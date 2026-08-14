@@ -118,24 +118,25 @@
   };
 
   // ---------- 课文模块列表 ----------
+  // 数据结构：{外研社: {年级: {学期: {Module N: [units]}}}}}
   function textbookModules(grade) {
     const res = [];
     const root = DATA.textbook["外研社"] || {};
     const grades = grade ? [grade] : Object.keys(root);
     grades.forEach((g) => {
-      const gd = root[g] || {};
-      Object.keys(gd).forEach((sem) => {
-        const units = gd[sem];
-        if (Array.isArray(units)) {
-          units.forEach((u) => {
-            if (u.module) {
-              res.push({ module: u.module, grade: g, semester: sem });
-            }
-          });
-        }
+      const semesters = root[g] || {};  // {上册: {...}, 下册: {...}}
+      Object.keys(semesters).forEach((sem) => {
+        const modDict = semesters[sem];  // {Module 1: [...], Module 2: [...]}
+        if (typeof modDict !== "object") return;
+        Object.keys(modDict).forEach((modName) => {
+          const units = modDict[modName];
+          if (Array.isArray(units) && units.length > 0) {
+            res.push({ module: modName, grade: g, semester: sem });
+          }
+        });
       });
     });
-    // 去重，按年级+module 合并（上下册各保留一次）
+    // 去重：同年级同 Module 只保留一个
     const seen = {};
     return res.filter((item) => {
       const key = item.grade + "/" + item.module;
@@ -150,14 +151,12 @@
     const root = DATA.textbook["外研社"] || {};
     const grades = grade ? [grade] : Object.keys(root);
     for (const g of grades) {
-      const gd = root[g] || {};
-      Object.keys(gd).forEach((sem) => {
-        const units = gd[sem];
-        if (!Array.isArray(units)) return;
-        for (const u of units) {
-          if (u.module === moduleName) {
-            return { module: moduleName, grade: g, semester: sem, units: units };
-          }
+      const semesters = root[g] || {};
+      Object.keys(semesters).forEach((sem) => {
+        const modDict = semesters[sem];
+        if (typeof modDict !== "object") return;
+        if (moduleName in modDict) {
+          return { module: moduleName, grade: g, semester: sem, units: modDict[moduleName] };
         }
       });
     }
@@ -268,21 +267,18 @@
       }
       if (api.startsWith("textbook/")) {
         const rest = decodeURIComponent(api.slice("textbook/".length));
-        // 可能带查询参数 ?grade=...
         const parts = rest.split("/");
         const moduleName = parts[0];
         const grade = params.get("grade") || null;
         const root = DATA.textbook["外研社"] || {};
         const grades = grade ? [grade] : Object.keys(root);
         for (const g of grades) {
-          const gd = root[g] || {};
-          Object.keys(gd).forEach((sem) => {
-            const units = gd[sem];
-            if (!Array.isArray(units)) return;
-            for (const u of units) {
-              if (u.module === moduleName) {
-                return json({ module: moduleName, grade: g, semester: sem, units: units });
-              }
+          const semesters = root[g] || {};
+          Object.keys(semesters).forEach((sem) => {
+            const modDict = semesters[sem];
+            if (typeof modDict !== "object") return;
+            if (moduleName in modDict) {
+              return json({ module: moduleName, grade: g, semester: sem, units: modDict[moduleName] });
             }
           });
         }
