@@ -1,6 +1,5 @@
 // api-shim.js
-// 纯静态版：在浏览器内用本地 JSON 数据模拟原 FastAPI 后端的所有接口，
-// 这样前端代码（apiGET / apiPOST）无需改动即可在 GitHub Pages 上运行。
+// 纯静态版：支持多年级（三年级/四年级/五年级），用本地 JSON 模拟 FastAPI 后端接口。
 (function () {
   "use strict";
 
@@ -23,7 +22,7 @@
         DATA.ket = k || {};
       })
       .catch((e) => {
-        console.error("数据加载失败：", e);
+        console.error("[静态版] 数据加载失败：", e);
         alert("数据加载失败，请确认 data/ 目录下的 JSON 文件存在。");
       });
     return _ready;
@@ -46,13 +45,31 @@
     });
   }
 
-  // ---------- 数据查询辅助（对应 words_data.py） ----------
-  function getModules() {
-    const s = new Set();
-    DATA.words.forEach((w) => { if (w.module) s.add(w.module); });
-    return Array.from(s);
+  // ---------- 年级 ----------
+  function getGrades() {
+    const root = DATA.textbook["外研社"] || DATA.textbook;
+    return Object.keys(root).filter((k) => typeof root[k] === "object");
   }
-  function wordsByModule(m) { return DATA.words.filter((w) => w.module === m); }
+
+  // ---------- 单词模块（支持年级过滤） ----------
+  function getModules(grade) {
+    const seen = {};
+    DATA.words.forEach((w) => {
+      if (!w.module) return;
+      if (grade && w.grade !== grade) return;
+      seen[w.module] = true;
+    });
+    return Object.keys(seen).sort();
+  }
+
+  function wordsByModuleAndGrade(m, grade) {
+    return DATA.words.filter((w) => {
+      if (w.module !== m) return false;
+      if (grade && w.grade !== grade) return false;
+      return true;
+    });
+  }
+
   function searchWords(q) {
     q = (q || "").toLowerCase();
     return DATA.words.filter((w) =>
@@ -63,8 +80,9 @@
     );
   }
 
-  // ---------- 课文模块（对应 main.py） ----------
+  // ---------- 单词模块→课文映射（三个年级） ----------
   const WORD_TO_LESSON = {
+    // 三年级
     "上1": ["Module 1", "三年级上册"], "上2": ["Module 2", "三年级上册"],
     "上3": ["Module 3", "三年级上册"], "上4": ["Module 4", "三年级上册"],
     "上5": ["Module 5", "三年级上册"], "上6": ["Module 6", "三年级上册"],
@@ -75,30 +93,80 @@
     "下5": ["Module 5", "三年级下册"], "下6": ["Module 6", "三年级下册"],
     "下7": ["Module 7", "三年级下册"], "下8": ["Module 8", "三年级下册"],
     "下9": ["Module 9", "三年级下册"], "下10": ["Module 10", "三年级下册"],
+    // 四年级
+    "四上1": ["Module 1", "四年级上册"], "四上2": ["Module 2", "四年级上册"],
+    "四上3": ["Module 3", "四年级上册"], "四上4": ["Module 4", "四年级上册"],
+    "四上5": ["Module 5", "四年级上册"], "四上6": ["Module 6", "四年级上册"],
+    "四上7": ["Module 7", "四年级上册"], "四上8": ["Module 8", "四年级上册"],
+    "四上9": ["Module 9", "四年级上册"], "四上10": ["Module 10", "四年级上册"],
+    "四下1": ["Module 1", "四年级下册"], "四下2": ["Module 2", "四年级下册"],
+    "四下3": ["Module 3", "四年级下册"], "四下4": ["Module 4", "四年级下册"],
+    "四下5": ["Module 5", "四年级下册"], "四下6": ["Module 6", "四年级下册"],
+    "四下7": ["Module 7", "四年级下册"], "四下8": ["Module 8", "四年级下册"],
+    "四下9": ["Module 9", "四年级下册"], "四下10": ["Module 10", "四年级下册"],
+    // 五年级
+    "五上1": ["Module 1", "五年级上册"], "五上2": ["Module 2", "五年级上册"],
+    "五上3": ["Module 3", "五年级上册"], "五上4": ["Module 4", "五年级上册"],
+    "五上5": ["Module 5", "五年级上册"], "五上6": ["Module 6", "五年级上册"],
+    "五上7": ["Module 7", "五年级上册"], "五上8": ["Module 8", "五年级上册"],
+    "五上9": ["Module 9", "五年级上册"], "五上10": ["Module 10", "五年级上册"],
+    "五下1": ["Module 1", "五年级下册"], "五下2": ["Module 2", "五年级下册"],
+    "五下3": ["Module 3", "五年级下册"], "五下4": ["Module 4", "五年级下册"],
+    "五下5": ["Module 5", "五年级下册"], "五下6": ["Module 6", "五年级下册"],
+    "五下7": ["Module 7", "五年级下册"], "五下8": ["Module 8", "五年级下册"],
+    "五下9": ["Module 9", "五年级下册"], "五下10": ["Module 10", "五年级下册"],
   };
 
+  // ---------- 课文模块列表 ----------
   function textbookModules(grade) {
     const res = [];
     const root = DATA.textbook["外研社"] || {};
     const grades = grade ? [grade] : Object.keys(root);
     grades.forEach((g) => {
       const gd = root[g] || {};
-      Object.keys(gd).forEach((mod) => {
-        const units = gd[mod];
+      Object.keys(gd).forEach((sem) => {
+        const units = gd[sem];
         if (Array.isArray(units)) {
-          res.push({
-            module: mod, grade: g, unit_count: units.length,
-            units: units.map((u) => u.unit),
+          units.forEach((u) => {
+            if (u.module) {
+              res.push({ module: u.module, grade: g, semester: sem });
+            }
           });
         }
       });
     });
-    return res;
+    // 去重，按年级+module 合并（上下册各保留一次）
+    const seen = {};
+    return res.filter((item) => {
+      const key = item.grade + "/" + item.module;
+      if (seen[key]) return false;
+      seen[key] = true;
+      return true;
+    });
   }
 
-  // ---------- 进度统计 ----------
-  function moduleProgress(uid, m) {
-    const ws = wordsByModule(m);
+  // ---------- 课文模块详情 ----------
+  function textbookModuleDetail(moduleName, grade) {
+    const root = DATA.textbook["外研社"] || {};
+    const grades = grade ? [grade] : Object.keys(root);
+    for (const g of grades) {
+      const gd = root[g] || {};
+      Object.keys(gd).forEach((sem) => {
+        const units = gd[sem];
+        if (!Array.isArray(units)) return;
+        for (const u of units) {
+          if (u.module === moduleName) {
+            return { module: moduleName, grade: g, semester: sem, units: units };
+          }
+        }
+      });
+    }
+    return null;
+  }
+
+  // ---------- 进度统计（支持年级前缀 key） ----------
+  function moduleProgress(uid, m, grade) {
+    const ws = wordsByModuleAndGrade(m, grade || null);
     const total = ws.length;
     const prog = getProg(uid);
     let learned = 0, mastered = 0;
@@ -107,16 +175,21 @@
       if (s === "learned" || s === "mastered") learned++;
       if (s === "mastered") mastered++;
     });
-    return { module: m, total, learned, mastered, percent: total ? Math.round((learned / total) * 100) : 0 };
+    const pct = total ? Math.round((learned / total) * 100) : 0;
+    return { module: m, grade: grade || "", total, learned, mastered, percent: pct };
   }
+
   function allStats(uid) {
-    const modules = getModules();
+    const grades = getGrades();
     const result = {};
     let tw = 0, tl = 0, tm = 0;
-    modules.forEach((m) => {
-      const p = moduleProgress(uid, m);
-      result[m] = p;
-      tw += p.total; tl += p.learned; tm += p.mastered;
+    grades.forEach((g) => {
+      getModules(g).forEach((m) => {
+        const p = moduleProgress(uid, m, g);
+        const key = g + "/" + m;
+        result[key] = p;
+        tw += p.total; tl += p.learned; tm += p.mastered;
+      });
     });
     result._total = {
       total: tw, learned: tl, mastered: tm,
@@ -145,7 +218,7 @@
     return { categories: cats };
   }
 
-  // ---------- 评分（对应 simple_score） ----------
+  // ---------- 评分 ----------
   function simpleScore(user_answer, correct_answer) {
     const u = (user_answer || "").trim().toLowerCase();
     const c = (correct_answer || "").trim().toLowerCase();
@@ -168,8 +241,25 @@
     const method = (init && init.method) || "GET";
 
     try {
-      if (api === "textbook" && method === "GET") return json(DATA.textbook);
-      if (api === "textbook/modules") return json(textbookModules(params.get("grade")));
+      // ===== 多年级新增接口 =====
+      if (api === "grades") return json(getGrades());
+      // /api/modules?grade=三年级
+      if (api === "modules") {
+        const grade = params.get("grade") || null;
+        const mods = getModules(grade);
+        return json(mods.map((m) => ({
+          module: m,
+          grade: grade || DATA.words.find((w) => w.module === m)?.grade || "",
+          count: wordsByModuleAndGrade(m, grade || null).length,
+        })));
+      }
+
+      // ===== 课文系列 =====
+      if (api === "textbook") return json(DATA.textbook);
+      if (api === "textbook/modules") {
+        const grade = params.get("grade") || null;
+        return json(textbookModules(grade));
+      }
       if (api.startsWith("textbook/grade/")) {
         const wm = decodeURIComponent(api.slice("textbook/grade/".length));
         const r = WORD_TO_LESSON[wm];
@@ -177,21 +267,35 @@
         return json({ word_module: wm, module: r[0], grade: r[1] });
       }
       if (api.startsWith("textbook/")) {
-        const mod = decodeURIComponent(api.slice("textbook/".length));
-        const grade = params.get("grade");
+        const rest = decodeURIComponent(api.slice("textbook/".length));
+        // 可能带查询参数 ?grade=...
+        const parts = rest.split("/");
+        const moduleName = parts[0];
+        const grade = params.get("grade") || null;
         const root = DATA.textbook["外研社"] || {};
         const grades = grade ? [grade] : Object.keys(root);
         for (const g of grades) {
           const gd = root[g] || {};
-          if (mod in gd) return json({ module: mod, grade: g, units: gd[mod] });
+          Object.keys(gd).forEach((sem) => {
+            const units = gd[sem];
+            if (!Array.isArray(units)) return;
+            for (const u of units) {
+              if (u.module === moduleName) {
+                return json({ module: moduleName, grade: g, semester: sem, units: units });
+              }
+            }
+          });
         }
-        return json({ detail: "模块不存在: " + mod }, 404);
+        return json({ detail: "模块不存在: " + moduleName }, 404);
       }
 
-      if (api === "modules") return json(getModules().map((m) => ({ module: m, count: wordsByModule(m).length })));
+      // ===== 单词系列 =====
       if (api === "words") {
         const m = params.get("module");
-        const ws = m ? wordsByModule(m) : DATA.words;
+        const grade = params.get("grade");
+        let ws = DATA.words;
+        if (m) ws = ws.filter((w) => w.module === m);
+        if (grade) ws = ws.filter((w) => w.grade === grade);
         return json({ total: ws.length, words: ws });
       }
       if (api.startsWith("word/")) {
@@ -205,20 +309,35 @@
         return json({ total: r.length, words: r });
       }
 
+      // ===== 进度系列 =====
       if (api.startsWith("progress/")) {
         const rest = api.slice("progress/".length);
         const parts = rest.split("/");
         const uid = parts[0];
         if (parts.length === 1) return json(allStats(uid));
-        return json(moduleProgress(uid, decodeURIComponent(parts[1])));
+        // parts[1] 可能是 "grade/module" 或纯 module
+        const gradeSlashModule = decodeURIComponent(parts.slice(1).join("/"));
+        const slashIdx = gradeSlashModule.indexOf("/");
+        let m, g;
+        if (slashIdx >= 0) {
+          g = gradeSlashModule.slice(0, slashIdx);
+          m = gradeSlashModule.slice(slashIdx + 1);
+        } else {
+          m = gradeSlashModule;
+          g = null;
+        }
+        return json(moduleProgress(uid, m, g));
       }
       if (api.startsWith("word-status/")) {
         const rest = api.slice("word-status/".length);
         const uid = rest.split("/")[0];
         const m = params.get("module");
+        const g = params.get("grade");
         const prog = getProg(uid);
         const out = {};
-        wordsByModule(m).forEach((w) => { out[w.id] = prog[w.id] || "new"; });
+        wordsByModuleAndGrade(m, g || null).forEach((w) => {
+          out[w.id] = prog[w.id] || "new";
+        });
         return json(out);
       }
       if (api === "score") {
@@ -228,6 +347,7 @@
         return json(Object.assign({ correct_answer: body.correct_answer }, r));
       }
 
+      // ===== KET 系列 =====
       if (api === "ket/categories") return json(ketCategories());
       if (api === "ket/words") {
         const c = params.get("category");
@@ -281,5 +401,5 @@
     return _origFetch ? _origFetch(input, init) : fetch(input, init);
   };
 
-  console.log("[静态版] API 模拟层已加载");
+  console.log("[静态版] API 模拟层已加载（多年级支持）");
 })();

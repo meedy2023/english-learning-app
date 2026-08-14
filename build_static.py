@@ -41,12 +41,17 @@ def export_ket():
 
 
 def export_textbook():
-    src = os.path.join(BACKEND, "textbook3_data.json")
-    with open(src, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    with open(os.path.join(DATA_DIR, "textbook.json"), "w", encoding="utf-8") as f:
-        json.dump(data, f, ensure_ascii=False, indent=1)
-    print("[OK] textbook.json")
+    # 优先读新版多年级结构，回退到旧版
+    for src_name in ["textbook_data.json", "textbook3_data.json"]:
+        src = os.path.join(BACKEND, src_name)
+        if os.path.exists(src):
+            with open(src, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            with open(os.path.join(DATA_DIR, "textbook.json"), "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=1)
+            print(f"[OK] textbook.json  ({src_name})")
+            return
+    print("[WARN] textbook.json 未找到")
 
 
 def build_index():
