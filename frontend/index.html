@@ -375,6 +375,49 @@
     /* ========== 空状态 ========== */
     .empty-state { text-align: center; padding: 40px 20px; color: #aaa; }
     .empty-state-icon { font-size: 48px; margin-bottom: 12px; }
+
+    /* ========== 年级按钮 ========== */
+    .grade-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      padding: 24px 28px;
+      background: #fff;
+      border: 2px solid #e0e6ff;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+    .grade-btn:hover, .grade-btn:active {
+      background: #6c63ff;
+      border-color: #6c63ff;
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108,99,255,0.35);
+    }
+    .grade-btn .grade-icon {
+      font-size: 32px;
+    }
+    .grade-btn .grade-info {
+      text-align: left;
+    }
+    .grade-btn .grade-name {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .grade-btn .grade-desc {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 2px;
+    }
+    .grade-btn:hover .grade-desc,
+    .grade-btn:active .grade-desc {
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -387,8 +430,20 @@
 
 <div class="container">
 
+  <!-- ======= 年级选择页 ======= -->
+  <div id="view-grade" class="view active">
+    <div class="topbar">
+      <div class="topbar-title">英语学习助手</div>
+      <div class="topbar-right" id="topbar-right">外研版</div>
+    </div>
+    <div class="section-title" style="margin-top:32px">请选择年级</div>
+    <div class="grade-grid" id="grade-grid" style="margin-top:20px;display:flex;flex-direction:column;gap:16px;padding:0 24px">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
   <!-- ======= 首页：模块列表 ======= -->
-  <div id="view-home" class="view active">
+  <div id="view-home" class="view">
     <div class="section-title">选择模块开始学习</div>
     <div class="module-grid" id="module-grid">
       <div class="spinner"></div>
@@ -556,11 +611,18 @@ const API = "http://10.255.100.133:8080";
     currentView = name;
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
+    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
-    document.getElementById("topbar-right").style.display = (name === "report" || name === "ket") ? "none" : "";
+    // 年级选择页不显示右上角
+    document.getElementById("topbar-right").style.display = (name === "grade" || name === "report" || name === "ket") ? "none" : "";
     if (name === "report") loadReport();
-      if (name === "ket") loadKetCategories();
+    if (name === "ket") loadKetCategories();
+    if (name === "home") {
+      // 如果没有选年级，回到年级选择页
+      if (!currentGrade) { switchView('grade'); loadGrades(); return; }
+      loadModules();
+    }
+    if (name === "grade") loadGrades();
     // 学习页无数据时显示提示
     if (name === "learn" && (!currentWords || currentWords.length === 0)) {
       document.getElementById("word-list").innerHTML = `<div class="empty-state"><div class="empty-state-icon">📖</div><div>请先选择一个模块</div><button class="btn btn-primary" style="margin-top:16px" onclick="backToHome()">去首页选择</button></div>`;
@@ -582,8 +644,9 @@ const API = "http://10.255.100.133:8080";
   // ========== 课文学习功能 ==========
   // 单词模块到课文模块的映射（包含学期信息）
   // 上N → Module N (三年级上册)
-  // 下N → Module N (三年级下册)
+  // 单词模块 → 课文模块+年级（全部三个年级）
   const WORD_TO_LESSON = {
+    // 三年级
     '上1': { module: 'Module 1', grade: '三年级上册' },
     '上2': { module: 'Module 2', grade: '三年级上册' },
     '上3': { module: 'Module 3', grade: '三年级上册' },
@@ -603,7 +666,49 @@ const API = "http://10.255.100.133:8080";
     '下7': { module: 'Module 7', grade: '三年级下册' },
     '下8': { module: 'Module 8', grade: '三年级下册' },
     '下9': { module: 'Module 9', grade: '三年级下册' },
-    '下10': { module: 'Module 10', grade: '三年级下册' }
+    '下10': { module: 'Module 10', grade: '三年级下册' },
+    // 四年级
+    '四上1': { module: 'Module 1', grade: '四年级上册' },
+    '四上2': { module: 'Module 2', grade: '四年级上册' },
+    '四上3': { module: 'Module 3', grade: '四年级上册' },
+    '四上4': { module: 'Module 4', grade: '四年级上册' },
+    '四上5': { module: 'Module 5', grade: '四年级上册' },
+    '四上6': { module: 'Module 6', grade: '四年级上册' },
+    '四上7': { module: 'Module 7', grade: '四年级上册' },
+    '四上8': { module: 'Module 8', grade: '四年级上册' },
+    '四上9': { module: 'Module 9', grade: '四年级上册' },
+    '四上10': { module: 'Module 10', grade: '四年级上册' },
+    '四下1': { module: 'Module 1', grade: '四年级下册' },
+    '四下2': { module: 'Module 2', grade: '四年级下册' },
+    '四下3': { module: 'Module 3', grade: '四年级下册' },
+    '四下4': { module: 'Module 4', grade: '四年级下册' },
+    '四下5': { module: 'Module 5', grade: '四年级下册' },
+    '四下6': { module: 'Module 6', grade: '四年级下册' },
+    '四下7': { module: 'Module 7', grade: '四年级下册' },
+    '四下8': { module: 'Module 8', grade: '四年级下册' },
+    '四下9': { module: 'Module 9', grade: '四年级下册' },
+    '四下10': { module: 'Module 10', grade: '四年级下册' },
+    // 五年级
+    '五上1': { module: 'Module 1', grade: '五年级上册' },
+    '五上2': { module: 'Module 2', grade: '五年级上册' },
+    '五上3': { module: 'Module 3', grade: '五年级上册' },
+    '五上4': { module: 'Module 4', grade: '五年级上册' },
+    '五上5': { module: 'Module 5', grade: '五年级上册' },
+    '五上6': { module: 'Module 6', grade: '五年级上册' },
+    '五上7': { module: 'Module 7', grade: '五年级上册' },
+    '五上8': { module: 'Module 8', grade: '五年级上册' },
+    '五上9': { module: 'Module 9', grade: '五年级上册' },
+    '五上10': { module: 'Module 10', grade: '五年级上册' },
+    '五下1': { module: 'Module 1', grade: '五年级下册' },
+    '五下2': { module: 'Module 2', grade: '五年级下册' },
+    '五下3': { module: 'Module 3', grade: '五年级下册' },
+    '五下4': { module: 'Module 4', grade: '五年级下册' },
+    '五下5': { module: 'Module 5', grade: '五年级下册' },
+    '五下6': { module: 'Module 6', grade: '五年级下册' },
+    '五下7': { module: 'Module 7', grade: '五年级下册' },
+    '五下8': { module: 'Module 8', grade: '五年级下册' },
+    '五下9': { module: 'Module 9', grade: '五年级下册' },
+    '五下10': { module: 'Module 10', grade: '五年级下册' },
   };
 
   async function showTextbookList() {
@@ -956,15 +1061,97 @@ const API = "http://10.255.100.133:8080";
     return res.json();
   }
 
-  // ========== 首页：加载模块 ==========
-  async function loadModules() {
+  // ========== 当前状态 ==========
+  var currentGrade = '';  // 当前年级，如 '三年级'
+
+  // ========== 年级选择页：加载年级列表 ==========
+  async function loadGrades() {
     try {
-      const data = await apiGET("/api/modules");
+      const data = await apiGET('/api/grades');
+      const grid = document.getElementById('grade-grid');
+      grid.innerHTML = '';
+      // 年级图标
+      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕'};
+      const descMap = {
+        '三年级': '外研社三年级上册/下册',
+        '四年级': '外研社四年级上册/下册',
+        '五年级': '外研社五年级上册/下册'
+      };
+      for (const grade of data.grades) {
+        const btn = document.createElement('div');
+        btn.className = 'grade-btn';
+        btn.innerHTML = `
+          <span class="grade-icon">${iconMap[grade] || '📗'}</span>
+          <span class="grade-info">
+            <div class="grade-name">${grade}</div>
+            <div class="grade-desc">${descMap[grade] || '外研版教材'}</div>
+          </span>
+          <span style="font-size:20px;margin-left:auto">→</span>
+        `;
+        btn.onclick = () => openGrade(grade);
+        grid.appendChild(btn);
+      }
+    } catch (e) {
+      // 后端未启动，尝试本地静态数据
+      const grid = document.getElementById('grade-grid');
+      grid.innerHTML = `
+        <div class="grade-btn" onclick="openGrade('三年级')">
+          <span class="grade-icon">📚</span>
+          <span class="grade-info">
+            <div class="grade-name">三年级</div>
+            <div class="grade-desc">外研社三年级上册/下册</div>
+          </span>
+          <span style="font-size:20px;margin-left:auto">→</span>
+        </div>
+        <div class="grade-btn" onclick="openGrade('四年级')">
+          <span class="grade-icon">📖</span>
+          <span class="grade-info">
+            <div class="grade-name">四年级</div>
+            <div class="grade-desc">外研社四年级上册/下册</div>
+          </span>
+          <span style="font-size:20px;margin-left:auto">→</span>
+        </div>
+        <div class="grade-btn" onclick="openGrade('五年级')">
+          <span class="grade-icon">📕</span>
+          <span class="grade-info">
+            <div class="grade-name">五年级</div>
+            <div class="grade-desc">外研社五年级上册/下册</div>
+          </span>
+          <span style="font-size:20px;margin-left:auto">→</span>
+        </div>
+      `;
+    }
+  }
+
+  // ========== 选择年级后进入首页 ==========
+  function openGrade(grade) {
+    currentGrade = grade;
+    document.getElementById('topbar-right').textContent = grade;
+    document.getElementById('topbar-right').style.display = '';
+    switchView('home');
+    loadModules();
+  }
+
+  // ========== 返回年级选择页 ==========
+  function backToGrade() {
+    currentGrade = '';
+    switchView('grade');
+  }
+
+  // ========== 首页：加载模块（按年级过滤） ==========
+  async function loadModules(grade) {
+    const targetGrade = grade || currentGrade;
+    try {
+      const url = targetGrade ? `/api/modules?grade=${encodeURIComponent(targetGrade)}` : '/api/modules';
+      const data = await apiGET(url);
       const progressData = await apiGET(`/api/progress/${USER_ID}`);
       const grid = document.getElementById("module-grid");
       grid.innerHTML = "";
       for (const m of data) {
-        const prog = progressData[m.module] || { total: m.count, learned: 0, mastered: 0, percent: 0 };
+        // 统一用 grade 字段（返回结构为 {module, grade, count}）
+        const gradeKey = m.grade || targetGrade || '';
+        const progKey = `${gradeKey}/${m.module}`;
+        const prog = progressData[progKey] || { total: m.count, learned: 0, mastered: 0, percent: 0 };
         const pct = prog.learned > 0 ? Math.round(prog.learned / prog.total * 100) : 0;
         const card = document.createElement("div");
         card.className = "module-card";
@@ -1588,8 +1775,8 @@ const API = "http://10.255.100.133:8080";
   // ========== 底部导航 ==========
   document.write(`
   <div class="bottom-nav">
-    <div id="nav-home" class="nav-item active" onclick="backToHome()">
-      <span class="nav-item-icon">🏠</span>首页
+    <div id="nav-home" class="nav-item active" onclick="backToGrade()">
+      <span class="nav-item-icon">🏠</span>年级
     </div>
     <div id="nav-learn" class="nav-item" onclick="switchView('learn')">
       <span class="nav-item-icon">📖</span>学习
@@ -1844,9 +2031,9 @@ const API = "http://10.255.100.133:8080";
   }
 
   // ========== 启动 ==========
-  // 顶部右上角联动年级提示（默认"三年级"）
-  document.getElementById('topbar-right').style.display = '';
-  loadModules();
+  // 默认显示年级选择页
+  document.getElementById('topbar-right').style.display = 'none';
+  loadGrades();
 </script>
 </body>
 </html>

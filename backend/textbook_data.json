@@ -1,0 +1,395 @@
+{
+  "外研社": {
+    "三年级": {
+      "上册": {
+        "Module 1": [
+          {"unit": "Unit 1 I'm Sam", "content": [
+            {"role": "Sam", "text": "Hello, I'm Sam.", "translation": "你好，我是 Sam。"},
+            {"role": "Amy", "text": "Hi, I'm Amy.", "translation": "嗨，我是 Amy。"},
+            {"role": "Ms Smart", "text": "Good morning, boys and girls.", "translation": "早上好，孩子们。"},
+            {"role": "Sam", "text": "Good morning, Ms Smart.", "translation": "早上好，Smart 老师。"}
+          ]},
+          {"unit": "Unit 2 How are you?", "content": [
+            {"role": "Daming", "text": "Good morning, Ms Smart.", "translation": "早上好，Smart 老师。"},
+            {"role": "Ms Smart", "text": "Good morning, Daming. How are you?", "translation": "早上好，大明。你好吗？"},
+            {"role": "Daming", "text": "I'm fine, thank you.", "translation": "我很好，谢谢。"},
+            {"role": "Ms Smart", "text": "Good. How are you, Lingling?", "translation": "好的。玲玲，你好吗？"}
+          ]}
+        ],
+        "Module 2": [
+          {"unit": "Unit 1 I'm Ms Smart.", "content": [
+            {"role": "Sam", "text": "What's your name?", "translation": "你叫什么名字？"},
+            {"role": "Amy", "text": "My name's Amy.", "translation": "我叫 Amy。"},
+            {"role": "Sam", "text": "Hi, Amy! Are you a student?", "translation": "嗨，Amy！你是学生吗？"}
+          ]}
+        ],
+        "Module 3": [
+          {"unit": "Unit 1 Point to the window.", "content": [
+            {"role": "Ms Smart", "text": "Stand up, please.", "translation": "请起立。"},
+            {"role": "Class", "text": "OK!", "translation": "好的！"},
+            {"role": "Ms Smart", "text": "Point to the window, please.", "translation": "请指向窗户。"}
+          ]}
+        ],
+        "Module 4": [
+          {"unit": "Unit 1 It's red!", "content": [
+            {"role": "Daming", "text": "What colour is it?", "translation": "它是什么颜色？"},
+            {"role": "Amy", "text": "It's red.", "translation": "它是红色的。"}
+          ]}
+        ],
+        "Module 5": [
+          {"unit": "Unit 1 I like candy.", "content": [
+            {"role": "Ms Smart", "text": "Do you like candy?", "translation": "你喜欢糖果吗？"},
+            {"role": "Sam", "text": "Yes, I do.", "translation": "是的，我喜欢。"}
+          ]}
+        ],
+        "Module 6": [
+          {"unit": "Unit 1 I have got a cat.", "content": [
+            {"role": "Amy", "text": "I've got a cat.", "translation": "我有一只猫。"},
+            {"role": "Daming", "text": "Have you got a dog?", "translation": "你有一只狗吗？"}
+          ]}
+        ],
+        "Module 7": [
+          {"unit": "Unit 1 Happy birthday!", "content": [
+            {"role": "Class", "text": "Happy birthday, Sam!", "translation": "生日快乐，Sam！"},
+            {"role": "Sam", "text": "Thank you!", "translation": "谢谢！"}
+          ]}
+        ],
+        "Module 8": [
+          {"unit": "Unit 1 What's the time?", "content": [
+            {"role": "Ms Smart", "text": "What's the time, please?", "translation": "请问几点了？"},
+            {"role": "Sam", "text": "It's nine o'clock.", "translation": "九点了。"}
+          ]}
+        ],
+        "Module 9": [
+          {"unit": "Unit 1 I've got a new book.", "content": [
+            {"role": "Daming", "text": "I've got a new book.", "translation": "我有一本新书。"},
+            {"role": "Amy", "text": "It's nice! Can I see it?", "translation": "真好看！我能看看吗？"}
+          ]}
+        ],
+        "Module 10": [
+          {"unit": "Unit 1 I've got a headache.", "content": [
+            {"role": "Ms Smart", "text": "What's wrong, Daming?", "translation": "大明，怎么了？"},
+            {"role": "Daming", "text": "I've got a headache.", "translation": "我头疼。"}
+          ]}
+        ]
+      },
+      "下册": {
+        "Module 1": [
+          {"unit": "Unit 1 He is cute.", "content": [
+            {"role": "Sam", "text": "Look at the panda. It's cute.", "translation": "看那只熊猫。它真可爱。"},
+            {"role": "Amy", "text": "It is from China.", "translation": "它来自中国。"}
+          ]}
+        ],
+        "Module 2": [
+          {"unit": "Unit 1 This is the way I go to school.", "content": [
+            {"role": "Daming", "text": "I go to school on foot.", "translation": "我走路去上学。"}
+          ]}
+        ],
+        "Module 3": [
+          {"unit": "Unit 1 Today is Sunday.", "content": [
+            {"role": "Amy", "text": "Today is Sunday. What do you do on Sundays?", "translation": "今天是星期日。你星期日做什么？"},
+            {"role": "Sam", "text": "I often play football.", "translation": "我经常踢足球。"}
+          ]}
+        ],
+        "Module 4": [
+          {"unit": "Unit 1 Do you like meat?", "content": [
+            {"role": "Daming", "text": "Do you like meat?", "translation": "你喜欢肉吗？"},
+            {"role": "Amy", "text": "Yes, I do. But I don't like fish.", "translation": "是的，我喜欢。但我不喜欢鱼。"}
+          ]}
+        ],
+        "Module 5": [
+          {"unit": "Unit 1 We fly kites in spring.", "content": [
+            {"role": "Ms Smart", "text": "What do you do in spring?", "translation": "你在春天做什么？"},
+            {"role": "Class", "text": "We fly kites in spring.", "translation": "我们在春天放风筝。"}
+          ]}
+        ],
+        "Module 6": [
+          {"unit": "Unit 1 What do you do on Saturdays?", "content": [
+            {"role": "Daming", "text": "I watch TV on Saturdays.", "translation": "我星期六看电视。"}
+          ]}
+        ],
+        "Module 7": [
+          {"unit": "Unit 1 We have a big family.", "content": [
+            {"role": "Sam", "text": "We have a big family.", "translation": "我们有一个大家庭。"}
+          ]}
+        ],
+        "Module 8": [
+          {"unit": "Unit 1 We can see the stars.", "content": [
+            {"role": "Amy", "text": "We can see the stars at night.", "translation": "我们晚上能看见星星。"}
+          ]}
+        ],
+        "Module 9": [
+          {"unit": "Unit 1 I had a good time.", "content": [
+            {"role": "Daming", "text": "I had a good time at the party.", "translation": "我在派对上玩得很开心。"}
+          ]}
+        ],
+        "Module 10": [
+          {"unit": "Unit 1 It's a sunny day.", "content": [
+            {"role": "Ms Smart", "text": "It's a sunny day today.", "translation": "今天是晴天。"}
+          ]}
+        ]
+      }
+    },
+
+    "四年级": {
+      "上册": {
+        "Module 1": [
+          {"unit": "Unit 1 I went to Sanya for my holidays.", "content": [
+            {"role": "Daming", "text": "I went to Sanya for my holidays.", "translation": "我去三亚度假了。"},
+            {"role": "Amy", "text": "Did you have a good time?", "translation": "你玩得开心吗？"},
+            {"role": "Daming", "text": "Yes, I did. I swam in the sea.", "translation": "是的，我很开心。我在海里游泳了。"},
+            {"role": "Amy", "text": "Sounds great!", "translation": "听起来很棒！"}
+          ]},
+          {"unit": "Unit 2 Where did you go?", "content": [
+            {"role": "Sam", "text": "Where did you go last weekend?", "translation": "你上周末去哪了？"},
+            {"role": "Lingling", "text": "I went to Beijing with my family.", "translation": "我和家人去了北京。"},
+            {"role": "Sam", "text": "How did you go there?", "translation": "你怎么去的？"},
+            {"role": "Lingling", "text": "We went by plane.", "translation": "我们坐飞机去的。"}
+          ]}
+        ],
+        "Module 2": [
+          {"unit": "Unit 1 Grandparents are special.", "content": [
+            {"role": "Amy", "text": "This is my grandmother. She is very kind.", "translation": "这是我奶奶。她非常慈祥。"},
+            {"role": "Daming", "text": "Is this your grandfather? He's so tall!", "translation": "这是你爷爷吗？他好高啊！"},
+            {"role": "Amy", "text": "Yes. He tells me stories every night.", "translation": "是的。他每天晚上给我讲故事。"}
+          ]}
+        ],
+        "Module 3": [
+          {"unit": "Unit 1 My weekend was great!", "content": [
+            {"role": "Sam", "text": "My weekend was great! I visited the Great Wall.", "translation": "我周末很棒！我去游览了长城。"},
+            {"role": "Daming", "text": "Wow! I want to visit it too.", "translation": "哇！我也想去看看。"}
+          ]}
+        ],
+        "Module 4": [
+          {"unit": "Unit 1 I got a letter from my pen pal.", "content": [
+            {"role": "Lingling", "text": "I got a letter from my pen pal in London.", "translation": "我收到了伦敦笔友的来信。"},
+            {"role": "Amy", "text": "What did she say?", "translation": "她说什么了？"},
+            {"role": "Lingling", "text": "She visited the Tower Bridge last week.", "translation": "她上周游览了塔桥。"}
+          ]}
+        ],
+        "Module 5": [
+          {"unit": "Unit 1 Our school is beautiful.", "content": [
+            {"role": "Ms Smart", "text": "Welcome to our school! It's very beautiful.", "translation": "欢迎来到我们的学校！它非常漂亮。"},
+            {"role": "Class", "text": "We love our school!", "translation": "我们爱我们的学校！"}
+          ]}
+        ],
+        "Module 6": [
+          {"unit": "Unit 1 We wish you a Merry Christmas!", "content": [
+            {"role": "Class", "text": "We wish you a Merry Christmas!", "translation": "我们祝你圣诞快乐！"},
+            {"role": "Ms Smart", "text": "Merry Christmas, everyone!", "translation": "大家圣诞快乐！"}
+          ]}
+        ],
+        "Module 7": [
+          {"unit": "Unit 1 I'll send you a postcard.", "content": [
+            {"role": "Daming", "text": "I'll send you a postcard from Shanghai.", "translation": "我会从上海寄一张明信片给你。"},
+            {"role": "Sam", "text": "That's a great idea!", "translation": "这是个好主意！"}
+          ]}
+        ],
+        "Module 8": [
+          {"unit": "Unit 1 The Pandas are in danger.", "content": [
+            {"role": "Ms Smart", "text": "Pandas are in danger. We must protect them.", "translation": "熊猫正处于危险之中。我们必须保护它们。"},
+            {"role": "Daming", "text": "I'll try my best to help them.", "translation": "我会尽力帮助它们。"}
+          ]}
+        ],
+        "Module 9": [
+          {"unit": "Unit 1 I was happy yesterday.", "content": [
+            {"role": "Amy", "text": "I was happy yesterday because it was my birthday.", "translation": "我昨天很开心，因为昨天是我的生日。"},
+            {"role": "Sam", "text": "Happy birthday, Amy!", "translation": "生日快乐，Amy！"}
+          ]}
+        ],
+        "Module 10": [
+          {"unit": "Unit 1 I'm in New York now.", "content": [
+            {"role": "Lingling", "text": "I'm in New York now. The city is very big.", "translation": "我现在在纽约。这座城市非常大。"},
+            {"role": "Amy", "text": "What's the weather like?", "translation": "天气怎么样？"},
+            {"role": "Lingling", "text": "It's sunny but cold.", "translation": "阳光明媚但很冷。"}
+          ]}
+        ]
+      },
+      "下册": {
+        "Module 1": [
+          {"unit": "Unit 1 I helped Mum.", "content": [
+            {"role": "Daming", "text": "I helped Mum cook dinner yesterday.", "translation": "我昨天帮妈妈做了晚饭。"},
+            {"role": "Amy", "text": "That's a good boy!", "translation": "真是个好孩子！"}
+          ]}
+        ],
+        "Module 2": [
+          {"unit": "Unit 1 I made a cake.", "content": [
+            {"role": "Sam", "text": "I made a cake for my mum's birthday.", "translation": "我给妈妈的生日做了一个蛋糕。"},
+            {"role": "Daming", "text": "Was it delicious?", "translation": "好吃吗？"}
+          ]}
+        ],
+        "Module 3": [
+          {"unit": "Unit 1 They were very happy.", "content": [
+            {"role": "Ms Smart", "text": "They were very happy on the Children's Day.", "translation": "他们在儿童节非常开心。"}
+          ]}
+        ],
+        "Module 4": [
+          {"unit": "Unit 1 We are going to have a picnic.", "content": [
+            {"role": "Amy", "text": "We are going to have a picnic this Saturday.", "translation": "这周六我们要去野餐。"},
+            {"role": "Sam", "text": "Where will you go?", "translation": "你们要去哪里？"},
+            {"role": "Amy", "text": "We'll go to the park near the lake.", "translation": "我们去湖边的公园。"}
+          ]}
+        ],
+        "Module 5": [
+          {"unit": "Unit 1 I'll be a scientist.", "content": [
+            {"role": "Daming", "text": "I'll be a scientist when I grow up.", "translation": "我长大后要当科学家。"}
+          ]}
+        ],
+        "Module 6": [
+          {"unit": "Unit 1 We wish you a happy Children's Day.", "content": [
+            {"role": "Class", "text": "We wish you a happy Children's Day!", "translation": "我们祝你儿童节快乐！"}
+          ]}
+        ],
+        "Module 7": [
+          {"unit": "Unit 1 I helped the old man.", "content": [
+            {"role": "Sam", "text": "I helped the old man cross the road yesterday.", "translation": "我昨天帮助那位老人过了马路。"}
+          ]}
+        ],
+        "Module 8": [
+          {"unit": "Unit 1 He is very clever.", "content": [
+            {"role": "Ms Smart", "text": "He is very clever. He can solve hard problems.", "translation": "他非常聪明。他能解决难题。"}
+          ]}
+        ],
+        "Module 9": [
+          {"unit": "Unit 1 We were on holiday.", "content": [
+            {"role": "Lingling", "text": "We were on holiday in Hainan last July.", "translation": "我们去年7月在海南度假。"}
+          ]}
+        ],
+        "Module 10": [
+          {"unit": "Unit 1 The world is beautiful.", "content": [
+            {"role": "Ms Smart", "text": "The world is beautiful. We should protect it.", "translation": "世界很美丽。我们应该保护它。"}
+          ]}
+        ]
+      }
+    },
+
+    "五年级": {
+      "上册": {
+        "Module 1": [
+          {"unit": "Unit 1 There are only nineteen crayons in the box.", "content": [
+            {"role": "Ms Smart", "text": "How many crayons are there in the box?", "translation": "盒子里有多少支蜡笔？"},
+            {"role": "Daming", "text": "There are only nineteen crayons in the box.", "translation": "盒子里只有十九支蜡笔。"},
+            {"role": "Amy", "text": "There were twenty yesterday.", "translation": "昨天有二十支。"},
+            {"role": "Daming", "text": "Where is the missing one?", "translation": "少的那支去哪了？"}
+          ]},
+          {"unit": "Unit 2 There are lots of trees on the hill.", "content": [
+            {"role": "Sam", "text": "There are lots of trees on the hill.", "translation": "山上有许多树。"},
+            {"role": "Lingling", "text": "There is a river near the hill too.", "translation": "山附近还有一条河。"},
+            {"role": "Sam", "text": "It's a beautiful place.", "translation": "这是个美丽的地方。"}
+          ]}
+        ],
+        "Module 2": [
+          {"unit": "Unit 1 We bought ice creams.", "content": [
+            {"role": "Amy", "text": "We bought ice creams yesterday afternoon.", "translation": "昨天下午我们买了冰淇淋。"},
+            {"role": "Daming", "text": "What flavour did you buy?", "translation": "你买了什么口味的？"},
+            {"role": "Amy", "text": "Strawberry and chocolate.", "translation": "草莓味和巧克力味。"}
+          ]}
+        ],
+        "Module 3": [
+          {"unit": "Unit 1 My father was a fisherman.", "content": [
+            {"role": "Sam", "text": "My father was a fisherman ten years ago.", "translation": "我爸爸十年前是个渔夫。"},
+            {"role": "Daming", "text": "What does he do now?", "translation": "他现在做什么？"},
+            {"role": "Sam", "text": "He is a cook now.", "translation": "他现在是个厨师。"}
+          ]}
+        ],
+        "Module 4": [
+          {"unit": "Unit 1 We didn't see the Pandas.", "content": [
+            {"role": "Amy", "text": "We didn't see the Pandas at the zoo last Sunday.", "translation": "上周日我们在动物园没看到熊猫。"},
+            {"role": "Lingling", "text": "That's too bad!", "translation": "太可惜了！"}
+          ]}
+        ],
+        "Module 5": [
+          {"unit": "Unit 1 Dad always puts the rubbish in the bin.", "content": [
+            {"role": "Ms Smart", "text": "Dad always puts the rubbish in the bin.", "translation": "爸爸总是把垃圾放进垃圾桶里。"},
+            {"role": "Class", "text": "We should do the same!", "translation": "我们应该也这样做！"}
+          ]}
+        ],
+        "Module 6": [
+          {"unit": "Unit 1 I am reading a newspaper.", "content": [
+            {"role": "Daming", "text": "What are you doing, Lingling?", "translation": "玲玲，你在做什么？"},
+            {"role": "Lingling", "text": "I am reading a newspaper.", "translation": "我在看报纸。"},
+            {"role": "Daming", "text": "Any good news?", "translation": "有什么好消息吗？"}
+          ]}
+        ],
+        "Module 7": [
+          {"unit": "Unit 1 There are five people in my family.", "content": [
+            {"role": "Amy", "text": "There are five people in my family.", "translation": "我家有五口人。"},
+            {"role": "Sam", "text": "Who are they?", "translation": "他们是谁？"},
+            {"role": "Amy", "text": "My grandparents, my parents and me.", "translation": "我爷爷奶奶、爸爸妈妈和我。"}
+          ]}
+        ],
+        "Module 8": [
+          {"unit": "Unit 1 I'm making a cake.", "content": [
+            {"role": "Daming", "text": "What are you doing, Mum?", "translation": "妈妈，你在做什么？"},
+            {"role": "Mum", "text": "I'm making a cake for your birthday.", "translation": "我在为你的生日做一个蛋糕。"}
+          ]}
+        ],
+        "Module 9": [
+          {"unit": "Unit 1 Are you feeling sad?", "content": [
+            {"role": "Sam", "text": "Are you feeling sad, Daming?", "translation": "大明，你难过吗？"},
+            {"role": "Daming", "text": "No, I'm feeling excited! Tomorrow is the sports day.", "translation": "不，我感到兴奋！明天是运动会。"}
+          ]}
+        ],
+        "Module 10": [
+          {"unit": "Unit 1 I'm watching TV.", "content": [
+            {"role": "Amy", "text": "Please be quiet. I'm watching TV.", "translation": "请安静。我在看电视。"},
+            {"role": "Daming", "text": "OK. Sorry.", "translation": "好的，抱歉。"}
+          ]}
+        ]
+      },
+      "下册": {
+        "Module 1": [
+          {"unit": "Unit 1 He is playing the piano.", "content": [
+            {"role": "Ms Smart", "text": "Listen! He is playing the piano beautifully.", "translation": "听！他正在优美地弹钢琴。"}
+          ]}
+        ],
+        "Module 2": [
+          {"unit": "Unit 1 She learnt English last year.", "content": [
+            {"role": "Daming", "text": "She learnt English last year. Now she can speak it well.", "translation": "她去年学了英语。现在她能说得很流利。"}
+          ]}
+        ],
+        "Module 3": [
+          {"unit": "Unit 1 We had a good time.", "content": [
+            {"role": "Class", "text": "We had a good time at the picnic!", "translation": "我们在野餐中玩得很开心！"}
+          ]}
+        ],
+        "Module 4": [
+          {"unit": "Unit 1 I'll send you a card.", "content": [
+            {"role": "Amy", "text": "I'll send you a card from London.", "translation": "我会从伦敦给你寄一张卡片。"}
+          ]}
+        ],
+        "Module 5": [
+          {"unit": "Unit 1 It's a sunny day.", "content": [
+            {"role": "Sam", "text": "It's a sunny day. Let's go to the beach!", "translation": "今天是晴天。我们去海滩吧！"}
+          ]}
+        ],
+        "Module 6": [
+          {"unit": "Unit 1 We are going to learn English.", "content": [
+            {"role": "Ms Smart", "text": "We are going to learn English next term.", "translation": "下学期我们将学英语。"}
+          ]}
+        ],
+        "Module 7": [
+          {"unit": "Unit 1 There are many animals.", "content": [
+            {"role": "Daming", "text": "There are many animals in the zoo.", "translation": "动物园里有许多动物。"}
+          ]}
+        ],
+        "Module 8": [
+          {"unit": "Unit 1 I'm going to buy a book.", "content": [
+            {"role": "Lingling", "text": "I'm going to buy a book tomorrow.", "translation": "我明天要买一本书。"}
+          ]}
+        ],
+        "Module 9": [
+          {"unit": "Unit 1 Are you going to run?", "content": [
+            {"role": "Sam", "text": "Are you going to run tomorrow?", "translation": "你明天要去跑步吗？"},
+            {"role": "Amy", "text": "Yes, I'm going to run for half an hour.", "translation": "是的，我要跑半小时。"}
+          ]}
+        ],
+        "Module 10": [
+          {"unit": "Unit 1 The world is changing.", "content": [
+            {"role": "Ms Smart", "text": "The world is changing. We should learn more.", "translation": "世界在变化。我们应该多学一些。"}
+          ]}
+        ]
+      }
+    }
+  }
+}
