@@ -50,8 +50,8 @@ backend_dir = os.path.join(os.path.dirname(__file__), 'backend')
 os.chdir(backend_dir)
 
 subprocess.Popen(
-    'cmd /c "python -m uvicorn main:app --reload --port 8080 --host 0.0.0.0"',
-    shell=True,
+    'python -m uvicorn main:app --reload --port 8080 --host 0.0.0.0',
+    shell=False,
     cwd=backend_dir,
     creationflags=subprocess.CREATE_NEW_CONSOLE
 )

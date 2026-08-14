@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+"""
+提取 index.html 中的 JS 部分，用 Node.js 实际执行来验证错误
+"""
+import re
+
+with open('frontend/index.html', 'r', encoding='utf-8-sig') as f:  # 用 utf-8-sig 去掉 BOM
+    content = f.read()
+
+# 提取 script 内容
+match = re.search(r'<script>(.*?)</script>', content, re.DOTALL)
+if match:
+    script = match.group(1)
+    with open('test_script.js', 'w', encoding='utf-8') as f:
+        f.write(script)
+    print(f"提取 JS 脚本: {len(script)} 字符")
+    print(f"保存到 test_script.js")
+    print(f"前 200 字符:")
+    print(script[:200])
+else:
+    print("未找到 script 标签")
