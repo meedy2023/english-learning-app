@@ -559,7 +559,7 @@ const API = ".";
     document.getElementById("view-" + name).classList.add("active");
     const titles = { home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
-    document.getElementById("topbar-right").style.display = (name === "home" || name === "learn" || name === "report" || name === "ket") ? "none" : "";
+    document.getElementById("topbar-right").style.display = (name === "report" || name === "ket") ? "none" : "";
     if (name === "report") loadReport();
       if (name === "ket") loadKetCategories();
     // 学习页无数据时显示提示
@@ -657,6 +657,11 @@ const API = ".";
     currentLessonModule = moduleName;
     currentLessonGrade = grade || currentLessonGrade || '三年级上册';
     document.getElementById('topbar-title').textContent = '📖 ' + currentLessonGrade + ' - ' + moduleName;
+    // 联动更新右上角的年级提示：提取'几年级'部分，例如"三年级上册"→"三年级"
+    const gradeMatch = (grade || currentLessonGrade || '').match(/^[^-]+?年级/);
+    document.getElementById('topbar-right').textContent = gradeMatch ? gradeMatch[0] : '三年级';
+    // 显示年级提示
+    document.getElementById('topbar-right').style.display = '';
 
     try {
       // 根据是否有指定学期决定 URL
@@ -1840,8 +1845,8 @@ const API = ".";
   }
 
   // ========== 启动 ==========
-  // 隐藏顶部右上角，避免显示默认硬编码的"三年级上册"
-  document.getElementById('topbar-right').style.display = 'none';
+  // 顶部右上角联动年级提示（默认"三年级"）
+  document.getElementById('topbar-right').style.display = '';
   loadModules();
 </script>
 </body>
