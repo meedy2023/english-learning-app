@@ -524,9 +524,10 @@
 <!-- Toast 提示 -->
 <div class="toast" id="toast"></div>
 
+<script src="api-shim.js"></script>
 <script>
   // ========== 全局状态 ==========
-const API = "http://10.255.100.133:8080";
+const API = ".";
   let USER_ID = localStorage.getItem("user_id") || ("user_" + Math.random().toString(36).substr(2, 8));
   localStorage.setItem("user_id", USER_ID);
 
