@@ -1,0 +1,1208 @@
+
+  // ========== 全局状态 ==========
+  const API = "http://localhost:8080";
+  let USER_ID = localStorage.getItem("user_id") || ("user_" + Math.random().toString(36).substr(2, 8));
+  localStorage.setItem("user_id", USER_ID);
+
+  let currentModule = null;
+  let currentWords = [];
+  let currentQuizIndex = 0;
+  let currentQuizMode = "en_to_cn"; // "en_to_cn" | "cn_to_en"
+  let quizOrder = []; // 打乱顺序的单词ID列表
+
+  // 课文学习相关状态
+  let currentLessonModule = null;
+  let currentLessonData = null;
+  let currentLessonGrade = '三年级上册';
+
+  // ========== 工具函数 ==========
+  function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 2000);
+  }
+
+  let currentView = 'home';
+  function switchView(name) {
+    // 学习页面内点击学习导航，不重复切换
+    if (name === 'learn' && currentView === 'learn') return;
+    currentView = name;
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.getElementById("view-" + name).classList.add("active");
+    const titles = { home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
+    document.getElementById("topbar-title").textContent = titles[name] || "";
+    document.getElementById("topbar-right").style.display = (name === "report" || name === "ket") ? "none" : "";
+    if (name === "report") loadReport();
+      if (name === "ket") loadKetCategories();
+    // 学习页无数据时显示提示
+    if (name === "learn" && (!currentWords || currentWords.length === 0)) {
+      document.getElementById("word-list").innerHTML = `<div class="empty-state"><div class="empty-state-icon">📖</div><div>请先选择一个模块</div><button class="btn btn-primary" style="margin-top:16px" onclick="backToHome()">去首页选择</button></div>`;
+      document.getElementById("quiz-toggle-bar").style.display = "none";
+      document.getElementById("learn-module-title").style.display = "none";
+    }
+    // 更新底部导航激活状态
+    ['home', 'learn', 'ket', 'report'].forEach(function(v) {
+      var el = document.getElementById('nav-' + v);
+      if (el) {
+        if (v === name) el.classList.add('active');
+        else el.classList.remove('active');
+      }
+    });
+  }
+
+  function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  // ========== 课文学习功能 ==========
+  // 单词模块到课文模块的映射（包含学期信息）
+  // 上N → Module N (三年级上册)
+  // 下N → Module N (三年级下册)
+  const WORD_TO_LESSON = {
+    '上1': { module: 'Module 1', grade: '三年级上册' },
+    '上2': { module: 'Module 2', grade: '三年级上册' },
+    '上3': { module: 'Module 3', grade: '三年级上册' },
+    '上4': { module: 'Module 4', grade: '三年级上册' },
+    '上5': { module: 'Module 5', grade: '三年级上册' },
+    '上6': { module: 'Module 6', grade: '三年级上册' },
+    '上7': { module: 'Module 7', grade: '三年级上册' },
+    '上8': { module: 'Module 8', grade: '三年级上册' },
+    '上9': { module: 'Module 9', grade: '三年级上册' },
+    '上10': { module: 'Module 10', grade: '三年级上册' },
+    '下1': { module: 'Module 1', grade: '三年级下册' },
+    '下2': { module: 'Module 2', grade: '三年级下册' },
+    '下3': { module: 'Module 3', grade: '三年级下册' },
+    '下4': { module: 'Module 4', grade: '三年级下册' },
+    '下5': { module: 'Module 5', grade: '三年级下册' },
+    '下6': { module: 'Module 6', grade: '三年级下册' },
+    '下7': { module: 'Module 7', grade: '三年级下册' },
+    '下8': { module: 'Module 8', grade: '三年级下册' },
+    '下9': { module: 'Module 9', grade: '三年级下册' },
+    '下10': { module: 'Module 10', grade: '三年级下册' }
+  };
+
+  async function showTextbookList() {
+    // 智能跳转：如果当前在某个单词模块中，直接打开对应的课文模块
+    if (currentModule && WORD_TO_LESSON[currentModule]) {
+      const mapping = WORD_TO_LESSON[currentModule];
+      // 直接进入对应模块的单元列表（带上学期参数）
+      await openLessonModule(mapping.module, mapping.grade);
+      return;
+    }
+
+    // 否则显示所有课文模块列表
+    switchView('learn');
+    document.getElementById('word-list').style.display = 'none';
+    document.getElementById('word-detail-area').style.display = 'none';
+    document.getElementById('choice-learn-area').style.display = 'none';
+    document.getElementById('quiz-toggle-bar').style.display = 'none';
+
+    const area = document.getElementById('word-list');
+    area.style.display = 'block';
+    area.innerHTML = '<div class="spinner"></div>';
+
+    try {
+      const modules = await apiGET('/api/textbook/modules');
+      area.innerHTML = '<div class="section-title">选择课文模块</div>';
+
+      const grid = document.createElement('div');
+      grid.className = 'module-grid';
+
+      for (const m of modules) {
+        const card = document.createElement('div');
+        card.className = 'module-card';
+        const gradeLabel = m.grade ? ` <span style="font-size:11px;color:#888;font-weight:normal">(${m.grade})</span>` : '';
+        card.innerHTML = `
+          <div class="module-name">${m.module}${gradeLabel}</div>
+          <div class="module-count">${m.unit_count} 个单元</div>
+        `;
+        // 模块点击时带上学期参数
+        card.onclick = () => openLessonModule(m.module, m.grade);
+        grid.appendChild(card);
+      }
+
+      area.appendChild(grid);
+    } catch (e) {
+      area.innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><div>加载失败：' + e.message + '</div></div>';
+    }
+  }
+
+  async function openLessonModule(moduleName, grade) {
+    currentLessonModule = moduleName;
+    currentLessonGrade = grade || currentLessonGrade || '三年级上册';
+    document.getElementById('topbar-title').textContent = '📖 ' + currentLessonGrade + ' - ' + moduleName;
+
+    try {
+      // 根据是否有指定学期决定 URL
+      let url = '/api/textbook/' + encodeURIComponent(moduleName);
+      if (grade) {
+        url += '?grade=' + encodeURIComponent(grade);
+      }
+      const data = await apiGET(url);
+      currentLessonData = data.units;
+      currentLessonGrade = data.grade || currentLessonGrade;
+      
+      const area = document.getElementById('word-list');
+      area.innerHTML = '';
+      
+      // 返回按钮
+      const backBtn = document.createElement('button');
+      backBtn.className = 'btn btn-secondary';
+      backBtn.style.cssText = 'margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500';
+      backBtn.innerHTML = '<span style="font-size:16px">←</span> 返回课文模块';
+      backBtn.onclick = showTextbookList;
+      area.appendChild(backBtn);
+      
+      // 单元列表
+      const title = document.createElement('div');
+      title.className = 'section-title';
+      title.textContent = '选择单元';
+      area.appendChild(title);
+      
+      for (const unit of currentLessonData) {
+        const unitCard = document.createElement('div');
+        unitCard.className = 'word-item';
+        unitCard.innerHTML = `
+          <div class="word-item-left">
+            <div class="word-item-word">${unit.unit}</div>
+            <div class="word-item-chinese" style="color:#999;font-size:12px">${unit.content.length} 句对话</div>
+          </div>
+          <div style="font-size:20px;color:#6c63ff">▶</div>
+        `;
+        unitCard.onclick = () => showLessonDetail(unit);
+        area.appendChild(unitCard);
+      }
+    } catch (e) {
+      toast('加载课文失败：' + e.message);
+    }
+  }
+
+  function showLessonDetail(unit) {
+    document.getElementById('word-list').style.display = 'none';
+    
+    const area = document.getElementById('word-detail-area');
+    area.style.display = 'block';
+    
+    document.getElementById('topbar-title').textContent = '📖 ' + unit.unit;
+    
+    // 构建对话内容
+    let dialogueHTML = '';
+    unit.content.forEach((line, idx) => {
+      const roleColor = getRoleColor(line.role);
+      dialogueHTML += `
+        <div style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid ${roleColor}">
+          <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}</div>
+          <div style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${line.text}</div>
+          <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
+        </div>
+      `;
+    });
+    
+    // 构建翻译内容
+    let translationHTML = '';
+    unit.content.forEach((line, idx) => {
+      const roleColor = getRoleColor(line.role);
+      translationHTML += `
+        <div style="margin-bottom:12px;padding:8px 12px;background:#fafafa;border-radius:8px">
+          <div style="font-weight:600;color:${roleColor};font-size:12px;margin-bottom:2px">${line.role}</div>
+          <div style="font-size:14px;color:#666">${line.translation || '（暂无翻译）'}</div>
+        </div>
+      `;
+    });
+    
+    area.innerHTML = `
+      <button class="btn btn-secondary" onclick="backToLessonUnits()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">
+        <span style="font-size:16px">←</span> 返回单元列表
+      </button>
+      
+      <div class="word-detail-card" style="text-align:left">
+        <h3 style="margin-bottom:16px;color:#333;display:flex;align-items:center;gap:8px">
+          <span style="font-size:24px">💬</span>
+          对话原文
+        </h3>
+        <div style="line-height:1.8">
+          ${dialogueHTML}
+        </div>
+        <button class="speak-btn" id="lesson-full-speak-btn" style="margin-top:20px;width:100%;background:linear-gradient(135deg,#4f9fff,#6c63ff);color:white;border:none;font-weight:600">
+          🔊 朗读整篇课文
+        </button>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn btn-secondary" id="lesson-prev-unit-btn" style="flex:1;padding:10px;font-size:14px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500;display:none">
+            ← 上一单元
+          </button>
+          <button class="btn btn-primary" id="lesson-next-unit-btn" style="flex:1;padding:10px;font-size:14px;background:linear-gradient(135deg,#52c41a,#73d13d);color:white;border:none;font-weight:500;display:none">
+            下一单元 →
+          </button>
+        </div>
+      </div>
+      
+      <div class="word-detail-card" style="margin-top:16px;text-align:left;background:#fffbf0;border:2px solid #ffe7ba">
+        <h3 style="margin-bottom:16px;color:#d48806;display:flex;align-items:center;gap:8px">
+          <span style="font-size:24px">📝</span>
+          中文翻译
+        </h3>
+        <div style="line-height:1.8">
+          ${translationHTML}
+        </div>
+      </div>
+    `;
+
+    // 绑定整篇朗读按钮
+    var fullSpeakBtn = document.getElementById("lesson-full-speak-btn");
+    if (fullSpeakBtn) {
+      fullSpeakBtn.onclick = function() {
+        speakAllLessonLines(unit.content);
+      };
+    }
+
+    // 计算当前单元在模块中的位置
+    var unitIndex = -1;
+    if (currentLessonData) {
+      for (var i = 0; i < currentLessonData.length; i++) {
+        if (currentLessonData[i].unit === unit.unit) {
+          unitIndex = i;
+          break;
+        }
+      }
+    }
+
+    // 绑定"上一单元"按钮
+    var prevBtn = document.getElementById("lesson-prev-unit-btn");
+    if (prevBtn) {
+      if (unitIndex > 0) {
+        prevBtn.style.display = 'block';
+        prevBtn.onclick = function() {
+          showLessonDetail(currentLessonData[unitIndex - 1]);
+        };
+      } else {
+        prevBtn.style.display = 'none';
+      }
+    }
+
+    // 绑定"下一单元"按钮
+    var nextBtn = document.getElementById("lesson-next-unit-btn");
+    if (nextBtn) {
+      if (currentLessonData && unitIndex >= 0 && unitIndex < currentLessonData.length - 1) {
+        nextBtn.style.display = 'block';
+        nextBtn.onclick = function() {
+          showLessonDetail(currentLessonData[unitIndex + 1]);
+        };
+      } else {
+        nextBtn.style.display = 'none';
+      }
+    }
+
+    // 返回按钮已通过 onclick="backToLessonUnits()" 绑定
+  }
+
+  function backToLessonUnits() {
+    document.getElementById('word-detail-area').style.display = 'none';
+    document.getElementById('word-list').style.display = 'block';
+    showTextbookList();
+  }
+
+  function getRoleColor(role) {
+    const colors = {
+      'Sam': '#4f9fff',
+      'Amy': '#ff6b9d',
+      'Daming': '#52c41a',
+      'Lingling': '#fa8c16',
+      'Ms Smart': '#722ed1',
+      'Mr Li': '#13c2c2',
+      'Tom': '#eb2f96'
+    };
+    return colors[role] || '#6c63ff';
+  }
+
+  function escapeForJS(str) {
+    return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+  }
+
+  function speakLine(text) {
+    speakWord(text);
+  }
+
+  function speakAllLessonLines(content) {
+    if (!content || content.length === 0) {
+      toast('没有可朗读的内容');
+      return;
+    }
+    
+    let delay = 0;
+    content.forEach((line, idx) => {
+      setTimeout(() => {
+        speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(line.text);
+        utter.lang = 'en-US';
+        utter.rate = 0.85;
+        const voices = speechSynthesis.getVoices();
+        const enVoice = voices.find(v => v.lang.startsWith('en'));
+        if (enVoice) utter.voice = enVoice;
+        speechSynthesis.speak(utter);
+      }, delay);
+      delay += 2500; // 每句间隔2.5秒
+    });
+    
+    toast('开始朗读整篇课文...');
+  }
+
+  // ========== TTS 发音 ==========
+  function speakWord(word) {
+    if (!word) { toast("没有可发音的内容"); return; }
+    if (!window.speechSynthesis) { toast("当前浏览器不支持发音功能"); return; }
+    try {
+      speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(word);
+      utter.lang = "en-US";
+      utter.rate = 0.85;
+      utter.pitch = 1.1;
+      // 等待 voices 加载
+      const voices = speechSynthesis.getVoices();
+      const enVoice = voices.find(v => v.lang.startsWith("en"));
+      if (enVoice) utter.voice = enVoice;
+      speechSynthesis.speak(utter);
+    } catch (e) { toast("发音失败: " + e.message); }
+  }
+
+  function speakChinese(text) {
+    if (!text) return;
+    if (!window.speechSynthesis) { toast("当前浏览器不支持发音功能"); return; }
+    try {
+      speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "zh-CN";
+      const voices = speechSynthesis.getVoices();
+      const zhVoice = voices.find(v => v.lang.startsWith("zh"));
+      if (zhVoice) utter.voice = zhVoice;
+      speechSynthesis.speak(utter);
+    } catch (e) { toast("发音失败"); }
+  }
+
+
+  function speakAll(word, chinese, exampleEn, exampleCn) {
+    // 朗读顺序：单词 -> 中文 -> 英文例句 -> 例句中文
+    const parts = [
+      { text: word,       lang: 'en-US', delay: 600 },
+      { text: chinese,    lang: 'zh-CN', delay: 500 },
+      { text: exampleEn,  lang: 'en-US', delay: 600 },
+      { text: exampleCn,  lang: 'zh-CN', delay: 0   },
+    ];
+    let delay = 300;
+    for (const p of parts) {
+      setTimeout(() => {
+        if (!p.text) return;
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(p.text);
+        u.lang = p.lang;
+        u.rate = p.lang === 'en-US' ? 0.85 : 1.0;
+        const vlist = speechSynthesis.getVoices();
+        const v = vlist.find(x => x.lang.startsWith(p.lang.slice(0, 2)));
+        if (v) u.voice = v;
+        speechSynthesis.speak(u);
+      }, delay);
+      delay += p.delay + 200;
+    }
+  }
+
+  // 提前加载 voices（某些浏览器需要）
+  if (window.speechSynthesis) {
+    speechSynthesis.onvoiceschanged = () => speechSynthesis.getVoices();
+    speechSynthesis.getVoices();
+  }
+
+  // ========== API 请求 ==========
+  async function apiGET(path) {
+    const res = await fetch(API + path);
+    if (!res.ok) throw new Error(`API 错误: ${res.status}`);
+    return res.json();
+  }
+  async function apiPOST(path, body) {
+    const res = await fetch(API + path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(`API 错误: ${res.status}`);
+    return res.json();
+  }
+
+  // ========== 首页：加载模块 ==========
+  async function loadModules() {
+    try {
+      const data = await apiGET("/api/modules");
+      const progressData = await apiGET(`/api/progress/${USER_ID}`);
+      const grid = document.getElementById("module-grid");
+      grid.innerHTML = "";
+      for (const m of data) {
+        const prog = progressData[m.module] || { total: m.count, learned: 0, mastered: 0, percent: 0 };
+        const pct = prog.learned > 0 ? Math.round(prog.learned / prog.total * 100) : 0;
+        const card = document.createElement("div");
+        card.className = "module-card";
+        card.innerHTML = `
+          <div class="module-name">${m.module}</div>
+          <div class="module-count">${m.count} 个单词</div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${pct}%"></div>
+          </div>
+          <div class="progress-text">${prog.learned}/${prog.total} 已学</div>
+        `;
+        card.onclick = () => openModule(m.module);
+        grid.appendChild(card);
+      }
+    } catch (e) {
+      document.getElementById("module-grid").innerHTML =
+        `<div class="empty-state">
+          <div class="empty-state-icon">⚠️</div>
+          <div>无法连接服务器</div>
+          <div style="font-size:12px;margin-top:8px">请确保后端已启动：<br><code style="background:#eee;padding:2px 6px;border-radius:4px">uvicorn main:app --reload</code></div>
+        </div>`;
+    }
+  }
+
+  // ========== 模块：加载单词列表 ==========
+  async function openModule(module) {
+    currentModule = module;
+    try {
+      const data = await apiGET(`/api/words?module=${encodeURIComponent(module)}`);
+      currentWords = data.words;
+      document.getElementById("learn-module-title").textContent = "📖 " + module;
+      switchView("learn");
+      showWordList();
+    } catch (e) { toast("加载失败: " + e.message); }
+  }
+
+  async function showWordList() {
+    // 确保在学习视图
+    switchView("learn");
+    // 隐藏所有学习子视图
+    document.getElementById("word-detail-area").style.display = "none";
+    document.getElementById("choice-learn-area").style.display = "none";
+    document.getElementById("view-quiz").classList.remove("active");
+    document.getElementById("word-list").style.display = "block";
+    document.getElementById("quiz-toggle-bar").style.display = "flex";
+    const list = document.getElementById("word-list");
+    list.innerHTML = "<div class='spinner'></div>";
+    // 批量获取当前模块所有单词状态
+    let wordStatuses = {};
+    try {
+      wordStatuses = await apiGET(`/api/word-status/${USER_ID}?module=${encodeURIComponent(currentModule)}`);
+    } catch(e) { wordStatuses = {}; }
+    list.innerHTML = "";
+    for (const w of currentWords) {
+      const status = wordStatuses[w.id] || "new";
+      const item = document.createElement("div");
+      item.className = "word-item";
+      item.innerHTML = `
+        <div class="word-item-left">
+          <div class="word-item-word">${capitalize(w.word)}</div>
+          <div class="word-item-phonetic">${w.phonetic}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="word-item-chinese">${w.chinese}</div>
+          <div class="word-status-dot ${status}" title="${status === "new" ? "未学" : status === "learned" ? "已学" : "已掌握"}"></div>
+        </div>
+      `;
+      item.onclick = () => showWordDetail(w);
+      list.appendChild(item);
+    }
+  }
+
+  async function getWordStatus(wordId) {
+    try {
+      const all = await apiGET(`/api/word-status/${USER_ID}?module=${encodeURIComponent(currentModule)}`);
+      return all[wordId] || "new";
+    } catch { return "new"; }
+  }
+
+  // ========== 单词详情 ==========
+  function showWordDetail(w) {
+    document.getElementById("word-list").style.display = "none";
+    document.getElementById("quiz-toggle-bar").style.display = "none";
+    const area = document.getElementById("word-detail-area");
+    area.style.display = "block";
+    // 转义单引号，防止破坏 HTML onclick 属性的 JS 字符串
+    const esc = s => (s || "").replace(/'/g, "\\'");
+    area.innerHTML = `
+      <button class="btn btn-secondary" onclick="showWordList()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回单词表</button>
+      <div class="word-detail-card">
+        <div class="word-type-badge">${w.type}</div>
+        <div class="word-text">${capitalize(w.word)}</div>
+        <div class="word-phonetic">${w.phonetic}</div>
+        <button class="speak-btn" onclick="speakWord('${esc(w.word)}')">🔊 听发音</button>
+        <div class="word-chinese">${w.chinese}</div>
+        <div class="word-example">
+          <div>${capitalize(w.example_en)}</div>
+          <div class="word-example-cn">${w.example_cn}</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        <button class="btn btn-primary" onclick="markWord('${w.id}', 'learned')" style="flex:1">✓ 我学会了</button>
+        <button class="btn btn-secondary" onclick="markWord('${w.id}', 'mastered')" style="flex:1;background:linear-gradient(135deg,#ffd700 0%,#ffb700 100%);border:none;color:#fff;font-weight:600">⭐ 已掌握</button>
+      </div>
+      <button class="btn btn-secondary" onclick="speakAll('${esc(w.word)}','${esc(w.chinese)}','${esc(w.example_en)}','${esc(w.example_cn)}')" style="margin-top:10px;width:100%;background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px">🔊 朗读全部</button>
+    `;
+  }
+
+  // ========== 标记单词状态 ==========
+  async function markWord(wordId, status) {
+    try {
+      await apiPOST('/api/progress/' + USER_ID + '/' + wordId + '?status=' + status, {});
+      toast(status === 'mastered' ? '⭐ 已掌握！' : '✓ 已学会！');
+      // 刷新单词列表状态
+      showWordList();
+    } catch (e) {
+      toast('标记失败：' + e.message);
+    }
+  }
+
+  // ========== 测验 ==========
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function startQuiz() {
+    if (currentWords.length === 0) { toast("请先选择一个模块"); return; }
+    quizOrder = shuffle(currentWords.map(w => w.id));
+    currentQuizIndex = 0;
+    window.quizResults = [];
+    // 恢复显示跳过按钮和题号
+    const skipBtn = document.querySelector('#view-quiz .btn-secondary[onclick="skipQuiz()"]');
+    if (skipBtn) skipBtn.parentElement.style.display = "flex";
+    document.getElementById("quiz-hint").style.display = "block";
+    switchView("quiz");
+    loadQuizQuestion();
+  }
+
+  function loadQuizQuestion() {
+    if (currentQuizIndex >= quizOrder.length) {
+      showQuizSummary();
+      return;
+    }
+    // 重置反馈区
+    document.getElementById("quiz-feedback").style.display = "none";
+    document.getElementById("quiz-next-btn").style.display = "none";
+
+    const wordId = quizOrder[currentQuizIndex];
+    const w = currentWords.find(x => x.id === wordId);
+    if (!w) { currentQuizIndex++; loadQuizQuestion(); return; }
+
+    // 随机决定题型
+    const mode = Math.random() > 0.5 ? "en_to_cn" : "cn_to_en";
+    currentQuizMode = mode;
+
+    if (mode === "en_to_cn") {
+      document.getElementById("quiz-prompt").textContent = "这个单词的中文是？";
+      document.getElementById("quiz-word").textContent = capitalize(w.word);
+    } else {
+      document.getElementById("quiz-prompt").textContent = "这个中文的英文是？";
+      document.getElementById("quiz-word").textContent = w.chinese;
+    }
+    document.getElementById("quiz-num").textContent = currentQuizIndex + 1;
+    document.getElementById("quiz-total").textContent = quizOrder.length;
+
+    // 生成4个选项
+    const others = currentWords.filter(x => x.id !== wordId);
+    const distractors = shuffle(others).slice(0, 3);
+    let options;
+    if (mode === "en_to_cn") {
+      options = shuffle([
+        { text: w.chinese, correct: true, word: w },
+        ...distractors.map(d => ({ text: d.chinese, correct: false, word: d }))
+      ]);
+    } else {
+      options = shuffle([
+        { text: w.word, correct: true, word: w },
+        ...distractors.map(d => ({ text: d.word, correct: false, word: d }))
+      ]);
+    }
+
+    // 渲染选项
+    const optsContainer = document.getElementById("quiz-options");
+    optsContainer.innerHTML = "";
+    const labels = ["A", "B", "C", "D"];
+    options.forEach(function(opt, i) {
+      const btn = document.createElement("button");
+      btn.className = "btn btn-secondary";
+      btn.style.cssText = "width:100%;text-align:left;padding:14px 18px;font-size:16px;border-radius:12px;background:white;border:2px solid #e8eeff;color:#333;cursor:pointer;transition:all .15s";
+      btn.innerHTML = '<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#f0f4ff;color:#6c63ff;font-size:13px;text-align:center;line-height:28px;font-weight:700;margin-right:10px">' + labels[i] + '</span><span>' + opt.text + '</span>';
+      btn.onclick = function() { handleQuizChoice(btn, opt, w, mode); };
+      optsContainer.appendChild(btn);
+    });
+
+    // 自动发音
+    if (mode === "en_to_cn") setTimeout(function() { speakWord(w.word); }, 100);
+  }
+
+  function handleQuizChoice(btnEl, opt, correctWord, mode) {
+    // 禁用所有选项
+    document.querySelectorAll("#quiz-options button").forEach(function(b) {
+      b.style.pointerEvents = "none";
+    });
+
+    const feedback = document.getElementById("quiz-feedback");
+    const nextBtn = document.getElementById("quiz-next-btn");
+    const isCorrect = opt.correct;
+
+    // 记录本题结果用于判断是否全对
+    if (!window.quizResults) window.quizResults = [];
+    window.quizResults.push({ correct: isCorrect });
+
+    if (isCorrect) {
+      btnEl.style.background = "#f6ffed";
+      btnEl.style.borderColor = "#52c41a";
+      btnEl.style.color = "#52c41a";
+      feedback.style.display = "block";
+      feedback.style.background = "#f6ffed";
+      feedback.style.color = "#52c41a";
+      feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word));
+      speakChinese("正确");
+      // 保存进度：最后一题且全对时标记 mastered
+      const isLast = currentQuizIndex + 1 >= quizOrder.length;
+      const allCorrect = isLast && window.quizResults.every(function(r) { return r.correct; });
+      apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=" + (allCorrect ? "mastered" : "learned"), {});
+    } else {
+      btnEl.style.background = "#fff2f0";
+      btnEl.style.borderColor = "#ff4d4f";
+      btnEl.style.color = "#ff4d4f";
+      // 高亮正确答案
+      const correctText = mode === "en_to_cn" ? correctWord.chinese : correctWord.word;
+      document.querySelectorAll("#quiz-options button").forEach(function(b) {
+        const span = b.querySelector("span:last-child");
+        if (span && span.textContent.trim() === correctText) {
+          b.style.background = "#f6ffed";
+          b.style.borderColor = "#52c41a";
+          b.style.color = "#52c41a";
+        }
+      });
+      feedback.style.display = "block";
+      feedback.style.background = "#fff2f0";
+      feedback.style.color = "#ff4d4f";
+      feedback.innerHTML = "<strong>❌ 不对哦~</strong><br>正确答案：<strong>" + correctText + "</strong>";
+      speakChinese("不对");
+    }
+
+    nextBtn.style.display = "block";
+    nextBtn.textContent = currentQuizIndex + 1 >= quizOrder.length ? "查看成绩 🎉" : "下一题 →";
+  }
+
+  function nextQuizQuestion() {
+    currentQuizIndex++;
+    loadQuizQuestion();
+  }
+
+  function resetQuizResults() {
+    window.quizResults = [];
+  }
+
+  function showQuizSummary() {
+    const results = window.quizResults || [];
+    const total = results.length;
+    const correct = results.filter(r => r.correct).length;
+    const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
+    const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+    
+    const container = document.getElementById("quiz-options");
+    container.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
+      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
+      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
+      '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
+      '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
+        '<div style="display:flex;gap:16px">' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#52c41a">' + correct + '</div><div style="font-size:12px;color:#999">正确</div></div>' +
+          '<div style="width:1px;background:#eee"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#ff4d4f">' + (total - correct) + '</div><div style="font-size:12px;color:#999">错误/跳过</div></div>' +
+          '<div style="width:1px;background:#eee"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#6c63ff">' + total + '</div><div style="font-size:12px;color:#999">总题数</div></div>' +
+        '</div>' +
+      '</div>' +
+      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startQuiz()">🔄 再来一轮</button>' +
+      `<button class="btn btn-secondary" style="width:100%;margin-bottom:8px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px" onclick="switchView('learn')">← 返回单词表</button>` +
+      `<button class="btn btn-secondary" style="width:100%;background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()">🏠 返回首页</button>` +
+    '</div>';
+    document.getElementById("quiz-feedback").style.display = "none";
+    document.getElementById("quiz-next-btn").style.display = "none";
+    // 隐藏跳过按钮
+    const skipBtn = document.querySelector('#view-quiz .btn-secondary[onclick="skipQuiz()"]');
+    if (skipBtn) skipBtn.parentElement.style.display = "none";
+    // 隐藏题号提示
+    document.getElementById("quiz-hint").style.display = "none";
+    speakChinese(msgs);
+  }
+
+  function speakQuizWord() {
+    // 获取当前测验题目对应的单词并朗读
+    const wordId = quizOrder[currentQuizIndex];
+    const w = currentWords.find(x => x.id === wordId);
+    if (!w) return;
+    if (currentQuizMode === "en_to_cn") {
+      speakWord(w.word);
+    } else {
+      // 中文题：朗读中文
+      speakChinese(w.chinese);
+    }
+  }
+
+
+
+
+
+
+
+  function skipQuiz() {
+    // 跳过也算一题，但不算正确
+    if (!window.quizResults) window.quizResults = [];
+    window.quizResults.push({ correct: false, skipped: true });
+    currentQuizIndex++;
+    loadQuizQuestion();
+  }
+
+  function showAnswer() {
+    const wordId = quizOrder[currentQuizIndex];
+    const w = currentWords.find(x => x.id === wordId);
+    if (!w) return;
+    let correct;
+    if (currentQuizMode === "en_to_cn") correct = w.chinese;
+    else correct = w.word;
+    toast("答案：" + correct);
+  }
+
+  // ========== 选择题学习 ==========
+  let cl_words = [];
+  let cl_idx = 0;
+  let cl_order = [];
+  let cl_correct = 0;
+  let cl_total = 0;
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function startChoiceLearn() {
+    if (!currentModule || currentWords.length === 0) {
+      toast('请先选择一个模块');
+      switchView('home');
+      return;
+    }
+    cl_words = [...currentWords];
+    cl_idx = 0;
+    cl_correct = 0;
+    cl_total = 0;
+    const ids = cl_words.map(w => w.id);
+    cl_order = shuffle(ids);
+    document.getElementById('word-list').style.display = 'none';
+    document.getElementById('word-detail-area').style.display = 'none';
+    document.getElementById('quiz-toggle-bar').style.display = 'none';
+    const area = document.getElementById('choice-learn-area');
+    area.style.display = 'block';
+    switchView('learn');
+    document.getElementById('topbar-title').textContent = '🎯 开始学习';
+    loadChoiceQuestion();
+  }
+
+  function loadChoiceQuestion() {
+    if (cl_idx >= cl_order.length) {
+      showChoiceSummary();
+      return;
+    }
+    const wordId = cl_order[cl_idx];
+    const word = cl_words.find(w => w.id === wordId);
+    if (!word) { cl_idx++; loadChoiceQuestion(); return; }
+    const mode = Math.random() > 0.5 ? 'en2cn' : 'cn2en';
+    const others = cl_words.filter(w => w.id !== wordId);
+    const distractors = shuffle(others).slice(0, 3);
+    let options;
+    if (mode === 'en2cn') {
+      options = shuffle([
+        { text: word.chinese, correct: true },
+        ...distractors.map(d => ({ text: d.chinese, correct: false }))
+      ]);
+    } else {
+      options = shuffle([
+        { text: word.word, correct: true },
+        ...distractors.map(d => ({ text: d.word, correct: false }))
+      ]);
+    }
+    const prompt = mode === 'en2cn' ? '这个单词的中文是？' : '这个中文的英文是？';
+    const question = mode === 'en2cn' ? capitalize(word.word) : word.chinese;
+    const pct = Math.round((cl_idx / cl_order.length) * 100);
+    if (mode === 'en2cn') setTimeout(function() { speakWord(word.word); }, 100);
+
+    const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
+
+    const area = document.getElementById('choice-learn-area');
+    area.innerHTML = '<button class="btn btn-secondary" onclick="showWordList()" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回单词表</button>' +
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+      '<span style="font-size:13px;color:#999">' + currentModule + '</span>' +
+      '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden">' +
+        '<div style="height:100%;background:linear-gradient(90deg,#4f9fff,#6c63ff);width:' + pct + '%;border-radius:3px;transition:width .3s"></div>' +
+      '</div>' +
+      '<span style="font-size:12px;color:#999">' + (cl_idx + 1) + '/' + cl_order.length + '</span>' +
+    '</div>' +
+    '<div style="text-align:center;margin-bottom:8px">' +
+      '<div style="font-size:40px;font-weight:800;color:#333;margin-bottom:4px">' + question + '</div>' +
+      '<button class="speak-btn" onclick="speakChoiceWord(\'' + esc(mode) + '\',' + wordId + ')" style="margin:0 auto">🔊 听发音</button>' +
+      '<div style="font-size:14px;color:#999;margin-top:4px">' + prompt + '</div>' +
+    '</div>' +
+    '<div id="choice-options" style="display:flex;flex-direction:column;gap:10px;margin-top:16px"></div>' +
+    '<div id="choice-feedback" style="display:none;margin-top:12px;text-align:center;padding:14px;border-radius:12px;font-size:15px;line-height:1.5"></div>' +
+    '<div style="display:flex;gap:10px;margin-top:12px">' +
+      '<button id="cl-next-btn" class="btn btn-primary" style="flex:1;display:none" onclick="clNextQuestion()">下一题 →</button>' +
+      '<button class="btn btn-secondary" style="padding:12px 20px;background:#f5f5f5;border:1px solid #ddd;color:#999" onclick="clSkipQuestion()">跳过</button>' +
+    '</div>';
+
+    const optsContainer = document.getElementById('choice-options');
+    const labels = ['A', 'B', 'C', 'D'];
+    options.forEach(function(opt, i) {
+      const btn = document.createElement('button');
+      btn.className = 'choice-opt-btn';
+      btn.style.cssText = 'width:100%;text-align:left;padding:14px 18px;font-size:16px;border-radius:12px;background:white;border:2px solid #e8eeff;color:#333;cursor:pointer;transition:all .15s';
+      btn.innerHTML = '<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#f0f4ff;color:#6c63ff;font-size:13px;text-align:center;line-height:28px;font-weight:700;margin-right:10px;flex-shrink:0">' + labels[i] + '</span><span>' + opt.text + '</span>';
+      btn.onclick = (function(o) {
+        return function() { handleChoiceAnswer(o, word, mode); };
+      })(opt);
+      optsContainer.appendChild(btn);
+    });
+  }
+
+  function speakChoiceWord(mode, wordId) {
+    const w = cl_words.find(function(x) { return x.id === wordId; });
+    if (!w) return;
+    if (mode === 'en2cn') speakWord(w.word);
+    else speakChinese(w.chinese);
+  }
+
+  function handleChoiceAnswer(opt, word, mode) {
+    document.querySelectorAll('.choice-opt-btn').forEach(function(b) { b.style.pointerEvents = 'none'; });
+    cl_total++;
+    const feedback = document.getElementById('choice-feedback');
+    const nextBtn = document.getElementById('cl-next-btn');
+    const isCorrect = opt.correct;
+
+    if (isCorrect) {
+      cl_correct++;
+      clStyle(feedback, '#f6ffed', '#52c41a', '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word)));
+      clStyleBtn(event.target, '#f6ffed', '#52c41a');
+      speakChinese('正确');
+      // 全对时标记 mastered，否则 learned
+      const isLast = (cl_idx + 1) >= cl_order.length;
+      const isPerfect = isLast && (cl_correct === cl_total);
+      saveChoiceProgress(word.id, isPerfect ? 'mastered' : 'learned');
+    } else {
+      clStyle(feedback, '#fff2f0', '#ff4d4f', '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + (mode === 'en2cn' ? word.chinese : capitalize(word.word)) + '</strong>');
+      // 高亮正确答案
+      document.querySelectorAll('.choice-opt-btn span:last-child').forEach(function(span) {
+        const txt = span.textContent.trim();
+        const correctTxt = mode === 'en2cn' ? word.chinese : word.word;
+        if (txt === correctTxt) {
+          span.parentElement.style.background = '#f6ffed';
+          span.parentElement.style.borderColor = '#52c41a';
+          span.parentElement.style.color = '#52c41a';
+        }
+      });
+      // 标红选错的
+      event.target.style.background = '#fff2f0';
+      event.target.style.borderColor = '#ff4d4f';
+      event.target.style.color = '#ff4d4f';
+      speakChinese('不对');
+    }
+
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = (cl_idx + 1) >= cl_order.length ? '查看成绩 🎉' : '下一题 →';
+  }
+
+  function clSkipQuestion() {
+    cl_total++; // 跳过也算一题，但不算正确
+    cl_idx++;
+    loadChoiceQuestion();
+  }
+
+  function clStyle(el, bg, color, html) {
+    el.style.display = 'block';
+    el.style.background = bg;
+    el.style.color = color;
+    el.innerHTML = html;
+  }
+
+  function clStyleBtn(btn, bg, color) {
+    btn.style.background = bg;
+    btn.style.borderColor = color;
+    btn.style.color = color;
+  }
+
+  async function saveChoiceProgress(wordId, status) {
+    status = status || 'learned';
+    try {
+      await apiPOST('/api/progress/' + USER_ID + '/' + wordId + '?status=' + status, {});
+    } catch(e) {}
+  }
+
+  function clNextQuestion() {
+    cl_idx++;
+    loadChoiceQuestion();
+  }
+
+  function showChoiceSummary() {
+    const pct = cl_total > 0 ? Math.round(cl_correct / cl_total * 100) : 0;
+    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
+    const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+    const area = document.getElementById('choice-learn-area');
+    area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
+      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
+      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + cl_correct + '/' + cl_total + ' 题正确</div>' +
+      '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
+      '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
+        '<div style="display:flex;gap:16px">' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#52c41a">' + cl_correct + '</div><div style="font-size:12px;color:#999">正确</div></div>' +
+          '<div style="width:1px;background:#eee"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#ff4d4f">' + (cl_total - cl_correct) + '</div><div style="font-size:12px;color:#999">错误</div></div>' +
+          '<div style="width:1px;background:#eee"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#6c63ff">' + cl_total + '</div><div style="font-size:12px;color:#999">总题数</div></div>' +
+        '</div>' +
+      '</div>' +
+      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startChoiceLearn()">🔄 再来一轮</button>' +
+      '<button class="btn btn-secondary" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500" onclick="showWordList()">← 返回单词表</button>' +
+      '<button class="btn btn-secondary" style="width:100%;background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()">🏠 返回首页</button>' +
+    '</div>';
+    speakChinese(msgs);
+  }
+
+  function showLessonList() {
+    switchView('home');
+  // 直接跳转到课文模块列表
+    showTextbookList();
+  }
+
+  function backToHome() {
+    switchView('home');
+    loadModules();
+  }
+
+
+// ========== 学习报告 ==========
+  async function loadReport() {
+    try {
+      const data = await apiGET(`/api/progress/${USER_ID}`);
+      const total = data._total;
+      const pct = total.percent || 0;
+      document.getElementById("total-percent").textContent = pct + "%";
+      document.getElementById("total-percent").parentElement.style.setProperty("--pct", pct + "%");
+      document.getElementById("stat-total").textContent = total.total;
+      document.getElementById("stat-learned").textContent = total.learned;
+      document.getElementById("stat-mastered").textContent = total.mastered;
+      // 各模块
+      const container = document.getElementById("report-modules");
+      container.innerHTML = "";
+      const keys = Object.keys(data).filter(k => k !== "_total");
+      for (const mod of keys) {
+        const p = data[mod];
+        const total = p.total || 0;
+        const learned = p.learned || 0;
+        const mastered = p.mastered || 0;
+        const pctM = total > 0 ? Math.round(learned / total * 100) : 0;
+
+        // 状态标签
+        let statusLabel = '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f5f5f5;color:#999">未开始</span>';
+        if (learned > 0 && mastered === 0) statusLabel = '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#e6f7ff;color:#1890ff">学习中</span>';
+        if (mastered > 0) statusLabel = '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#f6ffed;color:#52c41a">已掌握</span>';
+        if (learned === total && total > 0 && mastered < total) statusLabel = '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#fff7e6;color:#fa8c16">待巩固</span>';
+
+        // 进度条颜色
+        let barColor = '#e8eeff';
+        if (pctM >= 100) barColor = '#52c41a';
+        else if (pctM >= 60) barColor = '#4f9fff';
+
+        const pctBig = pctM >= 100
+          ? '<span style="color:#52c41a;font-weight:700">&#10004; ' + pctM + '%</span>'
+          : '<span style="color:#6c63ff;font-weight:700">' + pctM + '%</span>';
+
+        const div = document.createElement("div");
+        div.className = "report-card";
+        div.onclick = (function(m) { return function() {
+          openModule(m);
+        }; })(mod);
+        // 纯静态展示，无点击事件
+        div.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+          '<div style="font-weight:600;font-size:15px">' + mod + '</div>' +
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            statusLabel +
+            '<span style="font-size:14px">' + pctBig + '</span></div></div>' +
+          '<div style="height:8px;background:#f0f4ff;border-radius:4px;overflow:hidden;margin-bottom:8px">' +
+            '<div style="height:100%;background:' + barColor + ';width:' + pctM + '%;border-radius:4px;transition:width .4s"></div></div>' +
+          '<div style="display:flex;gap:16px;font-size:12px;color:#666">' +
+            '<span>&#128214; 已学 <b style="color:#333">' + learned + '</b></span>' +
+            '<span>&#11088; 已掌握 <b style="color:#333">' + mastered + '</b></span>' +
+            '<span>&#128218; 共 <b style="color:#333">' + total + '</b></span></div>';
+        container.appendChild(div);
+      }
+    } catch (e) {
+      toast("加载报告失败");
+    }
+  }
+
+  // ========== 底部导航 ==========
+  document.write(`
+  <div class="bottom-nav">
+    <div id="nav-home" class="nav-item active" onclick="backToHome()">
+      <span class="nav-item-icon">🏠</span>首页
+    </div>
+    <div id="nav-learn" class="nav-item" onclick="switchView('learn')">
+      <span class="nav-item-icon">📖</span>学习
+    </div>
+    <div id="nav-ket" class="nav-item" onclick="switchView('ket')">
+      <span class="nav-item-icon">📚</span>KET
+    </div>
+    <div id="nav-report" class="nav-item" onclick="switchView('report')">
+      <span class="nav-item-icon">📊</span>报告
+    </div>
+  </div>
+  `);
+
+  
+  // ========== KET 学习功能 ==========
+  let ketCategories = [];
+
+  async function loadKetCategories() {
+    try {
+      const data = await apiGET('/api/ket/categories');
+      ketCategories = data.categories || [];
+
+      const container = document.getElementById('ket-category-list');
+      container.innerHTML = '';
+
+      // 按类型分组
+      const grouped = {};
+      ketCategories.forEach(cat => {
+        if (!grouped[cat.type]) grouped[cat.type] = [];
+        grouped[cat.type].push(cat);
+      });
+
+      // 渲染分类卡片
+      for (const [type, cats] of Object.entries(grouped)) {
+        const typeDiv = document.createElement('div');
+        typeDiv.style.gridColumn = '1 / -1';
+        typeDiv.style.marginTop = '12px';
+        typeDiv.style.marginBottom = '8px';
+        typeDiv.style.fontSize = '16px';
+        typeDiv.style.fontWeight = '600';
+        typeDiv.style.color = '#333';
+        typeDiv.textContent = type === '词汇' ? '📖 词汇学习' : type === '句型' ? '💬 句型练习' : '📝 语法知识';
+        container.appendChild(typeDiv);
+
+        cats.forEach(cat => {
+          const card = document.createElement('div');
+          card.className = 'module-card';
+          card.innerHTML = `
+            <div class="module-name">${cat.category}</div>
+            <div class="module-count">${cat.count} 项</div>
+          `;
+          card.onclick = () => openKetCategory(cat.type, cat.category);
+          container.appendChild(card);
+        });
+      }
+
+      // 显示分类列表，隐藏内容区
+      container.style.display = 'grid';
+      document.getElementById('ket-content-area').style.display = 'none';
+
+    } catch (e) {
+      console.error('加载 KET 分类失败:', e);
+      toast('加载失败，请检查后端服务');
+    }
+  }
+
+  async function openKetCategory(type, category) {
+    try {
+      const container = document.getElementById('ket-content-list');
+      const titleEl = document.getElementById('ket-content-title');
+
+      // 隐藏分类列表，显示内容区
+      document.getElementById('ket-category-list').style.display = 'none';
+      document.getElementById('ket-content-area').style.display = 'block';
+
+      if (type === '词汇') {
+        titleEl.textContent = '📖 ' + category;
+        const data = await apiGET('/api/ket/words?category=' + encodeURIComponent(category));
+        const words = data.words || [];
+
+        container.innerHTML = words.map((w, i) => `
+          <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+            <div style="font-size:20px;font-weight:600;color:#4f9fff;margin-bottom:8px">
+              ${w.word}
+              <button class="speak-btn" onclick="speakWord('${w.word}')" style="margin-left:8px;padding:4px 12px;font-size:12px">🔊</button>
+            </div>
+            <div style="font-size:14px;color:#666;margin-bottom:4px">${w.chinese}</div>
+            <div style="font-size:13px;color:#999;font-style:italic">例：${w.example}</div>
+          </div>
+        `).join('');
+
+      } else if (type === '句型') {
+        titleEl.textContent = '💬 ' + category;
+        const data = await apiGET('/api/ket/sentences?category=' + encodeURIComponent(category));
+        const sentences = data.sentences || [];
+
+        container.innerHTML = sentences.map((s, i) => `
+          <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+            <div style="font-size:18px;font-weight:600;color:#4f9fff;margin-bottom:8px">
+              ${s.english}
+              <button class="speak-btn" onclick="speakWord('${s.english}')" style="margin-left:8px;padding:4px 12px;font-size:12px">🔊</button>
+            </div>
+            <div style="font-size:14px;color:#666;margin-bottom:4px">${s.chinese}</div>
+            <div style="font-size:12px;color:#999;background:#f0f4ff;padding:4px 8px;border-radius:4px;display:inline-block">用途：${s.usage}</div>
+          </div>
+        `).join('');
+
+      } else if (type === '语法') {
+        titleEl.textContent = '📝 ' + category;
+        const data = await apiGET('/api/ket/grammar?category=' + encodeURIComponent(category));
+        const grammar = data.grammar || {};
+
+        let html = `
+          <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+            <div style="font-size:16px;font-weight:600;color:#d48806;margin-bottom:8px">📖 规则</div>
+            <div style="font-size:14px;color:#666;line-height:1.6">${grammar.规则 || ''}</div>
+          </div>
+        `;
+
+        if (grammar.例句 && grammar.例句.length > 0) {
+          html += `
+            <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:#fffbf0;border-radius:12px;border:2px solid #ffe7ba">
+              <div style="font-size:16px;font-weight:600;color:#d48806;margin-bottom:12px">📝 例句</div>
+              ${grammar.例句.map(ex => `
+                <div style="padding:8px 0;border-bottom:1px dashed #ffe7ba">
+                  <div style="font-size:15px;color:#333">${ex}
+                    <button class="speak-btn" onclick="speakWord('${ex}')" style="margin-left:8px;padding:2px 8px;font-size:11px">🔊</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        container.innerHTML = html;
+      }
+
+    } catch (e) {
+      console.error('加载 KET 内容失败:', e);
+      toast('加载失败');
+    }
+  }
+
+  function backToKetCategories() {
+    document.getElementById('ket-category-list').style.display = 'grid';
+    document.getElementById('ket-content-area').style.display = 'none';
+  }
+
+  // ========== 启动 ==========
+  loadModules();
