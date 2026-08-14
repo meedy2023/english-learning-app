@@ -558,7 +558,7 @@ const API = "http://10.255.100.133:8080";
     document.getElementById("view-" + name).classList.add("active");
     const titles = { home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
-    document.getElementById("topbar-right").style.display = (name === "report" || name === "ket") ? "none" : "";
+    document.getElementById("topbar-right").style.display = (name === "home" || name === "learn" || name === "report" || name === "ket") ? "none" : "";
     if (name === "report") loadReport();
       if (name === "ket") loadKetCategories();
     // 学习页无数据时显示提示
