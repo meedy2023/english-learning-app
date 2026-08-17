@@ -152,13 +152,13 @@
     const grades = grade ? [grade] : Object.keys(root);
     for (const g of grades) {
       const semesters = root[g] || {};
-      Object.keys(semesters).forEach((sem) => {
+      for (const sem of Object.keys(semesters)) {
         const modDict = semesters[sem];
-        if (typeof modDict !== "object") return;
+        if (typeof modDict !== "object") continue;
         if (moduleName in modDict) {
           return { module: moduleName, grade: g, semester: sem, units: modDict[moduleName] };
         }
-      });
+      }
     }
     return null;
   }
@@ -274,16 +274,16 @@
         const grades = gradeLabel ? [gradeLabel.replace(/(上册|下册)$/, "")] : Object.keys(root);
         for (const g of grades) {
           const semesters = root[g] || {};
-          Object.keys(semesters).forEach((sem) => {
+          for (const sem of Object.keys(semesters)) {
             const modDict = semesters[sem];
-            if (typeof modDict !== "object") return;
-            if (gradeLabel && (g + sem) !== gradeLabel) return;
+            if (typeof modDict !== "object") continue;
+            if (gradeLabel && (g + sem) !== gradeLabel) continue;
             if (moduleName in modDict) {
               return json({ module: moduleName, grade: g, semester: sem, units: modDict[moduleName] });
             }
-          });
+          }
         }
-        return json({ detail: "模块不存在: " + moduleName }, 404);
+        return json({ detail: "模块不存在: " + moduleName + (gradeLabel ? " (年级: " + gradeLabel + ")" : "") }, 404);
       }
 
       // ===== 单词系列 =====
