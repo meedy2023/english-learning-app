@@ -276,13 +276,18 @@
         const moduleName = parts[0];
         const gradeLabel = params.get("grade_label") || null;
         const root = DATA.textbook["外研社"] || {};
-        const grades = gradeLabel ? [gradeLabel.replace(/(上册|下册)$/, "")] : Object.keys(root);
-        for (const g of grades) {
+        // 正确拆分年级和学期："五年级下册" → grade="五年级", semKey="下册"
+        const _gk = gradeLabel || "";
+        const _grade = _gk.replace(/(上册|下册)$/, "");
+        const _semKey = _gk ? _gk.slice(_grade.length) : "";
+        const _targetGrades = _grade ? [_grade] : Object.keys(root);
+        for (const g of _targetGrades) {
           const semesters = root[g] || {};
           for (const sem of Object.keys(semesters)) {
+            // 若指定了学期，匹配"下册"=="下册"，不匹配则跳过
+            if (_semKey && sem !== _semKey) continue;
             const modDict = semesters[sem];
             if (typeof modDict !== "object") continue;
-            if (gradeLabel && (g + sem) !== gradeLabel) continue;
             const target = String(moduleName).trim().toLowerCase();
             for (const key of Object.keys(modDict)) {
               const k = key.trim().toLowerCase();
