@@ -135,13 +135,19 @@ def get_textbook_modules(grade: Optional[str] = None):
             continue
         semesters = data["外研社"][g]
         for sem, mod_dict in semesters.items():
-            for mod_name in mod_dict.keys():
-                modules.append({"grade": g, "semester": sem, "module": mod_name})
+            for mod_name, units in mod_dict.items():
+                modules.append({
+                    "grade": g,
+                    "semester": sem,
+                    "module": mod_name,
+                    "grade_label": g + sem,
+                    "unit_count": len(units) if isinstance(units, list) else 0,
+                })
     return {"modules": modules, "grades": all_grades}
 
 
 @app.get("/api/textbook/{module_name}")
-def get_textbook_module(module_name: str, grade: Optional[str] = None, semester: Optional[str] = None):
+def get_textbook_module(module_name: str, grade_label: Optional[str] = None, semester: Optional[str] = None):
     """获取指定课文模块内容"""
     try:
         with open("textbook_data.json", "r", encoding="utf-8") as f:
@@ -150,12 +156,10 @@ def get_textbook_module(module_name: str, grade: Optional[str] = None, semester:
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="课文数据文件未找到")
 
-    # 精确匹配
+    # 精确匹配：遍历 (年级, 学期) 组合，用 grade_label = g+sem 来匹配
     for g, semesters in data.get("外研社", {}).items():
-        if grade and g != grade:
-            continue
         for sem, mod_dict in semesters.items():
-            if semester and sem != semester:
+            if grade_label and (g + sem) != grade_label:
                 continue
             if module_name in mod_dict:
                 return {"grade": g, "semester": sem, "module": module_name, "units": mod_dict[module_name]}

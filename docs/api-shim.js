@@ -131,7 +131,7 @@
         Object.keys(modDict).forEach((modName) => {
           const units = modDict[modName];
           if (Array.isArray(units) && units.length > 0) {
-            res.push({ module: modName, grade: g, semester: sem });
+            res.push({ module: modName, grade: g, semester: sem, grade_label: g + sem, unit_count: units.length });
           }
         });
       });
@@ -242,7 +242,7 @@
     try {
       // ===== 多年级新增接口 =====
       if (api === "grades") return json(getGrades());
-      // /api/modules?grade=三年级
+      // /api/modules?grade_label=三年级
       if (api === "modules") {
         const grade = params.get("grade") || null;
         const mods = getModules(grade);
@@ -269,14 +269,15 @@
         const rest = decodeURIComponent(api.slice("textbook/".length));
         const parts = rest.split("/");
         const moduleName = parts[0];
-        const grade = params.get("grade") || null;
+        const gradeLabel = params.get("grade_label") || null;
         const root = DATA.textbook["外研社"] || {};
-        const grades = grade ? [grade] : Object.keys(root);
+        const grades = gradeLabel ? [gradeLabel.replace(/(上册|下册)$/, "")] : Object.keys(root);
         for (const g of grades) {
           const semesters = root[g] || {};
           Object.keys(semesters).forEach((sem) => {
             const modDict = semesters[sem];
             if (typeof modDict !== "object") return;
+            if (gradeLabel && (g + sem) !== gradeLabel) return;
             if (moduleName in modDict) {
               return json({ module: moduleName, grade: g, semester: sem, units: modDict[moduleName] });
             }

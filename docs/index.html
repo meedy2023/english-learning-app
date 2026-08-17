@@ -759,8 +759,8 @@ const API = ".";
           <div class="module-name">${m.module}${gradeLabel}</div>
           <div class="module-count">${m.unit_count} 个单元</div>
         `;
-        // 模块点击时带上学期参数
-        card.onclick = () => openLessonModule(m.module, m.grade);
+        // 模块点击时带上学年级+学期参数（grade_label = 年级+学期，如 '三年级上册'）
+        card.onclick = () => openLessonModule(m.module, m.grade_label || m.grade);
         grid.appendChild(card);
       }
 
@@ -771,6 +771,7 @@ const API = ".";
   }
 
   async function openLessonModule(moduleName, grade) {
+    const gradeLabel = grade || currentLessonGrade || "三年级上册";
     currentLessonModule = moduleName;
     currentLessonGrade = grade || currentLessonGrade || '三年级上册';
     document.getElementById('topbar-title').textContent = '📖 ' + currentLessonGrade + ' - ' + moduleName;
@@ -784,7 +785,7 @@ const API = ".";
       // 根据是否有指定学期决定 URL
       let url = '/api/textbook/' + encodeURIComponent(moduleName);
       if (grade) {
-        url += '?grade=' + encodeURIComponent(grade);
+        url += '?grade_label=' + encodeURIComponent(grade || currentLessonGrade || '三年级上册');
       }
       const data = await apiGET(url);
       currentLessonData = data.units;
