@@ -82,17 +82,18 @@
 
   // ---------- 单词模块→课文映射（三个年级） ----------
   const WORD_TO_LESSON = {
-    // 三年级
-    "上1": ["Module 1", "三年级上册"], "上2": ["Module 2", "三年级上册"],
-    "上3": ["Module 3", "三年级上册"], "上4": ["Module 4", "三年级上册"],
-    "上5": ["Module 5", "三年级上册"], "上6": ["Module 6", "三年级上册"],
-    "上7": ["Module 7", "三年级上册"], "上8": ["Module 8", "三年级上册"],
-    "上9": ["Module 9", "三年级上册"], "上10": ["Module 10", "三年级上册"],
-    "下1": ["Module 1", "三年级下册"], "下2": ["Module 2", "三年级下册"],
-    "下3": ["Module 3", "三年级下册"], "下4": ["Module 4", "三年级下册"],
-    "下5": ["Module 5", "三年级下册"], "下6": ["Module 6", "三年级下册"],
-    "下7": ["Module 7", "三年级下册"], "下8": ["Module 8", "三年级下册"],
-    "下9": ["Module 9", "三年级下册"], "下10": ["Module 10", "三年级下册"],
+    // 三年级上册（2024新版：Welcome + Unit 1~6）
+    "上0": ["Welcome to school", "三年级上册"],
+    "上1": ["Unit 1 Let's be friends!", "三年级上册"],
+    "上2": ["Unit 2 My school things", "三年级上册"],
+    "上3": ["Unit 3 It's a colourful world!", "三年级上册"],
+    "上4": ["Unit 4 Fun with numbers", "三年级上册"],
+    "上5": ["Unit 5 We're family", "三年级上册"],
+    "上6": ["Unit 6 My sweet home", "三年级上册"],
+    // 三年级下册（2024新版：Unit 1~6）
+    "下1": ["Unit 1 Animal friends", "三年级下册"], "下2": ["Unit 2 Know your body", "三年级下册"],
+    "下3": ["Unit 3 Yummy food", "三年级下册"], "下4": ["Unit 4 What's your hobby?", "三年级下册"],
+    "下5": ["Unit 5 What time is it?", "三年级下册"], "下6": ["Unit 6 A great week", "三年级下册"],
     // 四年级
     "四上1": ["Module 1", "四年级上册"], "四上2": ["Module 2", "四年级上册"],
     "四上3": ["Module 3", "四年级上册"], "四上4": ["Module 4", "四年级上册"],
@@ -150,13 +151,17 @@
   function textbookModuleDetail(moduleName, grade) {
     const root = DATA.textbook["外研社"] || {};
     const grades = grade ? [grade] : Object.keys(root);
+    const target = String(moduleName).trim().toLowerCase();
     for (const g of grades) {
       const semesters = root[g] || {};
       for (const sem of Object.keys(semesters)) {
         const modDict = semesters[sem];
         if (typeof modDict !== "object") continue;
-        if (moduleName in modDict) {
-          return { module: moduleName, grade: g, semester: sem, units: modDict[moduleName] };
+        for (const key of Object.keys(modDict)) {
+          const k = key.trim().toLowerCase();
+          if (k === target || k.startsWith(target)) {
+            return { module: key, grade: g, semester: sem, units: modDict[key] };
+          }
         }
       }
     }
@@ -278,8 +283,12 @@
             const modDict = semesters[sem];
             if (typeof modDict !== "object") continue;
             if (gradeLabel && (g + sem) !== gradeLabel) continue;
-            if (moduleName in modDict) {
-              return json({ module: moduleName, grade: g, semester: sem, units: modDict[moduleName] });
+            const target = String(moduleName).trim().toLowerCase();
+            for (const key of Object.keys(modDict)) {
+              const k = key.trim().toLowerCase();
+              if (k === target || k.startsWith(target)) {
+                return json({ module: key, grade: g, semester: sem, units: modDict[key] });
+              }
             }
           }
         }

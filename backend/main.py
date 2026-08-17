@@ -156,13 +156,16 @@ def get_textbook_module(module_name: str, grade_label: Optional[str] = None, sem
         from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="课文数据文件未找到")
 
-    # 精确匹配：遍历 (年级, 学期) 组合，用 grade_label = g+sem 来匹配
+    # 匹配：遍历 (年级, 学期) 组合，用 grade_label = g+sem 来匹配
+    # module_name 支持：完整 key（'Module 1 Go straight on'）或前缀（'Module 1' / 'Unit 1' / 'Welcome to school'）
+    target = module_name.strip().lower()
     for g, semesters in data.get("外研社", {}).items():
         for sem, mod_dict in semesters.items():
             if grade_label and (g + sem) != grade_label:
                 continue
-            if module_name in mod_dict:
-                return {"grade": g, "semester": sem, "module": module_name, "units": mod_dict[module_name]}
+            for key, units in mod_dict.items():
+                if key.strip().lower() == target or key.strip().lower().startswith(target):
+                    return {"grade": g, "semester": sem, "module": key, "units": units}
     from fastapi import HTTPException
     raise HTTPException(status_code=404, detail="未找到该课文模块")
 
@@ -180,17 +183,18 @@ def textbook_by_word_module(word_module: str):
 
 # 单词模块 → 课文模块+学期
 WORD_TO_LESSON_MODULE = {
-    # 三年级
-    '上1': ('Module 1', '三年级上册'), '上2': ('Module 2', '三年级上册'),
-    '上3': ('Module 3', '三年级上册'), '上4': ('Module 4', '三年级上册'),
-    '上5': ('Module 5', '三年级上册'), '上6': ('Module 6', '三年级上册'),
-    '上7': ('Module 7', '三年级上册'), '上8': ('Module 8', '三年级上册'),
-    '上9': ('Module 9', '三年级上册'), '上10': ('Module 10', '三年级上册'),
-    '下1': ('Module 1', '三年级下册'), '下2': ('Module 2', '三年级下册'),
-    '下3': ('Module 3', '三年级下册'), '下4': ('Module 4', '三年级下册'),
-    '下5': ('Module 5', '三年级下册'), '下6': ('Module 6', '三年级下册'),
-    '下7': ('Module 7', '三年级下册'), '下8': ('Module 8', '三年级下册'),
-    '下9': ('Module 9', '三年级下册'), '下10': ('Module 10', '三年级下册'),
+    # 三年级上册（2024新版：Welcome + Unit 1~6）
+    '上0': ('Welcome to school', '三年级上册'),
+    '上1': ("Unit 1 Let's be friends!", '三年级上册'),
+    '上2': ('Unit 2 My school things', '三年级上册'),
+    '上3': ("Unit 3 It's a colourful world!", '三年级上册'),
+    '上4': ('Unit 4 Fun with numbers', '三年级上册'),
+    '上5': ("Unit 5 We're family", '三年级上册'),
+    '上6': ('Unit 6 My sweet home', '三年级上册'),
+    # 三年级下册（2024新版：Unit 1~6）
+    '下1': ('Unit 1 Animal friends', '三年级下册'), '下2': ('Unit 2 Know your body', '三年级下册'),
+    '下3': ('Unit 3 Yummy food', '三年级下册'), '下4': ("Unit 4 What's your hobby?", '三年级下册'),
+    '下5': ('Unit 5 What time is it?', '三年级下册'), '下6': ('Unit 6 A great week', '三年级下册'),
     # 四年级
     '四上1': ('Module 1', '四年级上册'), '四上2': ('Module 2', '四年级上册'),
     '四上3': ('Module 3', '四年级上册'), '四上4': ('Module 4', '四年级上册'),
