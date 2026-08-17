@@ -422,6 +422,35 @@
     .grade-btn:active .grade-desc {
       opacity: 1;
     }
+  
+  /* ===== 跟读功能样式 ===== */
+  .ra-btn { transition: all 0.3s; }
+  .ra-btn:hover { transform: scale(1.05); }
+  .ra-playing {
+    background: #e3f2fd !important;
+    border-color: #1976d2 !important;
+    color: #1976d2 !important;
+    animation: ra-pulse-blue 0.8s ease-in-out infinite;
+  }
+  .ra-recording {
+    background: #ffebee !important;
+    border-color: #d32f2f !important;
+    color: #d32f2f !important;
+    animation: ra-pulse-red 0.6s ease-in-out infinite;
+  }
+  .ra-line-item.ra-active {
+    background: #fffde7 !important;
+    box-shadow: 0 0 0 2px #ffc107;
+  }
+  @keyframes ra-pulse-blue {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(25,118,210,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(25,118,210,0); }
+  }
+  @keyframes ra-pulse-red {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(211,47,47,0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(211,47,47,0); }
+  }
+
   </style>
 </head>
 <body>
@@ -844,13 +873,19 @@ const API = "http://10.255.100.133:8080";
     let dialogueHTML = '';
     unit.content.forEach((line, idx) => {
       const roleColor = getRoleColor(line.role);
-      dialogueHTML += `
-        <div style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid ${roleColor}">
-          <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}</div>
-          <div style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${line.text}</div>
-          <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
+      const lineId = 'ra-line-' + idx;
+      dialogueHTML += \`
+        <div class="ra-line-item" id="\${lineId}" style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid \${roleColor}">
+          <div style="font-weight:600;color:\${roleColor};margin-bottom:4px;font-size:14px">\${line.role}</div>
+          <div id="\${lineId}-text" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">\${line.text}</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn btn-secondary btn-sm" onclick="speakLine('\${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
+            <button class="ra-btn" onclick="raToggle(document.getElementById('\${lineId}-text'), '\${escapeForJS(line.text)}', \${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
+              🎤 跟读
+            </button>
+          </div>
         </div>
-      `;
+      \`;
     });
     
     // 构建翻译内容
@@ -975,6 +1010,100 @@ const API = "http://10.255.100.133:8080";
 
   function speakLine(text) {
     speakWord(text);
+  }
+
+// ========== 跟读功能（麦克风录音）==========
+  var _ra = null; // MediaRecorder instance
+  var _raChunks = [];
+  var _raState = 'idle'; // idle | playing | recording
+  var _raTimeout = null;
+
+  function raToggle(lineEl, text, idx) {
+    // 停止当前操作
+    if (_raState === 'recording') { raStop(); return; }
+    if (_raState === 'playing') { raReset(); return; }
+
+    // 开始播放 TTS + 录音
+    _raState = 'playing';
+    var btn = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
+    btn.textContent = '⏳ 等待结束...';
+    btn.className = 'ra-btn ra-playing';
+    raClearHighlight();
+    lineEl.closest('.ra-line-item').classList.add('ra-active');
+
+    TTS.speak(text, 'en-US');
+
+    // TTS 播放完（约 3 秒后）开始录音
+    _raTimeout = setTimeout(function() {
+      raStartRecording(lineEl, text, idx);
+    }, text.length < 30 ? 3000 : 5000);
+  }
+
+  function raStartRecording(lineEl, text, idx) {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      toast('您的浏览器不支持麦克风录音');
+      raReset();
+      return;
+    }
+    _raState = 'recording';
+    _raChunks = [];
+    var btn = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
+    btn.textContent = '🔴 录音中...';
+    btn.className = 'ra-btn ra-recording';
+
+    navigator.mediaDevices.getUserMedia({ audio: true, video: false })
+      .then(function(stream) {
+        _ra = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        _ra.ondataavailable = function(e) { if (e.data.size > 0) _raChunks.push(e.data); };
+        _ra.onstop = function() {
+          stream.getTracks().forEach(function(t) { t.stop(); });
+          if (_raChunks.length === 0) { toast('未检测到录音'); raReset(); return; }
+          var blob = new Blob(_raChunks, { type: 'audio/webm' });
+          var url = URL.createObjectURL(blob);
+          var audio = new Audio();
+          audio.src = url;
+          audio.onended = function() {
+            URL.revokeObjectURL(url);
+            toast('跟读完成，再试一次或切换其他句子');
+            raReset();
+          };
+          audio.play().catch(function() { toast('回放失败'); raReset(); });
+          var btn2 = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
+          btn2.textContent = '▶ 回放中...';
+          btn2.className = 'ra-btn ra-playing';
+        };
+        _ra.start();
+
+        // 5 秒后自动停止
+        setTimeout(function() { if (_ra && _ra.state === 'recording') _ra.stop(); }, 5000);
+      })
+      .catch(function(err) {
+        toast('麦克风权限被拒绝，请允许使用麦克风');
+        raReset();
+      });
+  }
+
+  function raStop() {
+    if (_ra && _ra.state === 'recording') _ra.stop();
+    clearTimeout(_raTimeout);
+    raReset();
+  }
+
+  function raReset() {
+    clearTimeout(_raTimeout);
+    _raState = 'idle';
+    _raChunks = [];
+    raClearHighlight();
+  }
+
+  function raClearHighlight() {
+    document.querySelectorAll('.ra-line-item').forEach(function(el) {
+      el.classList.remove('ra-active');
+    });
+    document.querySelectorAll('.ra-btn').forEach(function(b) {
+      b.textContent = '🎤 跟读';
+      b.className = 'ra-btn';
+    });
   }
 
   function speakAllLessonLines(content) {
