@@ -874,7 +874,21 @@ const API = ".";
         </div>
       </div>
 
-      <div class="word-detail-card">
+      <div style="background:#fff7e6;border:1px solid #ffd591;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;color:#d48806;display:flex;align-items:center;gap:8px">
+        <span style="font-size:18px">💡</span>
+        <span>积分保存在浏览器中，清除浏览器数据会重置。建议定期导出备份！</span>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-bottom:16px">
+        <button class="btn btn-secondary" onclick="exportPoints()" style="flex:1;background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px">
+          <span>📤</span> 导出积分
+        </button>
+        <button class="btn btn-secondary" onclick="importPoints()" style="flex:1;background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px">
+          <span>📥</span> 导入积分
+        </button>
+      </div>
+
+      <div class="word-detail-card"> 
         <h3 style="margin-bottom:16px;color:#333;display:flex;align-items:center;gap:8px">
           <span style="font-size:20px">📊</span>
           学习统计
@@ -906,6 +920,126 @@ const API = ".";
     document.getElementById('word-list').style.display = 'block';
     document.getElementById('quiz-toggle-bar').style.display = 'flex';
   }
+
+  // 导出积分数据
+  function exportPoints() {
+    const data = Points.getData();
+    const exportData = {
+      version: '1.0',
+      exportDate: new Date().toISOString(),
+      userId: USER_ID,
+      points: data
+    };
+
+    const jsonStr = JSON.stringify(exportData, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `english_learning_points_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+    toast('✓ 积分已导出！请妥善保管备份文件');
+  }
+
+  // 导入积分数据
+  function importPoints() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+
+    input.onchange = function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const importData = JSON.parse(event.target.result);
+
+          // 验证格式
+          if (!importData.version || !importData.points) {
+            toast('❌ 文件格式不正确');
+            return;
+          }
+
+          // 确认导入
+          const currentData = Points.getData();
+          const currentTotal = currentData.total || 0;
+          const importTotal = importData.points.total || 0;
+
+          if (currentTotal > 0 && currentTotal !== importTotal) {
+            const confirm = window.confirm(
+              `当前积分: ${currentTotal}\n导入积分: ${importTotal}\n\n确定要覆盖当前积分吗？`
+            );
+            if (!confirm) {
+              toast('已取消导入');
+              return;
+            }
+          }
+
+          // 合并数据（取较大值）
+          const merged = {
+            total: Math.max(currentData.total || 0, importData.points.total || 0),
+            today: Math.max(currentData.today || 0, importData.points.today || 0),
+            lastDate: importData.points.lastDate || currentData.lastDate || '',
+            streak: Math.max(currentData.streak || 0, importData.points.streak || 0),
+            stats: {
+              wordsLearned: Math.max(currentData.stats?.wordsLearned || 0, importData.points.stats?.wordsLearned || 0),
+              wordsMastered: Math.max(currentData.stats?.wordsMastered || 0, importData.points.stats?.wordsMastered || 0),
+              recordings: Math.max(currentData.stats?.recordings || 0, importData.points.stats?.recordings || 0),
+              quizzesPassed: Math.max(currentData.stats?.quizzesPassed || 0, importData.points.stats?.quizzesPassed || 0),
+              lessonsRead: Math.max(currentData.stats?.lessonsRead || 0, importData.points.stats?.lessonsRead || 0)
+            },
+            records: {
+              word_viewed: [...new Set([...(currentData.records?.word_viewed || []), ...(importData.points.records?.word_viewed || [])])],
+              lesson_opened: [...new Set([...(currentData.records?.lesson_opened || []), ...(importData.points.records?.lesson_opened || [])])],
+              quiz_perfect_dates: [...new Set([...(currentData.records?.quiz_perfect_dates || []), ...(importData.points.records?.quiz_perfect_dates || [])])]
+            }
+          };
+
+          Points.saveData(merged);
+          updatePointsDisplay();
+
+          toast(`✓ 积分已导入！总积分: ${merged.total}`);
+          showPointsDetail(); // 刷新显示
+        } catch (err) {
+          console.error('导入失败:', err);
+          toast('❌ 导入失败：文件格式错误');
+        }
+      };
+
+      reader.readAsText(file);
+    };
+
+    input.click();
+  }
+
+  // 首次访问提示（仅在首次显示）
+  function showFirstTimeHint() {
+    const shown = localStorage.getItem('points_hint_shown');
+    if (!shown) {
+      setTimeout(() => {
+        const hint = document.createElement('div');
+        hint.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:white;padding:24px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.15);z-index:3000;max-width:320px;text-align:center';
+        hint.innerHTML = `
+          <div style="font-size:48px;margin-bottom:16px">🏆</div>
+          <div style="font-size:18px;font-weight:700;color:#333;margin-bottom:12px">积分系统已启用</div>
+          <div style="font-size:14px;color:#666;line-height:1.6;margin-bottom:16px">
+            学习单词和课文可以获得积分！<br>
+            点击顶部 <strong>🏆 积分</strong> 查看详情和导出备份。
+          </div>
+          <button onclick="this.parentElement.remove();localStorage.setItem('points_hint_shown','1')" style="background:linear-gradient(135deg,#4f9fff,#6c63ff);color:white;border:none;padding:10px 24px;border-radius:8px;font-weight:600;cursor:pointer">
+            开始学习
+          </button>
+        `;
+        document.body.appendChild(hint);
+      }, 1500);
+    }
+  }
+
 
   let currentModule = null;
   let currentWords = [];
