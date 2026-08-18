@@ -2892,7 +2892,8 @@ const API = ".";
           <div style="font-size:20px;font-weight:600;color:#4f9fff;margin-bottom:8px;display:flex;align-items:center;gap:12px">
             <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
             ${w.word}
-            <button class="speak-btn" onclick="speakWord('${w.word}')" style="margin-left:8px;padding:4px 12px;font-size:12px">🔊</button>
+            <button class="speak-btn" onclick="speakWord('${w.word}')" style="padding:4px 12px;font-size:12px">🔊</button>
+            <button class="ra-btn" onclick="raToggleKet(this, '${w.word.replace(/'/g, "\'")}')" style="padding:4px 12px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
           </div>
           <div style="font-size:14px;color:#666;margin-bottom:4px">${w.chinese}</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
@@ -2907,7 +2908,8 @@ const API = ".";
           <div style="font-size:18px;font-weight:600;color:#4f9fff;margin-bottom:8px;display:flex;align-items:center;gap:12px">
             <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
             ${s.english}
-            <button class="speak-btn" onclick="speakWord('${s.english}')" style="margin-left:8px;padding:4px 12px;font-size:12px">🔊</button>
+            <button class="speak-btn" onclick="speakWord('${s.english}')" style="padding:4px 12px;font-size:12px">🔊</button>
+            <button class="ra-btn" onclick="raToggleKet(this, '${s.english.replace(/'/g, "\'")}')" style="padding:4px 12px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
           </div>
           <div style="font-size:14px;color:#666;margin-bottom:4px">${s.chinese}</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:4px">
