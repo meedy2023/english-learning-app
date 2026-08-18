@@ -843,10 +843,20 @@ const API = ".";
   function showPointsDetail() {
     const data = Points.getData();
 
+    // 切换到学习视图并显示积分详情
+    switchView('learn');
+
     const area = document.getElementById('word-detail-area');
+    if (!area) {
+      toast('积分详情加载失败，请重试');
+      return;
+    }
+
     area.style.display = 'block';
-    document.getElementById('word-list').style.display = 'none';
-    document.getElementById('quiz-toggle-bar').style.display = 'none';
+    const wordList = document.getElementById('word-list');
+    const quizBar = document.getElementById('quiz-toggle-bar');
+    if (wordList) wordList.style.display = 'none';
+    if (quizBar) quizBar.style.display = 'none';
 
     area.innerHTML = `
       <button class="btn btn-secondary" onclick="hidePointsDetail()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">
@@ -913,9 +923,13 @@ const API = ".";
   }
 
   function hidePointsDetail() {
-    document.getElementById('word-detail-area').style.display = 'none';
-    document.getElementById('word-list').style.display = 'block';
-    document.getElementById('quiz-toggle-bar').style.display = 'flex';
+    const area = document.getElementById('word-detail-area');
+    const wordList = document.getElementById('word-list');
+    const quizBar = document.getElementById('quiz-toggle-bar');
+
+    if (area) area.style.display = 'none';
+    if (wordList) wordList.style.display = 'block';
+    if (quizBar) quizBar.style.display = 'flex';
   }
 
   // 导出积分数据
