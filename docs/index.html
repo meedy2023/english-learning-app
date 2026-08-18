@@ -1020,36 +1020,35 @@ const API = ".";
   var _raTimeout = null;
 
   function raToggle(lineEl, text, idx) {
-    // 停止当前操作
-    if (_raState === 'recording') { raStop(); return; }
-    if (_raState === 'playing') { raReset(); return; }
+    // 如果正在录音，点击则停止
+    if (_raState === 'recording') { 
+      raStopRecording(lineEl); 
+      return; 
+    }
+    // 如果正在播放，点击则重置
+    if (_raState === 'playing') { 
+      raReset(); 
+      return; 
+    }
 
-    // 开始播放 TTS + 录音
-    _raState = 'playing';
-    var btn = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
-    btn.textContent = '⏳ 等待结束...';
-    btn.className = 'ra-btn ra-playing';
-    raClearHighlight();
-    lineEl.closest('.ra-line-item').classList.add('ra-active');
-
-    TTS.speak(text, 'en-US');
-
-    // TTS 播放完（约 3 秒后）开始录音
-    _raTimeout = setTimeout(function() {
-      raStartRecording(lineEl, text, idx);
-    }, text.length < 30 ? 3000 : 5000);
+    // 开始录音流程
+    raStartRecordingFlow(lineEl, text);
   }
 
-  function raStartRecording(lineEl, text, idx) {
+  // 开始录音流程（课文跟读）
+  function raStartRecordingFlow(lineEl, text) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       toast('您的浏览器不支持麦克风录音');
-      raReset();
       return;
     }
+    
     _raState = 'recording';
     _raChunks = [];
+    raClearHighlight();
+    lineEl.closest('.ra-line-item').classList.add('ra-active');
+    
     var btn = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
-    btn.textContent = '🔴 录音中...';
+    btn.textContent = '🔴 点击结束录音';
     btn.className = 'ra-btn ra-recording';
 
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
@@ -1058,30 +1057,50 @@ const API = ".";
         _ra.ondataavailable = function(e) { if (e.data.size > 0) _raChunks.push(e.data); };
         _ra.onstop = function() {
           stream.getTracks().forEach(function(t) { t.stop(); });
-          if (_raChunks.length === 0) { toast('未检测到录音'); raReset(); return; }
-          var blob = new Blob(_raChunks, { type: 'audio/webm' });
-          var url = URL.createObjectURL(blob);
-          var audio = new Audio();
-          audio.src = url;
-          audio.onended = function() {
-            URL.revokeObjectURL(url);
-            toast('跟读完成，再试一次或切换其他句子');
-            raReset();
-          };
-          audio.play().catch(function() { toast('回放失败'); raReset(); });
-          var btn2 = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
-          btn2.textContent = '▶ 回放中...';
-          btn2.className = 'ra-btn ra-playing';
+          raPlayBack(lineEl);
         };
         _ra.start();
-
-        // 5 秒后自动停止
-        setTimeout(function() { if (_ra && _ra.state === 'recording') _ra.stop(); }, 5000);
       })
       .catch(function(err) {
         toast('麦克风权限被拒绝，请允许使用麦克风');
         raReset();
       });
+  }
+
+  // 停止录音（手动点击）
+  function raStopRecording(lineEl) {
+    if (_ra && _ra.state === 'recording') {
+      _ra.stop();
+    }
+  }
+
+  // 播放录音
+  function raPlayBack(lineEl) {
+    if (_raChunks.length === 0) { 
+      toast('未检测到录音'); 
+      raReset(); 
+      return; 
+    }
+    
+    _raState = 'playing';
+    var blob = new Blob(_raChunks, { type: 'audio/webm' });
+    var url = URL.createObjectURL(blob);
+    var audio = new Audio();
+    audio.src = url;
+    
+    var btn = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
+    btn.textContent = '▶ 回放中...';
+    btn.className = 'ra-btn ra-playing';
+    
+    audio.onended = function() {
+      URL.revokeObjectURL(url);
+      toast('跟读完成！再试一次或切换其他句子');
+      raReset();
+    };
+    audio.play().catch(function() { 
+      toast('回放失败'); 
+      raReset(); 
+    });
   }
 
   function raStop() {
@@ -1109,35 +1128,34 @@ const API = ".";
 
   // ========== 单词跟读（简化版，复用全局 _ra 状态）==========
   function raToggleWord(textEl, text) {
-    if (_raState === 'recording') { raStop(); return; }
-    if (_raState === 'playing') { raReset(); return; }
+    // 如果正在录音，点击则停止
+    if (_raState === 'recording') { 
+      raStopRecordingWord(); 
+      return; 
+    }
+    // 如果正在播放，点击则重置
+    if (_raState === 'playing') { 
+      raReset(); 
+      return; 
+    }
 
-    _raState = 'playing';
-    const card = textEl.closest('.word-detail-card');
-    const btn = event.target.closest('.ra-btn');
-    btn.textContent = '⏳ 播放中...';
-    btn.className = 'ra-btn ra-playing';
-    if (card) card.style.boxShadow = '0 0 0 3px #1976d2';
-
-    TTS.speak(text, 'en-US');
-
-    _raTimeout = setTimeout(function() {
-      raStartRecordingWord(textEl, text);
-    }, text.length < 20 ? 2500 : 4000);
+    // 开始录音
+    raStartRecordingWordFlow(textEl, text);
   }
 
-  function raStartRecordingWord(textEl, text) {
+  function raStartRecordingWordFlow(textEl, text) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       toast('您的浏览器不支持麦克风录音');
-      raReset();
       return;
     }
+    
     _raState = 'recording';
     _raChunks = [];
     const card = textEl.closest('.word-detail-card');
-    const btn = event.target.closest('.ra-btn') || document.querySelector('.ra-btn.ra-playing');
+    const btn = event.target.closest('.ra-btn');
+    
     if (btn) {
-      btn.textContent = '🔴 录音中...';
+      btn.textContent = '🔴 点击结束录音';
       btn.className = 'ra-btn ra-recording';
     }
     if (card) {
@@ -1150,29 +1168,52 @@ const API = ".";
         _ra.ondataavailable = function(e) { if (e.data.size > 0) _raChunks.push(e.data); };
         _ra.onstop = function() {
           stream.getTracks().forEach(function(t) { t.stop(); });
-          if (_raChunks.length === 0) { toast('未检测到录音'); raReset(); return; }
-          var blob = new Blob(_raChunks, { type: 'audio/webm' });
-          var url = URL.createObjectURL(blob);
-          var audio = new Audio();
-          audio.src = url;
-          audio.onended = function() {
-            URL.revokeObjectURL(url);
-            toast('跟读完成！');
-            raReset();
-          };
-          audio.play().catch(function() { toast('回放失败'); raReset(); });
-          if (btn) {
-            btn.textContent = '▶ 回放中...';
-            btn.className = 'ra-btn ra-playing';
-          }
+          raPlayBackWord(textEl, btn, card);
         };
         _ra.start();
-        setTimeout(function() { if (_ra && _ra.state === 'recording') _ra.stop(); }, 5000);
       })
       .catch(function(err) {
         toast('麦克风权限被拒绝');
         raReset();
       });
+  }
+
+  function raStopRecordingWord() {
+    if (_ra && _ra.state === 'recording') {
+      _ra.stop();
+    }
+  }
+
+  function raPlayBackWord(textEl, btn, card) {
+    if (_raChunks.length === 0) { 
+      toast('未检测到录音'); 
+      raReset(); 
+      if (card) card.style.boxShadow = '';
+      return; 
+    }
+    
+    _raState = 'playing';
+    var blob = new Blob(_raChunks, { type: 'audio/webm' });
+    var url = URL.createObjectURL(blob);
+    var audio = new Audio();
+    audio.src = url;
+    
+    if (btn) {
+      btn.textContent = '▶ 回放中...';
+      btn.className = 'ra-btn ra-playing';
+    }
+    
+    audio.onended = function() {
+      URL.revokeObjectURL(url);
+      toast('跟读完成！');
+      raReset();
+      if (card) card.style.boxShadow = '';
+    };
+    audio.play().catch(function() { 
+      toast('回放失败'); 
+      raReset();
+      if (card) card.style.boxShadow = '';
+    });
   }
 
   function speakAllLessonLines(content) {
