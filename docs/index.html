@@ -451,6 +451,50 @@
     50% { box-shadow: 0 0 0 6px rgba(211,47,47,0); }
   }
 
+  
+    /* ========== 积分相关 ========== */
+    .points-toast {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: linear-gradient(135deg, #ffd700, #ffb700);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+      z-index: 2000;
+      animation: pointsPop 0.5s ease;
+    }
+    @keyframes pointsPop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .points-card {
+      background: linear-gradient(135deg, #ffd700, #ffb700);
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 16px;
+    }
+    .points-stat {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 16px;
+    }
+    .points-stat-item {
+      text-align: center;
+    }
+    .points-stat-num {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    .points-stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
   </style>
   <script src="api-shim.js"></script>
 </head>
@@ -459,7 +503,10 @@
 <!-- 顶部导航 -->
 <div class="topbar">
   <h1 id="topbar-title">📚 单词学习</h1>
-  <div class="topbar-right" id="topbar-right">三年级</div>
+  <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
+      <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
+      <span id="grade-display">三年级</span>
+    </div>
 </div>
 
 <div class="container">
@@ -639,6 +686,226 @@
 const API = ".";
   let USER_ID = localStorage.getItem("user_id") || ("user_" + Math.random().toString(36).substr(2, 8));
   localStorage.setItem("user_id", USER_ID);
+
+  // ========== 积分奖励系统 ==========
+  const Points = {
+    RULES: {
+      word_view: 1,        // 查看新单词
+      word_learned: 2,     // 标记已学会
+      word_mastered: 5,    // 标记已掌握
+      word_record: 1,      // 单词跟读
+      quiz_correct: 3,     // 测验答对
+      quiz_perfect: 10,    // 测验满分
+      lesson_open: 1,      // 打开课文
+      lesson_record: 2,    // 课文跟读
+      lesson_full_read: 5  // 朗读全文
+    },
+
+    getData() {
+      const key = 'points_' + USER_ID;
+      const data = localStorage.getItem(key);
+      if (data) return JSON.parse(data);
+      return this.initData();
+    },
+
+    initData() {
+      const data = {
+        total: 0,
+        today: 0,
+        lastDate: '',
+        streak: 0,
+        stats: {
+          wordsLearned: 0,
+          wordsMastered: 0,
+          recordings: 0,
+          quizzesPassed: 0,
+          lessonsRead: 0
+        },
+        records: {
+          word_viewed: [],
+          lesson_opened: [],
+          quiz_perfect_dates: []
+        }
+      };
+      this.saveData(data);
+      return data;
+    },
+
+    saveData(data) {
+      const key = 'points_' + USER_ID;
+      localStorage.setItem(key, JSON.stringify(data));
+    },
+
+    earn(action, itemId = null) {
+      const data = this.getData();
+      const points = this.RULES[action] || 0;
+
+      // 检查是否新的一天
+      const today = new Date().toISOString().split('T')[0];
+      if (data.lastDate !== today) {
+        // 计算连续天数
+        if (data.lastDate) {
+          const last = new Date(data.lastDate);
+          const diff = (new Date(today) - last) / (1000 * 60 * 60 * 24);
+          data.streak = diff === 1 ? data.streak + 1 : 1;
+        } else {
+          data.streak = 1;
+        }
+        data.today = 0;
+        data.lastDate = today;
+      }
+
+      // 防重复（某些操作可以重复，如跟读）
+      const canRepeat = ['word_record', 'lesson_record', 'lesson_full_read', 'quiz_correct'];
+      if (itemId && !canRepeat.includes(action)) {
+        const recordKey = action.startsWith('word_') ? 'word_viewed' : 'lesson_opened';
+        if (data.records[recordKey].includes(itemId)) {
+          return { success: false, reason: 'already_earned' };
+        }
+        data.records[recordKey].push(itemId);
+      }
+
+      // 更新积分
+      data.total += points;
+      data.today += points;
+
+      // 更新统计
+      this.updateStats(data, action);
+
+      this.saveData(data);
+
+      return {
+        success: true,
+        points: points,
+        total: data.total,
+        today: data.today,
+        streak: data.streak
+      };
+    },
+
+    updateStats(data, action) {
+      switch(action) {
+        case 'word_view':
+          data.stats.wordsLearned++;
+          break;
+        case 'word_mastered':
+          data.stats.wordsMastered++;
+          break;
+        case 'word_record':
+        case 'lesson_record':
+          data.stats.recordings++;
+          break;
+        case 'quiz_correct':
+          data.stats.quizzesPassed++;
+          break;
+        case 'lesson_full_read':
+          data.stats.lessonsRead++;
+          break;
+      }
+    },
+
+    getMessage(action) {
+      const messages = {
+        word_view: '查看新单词',
+        word_learned: '标记已学会',
+        word_mastered: '已掌握单词',
+        word_record: '完成跟读',
+        quiz_correct: '测验答对',
+        quiz_perfect: '测验满分',
+        lesson_open: '打开课文',
+        lesson_record: '课文跟读',
+        lesson_full_read: '朗读全文'
+      };
+      return messages[action] || '';
+    }
+  };
+
+  // 显示积分提示
+  function showPointsToast(points, message) {
+    const toast = document.createElement('div');
+    toast.className = 'points-toast';
+    toast.textContent = `✨ +${points} ${message}`;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
+  }
+
+  // 更新积分显示
+  function updatePointsDisplay() {
+    const data = Points.getData();
+    const display = document.getElementById('points-display');
+    if (display) {
+      display.textContent = `🏆 ${data.total}分`;
+    }
+  }
+
+  // 显示积分详情（弹窗）
+  function showPointsDetail() {
+    const data = Points.getData();
+
+    const area = document.getElementById('word-detail-area');
+    area.style.display = 'block';
+    document.getElementById('word-list').style.display = 'none';
+    document.getElementById('quiz-toggle-bar').style.display = 'none';
+
+    area.innerHTML = `
+      <button class="btn btn-secondary" onclick="hidePointsDetail()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">
+        <span style="font-size:16px">←</span> 返回
+      </button>
+
+      <div class="points-card">
+        <div style="text-align:center">
+          <div style="font-size:48px;margin-bottom:8px">🏆</div>
+          <div style="font-size:32px;font-weight:700">${data.total}</div>
+          <div style="font-size:14px;opacity:0.9">总积分</div>
+        </div>
+        <div class="points-stat">
+          <div class="points-stat-item">
+            <div class="points-stat-num">${data.today}</div>
+            <div class="points-stat-label">今日获得</div>
+          </div>
+          <div class="points-stat-item">
+            <div class="points-stat-num">${data.streak}</div>
+            <div class="points-stat-label">连续天数</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="word-detail-card">
+        <h3 style="margin-bottom:16px;color:#333;display:flex;align-items:center;gap:8px">
+          <span style="font-size:20px">📊</span>
+          学习统计
+        </h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:#f0f4ff;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:24px;font-weight:700;color:#4f9fff">${data.stats.wordsLearned}</div>
+            <div style="font-size:12px;color:#666">学习单词</div>
+          </div>
+          <div style="background:#fff0f5;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:24px;font-weight:700;color:#ff6b9d">${data.stats.wordsMastered}</div>
+            <div style="font-size:12px;color:#666">已掌握</div>
+          </div>
+          <div style="background:#f0fff4;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:24px;font-weight:700;color:#52c41a">${data.stats.recordings}</div>
+            <div style="font-size:12px;color:#666">跟读次数</div>
+          </div>
+          <div style="background:#fffbf0;padding:12px;border-radius:8px;text-align:center">
+            <div style="font-size:24px;font-weight:700;color:#d48806">${data.stats.quizzesPassed}</div>
+            <div style="font-size:12px;color:#666">测验答对</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function hidePointsDetail() {
+    document.getElementById('word-detail-area').style.display = 'none';
+    document.getElementById('word-list').style.display = 'block';
+    document.getElementById('quiz-toggle-bar').style.display = 'flex';
+  }
 
   let currentModule = null;
   let currentWords = [];
@@ -864,7 +1131,15 @@ const API = ".";
 
   function showLessonDetail(unit) {
     document.getElementById('word-list').style.display = 'none';
-    
+
+    // 获得积分：打开课文
+    const lessonId = unit.unit || 'lesson_' + Date.now();
+    const result = Points.earn('lesson_open', lessonId);
+    if (result.success) {
+      showPointsToast(result.points, Points.getMessage('lesson_open'));
+      updatePointsDisplay();
+    }
+
     const area = document.getElementById('word-detail-area');
     area.style.display = 'block';
     
@@ -1094,6 +1369,14 @@ const API = ".";
     
     audio.onended = function() {
       URL.revokeObjectURL(url);
+
+      // 获得积分：课文跟读
+      const result = Points.earn('lesson_record');
+      if (result.success) {
+        showPointsToast(result.points, Points.getMessage('lesson_record'));
+        updatePointsDisplay();
+      }
+
       toast('跟读完成！再试一次或切换其他句子');
       raReset();
     };
@@ -1205,6 +1488,14 @@ const API = ".";
     
     audio.onended = function() {
       URL.revokeObjectURL(url);
+
+      // 获得积分：单词跟读
+      const result = Points.earn('word_record');
+      if (result.success) {
+        showPointsToast(result.points, Points.getMessage('word_record'));
+        updatePointsDisplay();
+      }
+
       toast('跟读完成！');
       raReset();
       if (card) card.style.boxShadow = '';
@@ -1221,7 +1512,7 @@ const API = ".";
       toast('没有可朗读的内容');
       return;
     }
-    
+
     let delay = 0;
     content.forEach((line, idx) => {
       setTimeout(() => {
@@ -1229,7 +1520,16 @@ const API = ".";
       }, delay);
       delay += 3500; // 每句间隔3.5秒
     });
-    
+
+    // 朗读完成后获得积分
+    setTimeout(() => {
+      const result = Points.earn('lesson_full_read');
+      if (result.success) {
+        showPointsToast(result.points, Points.getMessage('lesson_full_read'));
+        updatePointsDisplay();
+      }
+    }, delay + 1000);
+
     toast('开始朗读整篇课文...');
   }
 
@@ -1588,6 +1888,13 @@ const API = ".";
     document.getElementById("quiz-toggle-bar").style.display = "none";
     const area = document.getElementById("word-detail-area");
     area.style.display = "block";
+
+    // 获得积分：查看新单词
+    const result = Points.earn('word_view', 'word_' + w.id);
+    if (result.success) {
+      showPointsToast(result.points, Points.getMessage('word_view'));
+      updatePointsDisplay();
+    }
     // 转义单引号，防止破坏 HTML onclick 属性的 JS 字符串
     const esc = s => (s || "").replace(/'/g, "\\'");
     const wordId = 'ra-word-' + w.id;
@@ -1625,7 +1932,16 @@ const API = ".";
   async function markWord(wordId, status) {
     try {
       await apiPOST('/api/progress/' + USER_ID + '/' + wordId + '?status=' + status, {});
-      toast(status === 'mastered' ? '⭐ 已掌握！' : '✓ 已学会！');
+
+      // 获得积分
+      const action = status === 'mastered' ? 'word_mastered' : 'word_learned';
+      const result = Points.earn(action, 'word_' + wordId + '_' + status);
+      if (result.success) {
+        showPointsToast(result.points, Points.getMessage(action));
+        updatePointsDisplay();
+      }
+
+      toast(status === 'mastered' ? '⭐ 已掌握！' : '✓ 我学会了！');
       // 刷新单词列表状态
       showWordList();
     } catch (e) {
@@ -1739,6 +2055,14 @@ const API = ".";
       feedback.style.color = "#52c41a";
       feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word));
       speakChinese("正确");
+
+      // 获得积分：测验答对
+      const result = Points.earn('quiz_correct');
+      if (result.success) {
+        showPointsToast(result.points, Points.getMessage('quiz_correct'));
+        updatePointsDisplay();
+      }
+
       // 保存进度：最后一题且全对时标记 mastered
       const isLast = currentQuizIndex + 1 >= quizOrder.length;
       const allCorrect = isLast && window.quizResults.every(function(r) { return r.correct; });
@@ -1784,6 +2108,17 @@ const API = ".";
     const pct = total > 0 ? Math.round(correct / total * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+
+    // 测验满分额外奖励
+    if (pct === 100 && total > 0) {
+      const result = Points.earn('quiz_perfect');
+      if (result.success) {
+        setTimeout(() => {
+          showPointsToast(result.points, Points.getMessage('quiz_perfect'));
+          updatePointsDisplay();
+        }, 500);
+      }
+    }
     
     const container = document.getElementById("quiz-options");
     container.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
@@ -2516,6 +2851,9 @@ const API = ".";
   // 默认显示年级选择页
   document.getElementById('topbar-right').style.display = 'none';
   loadGrades();
+
+  // 初始化积分显示
+  updatePointsDisplay();
 </script>
 </body>
 </html>
