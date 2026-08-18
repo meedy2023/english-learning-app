@@ -506,7 +506,7 @@
   <h1 id="topbar-title">📚 单词学习</h1>
   <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
       <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
-      <span id="grade-display">三年级</span>
+      <span id="grade-display" style="display:none">三年级</span>
     </div>
 </div>
 
@@ -1081,7 +1081,7 @@ const API = ".";
     const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     // 年级选择页不显示右上角
-    document.getElementById("topbar-right").style.display = (name === "grade" || name === "report" || name === "ket") ? "none" : "";
+    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket") ? "none" : "inline";
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
     if (name === "home") {
@@ -1227,7 +1227,7 @@ const API = ".";
     const gradeMatch = (grade || currentLessonGrade || '').match(/^[^-]+?年级/);
     document.getElementById('topbar-right').textContent = gradeMatch ? gradeMatch[0] : '三年级';
     // 显示年级提示
-    document.getElementById('topbar-right').style.display = '';
+    document.getElementById('grade-display').style.display = 'inline';
 
     try {
       // 根据是否有指定学期决定 URL
@@ -1923,7 +1923,7 @@ const API = ".";
   function openGrade(grade) {
     currentGrade = grade;
     document.getElementById('topbar-right').textContent = grade;
-    document.getElementById('topbar-right').style.display = '';
+    document.getElementById('grade-display').style.display = 'inline';
     switchView('home');
     loadModules();
   }
@@ -2994,7 +2994,7 @@ const API = ".";
 
   // ========== 启动 ==========
   // 默认显示年级选择页
-  document.getElementById('topbar-right').style.display = 'none';
+  document.getElementById('grade-display').style.display = 'none';
   loadGrades();
 
   // 初始化积分显示
