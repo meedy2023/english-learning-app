@@ -1225,7 +1225,8 @@ const API = ".";
     document.getElementById('topbar-title').textContent = '📖 ' + currentLessonGrade + ' - ' + moduleName;
     // 联动更新右上角的年级提示：提取'几年级'部分，例如"三年级上册"→"三年级"
     const gradeMatch = (grade || currentLessonGrade || '').match(/^[^-]+?年级/);
-    document.getElementById('topbar-right').textContent = gradeMatch ? gradeMatch[0] : '三年级';
+    const gradeDisplay = document.getElementById('grade-display');
+    if (gradeDisplay) gradeDisplay.textContent = gradeMatch ? gradeMatch[0] : '三年级';
     // 显示年级提示
     document.getElementById('grade-display').style.display = 'inline';
 
@@ -1922,7 +1923,8 @@ const API = ".";
   // ========== 选择年级后进入首页 ==========
   function openGrade(grade) {
     currentGrade = grade;
-    document.getElementById('topbar-right').textContent = grade;
+    const gradeDisplay2 = document.getElementById('grade-display');
+    if (gradeDisplay2) gradeDisplay2.textContent = grade;
     document.getElementById('grade-display').style.display = 'inline';
     switchView('home');
     loadModules();
