@@ -452,6 +452,7 @@
   }
 
   </style>
+  <script src="api-shim.js"></script>
 </head>
 <body>
 
@@ -635,7 +636,7 @@
 
 <script>
   // ========== 全局状态 ==========
-const API = "http://10.255.100.133:8080";
+const API = ".";
   let USER_ID = localStorage.getItem("user_id") || ("user_" + Math.random().toString(36).substr(2, 8));
   localStorage.setItem("user_id", USER_ID);
 
@@ -874,18 +875,18 @@ const API = "http://10.255.100.133:8080";
     unit.content.forEach((line, idx) => {
       const roleColor = getRoleColor(line.role);
       const lineId = 'ra-line-' + idx;
-      dialogueHTML += \`
-        <div class="ra-line-item" id="\${lineId}" style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid \${roleColor}">
-          <div style="font-weight:600;color:\${roleColor};margin-bottom:4px;font-size:14px">\${line.role}</div>
-          <div id="\${lineId}-text" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">\${line.text}</div>
+      dialogueHTML += `
+        <div class="ra-line-item" id="${lineId}" style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid ${roleColor}">
+          <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}</div>
+          <div id="${lineId}-text" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${line.text}</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn btn-secondary btn-sm" onclick="speakLine('\${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
-            <button class="ra-btn" onclick="raToggle(document.getElementById('\${lineId}-text'), '\${escapeForJS(line.text)}', \${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
+            <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
+            <button class="ra-btn" onclick="raToggle(document.getElementById('${lineId}-text'), '${escapeForJS(line.text)}', ${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
               🎤 跟读
             </button>
           </div>
         </div>
-      \`;
+      `;
     });
     
     // 构建翻译内容
