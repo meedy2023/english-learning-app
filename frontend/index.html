@@ -1715,7 +1715,7 @@ const API = ".";
         const style = lang === 'zh-CN' ? 'friendly' : 'cheerful';
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + lang + "'>"
           + "<voice name='" + voice + "'>"
-          + "<mstts:express-as style='" + style + "' styledegree='1.2'>"
+          + "<mstts:express-as style='" + style + "' styledegree='2.0'>"
           + "<prosody rate='-10%' pitch='+3%'>" + escapeXml(text) + "</prosody>"
           + "</mstts:express-as></voice></speak>";
         const header = "X-RequestId:" + uuid + "\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:" + ts + "Z\r\n\r\n";
