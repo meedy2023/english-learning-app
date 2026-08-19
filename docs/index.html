@@ -2896,9 +2896,12 @@ const API = ".";
             <button class="ra-btn" onclick="raToggleKet(this, '${w.word.replace(/'/g, "\'")}')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;margin-left:auto">🎤 跟读</button>
           </div>
           <div style="font-size:14px;color:#666;margin-bottom:4px">${w.chinese}</div>
-          <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
-            <span style="font-size:13px;color:#999;font-style:italic;flex:1;line-height:1.5">例：${w.example}</span>
-            <button class="speak-btn" onclick="speakWord('${w.example}')" style="padding:4px 10px;font-size:12px;flex-shrink:0">🔊 例句</button>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
+            <span style="font-size:13px;color:#999;font-style:italic;flex:1;line-height:1.5;min-width:0">例：${w.example}</span>
+            <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+              <button class="speak-btn" onclick="speakWord('${w.example}')" style="padding:4px 10px;font-size:12px">🔊 例句</button>
+              <button class="ra-btn" onclick="raToggleKet(this, '${w.example.replace(/'/g, "\'")}')" style="padding:4px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+            </div>
           </div>
         </div>
       `).join('');
