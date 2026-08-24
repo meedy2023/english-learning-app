@@ -381,6 +381,13 @@ def get_ket_grammar(category: str):
     return {"grammar": {}}
 
 
+@app.get("/api/ket/reading")
+def get_ket_reading(category: str):
+    if "短文" in KET_DATA and category in KET_DATA["短文"]:
+        return {"reading": KET_DATA["短文"][category]}
+    return {"reading": None}
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)

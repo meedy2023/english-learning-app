@@ -5,6 +5,12 @@ KET 学习数据 - 完整版
 约 1500 词汇量，覆盖 KET 考试全部主题
 """
 
+# 短文阅读数据（从 ket_reading_data 导入）
+try:
+    from ket_reading_data import READING as _KET_READING
+except ImportError:
+    _KET_READING = {}
+
 KET_DATA = {
     "词汇": {
         "分类": {
@@ -1251,7 +1257,8 @@ KET_DATA = {
                 "The weather is getting worse.",
             ]
         },
-    }
+    },
+    "短文": _KET_READING,
 }
 
 # 统计词汇数量

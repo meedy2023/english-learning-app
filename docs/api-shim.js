@@ -375,6 +375,11 @@
         const g = (DATA.ket["语法"] && DATA.ket["语法"][c]) || {};
         return json({ grammar: g });
       }
+      if (api === "ket/reading") {
+        const c = params.get("category");
+        const r = (DATA.ket["短文"] && DATA.ket["短文"][c]) || null;
+        return json({ reading: r });
+      }
 
       return json({ detail: "未知接口: " + api }, 404);
     } catch (e) {
