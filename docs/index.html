@@ -443,7 +443,8 @@
     background: #fffde7 !important;
     box-shadow: 0 0 0 2px #ffc107;
   }
-  @keyframes ra-pulse-blue {
+  @keyframes combo-pop { 0% { transform: translateX(-50%) scale(0.5); opacity: 0; } 60% { transform: translateX(-50%) scale(1.15); opacity: 1; } 100% { transform: translateX(-50%) scale(1); } }
+    @keyframes ra-pulse-blue {
     0%, 100% { box-shadow: 0 0 0 0 rgba(25,118,210,0.4); }
     50% { box-shadow: 0 0 0 6px rgba(25,118,210,0); }
   }
@@ -522,6 +523,16 @@
 
   <!-- ======= 首页：模块列表 ======= -->
   <div id="view-home" class="view">
+    <div class="review-entry" id="review-entry" onclick="openReview()" style="display:none;align-items:center;justify-content:space-between;background:#fff5f5;border:1.5px solid #ffccc7;border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:26px">🔴</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#d4380d">错词本</div>
+          <div style="font-size:12px;color:#999;margin-top:2px">把答错的单词收集起来，按时复习</div>
+        </div>
+      </div>
+      <div id="review-entry-badge" style="background:#ff4d4f;color:white;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;white-space:nowrap">待复习 0 个</div>
+    </div>
     <div class="section-title">选择模块开始学习</div>
     <div class="tts-engine-bar" id="tts-engine-bar">
       <span class="tts-engine-label">🔊 发音引擎</span>
@@ -574,6 +585,13 @@
     <div id="quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="quiz-num">1</span> / <span id="quiz-total">0</span> 题</div>
   </div>
 
+
+<!-- ======= 错词复习 ======= -->
+<div id="view-review" class="view">
+  <button class="btn btn-secondary" onclick="switchView('home')" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回首页</button>
+  <div class="section-title">🔴 错词复习</div>
+  <div id="review-area"></div>
+</div>
 
 <!-- 课文学习：列表页 -->
 <div id="view-lesson-list" class="view">
@@ -1078,10 +1096,10 @@ const API = ".";
     currentView = name;
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", report: "📊 学习报告", ket: "📚 KET 学习" };
+    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     // 年级选择页不显示右上角
-    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket") ? "none" : "inline";
+    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review") ? "none" : "inline";
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
     if (name === "home") {
@@ -2106,6 +2124,233 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return res.json();
   }
 
+  // ========== 错词本 + 自动复习 ==========
+  let allWordsCache = null;
+  let rvOrder = [];
+  let rvIdx = 0;
+  let rvCorrect = 0;
+  let rvTotal = 0;
+
+  async function getAllWords() {
+    if (allWordsCache) return allWordsCache;
+    try {
+      const data = await apiGET('/api/words');
+      allWordsCache = data.words || [];
+    } catch (e) { allWordsCache = []; }
+    return allWordsCache;
+  }
+
+  const Review = {
+    todayStr() { return new Date().toISOString().split('T')[0]; },
+    todayPlus(n) {
+      const d = new Date();
+      d.setDate(d.getDate() + n);
+      return d.toISOString().split('T')[0];
+    },
+    getData() {
+      try { return JSON.parse(localStorage.getItem('review_' + USER_ID) || '{}'); }
+      catch (e) { return {}; }
+    },
+    saveData(d) { localStorage.setItem('review_' + USER_ID, JSON.stringify(d)); },
+    add(wordId) {
+      if (!wordId && wordId !== 0) return;
+      const d = this.getData();
+      if (!d[wordId]) {
+        d[wordId] = { wrongCount: 1, box: 1, interval: 1, nextReview: this.todayPlus(1) };
+      } else {
+        d[wordId].wrongCount++;
+        d[wordId].box = 1;
+        d[wordId].interval = 1;
+        d[wordId].nextReview = this.todayPlus(1);
+      }
+      this.saveData(d);
+      this.refreshEntry();
+    },
+    correct(wordId) {
+      const d = this.getData();
+      const r = d[wordId];
+      if (!r) return;
+      r.box++;
+      const intervals = [1, 2, 4, 7, 15];
+      r.interval = intervals[Math.min(r.box - 1, 4)];
+      if (r.box >= 5) {
+        delete d[wordId];
+      } else {
+        r.nextReview = this.todayPlus(r.interval);
+      }
+      this.saveData(d);
+    },
+    wrong(wordId) {
+      const d = this.getData();
+      const r = d[wordId];
+      if (!r) return;
+      r.wrongCount++;
+      r.box = 1;
+      r.interval = 1;
+      r.nextReview = this.todayPlus(1);
+      this.saveData(d);
+    },
+    due() {
+      const d = this.getData();
+      const today = this.todayStr();
+      return Object.keys(d).filter(function (id) { return d[id].nextReview <= today; });
+    },
+    count() { return Object.keys(this.getData()).length; },
+    refreshEntry() {
+      const el = document.getElementById('review-entry');
+      if (!el) return;
+      const totalN = this.count();
+      if (totalN === 0) { el.style.display = 'none'; return; }
+      el.style.display = 'flex';
+      const dueN = this.due().length;
+      document.getElementById('review-entry-badge').textContent =
+        dueN > 0 ? ('🔔 待复习 ' + dueN + ' 个') : ('错词 ' + totalN + ' 个');
+    }
+  };
+
+  function openReview() {
+    const due = Review.due();
+    if (due.length === 0) {
+      toast(Review.count() > 0 ? '今天没有到期的单词，明天再来复习吧~' : '错词本是空的，先去学习吧！');
+      return;
+    }
+    getAllWords().then(function (all) {
+      const words = [];
+      due.forEach(function (id) {
+        const w = all.find(function (x) { return String(x.id) === String(id); });
+        if (w) words.push(w);
+      });
+      if (words.length === 0) { toast('错词本为空'); return; }
+      rvOrder = shuffle(words.map(function (w) { return w.id; }));
+      rvIdx = 0;
+      rvCorrect = 0;
+      rvTotal = 0;
+      switchView('review');
+      loadReviewQuestion();
+    });
+  }
+
+  function loadReviewQuestion() {
+    if (rvIdx >= rvOrder.length) { showReviewSummary(); return; }
+    const wordId = rvOrder[rvIdx];
+    getAllWords().then(function (all) {
+      const word = all.find(function (x) { return String(x.id) === String(wordId); });
+      if (!word) { rvIdx++; loadReviewQuestion(); return; }
+      const mode = Math.random() > 0.5 ? 'en2cn' : 'cn2en';
+      const others = shuffle(all.filter(function (w) { return String(w.id) !== String(wordId); })).slice(0, 3);
+      let options;
+      if (mode === 'en2cn') {
+        options = shuffle([
+          { text: word.chinese, correct: true },
+          ...others.map(function (d) { return { text: d.chinese, correct: false }; })
+        ]);
+      } else {
+        options = shuffle([
+          { text: word.word, correct: true },
+          ...others.map(function (d) { return { text: d.word, correct: false }; })
+        ]);
+      }
+      const prompt = mode === 'en2cn' ? '这个单词的中文是？' : '这个中文的英文是？';
+      const question = mode === 'en2cn' ? capitalize(word.word) : word.chinese;
+      const esc = function (s) { return (s || '').replace(/'/g, "\\'"); };
+      if (mode === 'en2cn') setTimeout(function () { speakWord(word.word); }, 100);
+
+      const area = document.getElementById('review-area');
+      area.innerHTML = `
+        <div style="text-align:center;color:#bbb;font-size:13px;margin-bottom:8px">第 ${rvIdx + 1} / ${rvOrder.length} 个错词</div>
+        <div class="quiz-card">
+          <div class="quiz-prompt">${prompt}</div>
+          <div class="quiz-word">${question}</div>
+          <div style="margin-bottom:12px">
+            <button class="speak-btn" onclick="speakWord('${esc(word.word)}')">🔊 听发音</button>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+            ${options.map(function (o, i) {
+              return '<button class="choice-opt-btn" onclick="handleReviewAnswer(this, ' + i + ', ' + word.id + ", '" + mode + "')" +
+                '" style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:12px;background:white;font-size:16px;cursor:pointer">' +
+                '<span>' + o.text + '</span><span>' + String.fromCharCode(65 + i) + '</span></button>';
+            }).join('')}
+          </div>
+          <div id="review-feedback" style="display:none;margin-top:16px;text-align:center;padding:14px;border-radius:12px;font-size:15px"></div>
+          <button class="btn btn-primary" id="review-next-btn" onclick="nextReviewQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
+        </div>
+      `;
+      window._rvCur = { word: word, mode: mode, options: options };
+    });
+  }
+
+  function handleReviewAnswer(btnEl, optIdx, wordId, mode) {
+    const cur = window._rvCur;
+    if (!cur) return;
+    const opt = cur.options[optIdx];
+    const word = cur.word;
+    document.querySelectorAll('#review-area .choice-opt-btn').forEach(function (b) { b.style.pointerEvents = 'none'; });
+    rvTotal++;
+    const feedback = document.getElementById('review-feedback');
+    const nextBtn = document.getElementById('review-next-btn');
+    const isCorrect = opt.correct;
+
+    if (isCorrect) {
+      rvCorrect++;
+      btnEl.style.background = '#f6ffed';
+      btnEl.style.borderColor = '#52c41a';
+      btnEl.style.color = '#52c41a';
+      feedback.style.display = 'block';
+      feedback.style.background = '#f6ffed';
+      feedback.style.color = '#52c41a';
+      feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word));
+      speakChinese('正确');
+      Review.correct(wordId);
+    } else {
+      btnEl.style.background = '#fff2f0';
+      btnEl.style.borderColor = '#ff4d4f';
+      btnEl.style.color = '#ff4d4f';
+      const correctText = mode === 'en2cn' ? word.chinese : word.word;
+      document.querySelectorAll('#review-area .choice-opt-btn').forEach(function (b) {
+        const span = b.querySelector('span:first-child');
+        if (span && span.textContent.trim() === correctText) {
+          b.style.background = '#f6ffed';
+          b.style.borderColor = '#52c41a';
+          b.style.color = '#52c41a';
+        }
+      });
+      feedback.style.display = 'block';
+      feedback.style.background = '#fff2f0';
+      feedback.style.color = '#ff4d4f';
+      feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + correctText + '</strong>';
+      speakChinese('不对');
+      Review.wrong(wordId);
+    }
+
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = rvIdx + 1 >= rvOrder.length ? '完成复习 🎉' : '下一题 →';
+  }
+
+  function nextReviewQuestion() {
+    rvIdx++;
+    loadReviewQuestion();
+  }
+
+  function showReviewSummary() {
+    const pct = rvTotal > 0 ? Math.round(rvCorrect / rvTotal * 100) : 0;
+    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
+    const msgs = pct >= 90 ? '复习得太棒了！' : pct >= 70 ? '复习得很不错！' : pct >= 50 ? '继续加油，会记住的！' : '没关系，明天再巩固一次！';
+    const remain = Review.count();
+    const area = document.getElementById('review-area');
+    area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
+      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
+      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + rvCorrect + '/' + rvTotal + ' 个答对</div>' +
+      '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
+      '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
+        '<div style="font-size:28px;font-weight:700;color:' + (remain > 0 ? '#ff4d4f' : '#52c41a') + '">' + remain + '</div>' +
+        '<div style="font-size:12px;color:#999;margin-top:4px">错词本剩余</div>' +
+      '</div>' +
+      '<button class="btn btn-primary" style="width:100%" onclick="switchView(\'home\')">完成，返回首页</button>' +
+      '</div>';
+    Review.refreshEntry();
+  }
+
   // ========== 当前状态 ==========
   var currentGrade = '';  // 当前年级，如 '三年级'
 
@@ -2191,6 +2436,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const url = targetGrade ? `/api/modules?grade=${encodeURIComponent(targetGrade)}` : '/api/modules';
       const data = await apiGET(url);
       const progressData = await apiGET(`/api/progress/${USER_ID}`);
+      Review.refreshEntry();
       const grid = document.getElementById("module-grid");
       grid.innerHTML = "";
       for (const m of data) {
@@ -2359,6 +2605,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     quizOrder = shuffle(currentWords.map(w => w.id));
     currentQuizIndex = 0;
     window.quizResults = [];
+    comboCount = 0;
+    hideCombo();
     // 恢复显示跳过按钮和题号
     const skipBtn = document.querySelector('#view-quiz .btn-secondary[onclick="skipQuiz()"]');
     if (skipBtn) skipBtn.parentElement.style.display = "flex";
@@ -2451,6 +2699,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word));
       speakChinese("正确");
 
+      comboCount++;
+      showCombo(comboCount);
+
       // 获得积分：测验答对
       const result = Points.earn('quiz_correct');
       if (result.success) {
@@ -2481,6 +2732,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       feedback.style.color = "#ff4d4f";
       feedback.innerHTML = "<strong>❌ 不对哦~</strong><br>正确答案：<strong>" + correctText + "</strong>";
       speakChinese("不对");
+      comboCount = 0;
+      hideCombo();
+      Review.add(correctWord.id);
     }
 
     nextBtn.style.display = "block";
@@ -2497,6 +2751,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function showQuizSummary() {
+    hideCombo();
     const results = window.quizResults || [];
     const total = results.length;
     const correct = results.filter(r => r.correct).length;
@@ -2587,6 +2842,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let cl_order = [];
   let cl_correct = 0;
   let cl_total = 0;
+  let comboCount = 0;
+
+  // ========== 连击反馈 ==========
+  function showCombo(n) {
+    if (n < 2) { hideCombo(); return; }
+    let el = document.getElementById('combo-float');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'combo-float';
+      el.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:9998;font-size:20px;font-weight:800;color:#ff7a00;background:#fff7e6;border:2px solid #ffc53d;border-radius:20px;padding:8px 18px;box-shadow:0 4px 16px rgba(255,122,0,.25);pointer-events:none;transition:opacity .2s';
+      document.body.appendChild(el);
+    }
+    const icons = ['', '', '🔥', '🔥🔥', '🔥🔥🔥', '⚡'];
+    const big = n >= 5 ? ' ⚡超神连击！' : (n >= 3 ? ' 连击！' : '');
+    el.textContent = (icons[Math.min(n, 5)] || '🔥') + ' ' + n + ' 连击' + big;
+    el.style.display = 'block';
+    el.style.animation = 'none';
+    void el.offsetWidth; // 重排触发动画
+    el.style.animation = 'combo-pop 0.35s ease';
+  }
+  function hideCombo() {
+    const el = document.getElementById('combo-float');
+    if (el) el.style.display = 'none';
+  }
 
   function shuffle(arr) {
     const a = [...arr];
@@ -2607,6 +2886,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     cl_idx = 0;
     cl_correct = 0;
     cl_total = 0;
+    comboCount = 0;
+    hideCombo();
     const ids = cl_words.map(w => w.id);
     cl_order = shuffle(ids);
     document.getElementById('word-list').style.display = 'none';
@@ -2627,7 +2908,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const wordId = cl_order[cl_idx];
     const word = cl_words.find(w => w.id === wordId);
     if (!word) { cl_idx++; loadChoiceQuestion(); return; }
-    const mode = Math.random() > 0.5 ? 'en2cn' : 'cn2en';
+    const roll = Math.random();
+    const mode = roll < 0.34 ? 'en2cn' : (roll < 0.67 ? 'cn2en' : 'listen');
     const others = cl_words.filter(w => w.id !== wordId);
     const distractors = shuffle(others).slice(0, 3);
     let options;
@@ -2637,15 +2919,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         ...distractors.map(d => ({ text: d.chinese, correct: false }))
       ]);
     } else {
+      // cn2en 与 listen 都是英文选项
       options = shuffle([
         { text: word.word, correct: true },
         ...distractors.map(d => ({ text: d.word, correct: false }))
       ]);
     }
-    const prompt = mode === 'en2cn' ? '这个单词的中文是？' : '这个中文的英文是？';
-    const question = mode === 'en2cn' ? capitalize(word.word) : word.chinese;
+    const prompt = mode === 'en2cn' ? '这个单词的中文是？' : (mode === 'listen' ? '听发音，选出你听到的单词' : '这个中文的英文是？');
+    const question = mode === 'en2cn' ? capitalize(word.word) : (mode === 'listen' ? '🔉 ???' : word.chinese);
     const pct = Math.round((cl_idx / cl_order.length) * 100);
     if (mode === 'en2cn') setTimeout(function() { speakWord(word.word); }, 100);
+    if (mode === 'listen') setTimeout(function() { speakWord(word.word); }, 300);
 
     const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
 
@@ -2700,6 +2984,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     if (isCorrect) {
       cl_correct++;
+      comboCount++;
+      showCombo(comboCount);
       clStyle(feedback, '#f6ffed', '#52c41a', '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word)));
       clStyleBtn(event.target, '#f6ffed', '#52c41a');
       speakChinese('正确');
@@ -2724,6 +3010,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       event.target.style.borderColor = '#ff4d4f';
       event.target.style.color = '#ff4d4f';
       speakChinese('不对');
+      comboCount = 0;
+      hideCombo();
+      Review.add(word.id);
     }
 
     nextBtn.style.display = 'block';
@@ -2762,6 +3051,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function showChoiceSummary() {
+    hideCombo();
     const pct = cl_total > 0 ? Math.round(cl_correct / cl_total * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
