@@ -3467,11 +3467,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let ketCurrentType = ''; // 当前类型
   let ketCurrentCategory = ''; // 当前分类
 
-  // ========== KET 词汇测验状态 ==========
-  let ketQuizOrder = []; // 题目顺序（索引）
+  // ========== KET 测验状态（词汇/句型/语法 通用） ==========
+  let ketQuizShape = 'word'; // word | sentence | grammar
+  let ketQuizQueue = []; // 标准化题目队列
   let ketQuizIndex = 0;
-  let ketQuizMode = 'en2cn'; // en2cn | cn2en | listen
-  let ketQuizWords = []; // 当前测验词汇池
+  let ketQuizMode = '';
+  let ketQuizSpeak = null;
+  let ketGrammarExamples = [];
 
   function renderKetPagination(totalItems) {
     const totalPages = Math.ceil(totalItems / ketItemsPerPage);
@@ -3613,7 +3615,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const qe = document.getElementById('ket-quiz-entry');
         if (qe) {
           qe.style.display = 'block';
-          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz()">🎯 本类词汇测验</button>';
+          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🎯 本类词汇测验</button>';
         }
 
       } else if (type === '句型') {
@@ -3623,11 +3625,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         
         renderKetCurrentPage();
         renderKetPagination(ketCurrentItems.length);
+        const qe = document.getElementById('ket-quiz-entry');
+        if (qe) {
+          qe.style.display = 'block';
+          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'sentence\')">🎯 本类句型测验</button>';
+        }
 
       } else if (type === '语法') {
         titleEl.textContent = '📝 ' + category;
         const data = await apiGET('/api/ket/grammar?category=' + encodeURIComponent(category));
         const grammar = data.grammar || {};
+        ketGrammarExamples = grammar.例句 || [];
 
         let html = `
           <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
@@ -3652,6 +3660,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         }
 
         container.innerHTML = html;
+        const qe = document.getElementById('ket-quiz-entry');
+        if (qe) {
+          qe.style.display = 'block';
+          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'grammar\')">🎯 本语法点测验</button>';
+        }
       }
 
     } catch (e) {
@@ -3667,12 +3680,68 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (qe) qe.style.display = 'none';
   }
 
-  // ========== KET 词汇测验 ==========
-  function startKetQuiz() {
-    const pool = ketCurrentItems || [];
-    if (pool.length === 0) { toast('当前分类没有单词'); return; }
-    ketQuizWords = shuffle(pool.slice()).slice(0, 10);
-    ketQuizOrder = ketQuizWords.map(function (w, i) { return i; });
+  // ========== KET 测验（词汇/句型/语法 通用） ==========
+  // 标准化题目结构：{ prompt, question, speak, options:[{text,correct}], answerLabel }
+  function buildKetQuiz(shape) {
+    let src;
+    if (shape === 'word') src = (ketCurrentItems || []).map(function (w) { return { en: w.word, zh: w.chinese }; });
+    else if (shape === 'sentence') src = (ketCurrentItems || []).map(function (s) { return { en: s.english, zh: s.chinese }; });
+    else if (shape === 'grammar') src = (ketGrammarExamples || []).map(function (ex) { return { en: ex, zh: null }; });
+    else src = [];
+
+    if (src.length === 0) { toast('当前分类没有内容'); return null; }
+
+    const pool = shuffle(src.slice()).slice(0, 10);
+    const queue = [];
+    pool.forEach(function (item) {
+      let prompt, question, speak, options, answerLabel;
+      const others = shuffle(src.filter(function (x) { return x !== item; })).slice(0, 3);
+      const mode = shape === 'grammar' ? 'fill' : (Math.random() > 0.5 ? 'en2zh' : 'zh2en');
+      if (shape === 'grammar') {
+        // 挖空题：从英文句中挖掉某个词，四选一填空
+        const words = item.en.replace(/[.,!?;:'"()]/g, '').split(' ').filter(function (x) { return x.length >= 3; });
+        if (words.length === 0) return;
+        const blank = words[Math.floor(Math.random() * words.length)];
+        const blanked = item.en.replace(new RegExp(blank.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), '____');
+        const distractors = shuffle(src.filter(function (x) { return x !== item; })
+          .map(function (x) {
+            const ws = x.en.replace(/[.,!?;:'"()]/g, '').split(' ').filter(function (a) { return a.length >= 3; });
+            return ws.length ? ws[Math.floor(Math.random() * ws.length)] : null;
+          })
+          .filter(function (a, idx, arr) { return a && a !== blank && arr.indexOf(a) === idx; })).slice(0, 3);
+        prompt = '选择正确的单词填入空格';
+        question = blanked;
+        speak = item.en;
+        options = shuffle([{ text: blank, correct: true }].concat(distractors.map(function (d) { return { text: d, correct: false }; })));
+        answerLabel = item.en;
+      } else if (mode === 'en2zh') {
+        prompt = '这句话的中文是？';
+        question = item.en;
+        speak = item.en;
+        options = shuffle([{ text: item.zh, correct: true }].concat(others.map(function (d) { return { text: d.zh, correct: false }; })));
+        answerLabel = item.zh;
+      } else {
+        prompt = '这个中文对应的英文是？';
+        question = item.zh;
+        speak = item.en;
+        options = shuffle([{ text: item.en, correct: true }].concat(others.map(function (d) { return { text: d.en, correct: false }; })));
+        answerLabel = item.en;
+      }
+      queue.push({
+        prompt: prompt,
+        question: question,
+        speak: speak,
+        options: options,
+        answerLabel: answerLabel
+      });
+    });
+    return queue.filter(function (q) { return q.options && q.options.length >= 2; });
+  }
+
+  function startKetQuiz(shape) {
+    ketQuizShape = shape || 'word';
+    ketQuizQueue = buildKetQuiz(ketQuizShape);
+    if (!ketQuizQueue || ketQuizQueue.length === 0) return;
     ketQuizIndex = 0;
     window.ketQuizResults = [];
     comboCount = 0;
@@ -3683,49 +3752,29 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function loadKetQuizQuestion() {
     clearTimeout(window._ketQuizAutoNext);
-    if (ketQuizIndex >= ketQuizOrder.length) { showKetQuizSummary(); return; }
+    if (ketQuizIndex >= ketQuizQueue.length) { showKetQuizSummary(); return; }
     document.getElementById('ket-quiz-feedback').style.display = 'none';
     document.getElementById('ket-quiz-next-btn').style.display = 'none';
 
-    const w = ketQuizWords[ketQuizOrder[ketQuizIndex]];
-    if (!w) { ketQuizIndex++; loadKetQuizQuestion(); return; }
-
-    const modes = ['en2cn', 'cn2en', 'listen'];
-    ketQuizMode = modes[Math.floor(Math.random() * modes.length)];
-    const others = shuffle(ketQuizWords.filter(function (x) { return x !== w; })).slice(0, 3);
-
-    let options;
-    if (ketQuizMode === 'en2cn') {
-      options = shuffle([{ text: w.chinese, correct: true }].concat(others.map(function (d) { return { text: d.chinese, correct: false }; })));
-      document.getElementById('ket-quiz-prompt').textContent = '这个单词的中文是？';
-      document.getElementById('ket-quiz-word').textContent = capitalize(w.word);
-      setTimeout(function () { speakWord(w.word); }, 150);
-    } else if (ketQuizMode === 'cn2en') {
-      options = shuffle([{ text: w.word, correct: true }].concat(others.map(function (d) { return { text: d.word, correct: false }; })));
-      document.getElementById('ket-quiz-prompt').textContent = '这个中文的英文是？';
-      document.getElementById('ket-quiz-word').textContent = w.chinese;
-    } else {
-      options = shuffle([{ text: w.word, correct: true }].concat(others.map(function (d) { return { text: d.word, correct: false }; })));
-      document.getElementById('ket-quiz-prompt').textContent = '听发音，选出你听到的单词';
-      document.getElementById('ket-quiz-word').textContent = '🔊 🔊 🔊';
-      setTimeout(function () { speakWord(w.word); }, 150);
-    }
+    const q = ketQuizQueue[ketQuizIndex];
+    document.getElementById('ket-quiz-prompt').textContent = q.prompt;
+    document.getElementById('ket-quiz-word').textContent = q.question;
     document.getElementById('ket-quiz-num').textContent = ketQuizIndex + 1;
-    document.getElementById('ket-quiz-total').textContent = ketQuizOrder.length;
+    document.getElementById('ket-quiz-total').textContent = ketQuizQueue.length;
+    if (q.speak) setTimeout(function () { speakWord(q.speak); }, 150);
 
-    document.getElementById('ket-quiz-options').innerHTML = options.map(function (o, i) {
+    document.getElementById('ket-quiz-options').innerHTML = q.options.map(function (o, i) {
       return '<button class="choice-opt-btn" onclick="handleKetQuizChoice(this, ' + i + ')"' +
         ' style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:12px;background:white;font-size:16px;cursor:pointer">' +
         '<span>' + o.text + '</span><span>' + String.fromCharCode(65 + i) + '</span></button>';
     }).join('');
-    window._ketQuizCur = { word: w, mode: ketQuizMode, options: options };
+    window._ketQuizCur = q;
   }
 
   function handleKetQuizChoice(btnEl, optIdx) {
     const cur = window._ketQuizCur;
     if (!cur) return;
     const opt = cur.options[optIdx];
-    const w = cur.word;
     document.querySelectorAll('#ket-quiz-options button').forEach(function (b) { b.style.pointerEvents = 'none'; });
     window.ketQuizResults = window.ketQuizResults || [];
     const isCorrect = opt.correct;
@@ -3736,7 +3785,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (isCorrect) {
       btnEl.style.background = '#f6ffed'; btnEl.style.borderColor = '#52c41a'; btnEl.style.color = '#52c41a';
       feedback.style.display = 'block'; feedback.style.background = '#f6ffed'; feedback.style.color = '#52c41a';
-      feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + (cur.mode === 'cn2en' ? w.chinese + ' = ' + capitalize(w.word) : capitalize(w.word) + ' = ' + w.chinese);
+      feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + cur.answerLabel;
       speakChinese('正确');
       comboCount++;
       showCombo(comboCount);
@@ -3744,21 +3793,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (r.success) { showPointsToast(r.points, Points.getMessage('quiz_correct')); updatePointsDisplay(); }
     } else {
       btnEl.style.background = '#fff2f0'; btnEl.style.borderColor = '#ff4d4f'; btnEl.style.color = '#ff4d4f';
-      const correctText = cur.mode === 'cn2en' ? w.word : w.chinese;
-      document.querySelectorAll('#ket-quiz-options button').forEach(function (b) {
-        const s = b.querySelector('span:first-child');
-        if (s && s.textContent.trim() === correctText) { b.style.background = '#f6ffed'; b.style.borderColor = '#52c41a'; b.style.color = '#52c41a'; }
+      document.querySelectorAll('#ket-quiz-options button').forEach(function (b, idx) {
+        if (cur.options[idx] && cur.options[idx].correct) { b.style.background = '#f6ffed'; b.style.borderColor = '#52c41a'; b.style.color = '#52c41a'; }
       });
       feedback.style.display = 'block'; feedback.style.background = '#fff2f0'; feedback.style.color = '#ff4d4f';
-      feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + correctText + '</strong>';
+      feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + cur.answerLabel + '</strong>';
       speakChinese('不对');
     }
 
     nextBtn.style.display = 'block';
-    nextBtn.textContent = ketQuizIndex + 1 >= ketQuizOrder.length ? '查看成绩 🎉' : '下一题 →';
+    nextBtn.textContent = ketQuizIndex + 1 >= ketQuizQueue.length ? '查看成绩 🎉' : '下一题 →';
 
     clearTimeout(window._ketQuizAutoNext);
-    const isLast = ketQuizIndex + 1 >= ketQuizOrder.length;
+    const isLast = ketQuizIndex + 1 >= ketQuizQueue.length;
     if (!isLast) {
       window._ketQuizAutoNext = setTimeout(function () { nextKetQuizQuestion(); }, isCorrect ? 1200 : 2800);
     }
@@ -3788,10 +3835,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function speakKetQuizWord() {
-    const w = ketQuizWords[ketQuizOrder[ketQuizIndex]];
-    if (!w) return;
-    if (ketQuizMode === 'cn2en') speakChinese(w.chinese);
-    else speakWord(w.word);
+    const q = ketQuizQueue[ketQuizIndex];
+    if (q && q.speak) speakWord(q.speak);
   }
 
   function showKetQuizSummary() {
@@ -3813,7 +3858,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
       '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
       '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
-      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz()">再测一次</button>' +
+      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">再测一次</button>' +
       '<button class="btn btn-secondary" style="width:100%" onclick="backToKetCategory()">返回分类</button>' +
       '</div>';
   }
