@@ -199,12 +199,10 @@ WORD_TO_LESSON_MODULE = {
     '四上1': ('Unit 1 I love sports', '四年级上册'), '四上2': ('Unit 2 Helping at home', '四年级上册'),
     '四上3': ("Unit 3 What's the weather like?", '四年级上册'), '四上4': ('Unit 4 Wonderful seasons', '四年级上册'),
     '四上5': ("Unit 5 Let's go!", '四年级上册'), '四上6': ('Unit 6 Find your way', '四年级上册'),
-    '四下1': ('Module 1', '四年级下册'), '四下2': ('Module 2', '四年级下册'),
-    '四下3': ('Module 3', '四年级下册'), '四下4': ('Module 4', '四年级下册'),
-    '四下5': ('Module 5', '四年级下册'), '四下6': ('Module 6', '四年级下册'),
-    '四下7': ('Module 7', '四年级下册'), '四下8': ('Module 8', '四年级下册'),
-    '四下9': ('Module 9', '四年级下册'), '四下10': ('Module 10', '四年级下册'),
-    # 五年级
+    '四下1': ('Unit 1 People at work', '四年级下册'), '四下2': ('Unit 2 How do you feel today', '四年级下册'),
+    '四下3': ("Unit 3 Everyone's got talent", '四年级下册'), '四下4': ('Unit 4 Plant life', '四年级下册'),
+    '四下5': ('Unit 5 School activities', '四年级下册'), '四下6': ('Unit 6 Cool clothes', '四年级下册'),
+              # 五年级
     '五上1': ('Module 1', '五年级上册'), '五上2': ('Module 2', '五年级上册'),
     '五上3': ('Module 3', '五年级上册'), '五上4': ('Module 4', '五年级上册'),
     '五上5': ('Module 5', '五年级上册'), '五上6': ('Module 6', '五年级上册'),

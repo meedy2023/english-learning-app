@@ -1218,527 +1218,549 @@
     ]
    },
    "下册": {
-    "Module 1 She's a nice teacher": [
+    "Unit 1 People at work": [
      {
-      "unit": "Unit 1 She's a nice teacher",
+      "unit": "Unit 1 People at work (Start up)",
       "content": [
        {
-        "role": "narrator",
-        "text": "This is Ms Wang. She's a nice teacher.",
-        "translation": "这是王老师。她是一位好老师。"
+        "role": "Amy",
+        "text": "Who's the man?",
+        "translation": "这个男人是谁？"
        },
        {
-        "role": "narrator",
-        "text": "This is Maomao. She's a clever pupil.",
-        "translation": "这是毛毛。她是一个聪明的学生。"
+        "role": "Lingling",
+        "text": "This is my father.",
+        "translation": "这是我的爸爸。"
        },
        {
-        "role": "narrator",
-        "text": "This is Tom. He's a clever pupil, too.",
-        "translation": "这是汤姆。他也是一个聪明的学生。"
+        "role": "Amy",
+        "text": "What does he do? Have a guess!",
+        "translation": "他是做什么的？猜一猜！"
        },
        {
-        "role": "narrator",
-        "text": "This is Xiaoyong. He's very shy.",
-        "translation": "这是小勇。他很害羞。"
+        "role": "Sam",
+        "text": "Is he a farmer?",
+        "translation": "他是农民吗？"
        },
        {
-        "role": "narrator",
-        "text": "Parrot is a naughty bird. But it's very clever!",
-        "translation": "鹦鹉是一只调皮的鸟。但它非常聪明！"
+        "role": "Lingling",
+        "text": "No, he isn't. But he often works in the fields.",
+        "translation": "不，他不是。但他经常在田里工作。"
+       },
+       {
+        "role": "Amy",
+        "text": "Is he a painter?",
+        "translation": "他是画家吗？"
+       },
+       {
+        "role": "Lingling",
+        "text": "No, he isn't. But he uses his brush a lot.",
+        "translation": "不，他不是。但他经常用画笔。"
+       },
+       {
+        "role": "Sam",
+        "text": "I know! He's a scientist!",
+        "translation": "我知道了！他是科学家！"
+       },
+       {
+        "role": "Lingling",
+        "text": "That's right!",
+        "translation": "没错！"
+       },
+       {
+        "role": "Amy",
+        "text": "Oh, look at this!",
+        "translation": "哦，看这个！"
        }
       ]
      },
      {
-      "unit": "Unit 2 She's quite active",
+      "unit": "Unit 1 People at work (Speed up)",
       "content": [
        {
-        "role": "teacher",
-        "text": "Look at this picture. This is my friend.",
-        "translation": "看这张照片。这是我朋友。"
+        "role": "Narrator",
+        "text": "At night, many people are still working.",
+        "translation": "夜晚，很多人还在工作。"
        },
        {
-        "role": "pupil",
-        "text": "She's cute. She's very active in class.",
-        "translation": "她很可爱。她在课堂上非常活跃。"
+        "role": "Narrator",
+        "text": "The bus driver drives the bus.",
+        "translation": "公交车司机开着公交车。"
        },
        {
-        "role": "teacher",
-        "text": "What about you? Are you active?",
-        "translation": "你呢？你活跃吗？"
+        "role": "Narrator",
+        "text": "The taxi driver drives the taxi.",
+        "translation": "出租车司机开着出租车。"
        },
        {
-        "role": "pupil",
-        "text": "Yes, I am! I like English class.",
-        "translation": "是的，我很活跃！我喜欢英语课。"
+        "role": "Narrator",
+        "text": "The police officer keeps us safe.",
+        "translation": "警察保护我们的安全。"
+       },
+       {
+        "role": "Narrator",
+        "text": "The doctor helps sick people.",
+        "translation": "医生帮助病人。"
+       },
+       {
+        "role": "Narrator",
+        "text": "The nurse looks after patients.",
+        "translation": "护士照顾病人。"
+       },
+       {
+        "role": "Narrator",
+        "text": "They are night owls.",
+        "translation": "他们是夜猫子。"
        }
       ]
      }
     ],
-    "Module 2 It's very old": [
+    "Unit 2 How do you feel today": [
      {
-      "unit": "Unit 1 London is a big city",
+      "unit": "Unit 2 How do you feel today (Start up)",
       "content": [
        {
-        "role": "amy",
-        "text": "London is a big city. It's very famous.",
-        "translation": "伦敦是一座大城市。它非常有名。"
+        "role": "Amy",
+        "text": "It's my first Beijing opera show with Lingling. I'm so excited.",
+        "translation": "这是我和玲玲第一次参加京剧表演。我太兴奋了。"
        },
        {
-        "role": "lingling",
-        "text": "Look at Big Ben! It's very old.",
-        "translation": "看大本钟！它非常古老。"
+        "role": "Lingling's mum",
+        "text": "Lingling, it's Amy's mum. Amy is ill today.",
+        "translation": "玲玲，是艾米的妈妈。艾米今天病了。"
        },
        {
-        "role": "daming",
-        "text": "This is Buckingham Palace. The Queen lives here.",
-        "translation": "这是白金汉宫。女王住在这里。"
+        "role": "Lingling",
+        "text": "Is she coughing?",
+        "translation": "她在咳嗽吗？"
        },
        {
-        "role": "sam",
-        "text": "Hyde Park is beautiful. There are lots of trees.",
-        "translation": "海德公园很美。有很多树。"
+        "role": "Lingling's mum",
+        "text": "Yes, she is. She can't talk.",
+        "translation": "是的。她不能说话。"
+       },
+       {
+        "role": "Lingling",
+        "text": "She can't take part in the show today. She's sad.",
+        "translation": "她今天不能参加演出了。她很难过。"
+       },
+       {
+        "role": "Amy's mum",
+        "text": "I'm sorry to hear that.",
+        "translation": "听到这个我很难过。"
+       },
+       {
+        "role": "Lingling",
+        "text": "Dear Amy, Get well soon. Don't be sad. We can do it next time.",
+        "translation": "亲爱的艾米，早日康复。别难过。我们下次再表演。"
+       },
+       {
+        "role": "Amy",
+        "text": "Dear Lingling, Thank you. I'm feeling better now.",
+        "translation": "亲爱的玲玲，谢谢你。我现在好多了。"
+       },
+       {
+        "role": "Amy",
+        "text": "Time for the show. I'm happy!",
+        "translation": "演出时间到了。我很开心！"
        }
       ]
      },
      {
-      "unit": "Unit 2 It's very old",
+      "unit": "Unit 2 How do you feel today (Speed up)",
       "content": [
        {
-        "role": "amy",
-        "text": "This is Tower Bridge. It's very famous.",
-        "translation": "这是塔桥。它非常有名。"
+        "role": "Narrator",
+        "text": "Jay gets a ship model for his birthday.",
+        "translation": "杰伊生日收到一个船模型。"
        },
        {
-        "role": "lingling",
-        "text": "It's 127 years old. It's very old!",
-        "translation": "它有127年了。它非常古老！"
+        "role": "Narrator",
+        "text": "Jay is surprised and happy.",
+        "translation": "杰伊又惊又喜。"
        },
        {
-        "role": "daming",
-        "text": "The Great Wall is very old too. It's thousands of years old.",
-        "translation": "长城也很古老。它有几千年的历史了。"
+        "role": "Narrator",
+        "text": "Ray breaks the model.",
+        "translation": "雷弄坏了模型。"
        },
        {
-        "role": "sam",
-        "text": "China has many old buildings. They're amazing!",
-        "translation": "中国有很多古老的建筑。它们真令人惊叹！"
+        "role": "Narrator",
+        "text": "Jay is angry. He is shouting at Ray.",
+        "translation": "杰伊很生气。他在对雷大喊。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Jay runs back to his room. He is sad.",
+        "translation": "杰伊跑回房间。他很难过。"
+       },
+       {
+        "role": "Narrator",
+        "text": "They say sorry and make the model together.",
+        "translation": "他们互相道歉，一起重做模型。"
+       },
+       {
+        "role": "Narrator",
+        "text": "They are happy again.",
+        "translation": "他们又开心了。"
        }
       ]
      }
     ],
-    "Module 3 What are they doing?": [
+    "Unit 3 Everyone's got talent": [
      {
-      "unit": "Unit 1 Sam is riding a bike",
+      "unit": "Unit 3 Everyone's got talent (Start up)",
       "content": [
        {
-        "role": "daming",
-        "text": "Look! Sam is riding a bike.",
-        "translation": "看！萨姆正在骑自行车。"
+        "role": "Narrator",
+        "text": "It's the school dance show. Lingling is in it.",
+        "translation": "这是学校舞蹈比赛。玲玲参加了。"
        },
        {
-        "role": "amy",
-        "text": "What is Lingling doing?",
-        "translation": "玲玲正在做什么？"
+        "role": "Amy",
+        "text": "What are you looking at?",
+        "translation": "你在看什么？"
        },
        {
-        "role": "daming",
-        "text": "She's playing with her dog.",
-        "translation": "她正在和她的狗玩耍。"
+        "role": "Lingling",
+        "text": "I'm looking at their clothes.",
+        "translation": "我在看他们的衣服。"
        },
        {
-        "role": "sam",
-        "text": "I'm riding my bike in the park. It's fun!",
-        "translation": "我正在公园里骑自行车。真有趣！"
+        "role": "Amy",
+        "text": "Are you worried?",
+        "translation": "你担心吗？"
+       },
+       {
+        "role": "Lingling",
+        "text": "Yes. Everyone's wearing beautiful clothes. But I'm not. I can't win.",
+        "translation": "是的。每个人都穿着漂亮的衣服。但我没有。我赢不了。"
+       },
+       {
+        "role": "Amy",
+        "text": "Don't worry about your clothes. Just go and dance.",
+        "translation": "别担心你的衣服。去跳舞吧。"
+       },
+       {
+        "role": "Lingling",
+        "text": "OK.",
+        "translation": "好的。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Lingling is dancing well.",
+        "translation": "玲玲跳得很好。"
+       },
+       {
+        "role": "Narrator",
+        "text": "The best dancer is... Lingling! Hooray!",
+        "translation": "最佳舞者是……玲玲！万岁！"
        }
       ]
      },
      {
-      "unit": "Unit 2 They're having a picnic",
+      "unit": "Unit 3 Everyone's got talent (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "Look! They're having a picnic.",
-        "translation": "看！他们正在野餐。"
+        "role": "Narrator",
+        "text": "Little Chicken is sad. He is not good at anything.",
+        "translation": "小鸡很难过。他什么都不擅长。"
        },
        {
-        "role": "amy",
-        "text": "What are they eating?",
-        "translation": "他们正在吃什么？"
+        "role": "Little Chicken",
+        "text": "Bird, can you teach me to fly?",
+        "translation": "小鸟，你能教我飞吗？"
        },
        {
-        "role": "lingling",
-        "text": "They're eating sandwiches and drinking juice.",
-        "translation": "他们正在吃三明治和喝果汁。"
+        "role": "Little Chicken",
+        "text": "Oh, Duck, please teach me to swim.",
+        "translation": "哦，鸭子，请教我游泳。"
        },
        {
-        "role": "daming",
-        "text": "The weather is nice. Let's join them!",
-        "translation": "天气真好。我们去加入他们吧！"
+        "role": "Narrator",
+        "text": "Little Chicken can't fly or swim.",
+        "translation": "小鸡不会飞也不会游。"
+       },
+       {
+        "role": "Narrator",
+        "text": "One day, he sings. Everyone loves his song.",
+        "translation": "有一天，他唱歌。大家都喜欢他的歌。"
+       },
+       {
+        "role": "Little Chicken",
+        "text": "Hard work makes me shine!",
+        "translation": "努力使我闪闪发光！"
+       },
+       {
+        "role": "Narrator",
+        "text": "Everyone's got talent!",
+        "translation": "每个人都有才能！"
        }
       ]
      }
     ],
-    "Module 4 Do you want some rice?": [
+    "Unit 4 Plant life": [
      {
-      "unit": "Unit 1 Do you want some rice?",
+      "unit": "Unit 4 Plant life (Start up)",
       "content": [
        {
-        "role": "mum",
-        "text": "Daming, do you want some rice?",
-        "translation": "大明，你想吃一些米饭吗？"
+        "role": "Sam",
+        "text": "We're making a small garden for the class!",
+        "translation": "我们在为班级建一个小花园！"
        },
        {
-        "role": "daming",
-        "text": "Yes, please. I want a lot of rice.",
-        "translation": "好的，谢谢。我想要很多米饭。"
+        "role": "Lingling",
+        "text": "We're digging.",
+        "translation": "我们在挖土。"
        },
        {
-        "role": "mum",
-        "text": "What about some noodles?",
-        "translation": "吃一些面条怎么样？"
+        "role": "Daming",
+        "text": "I've got tomato seeds.",
+        "translation": "我有西红柿种子。"
        },
        {
-        "role": "daming",
-        "text": "No, thank you. I only want rice today.",
-        "translation": "不，谢谢。今天我只想吃米饭。"
+        "role": "Amy",
+        "text": "I've got bean seeds.",
+        "translation": "我有豆子种子。"
+       },
+       {
+        "role": "Lingling",
+        "text": "I've got cucumber seeds.",
+        "translation": "我有黄瓜种子。"
+       },
+       {
+        "role": "Sam",
+        "text": "I've got sunflower seeds.",
+        "translation": "我有葵花籽。"
+       },
+       {
+        "role": "Daming",
+        "text": "Are your seeds growing?",
+        "translation": "你的种子在发芽吗？"
+       },
+       {
+        "role": "Lingling",
+        "text": "Yes, they are. Look!",
+        "translation": "是的，看！"
+       },
+       {
+        "role": "Amy",
+        "text": "Are your seeds growing, Sam?",
+        "translation": "萨姆，你的种子在发芽吗？"
+       },
+       {
+        "role": "Sam",
+        "text": "No, they aren't. Why aren't my seeds growing?",
+        "translation": "不，没有。为什么我的种子不发芽？"
+       },
+       {
+        "role": "Amy",
+        "text": "Oh, Sam. These seeds can't grow!",
+        "translation": "哦，萨姆。这些种子不能发芽！"
+       },
+       {
+        "role": "Sam",
+        "text": "Why?",
+        "translation": "为什么？"
+       },
+       {
+        "role": "Amy",
+        "text": "Because your seeds are from a snack bag.",
+        "translation": "因为你的种子来自零食袋。"
+       },
+       {
+        "role": "Sam",
+        "text": "Let me plant a new one.",
+        "translation": "让我种一颗新的。"
        }
       ]
      },
      {
-      "unit": "Unit 2 I like chicken",
+      "unit": "Unit 4 Plant life (Speed up)",
       "content": [
        {
-        "role": "amy",
-        "text": "What do you want, Lingling?",
-        "translation": "你想吃什么，玲玲？"
+        "role": "Narrator",
+        "text": "This is Huahua's grandpa. He is a scientist.",
+        "translation": "这是花花的爷爷。他是一位科学家。"
        },
        {
-        "role": "lingling",
-        "text": "I like chicken. I want some chicken, please.",
-        "translation": "我喜欢鸡肉。我想要一些鸡肉。"
+        "role": "Narrator",
+        "text": "Grandpa often works in the fields.",
+        "translation": "爷爷经常在田里工作。"
        },
        {
-        "role": "amy",
-        "text": "Do you want some vegetables?",
-        "translation": "你想要一些蔬菜吗？"
+        "role": "Grandpa",
+        "text": "I want to grow tall rice plants.",
+        "translation": "我想种高大的水稻。"
        },
        {
-        "role": "lingling",
-        "text": "Yes, I like carrots and potatoes.",
-        "translation": "是的，我喜欢胡萝卜和土豆。"
+        "role": "Narrator",
+        "text": "Grandpa works hard day and night.",
+        "translation": "爷爷夜以继日地努力工作。"
+       },
+       {
+        "role": "Narrator",
+        "text": "I think his dreams will come true.",
+        "translation": "我想他的梦想会实现。"
        }
       ]
      }
     ],
-    "Module 5 Can you run fast?": [
+    "Unit 5 School activities": [
      {
-      "unit": "Unit 1 Can you run fast?",
+      "unit": "Unit 5 School activities (Start up)",
       "content": [
        {
-        "role": "teacher",
-        "text": "Can you run fast, Sam?",
-        "translation": "萨姆，你能跑得快吗？"
+        "role": "Daming",
+        "text": "These are my works for the Art Festival.",
+        "translation": "这些是我为艺术节准备的作品。"
        },
        {
-        "role": "sam",
-        "text": "Yes, I can. I'm very fast.",
-        "translation": "是的，我能。我跑得很快。"
+        "role": "Sam",
+        "text": "Look! That's a cow. There are horns on it.",
+        "translation": "看！那是一头牛。上面有角。"
        },
        {
-        "role": "teacher",
-        "text": "What about you, Amy?",
-        "translation": "你呢，Amy？"
+        "role": "Amy",
+        "text": "That's rain. Those are raindrops.",
+        "translation": "那是雨。那些是雨点。"
        },
        {
-        "role": "amy",
-        "text": "No, I can't run fast. But I can swim well.",
-        "translation": "不，我跑不快。但我游泳很好。"
+        "role": "Amy",
+        "text": "Are you drawing?",
+        "translation": "你在画画吗？"
+       },
+       {
+        "role": "Daming",
+        "text": "No, I'm writing Chinese words.",
+        "translation": "不，我在写汉字。"
+       },
+       {
+        "role": "Amy",
+        "text": "Are there more?",
+        "translation": "还有更多吗？"
+       },
+       {
+        "role": "Daming",
+        "text": "Yes, there are.",
+        "translation": "是的，有。"
        }
       ]
      },
      {
-      "unit": "Unit 2 Can you jump high?",
+      "unit": "Unit 5 School activities (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "Can you jump high?",
-        "translation": "你能跳得高吗？"
+        "role": "Narrator",
+        "text": "Weiwei and Lanlan are on a field trip.",
+        "translation": "薇薇和兰兰在户外研学。"
        },
        {
-        "role": "daming",
-        "text": "Yes, I can. I can jump very high.",
-        "translation": "是的，我能。我能跳得很高。"
+        "role": "Narrator",
+        "text": "They find a baby bird falls off the tree.",
+        "translation": "他们发现一只小鸟从树上掉下来。"
        },
        {
-        "role": "lingling",
-        "text": "Can you jump far?",
-        "translation": "你能跳得远吗？"
+        "role": "Lanlan",
+        "text": "Look! A baby bird!",
+        "translation": "看！一只小鸟！"
        },
        {
-        "role": "daming",
-        "text": "No, I can't. But I'm good at running.",
-        "translation": "不，我不能。但我擅长跑步。"
+        "role": "Weiwei",
+        "text": "Can we help it?",
+        "translation": "我们能帮助它吗？"
+       },
+       {
+        "role": "Lanlan",
+        "text": "Yes, we can. Let's call the forest keeper.",
+        "translation": "是的，我们能。我们打电话给护林员吧。"
+       },
+       {
+        "role": "Narrator",
+        "text": "The forest keeper comes and helps the bird.",
+        "translation": "护林员来帮助小鸟。"
+       },
+       {
+        "role": "Narrator",
+        "text": "The bird is safe now.",
+        "translation": "小鸟现在安全了。"
        }
       ]
      }
     ],
-    "Module 6 Can I have some sweets?": [
+    "Unit 6 Cool clothes": [
      {
-      "unit": "Unit 1 Can I have some sweets?",
+      "unit": "Unit 6 Cool clothes (Start up)",
       "content": [
        {
-        "role": "daming",
-        "text": "Mum, can I have some sweets?",
-        "translation": "妈妈，我能吃一些糖果吗？"
+        "role": "Mum",
+        "text": "Lingling, what do you want to wear to the party?",
+        "translation": "玲玲，你想穿什么去聚会？"
        },
        {
-        "role": "mum",
-        "text": "No, you can't. Sweets are not healthy.",
-        "translation": "不，你不能。糖果不健康。"
+        "role": "Lingling",
+        "text": "My favourite blue dress!",
+        "translation": "我最喜欢的蓝色连衣裙！"
        },
        {
-        "role": "daming",
-        "text": "Can I have some fruit then?",
-        "translation": "那我能吃一些水果吗？"
+        "role": "Lingling",
+        "text": "What are you doing, Mum?",
+        "translation": "妈妈，你在干什么？"
        },
        {
-        "role": "mum",
-        "text": "Yes, of course. Fruit is very good for you.",
-        "translation": "当然可以。水果对你很有好处。"
+        "role": "Mum",
+        "text": "I'm looking for your blue dress.",
+        "translation": "我在找你的蓝裙子。"
+       },
+       {
+        "role": "Lingling",
+        "text": "It's too small! I'm sad.",
+        "translation": "它太小了！我很难过。"
+       },
+       {
+        "role": "Mum",
+        "text": "I have an idea.",
+        "translation": "我有个主意。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Mum cuts up the dress and makes new clothes.",
+        "translation": "妈妈剪开裙子做新衣服。"
+       },
+       {
+        "role": "Lingling",
+        "text": "I'm wearing it at the party!",
+        "translation": "我在聚会上穿上它了！"
+       },
+       {
+        "role": "Lingling",
+        "text": "I'm happy now!",
+        "translation": "我现在很开心！"
        }
       ]
      },
      {
-      "unit": "Unit 2 I don't want any sweets",
+      "unit": "Unit 6 Cool clothes (Speed up)",
       "content": [
        {
-        "role": "amy",
-        "text": "Do you want some sweets, Lingling?",
-        "translation": "你想要一些糖果吗，玲玲？"
+        "role": "Narrator",
+        "text": "Police officers wear blue shirts.",
+        "translation": "警察穿蓝衬衫。"
        },
        {
-        "role": "lingling",
-        "text": "No, thank you. I don't want any sweets.",
-        "translation": "不，谢谢。我不想要任何糖果。"
+        "role": "Narrator",
+        "text": "Doctors and nurses wear white robes.",
+        "translation": "医生和护士穿白袍。"
        },
        {
-        "role": "amy",
-        "text": "What do you want?",
-        "translation": "你想要什么？"
+        "role": "Narrator",
+        "text": "Firemen wear orange uniforms.",
+        "translation": "消防员穿橙色制服。"
        },
        {
-        "role": "lingling",
-        "text": "I want some water, please.",
-        "translation": "请给我一些水。"
-       }
-      ]
-     }
-    ],
-    "Module 7 There is a horse in this photo": [
-     {
-      "unit": "Unit 1 There is a horse in this photo",
-      "content": [
-       {
-        "role": "daming",
-        "text": "Look at this photo. There is a horse.",
-        "translation": "看这张照片。有一匹马。"
-       },
-       {
-        "role": "amy",
-        "text": "There are many animals in the photo.",
-        "translation": "照片里有很多动物。"
-       },
-       {
-        "role": "daming",
-        "text": "There is a cow and some sheep too.",
-        "translation": "还有一头奶牛和一些绵羊。"
-       },
-       {
-        "role": "lingling",
-        "text": "The farm is beautiful. I like animals.",
-        "translation": "农场很美。我喜欢动物。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 There are lots of horses",
-      "content": [
-       {
-        "role": "sam",
-        "text": "There are lots of horses on the farm.",
-        "translation": "农场上有许多马。"
-       },
-       {
-        "role": "amy",
-        "text": "Are there any cows?",
-        "translation": "有奶牛吗？"
-       },
-       {
-        "role": "sam",
-        "text": "Yes, there are. There are also some pigs.",
-        "translation": "是的，有。还有一些猪。"
-       },
-       {
-        "role": "lingling",
-        "text": "I can count them. One, two, three...!",
-        "translation": "我可以数它们。一、二、三……！"
-       }
-      ]
-     }
-    ],
-    "Module 8 We're going to visit Hainan": [
-     {
-      "unit": "Unit 1 We're going to visit Hainan",
-      "content": [
-       {
-        "role": "daming",
-        "text": "Where are you going this summer?",
-        "translation": "今年夏天你打算去哪里？"
-       },
-       {
-        "role": "sam",
-        "text": "We're going to visit Hainan. It's very warm there.",
-        "translation": "我们打算去海南。那里很暖和。"
-       },
-       {
-        "role": "amy",
-        "text": "Are you going by plane?",
-        "translation": "你们打算坐飞机去吗？"
-       },
-       {
-        "role": "sam",
-        "text": "Yes, we're flying to Hainan.",
-        "translation": "是的，我们要飞往海南。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 I'm going to go to the beach",
-      "content": [
-       {
-        "role": "lingling",
-        "text": "What are you going to do in Hainan?",
-        "translation": "你打算在海南做什么？"
-       },
-       {
-        "role": "daming",
-        "text": "I'm going to swim in the sea.",
-        "translation": "我打算在海里游泳。"
-       },
-       {
-        "role": "lingling",
-        "text": "I'm going to play on the beach.",
-        "translation": "我打算在海滩上玩。"
-       },
-       {
-        "role": "daming",
-        "text": "We're going to have a great time!",
-        "translation": "我们一定会玩得很开心！"
-       }
-      ]
-     }
-    ],
-    "Module 9 Are you going to run on sports day?": [
-     {
-      "unit": "Unit 1 Are you going to run on sports day?",
-      "content": [
-       {
-        "role": "teacher",
-        "text": "Sports Day is coming. Are you going to run?",
-        "translation": "运动会快到了。你打算跑步吗？"
-       },
-       {
-        "role": "sam",
-        "text": "Yes, I'm going to run in the 100 metres.",
-        "translation": "是的，我打算参加100米跑。"
-       },
-       {
-        "role": "teacher",
-        "text": "What about you, Amy?",
-        "translation": "你呢，Amy？"
-       },
-       {
-        "role": "amy",
-        "text": "I'm going to jump. I can jump very high.",
-        "translation": "我打算跳远。我能跳得很高。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 Are you going to win?",
-      "content": [
-       {
-        "role": "daming",
-        "text": "Are you going to win, Sam?",
-        "translation": "你打算赢吗，萨姆？"
-       },
-       {
-        "role": "sam",
-        "text": "I'm going to try my best!",
-        "translation": "我会尽力的！"
-       },
-       {
-        "role": "daming",
-        "text": "Good luck! I believe in you.",
-        "translation": "祝你好运！我相信你。"
-       },
-       {
-        "role": "sam",
-        "text": "Thank you! See you at the sports ground!",
-        "translation": "谢谢！运动场上见！"
-       }
-      ]
-     }
-    ],
-    "Module 10 We have a big family dinner": [
-     {
-      "unit": "Unit 1 We have a big family dinner",
-      "content": [
-       {
-        "role": "grandma",
-        "text": "Chinese New Year is coming. We're going to have a big dinner.",
-        "translation": "春节快到了。我们打算吃一顿大餐。"
-       },
-       {
-        "role": "daming",
-        "text": "What are you going to eat?",
-        "translation": "你们打算吃什么？"
-       },
-       {
-        "role": "grandma",
-        "text": "We're going to eat dumplings, fish, and lots of nice food.",
-        "translation": "我们打算吃饺子、鱼和很多好吃的。"
-       },
-       {
-        "role": "daming",
-        "text": "That sounds delicious! I love dumplings.",
-        "translation": "听起来太好吃了！我爱吃饺子。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 We are having a party",
-      "content": [
-       {
-        "role": "amy",
-        "text": "We're having a party. Do you want to come?",
-        "translation": "我们要办派对。你想来吗？"
-       },
-       {
-        "role": "lingling",
-        "text": "Yes, I'd love to. What time?",
-        "translation": "是的，我很想来。几点？"
-       },
-       {
-        "role": "amy",
-        "text": "It's at 6 o'clock in the evening.",
-        "translation": "晚上六点。"
-       },
-       {
-        "role": "lingling",
-        "text": "Great! See you then!",
-        "translation": "太棒了！到时候见！"
+        "role": "Narrator",
+        "text": "Students wear school uniforms.",
+        "translation": "学生穿校服。"
        }
       ]
      }
