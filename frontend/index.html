@@ -675,9 +675,31 @@
         ← 返回分类
       </button>
       <div id="ket-content-title" style="font-size:18px;font-weight:600;margin-bottom:16px"></div>
+      <div id="ket-quiz-entry" style="display:none;margin-bottom:12px"></div>
       <div id="ket-content-list"></div>
     </div>
   </div>
+
+<!-- ======= KET 测验 ======= -->
+<div id="view-ket-quiz" class="view">
+  <button class="btn btn-secondary" onclick="backToKetCategory()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回分类</button>
+  <div class="quiz-card">
+    <div class="quiz-prompt" id="ket-quiz-prompt">这个单词的中文是？</div>
+    <div class="quiz-word" id="ket-quiz-word">word</div>
+    <div style="margin-bottom:16px">
+      <button class="speak-btn" id="ket-quiz-speak-btn" onclick="speakKetQuizWord()">🔊 听发音</button>
+    </div>
+    <div id="ket-quiz-options" style="display:flex;flex-direction:column;gap:10px;margin-top:12px"></div>
+    <div id="ket-quiz-feedback" style="display:none;margin-top:16px;text-align:center;padding:14px;border-radius:12px;font-size:15px"></div>
+    <button class="btn btn-primary" id="ket-quiz-next-btn" onclick="nextKetQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:12px">
+    <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevKetQuizQuestion()">← 上一题</button>
+    <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipKetQuiz()">跳过</button>
+    <button class="btn btn-secondary btn-sm" style="flex:1" onclick="nextKetQuizQuestion()">下一题 →</button>
+  </div>
+  <div id="ket-quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="ket-quiz-num">1</span> / <span id="ket-quiz-total">0</span> 题</div>
+</div>
 
 </div>
 
@@ -1098,10 +1120,10 @@ const API = ".";
     currentView = name;
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习" };
+    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     // 年级选择页不显示右上角
-    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review") ? "none" : "inline";
+    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz") ? "none" : "inline";
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
     if (name === "home") {
@@ -1117,10 +1139,11 @@ const API = ".";
       document.getElementById("learn-module-title").style.display = "none";
     }
     // 更新底部导航激活状态
+    var navName = (name === 'ket-quiz') ? 'ket' : name;
     ['home', 'learn', 'ket', 'report'].forEach(function(v) {
       var el = document.getElementById('nav-' + v);
       if (el) {
-        if (v === name) el.classList.add('active');
+        if (v === navName) el.classList.add('active');
         else el.classList.remove('active');
       }
     });
@@ -3444,6 +3467,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let ketCurrentType = ''; // 当前类型
   let ketCurrentCategory = ''; // 当前分类
 
+  // ========== KET 词汇测验状态 ==========
+  let ketQuizOrder = []; // 题目顺序（索引）
+  let ketQuizIndex = 0;
+  let ketQuizMode = 'en2cn'; // en2cn | cn2en | listen
+  let ketQuizWords = []; // 当前测验词汇池
+
   function renderKetPagination(totalItems) {
     const totalPages = Math.ceil(totalItems / ketItemsPerPage);
     const container = document.getElementById('ket-pagination');
@@ -3562,6 +3591,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       ketCurrentPage = 1;
       ketCurrentType = type;
       ketCurrentCategory = category;
+      const quizEntry = document.getElementById('ket-quiz-entry');
+      if (quizEntry) quizEntry.style.display = 'none';
       
       // 隐藏分类列表，显示内容区
       document.getElementById('ket-category-list').style.display = 'none';
@@ -3579,6 +3610,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         renderKetCurrentPage();
         renderKetPagination(ketCurrentItems.length);
         renderKetReading(category);
+        const qe = document.getElementById('ket-quiz-entry');
+        if (qe) {
+          qe.style.display = 'block';
+          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz()">🎯 本类词汇测验</button>';
+        }
 
       } else if (type === '句型') {
         titleEl.textContent = '💬 ' + category;
@@ -3627,6 +3663,169 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function backToKetCategories() {
     document.getElementById('ket-category-list').style.display = 'grid';
     document.getElementById('ket-content-area').style.display = 'none';
+    const qe = document.getElementById('ket-quiz-entry');
+    if (qe) qe.style.display = 'none';
+  }
+
+  // ========== KET 词汇测验 ==========
+  function startKetQuiz() {
+    const pool = ketCurrentItems || [];
+    if (pool.length === 0) { toast('当前分类没有单词'); return; }
+    ketQuizWords = shuffle(pool.slice()).slice(0, 10);
+    ketQuizOrder = ketQuizWords.map(function (w, i) { return i; });
+    ketQuizIndex = 0;
+    window.ketQuizResults = [];
+    comboCount = 0;
+    hideCombo();
+    switchView('ket-quiz');
+    loadKetQuizQuestion();
+  }
+
+  function loadKetQuizQuestion() {
+    clearTimeout(window._ketQuizAutoNext);
+    if (ketQuizIndex >= ketQuizOrder.length) { showKetQuizSummary(); return; }
+    document.getElementById('ket-quiz-feedback').style.display = 'none';
+    document.getElementById('ket-quiz-next-btn').style.display = 'none';
+
+    const w = ketQuizWords[ketQuizOrder[ketQuizIndex]];
+    if (!w) { ketQuizIndex++; loadKetQuizQuestion(); return; }
+
+    const modes = ['en2cn', 'cn2en', 'listen'];
+    ketQuizMode = modes[Math.floor(Math.random() * modes.length)];
+    const others = shuffle(ketQuizWords.filter(function (x) { return x !== w; })).slice(0, 3);
+
+    let options;
+    if (ketQuizMode === 'en2cn') {
+      options = shuffle([{ text: w.chinese, correct: true }].concat(others.map(function (d) { return { text: d.chinese, correct: false }; })));
+      document.getElementById('ket-quiz-prompt').textContent = '这个单词的中文是？';
+      document.getElementById('ket-quiz-word').textContent = capitalize(w.word);
+      setTimeout(function () { speakWord(w.word); }, 150);
+    } else if (ketQuizMode === 'cn2en') {
+      options = shuffle([{ text: w.word, correct: true }].concat(others.map(function (d) { return { text: d.word, correct: false }; })));
+      document.getElementById('ket-quiz-prompt').textContent = '这个中文的英文是？';
+      document.getElementById('ket-quiz-word').textContent = w.chinese;
+    } else {
+      options = shuffle([{ text: w.word, correct: true }].concat(others.map(function (d) { return { text: d.word, correct: false }; })));
+      document.getElementById('ket-quiz-prompt').textContent = '听发音，选出你听到的单词';
+      document.getElementById('ket-quiz-word').textContent = '🔊 🔊 🔊';
+      setTimeout(function () { speakWord(w.word); }, 150);
+    }
+    document.getElementById('ket-quiz-num').textContent = ketQuizIndex + 1;
+    document.getElementById('ket-quiz-total').textContent = ketQuizOrder.length;
+
+    document.getElementById('ket-quiz-options').innerHTML = options.map(function (o, i) {
+      return '<button class="choice-opt-btn" onclick="handleKetQuizChoice(this, ' + i + ')"' +
+        ' style="display:flex;justify-content:space-between;align-items:center;width:100%;padding:14px 16px;border:2px solid #e0e0e0;border-radius:12px;background:white;font-size:16px;cursor:pointer">' +
+        '<span>' + o.text + '</span><span>' + String.fromCharCode(65 + i) + '</span></button>';
+    }).join('');
+    window._ketQuizCur = { word: w, mode: ketQuizMode, options: options };
+  }
+
+  function handleKetQuizChoice(btnEl, optIdx) {
+    const cur = window._ketQuizCur;
+    if (!cur) return;
+    const opt = cur.options[optIdx];
+    const w = cur.word;
+    document.querySelectorAll('#ket-quiz-options button').forEach(function (b) { b.style.pointerEvents = 'none'; });
+    window.ketQuizResults = window.ketQuizResults || [];
+    const isCorrect = opt.correct;
+    window.ketQuizResults.push({ correct: isCorrect });
+    const feedback = document.getElementById('ket-quiz-feedback');
+    const nextBtn = document.getElementById('ket-quiz-next-btn');
+
+    if (isCorrect) {
+      btnEl.style.background = '#f6ffed'; btnEl.style.borderColor = '#52c41a'; btnEl.style.color = '#52c41a';
+      feedback.style.display = 'block'; feedback.style.background = '#f6ffed'; feedback.style.color = '#52c41a';
+      feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + (cur.mode === 'cn2en' ? w.chinese + ' = ' + capitalize(w.word) : capitalize(w.word) + ' = ' + w.chinese);
+      speakChinese('正确');
+      comboCount++;
+      showCombo(comboCount);
+      const r = Points.earn('quiz_correct');
+      if (r.success) { showPointsToast(r.points, Points.getMessage('quiz_correct')); updatePointsDisplay(); }
+    } else {
+      btnEl.style.background = '#fff2f0'; btnEl.style.borderColor = '#ff4d4f'; btnEl.style.color = '#ff4d4f';
+      const correctText = cur.mode === 'cn2en' ? w.word : w.chinese;
+      document.querySelectorAll('#ket-quiz-options button').forEach(function (b) {
+        const s = b.querySelector('span:first-child');
+        if (s && s.textContent.trim() === correctText) { b.style.background = '#f6ffed'; b.style.borderColor = '#52c41a'; b.style.color = '#52c41a'; }
+      });
+      feedback.style.display = 'block'; feedback.style.background = '#fff2f0'; feedback.style.color = '#ff4d4f';
+      feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + correctText + '</strong>';
+      speakChinese('不对');
+    }
+
+    nextBtn.style.display = 'block';
+    nextBtn.textContent = ketQuizIndex + 1 >= ketQuizOrder.length ? '查看成绩 🎉' : '下一题 →';
+
+    clearTimeout(window._ketQuizAutoNext);
+    const isLast = ketQuizIndex + 1 >= ketQuizOrder.length;
+    if (!isLast) {
+      window._ketQuizAutoNext = setTimeout(function () { nextKetQuizQuestion(); }, isCorrect ? 1200 : 2800);
+    }
+  }
+
+  function nextKetQuizQuestion() {
+    clearTimeout(window._ketQuizAutoNext);
+    ketQuizIndex++;
+    loadKetQuizQuestion();
+  }
+
+  function prevKetQuizQuestion() {
+    clearTimeout(window._ketQuizAutoNext);
+    if (ketQuizIndex <= 0) return;
+    if (window.ketQuizResults) window.ketQuizResults = window.ketQuizResults.slice(0, ketQuizIndex - 1);
+    comboCount = 0;
+    hideCombo();
+    ketQuizIndex--;
+    loadKetQuizQuestion();
+  }
+
+  function skipKetQuiz() {
+    window.ketQuizResults = window.ketQuizResults || [];
+    window.ketQuizResults.push({ correct: false, skipped: true });
+    ketQuizIndex++;
+    loadKetQuizQuestion();
+  }
+
+  function speakKetQuizWord() {
+    const w = ketQuizWords[ketQuizOrder[ketQuizIndex]];
+    if (!w) return;
+    if (ketQuizMode === 'cn2en') speakChinese(w.chinese);
+    else speakWord(w.word);
+  }
+
+  function showKetQuizSummary() {
+    hideCombo();
+    clearTimeout(window._ketQuizAutoNext);
+    const results = window.ketQuizResults || [];
+    const total = results.length;
+    const correct = results.filter(function (r) { return r.correct; }).length;
+    const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
+    const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+    if (pct === 100 && total > 0) {
+      const r = Points.earn('quiz_perfect');
+      if (r.success) { setTimeout(function () { showPointsToast(r.points, Points.getMessage('quiz_perfect')); updatePointsDisplay(); }, 500); }
+    }
+    document.getElementById('ket-quiz-options').innerHTML =
+      '<div style="text-align:center;padding:40px 20px">' +
+      '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
+      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
+      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
+      '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
+      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz()">再测一次</button>' +
+      '<button class="btn btn-secondary" style="width:100%" onclick="backToKetCategory()">返回分类</button>' +
+      '</div>';
+  }
+
+  function backToKetCategory() {
+    currentView = 'ket';
+    document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
+    document.getElementById('view-ket').classList.add('active');
+    document.getElementById('topbar-title').textContent = '📚 KET 学习';
+    document.getElementById('grade-display').style.display = 'none';
+    document.getElementById('ket-category-list').style.display = 'none';
+    document.getElementById('ket-content-area').style.display = 'block';
   }
 
   // ========== 启动 ==========
