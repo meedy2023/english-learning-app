@@ -774,172 +774,14 @@
     },
     "四年级": {
       "上册": {
-        "Module 1 Go straight on": [
+        "Unit 1 I love sports": [
           {
-            "unit": "Unit 1 Go straight on",
+            "unit": "Unit 1 I love sports (Start up)",
             "content": [
-              {
-                "role": "Daming",
-                "text": "Excuse me. Where is the library, please?",
-                "translation": "打扰一下。请问图书馆在哪里？"
-              },
-              {
-                "role": "Man",
-                "text": "Go straight on. It's at the station.",
-                "translation": "一直走。在车站那里。"
-              },
-              {
-                "role": "Daming",
-                "text": "Thank you.",
-                "translation": "谢谢。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 It's at the station",
-            "content": [
-              {
-                "role": "Amy",
-                "text": "Is the library near here?",
-                "translation": "图书馆在这附近吗？"
-              },
-              {
-                "role": "Daming",
-                "text": "Yes. Turn left. It's next to the park.",
-                "translation": "是的。左转。就在公园旁边。"
-              }
-            ]
-          }
-        ],
-        "Module 2 She's reading a book": [
-          {
-            "unit": "Unit 1 She's reading a book",
-            "content": [
-              {
-                "role": "Mum",
-                "text": "What are you doing, Lingling?",
-                "translation": "你在做什么，玲玲？"
-              },
-              {
-                "role": "Lingling",
-                "text": "I'm reading a book.",
-                "translation": "我在读书。"
-              },
-              {
-                "role": "Mum",
-                "text": "What is Sam doing?",
-                "translation": "Sam 在做什么？"
-              },
-              {
-                "role": "Lingling",
-                "text": "He's listening to music.",
-                "translation": "他在听音乐。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 What are you doing?",
-            "content": [
-              {
-                "role": "Amy",
-                "text": "What are you doing, Daming?",
-                "translation": "你在做什么，大明？"
-              },
-              {
-                "role": "Daming",
-                "text": "I'm watching TV.",
-                "translation": "我在看电视。"
-              }
-            ]
-          }
-        ],
-        "Module 3 What are they doing?": [
-          {
-            "unit": "Unit 1 What are they doing?",
-            "content": [
-              {
-                "role": "Ms Li",
-                "text": "Look at the picture. What are they doing?",
-                "translation": "看图片。他们在做什么？"
-              },
               {
                 "role": "Sam",
-                "text": "They are playing football.",
-                "translation": "他们在踢足球。"
-              },
-              {
-                "role": "Amy",
-                "text": "They are running.",
-                "translation": "他们在跑步。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 What's the elephant doing?",
-            "content": [
-              {
-                "role": "Daming",
-                "text": "What's the elephant doing?",
-                "translation": "那只大象在做什么？"
-              },
-              {
-                "role": "Amy",
-                "text": "It's drinking water.",
-                "translation": "它在喝水。"
-              }
-            ]
-          }
-        ],
-        "Module 4 Do you want some rice?": [
-          {
-            "unit": "Unit 1 Do you want some rice?",
-            "content": [
-              {
-                "role": "Mum",
-                "text": "What do you want for dinner?",
-                "translation": "晚饭你想吃什么？"
-              },
-              {
-                "role": "Sam",
-                "text": "I want some rice and meat.",
-                "translation": "我想要米饭和肉。"
-              },
-              {
-                "role": "Mum",
-                "text": "Do you want some soup?",
-                "translation": "你想要一些汤吗？"
-              },
-              {
-                "role": "Sam",
-                "text": "Yes, please.",
-                "translation": "好的，请来一些。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 How much is it?",
-            "content": [
-              {
-                "role": "Amy",
-                "text": "How much is the rice?",
-                "translation": "米饭多少钱？"
-              },
-              {
-                "role": "Shopkeeper",
-                "text": "It's three yuan.",
-                "translation": "三元钱。"
-              }
-            ]
-          }
-        ],
-        "Module 5 Can you run fast?": [
-          {
-            "unit": "Unit 1 Can you run fast?",
-            "content": [
-              {
-                "role": "Ms Li",
-                "text": "Can you run fast, Daming?",
-                "translation": "你跑得快吗，大明？"
+                "text": "Can you jump high, Daming?",
+                "translation": "大明，你能跳得高吗？"
               },
               {
                 "role": "Daming",
@@ -947,209 +789,429 @@
                 "translation": "是的，我能。"
               },
               {
-                "role": "Ms Li",
-                "text": "Can you swim, Amy?",
-                "translation": "你会游泳吗，Amy？"
+                "role": "Daming",
+                "text": "Can you run fast, Sam?",
+                "translation": "萨姆，你能跑得快吗？"
+              },
+              {
+                "role": "Sam",
+                "text": "Yes, I can.",
+                "translation": "是的，我能。"
               },
               {
                 "role": "Amy",
-                "text": "No, I can't.",
-                "translation": "不，我不会。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 Can Sam play football?",
-            "content": [
-              {
-                "role": "Daming",
-                "text": "Can Sam play football?",
-                "translation": "Sam 会踢足球吗？"
+                "text": "Can you play ping-pong, Lingling?",
+                "translation": "玲玲，你会打乒乓球吗？"
               },
               {
                 "role": "Lingling",
-                "text": "Yes, he can play very well.",
-                "translation": "是的，他踢得很好。"
-              }
-            ]
-          }
-        ],
-        "Module 6 Can I have some sweets?": [
-          {
-            "unit": "Unit 1 Can I have some sweets?",
-            "content": [
-              {
-                "role": "Sam",
-                "text": "Can I have some sweets, Mum?",
-                "translation": "妈妈，我能吃一些糖果吗？"
-              },
-              {
-                "role": "Mum",
-                "text": "No, you can't. It's bad for your teeth.",
-                "translation": "不行。对你的牙齿不好。"
-              },
-              {
-                "role": "Sam",
-                "text": "Can I have an apple, then?",
-                "translation": "那我能吃一个苹果吗？"
-              },
-              {
-                "role": "Mum",
-                "text": "Sure. Here you are.",
-                "translation": "当然。给你。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 Happy Mid-Autumn Festival",
-            "content": [
-              {
-                "role": "Daming",
-                "text": "Happy Mid-Autumn Festival!",
-                "translation": "中秋节快乐！"
-              },
-              {
-                "role": "Amy",
-                "text": "Thank you! Let's eat moon cakes.",
-                "translation": "谢谢！我们吃月饼吧。"
-              }
-            ]
-          }
-        ],
-        "Module 7 There is a horse in this photo": [
-          {
-            "unit": "Unit 1 There is a horse in this photo",
-            "content": [
-              {
-                "role": "Daming",
-                "text": "Look! There is a horse in this photo.",
-                "translation": "看！照片里有一匹马。"
-              },
-              {
-                "role": "Amy",
-                "text": "There are two horses. They're running on the grass.",
-                "translation": "有两匹马。它们在草地上跑。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 There are twelve boys on the bike",
-            "content": [
-              {
-                "role": "Sam",
-                "text": "There are twelve boys on the bike.",
-                "translation": "自行车上有十二个男孩。"
+                "text": "Yes, I can.",
+                "translation": "是的，我会。"
               },
               {
                 "role": "Lingling",
-                "text": "Wow! That's amazing.",
-                "translation": "哇！太神奇了。"
-              }
-            ]
-          }
-        ],
-        "Module 8 We're going to visit Hainan": [
-          {
-            "unit": "Unit 1 We're going to visit Hainan",
-            "content": [
-              {
-                "role": "Mum",
-                "text": "What are you going to do this summer?",
-                "translation": "这个夏天你打算做什么？"
+                "text": "Can you swim, Daming?",
+                "translation": "大明，你会游泳吗？"
               },
               {
-                "role": "Sam",
-                "text": "We're going to visit Hainan.",
-                "translation": "我们要去海南旅游。"
+                "role": "Daming",
+                "text": "No, I can't. But I can learn.",
+                "translation": "不，我不会。但是我可以学。"
               },
               {
-                "role": "Mum",
-                "text": "Have a good time!",
-                "translation": "玩得开心！"
+                "role": "Daming",
+                "text": "I can swim now!",
+                "translation": "我现在会游泳啦！"
+              },
+              {
+                "role": "Amy",
+                "text": "Wow! You can swim fast!",
+                "translation": "哇！你游得真快！"
               }
             ]
           },
           {
-            "unit": "Unit 2 Sam is going to ride a horse",
+            "unit": "Unit 1 I love sports (Speed up)",
             "content": [
               {
-                "role": "Daming",
-                "text": "Sam is going to ride a horse.",
-                "translation": "Sam 打算骑马。"
+                "role": "Narrator",
+                "text": "This is Terry Fox. He lost one leg because of cancer.",
+                "translation": "这是特里·福克斯。他因为癌症失去了一条腿。"
               },
               {
-                "role": "Amy",
-                "text": "I'm going to swim in the sea.",
-                "translation": "我打算在海里游泳。"
+                "role": "Narrator",
+                "text": "He ran across Canada to get money for the people with cancer.",
+                "translation": "他跑遍加拿大为癌症患者筹钱。"
+              },
+              {
+                "role": "Terry",
+                "text": "It's OK to fail. Don't give up!",
+                "translation": "失败没关系。不要放弃！"
+              },
+              {
+                "role": "Terry",
+                "text": "Never stop! Work hard and try your best!",
+                "translation": "永不停止！努力工作，尽你最大的努力！"
               }
             ]
           }
         ],
-        "Module 9 Are you going to run on sports day?": [
+        "Unit 2 Helping at home": [
           {
-            "unit": "Unit 1 Are you going to run on sports day?",
+            "unit": "Unit 2 Helping at home (Start up)",
             "content": [
               {
-                "role": "Ms Li",
-                "text": "Are you going to run on sports day, Lingling?",
-                "translation": "运动日你打算参加跑步吗，玲玲？"
+                "role": "Bobby",
+                "text": "Dad, may I play outside?",
+                "translation": "爸爸，我可以出去玩吗？"
               },
-              {
-                "role": "Lingling",
-                "text": "Yes, I am. I'm going to run fast.",
-                "translation": "是的，我要。我要跑得快。"
-              }
-            ]
-          },
-          {
-            "unit": "Unit 2 I'm going to do the high jump",
-            "content": [
-              {
-                "role": "Daming",
-                "text": "I'm going to do the high jump.",
-                "translation": "我要参加跳高。"
-              },
-              {
-                "role": "Amy",
-                "text": "I'm going to do the long jump.",
-                "translation": "我要参加跳远。"
-              }
-            ]
-          }
-        ],
-        "Module 10 We have a big family dinner": [
-          {
-            "unit": "Unit 1 We have a big family dinner",
-            "content": [
               {
                 "role": "Dad",
-                "text": "Today is Chinese New Year. We have a big family dinner.",
-                "translation": "今天是春节。我们有一个大家庭聚餐。"
+                "text": "Yes. But can you tidy your room first?",
+                "translation": "可以。但是你能先整理你的房间吗？"
               },
               {
-                "role": "Daming",
-                "text": "Happy Chinese New Year!",
-                "translation": "春节快乐！"
+                "role": "Dad",
+                "text": "Bobby, can you help me clean the floor?",
+                "translation": "波比，你能帮我擦地板吗？"
               },
               {
-                "role": "Amy",
-                "text": "Happy Chinese New Year, everyone!",
-                "translation": "大家春节快乐！"
+                "role": "Bobby",
+                "text": "OK. That's easy.",
+                "translation": "好的。那很容易。"
+              },
+              {
+                "role": "Sam",
+                "text": "Go, Bobby! Good job!",
+                "translation": "加油，波比！干得好！"
+              },
+              {
+                "role": "Dad",
+                "text": "Sam, are you still busy?",
+                "translation": "萨姆，你还在忙吗？"
+              },
+              {
+                "role": "Sam",
+                "text": "Yes, Dad. I need to clean the floor, the desk and the wall.",
+                "translation": "是的，爸爸。我需要擦地板、书桌和墙。"
+              },
+              {
+                "role": "Bobby",
+                "text": "Bobby, stop! Look! It's so dirty now!",
+                "translation": "波比，停下！看！现在它好脏啊！"
               }
             ]
           },
           {
-            "unit": "Unit 2 Merry Christmas!",
+            "unit": "Unit 2 Helping at home (Song)",
             "content": [
               {
-                "role": "Lingling",
-                "text": "Merry Christmas, Mum and Dad!",
-                "translation": "爸爸妈妈，圣诞快乐！"
+                "role": "Song",
+                "text": "Phew! So much work! Let's work together.",
+                "translation": "唷！好多活儿啊！让我们一起干吧。"
               },
               {
+                "role": "Song",
+                "text": "Wash the dishes. Feed the dog. Make the beds. Wash the clothes.",
+                "translation": "洗碗。喂狗。铺床。洗衣服。"
+              },
+              {
+                "role": "Song",
+                "text": "Sweep the floor. Take out the rubbish.",
+                "translation": "扫地。倒垃圾。"
+              },
+              {
+                "role": "Song",
+                "text": "Everyone, well done! Chores can be fun!",
+                "translation": "大家干得好！家务也可以很有趣！"
+              }
+            ]
+          }
+        ],
+        "Unit 3 What's the weather like?": [
+          {
+            "unit": "Unit 3 What's the weather like? (Start up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "What's the weather like?",
+                "translation": "天气怎么样？"
+              },
+              {
+                "role": "Daming",
+                "text": "It's sunny and warm. We can go out to play.",
+                "translation": "晴朗又暖和。我们可以出去玩。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Oh, it's cool!",
+                "translation": "哦，好凉快！"
+              },
+              {
+                "role": "Sam",
+                "text": "It's windy and cloudy. Let's go home!",
+                "translation": "又刮风又阴天。我们回家吧！"
+              },
+              {
+                "role": "Daming",
+                "text": "Oh! It's rainy now. Let's run!",
+                "translation": "哦！现在下雨了。我们快跑！"
+              },
+              {
+                "role": "Amy",
+                "text": "Look! I've got a good idea.",
+                "translation": "看！我有个好主意。"
+              },
+              {
+                "role": "Sam",
+                "text": "Our umbrellas are great!",
+                "translation": "我们的雨伞太棒了！"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 3 What's the weather like? (Song)",
+            "content": [
+              {
+                "role": "Song",
+                "text": "The sun comes up... It's sunny.",
+                "translation": "太阳升起来了……天晴了。"
+              },
+              {
+                "role": "Song",
+                "text": "The clouds go by... It's cloudy.",
+                "translation": "云飘过去了……天阴了。"
+              },
+              {
+                "role": "Song",
+                "text": "The wind blows around... It's windy.",
+                "translation": "风吹来吹去……起风了。"
+              },
+              {
+                "role": "Song",
+                "text": "The rain comes down... It's rainy.",
+                "translation": "雨落下来了……下雨了。"
+              },
+              {
+                "role": "Song",
+                "text": "The snow dances around... It's snowy.",
+                "translation": "雪飞舞着……下雪了。"
+              },
+              {
+                "role": "Song",
+                "text": "In any weather, we have fun. Hot, cold, cool or warm. Enjoy them all!",
+                "translation": "无论什么天气，我们都开心。热、冷、凉、暖，全都享受！"
+              }
+            ]
+          }
+        ],
+        "Unit 4 Wonderful seasons": [
+          {
+            "unit": "Unit 4 Wonderful seasons (Speed up)",
+            "content": [
+              {
+                "role": "Li Han",
+                "text": "I'm Li Han. This is my apple tree.",
+                "translation": "我是李涵。这是我的苹果树。"
+              },
+              {
+                "role": "Li Han",
+                "text": "I'm ten now. The tree is ten, too. Spring is here! The birds are back.",
+                "translation": "我现在十岁了。这棵树也十岁了。春天来了！鸟儿回来了。"
+              },
+              {
+                "role": "Li Han",
+                "text": "It's summer. The apple tree is like a sun umbrella. I like reading under it.",
+                "translation": "夏天到了。苹果树像一把太阳伞。我喜欢在树下读书。"
+              },
+              {
+                "role": "Li Han",
+                "text": "It's autumn. I like autumn best! There are many red apples on the tree!",
+                "translation": "秋天到了。我最喜欢秋天！树上有很多红苹果！"
+              },
+              {
+                "role": "Li Han",
+                "text": "Can I share the apples with my friends? Sure!",
+                "translation": "我能和朋友们分享这些苹果吗？当然！"
+              },
+              {
+                "role": "Li Han",
+                "text": "It's winter. My apple tree has warm, new clothes.",
+                "translation": "冬天到了。我的苹果树穿上了暖和的新衣服。"
+              },
+              {
+                "role": "Li Han",
+                "text": "A snowstorm comes. Oh, no! My apple tree! I don't like winter!",
+                "translation": "暴风雪来了。哦，不！我的苹果树！我不喜欢冬天！"
+              },
+              {
+                "role": "Dad",
+                "text": "Don't worry. Let's wait for spring.",
+                "translation": "别担心。让我们等待春天。"
+              },
+              {
+                "role": "Li Han",
+                "text": "It's spring again. My apple tree grows again. Hooray!",
+                "translation": "春天又来了。我的苹果树又生长了。万岁！"
+              }
+            ]
+          }
+        ],
+        "Unit 5 Let's go!": [
+          {
+            "unit": "Unit 5 Let's go! (Start up)",
+            "content": [
+              {
                 "role": "Mum",
-                "text": "Merry Christmas, dear!",
-                "translation": "亲爱的，圣诞快乐！"
+                "text": "Let's go for a picnic in the park.",
+                "translation": "我们去公园野餐吧。"
+              },
+              {
+                "role": "Daming & Sister",
+                "text": "Hooray!",
+                "translation": "万岁！"
+              },
+              {
+                "role": "Sister",
+                "text": "How do we get there?",
+                "translation": "我们怎么到那里？"
+              },
+              {
+                "role": "Daming",
+                "text": "Let's go by car! It's fast!",
+                "translation": "我们开车去吧！很快！"
+              },
+              {
+                "role": "Dad",
+                "text": "No, let's go in a \"green\" way!",
+                "translation": "不，让我们用“绿色”的方式去！"
+              },
+              {
+                "role": "Daming",
+                "text": "A green way?",
+                "translation": "绿色的方式？"
+              },
+              {
+                "role": "Dad",
+                "text": "Yes. Go and get ready. Let's meet in five minutes.",
+                "translation": "是的。去准备吧。我们五分钟后见。"
+              },
+              {
+                "role": "Daming & Sister",
+                "text": "We're green now! Let's go!",
+                "translation": "我们现在是绿色的了！出发！"
+              },
+              {
+                "role": "Dad",
+                "text": "Ha ha! Not that kind of green!",
+                "translation": "哈哈！不是那种绿色！"
+              },
+              {
+                "role": "Dad",
+                "text": "This kind of green!",
+                "translation": "是这种绿色！"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 5 Let's go! (Song)",
+            "content": [
+              {
+                "role": "Song",
+                "text": "We can go by bus, going up and down.",
+                "translation": "我们可以坐公交车，上上下下。"
+              },
+              {
+                "role": "Song",
+                "text": "We can go by car, to get around.",
+                "translation": "我们可以坐汽车，四处逛逛。"
+              },
+              {
+                "role": "Song",
+                "text": "We can go by train, from city to town.",
+                "translation": "我们可以坐火车，从城市到小镇。"
+              },
+              {
+                "role": "Song",
+                "text": "We can go by ship, across the sea.",
+                "translation": "我们可以坐大船，横跨大海。"
+              },
+              {
+                "role": "Song",
+                "text": "We can go by plane, high up in the sky.",
+                "translation": "我们可以坐飞机，高高飞在天上。"
+              },
+              {
+                "role": "Song",
+                "text": "We can go to different places, near and far.",
+                "translation": "我们可以去不同的地方，或近或远。"
+              }
+            ]
+          }
+        ],
+        "Unit 6 Find your way": [
+          {
+            "unit": "Unit 6 Find your way (Start up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "My cat Susu goes out every morning! Where does she go?",
+                "translation": "我的猫苏苏每天早上都出去！她去哪儿？"
+              },
+              {
+                "role": "Amy",
+                "text": "Where does she go? I don't know! Let's find out tomorrow.",
+                "translation": "她去哪儿？我不知道！我们明天去查个明白。"
+              },
+              {
+                "role": "Daming",
+                "text": "Susu goes straight on to the museum. She turns left there.",
+                "translation": "苏苏直着走到博物馆。她在那里左转。"
+              },
+              {
+                "role": "Amy",
+                "text": "At the hospital, she turns right.",
+                "translation": "在医院那里，她右转。"
+              },
+              {
+                "role": "Daming",
+                "text": "Then Susu stops. Let's go there!",
+                "translation": "然后苏苏停下了。我们去那儿吧！"
+              },
+              {
+                "role": "Amy",
+                "text": "Go straight on to the museum. Then turn left.",
+                "translation": "直着走到博物馆。然后左转。"
+              },
+              {
+                "role": "Daming",
+                "text": "Turn right at the hospital.",
+                "translation": "在医院那里右转。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 6 Find your way (Song)",
+            "content": [
+              {
+                "role": "Song",
+                "text": "The wheels on the bus go round and round.",
+                "translation": "公交车的轮子转啊转。"
+              },
+              {
+                "role": "Song",
+                "text": "Turn left and go straight on. Ding! Ding! Ding! Here's the library.",
+                "translation": "左转再直走。叮！叮！叮！这里是图书馆。"
+              },
+              {
+                "role": "Song",
+                "text": "The wheels on the bus go round and round.",
+                "translation": "公交车的轮子转啊转。"
+              },
+              {
+                "role": "Song",
+                "text": "Turn right and go straight on. Ding! Ding! Ding! Here's the sports centre.",
+                "translation": "右转再直走。叮！叮！叮！这里是体育中心。"
               }
             ]
           }
