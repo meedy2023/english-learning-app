@@ -580,7 +580,9 @@
       <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
     </div>
     <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipQuiz()">跳过 →</button>
+      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevQuizQuestion()">← 上一题</button>
+      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipQuiz()">跳过</button>
+      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="nextQuizQuestion()">下一题 →</button>
     </div>
     <div id="quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="quiz-num">1</span> / <span id="quiz-total">0</span> 题</div>
   </div>
@@ -2621,6 +2623,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       return;
     }
     // 重置反馈区
+    clearTimeout(window._quizAutoNext);
     document.getElementById("quiz-feedback").style.display = "none";
     document.getElementById("quiz-next-btn").style.display = "none";
 
@@ -2739,10 +2742,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     nextBtn.style.display = "block";
     nextBtn.textContent = currentQuizIndex + 1 >= quizOrder.length ? "查看成绩 🎉" : "下一题 →";
+
+    // 答完后自动切换下一题（无需手动点击「下一题」）；答错多停留一会儿看清答案
+    clearTimeout(window._quizAutoNext);
+    const isLastQ = currentQuizIndex + 1 >= quizOrder.length;
+    const autoDelay = isLastQ ? 2000 : (isCorrect ? 1200 : 2800);
+    window._quizAutoNext = setTimeout(function() { nextQuizQuestion(); }, autoDelay);
   }
 
   function nextQuizQuestion() {
+    clearTimeout(window._quizAutoNext);
     currentQuizIndex++;
+    loadQuizQuestion();
+  }
+
+  function prevQuizQuestion() {
+    clearTimeout(window._quizAutoNext);
+    if (currentQuizIndex <= 0) return;
+    // 丢弃当前题及之后的作答记录，回退上一题重新作答
+    if (window.quizResults) {
+      window.quizResults = window.quizResults.slice(0, currentQuizIndex - 1);
+    }
+    comboCount = 0;
+    hideCombo();
+    currentQuizIndex--;
     loadQuizQuestion();
   }
 
