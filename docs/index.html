@@ -2232,6 +2232,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function loadReviewQuestion() {
+    clearTimeout(window._rvAutoNext);
     if (rvIdx >= rvOrder.length) { showReviewSummary(); return; }
     const wordId = rvOrder[rvIdx];
     getAllWords().then(function (all) {
@@ -2274,6 +2275,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           </div>
           <div id="review-feedback" style="display:none;margin-top:16px;text-align:center;padding:14px;border-radius:12px;font-size:15px"></div>
           <button class="btn btn-primary" id="review-next-btn" onclick="nextReviewQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevReviewQuestion()">← 上一个</button>
+          <button class="btn btn-secondary btn-sm" style="flex:1" onclick="nextReviewQuestion()">下一个 →</button>
         </div>
       `;
       window._rvCur = { word: word, mode: mode, options: options };
@@ -2325,14 +2330,31 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     nextBtn.style.display = 'block';
     nextBtn.textContent = rvIdx + 1 >= rvOrder.length ? '完成复习 🎉' : '下一题 →';
+
+    // 答题结束自动跳转下一个；最后一个不跳转，等用户手动点「完成复习」
+    clearTimeout(window._rvAutoNext);
+    const isLastQ = rvIdx + 1 >= rvOrder.length;
+    if (!isLastQ) {
+      const autoDelay = isCorrect ? 1200 : 2800;
+      window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, autoDelay);
+    }
   }
 
   function nextReviewQuestion() {
+    clearTimeout(window._rvAutoNext);
     rvIdx++;
     loadReviewQuestion();
   }
 
+  function prevReviewQuestion() {
+    clearTimeout(window._rvAutoNext);
+    if (rvIdx <= 0) return;
+    rvIdx--;
+    loadReviewQuestion();
+  }
+
   function showReviewSummary() {
+    clearTimeout(window._rvAutoNext);
     const pct = rvTotal > 0 ? Math.round(rvCorrect / rvTotal * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = pct >= 90 ? '复习得太棒了！' : pct >= 70 ? '复习得很不错！' : pct >= 50 ? '继续加油，会记住的！' : '没关系，明天再巩固一次！';
