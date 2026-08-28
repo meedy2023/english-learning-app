@@ -2107,24 +2107,30 @@ const API = ".";
       return;
     }
 
-    let delay = 0;
-    content.forEach((line, idx) => {
-      setTimeout(() => {
-        TTS.speak(line.text, 'en-US');
-      }, delay);
-      delay += 3500; // 每句间隔3.5秒
-    });
+    // callback 链驱动：等上一句播完再播下一句
+    let idx = 0;
+    let total = content.length;
+    let done = 0;
 
-    // 朗读完成后获得积分
-    setTimeout(() => {
-      const result = Points.earn('lesson_full_read');
-      if (result.success) {
-        showPointsToast(result.points, Points.getMessage('lesson_full_read'));
-        updatePointsDisplay();
-      }
-    }, delay + 1000);
+    const speakNext = () => {
+      if (idx >= total) return;
+      const line = content[idx++];
+      TTS.speak(line.text, 'en-US', function() {
+        done++;
+        if (done === total) {
+          const result = Points.earn('lesson_full_read');
+          if (result.success) {
+            showPointsToast(result.points, Points.getMessage('lesson_full_read'));
+            updatePointsDisplay();
+          }
+        } else {
+          speakNext();
+        }
+      });
+    };
 
     toast('开始朗读整篇课文...');
+    speakNext();
   }
 
   // ========== TTS 发音（系统 speechSynthesis + 网络 Edge TTS 兜底）==========
@@ -2197,12 +2203,13 @@ const API = ".";
     }
   };
 
-  function playAudioBlob(blob) {
+  function playAudioBlob(blob, onEnd) {
     const url = URL.createObjectURL(blob);
     const audio = new Audio();
     audio.src = url;
-    audio.onended = () => URL.revokeObjectURL(url);
-    audio.play().catch(() => { toast('音频播放失败，请检查设备音量'); URL.revokeObjectURL(url); });
+    audio.onended = () => { URL.revokeObjectURL(url); if (onEnd) onEnd(); };
+    audio.onerror = () => { URL.revokeObjectURL(url); if (onEnd) onEnd(); };
+    audio.play().catch(() => { toast('音频播放失败，请检查设备音量'); URL.revokeObjectURL(url); if (onEnd) onEnd(); });
   }
 
   // ---- 统一 TTS 调度 ----
@@ -2227,14 +2234,14 @@ const API = ".";
       if (ttsEngine === 'system') return false;
       return !this.hasVoice(lang); // auto: 系统无可用语音则走网络
     },
-    speak(text, lang) {
-      if (!text) return;
+    speak(text, lang, onEnd) {
+      if (!text) { if (onEnd) onEnd(); return; }
       lang = lang || 'en-US';
-      if (this.useNetwork(lang)) this.speakNetwork(text, lang);
-      else this.speakSystem(text, lang);
+      if (this.useNetwork(lang)) this.speakNetwork(text, lang, onEnd);
+      else this.speakSystem(text, lang, onEnd);
     },
-    speakSystem(text, lang) {
-      if (!window.speechSynthesis) { this.speakNetwork(text, lang); return; }
+    speakSystem(text, lang, onEnd) {
+      if (!window.speechSynthesis) { this.speakNetwork(text, lang, onEnd); return; }
       try {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
@@ -2245,14 +2252,15 @@ const API = ".";
         const v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
                || speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(prefix));
         if (v) u.voice = v;
-        u.onerror = () => {}; // 静默失败时不重复提示
+        u.onend = () => { if (onEnd) onEnd(); };
+        u.onerror = () => { if (onEnd) onEnd(); };
         speechSynthesis.speak(u);
-      } catch (e) { this.speakNetwork(text, lang); }
+      } catch (e) { this.speakNetwork(text, lang, onEnd); }
     },
-    speakNetwork(text, lang) {
+    speakNetwork(text, lang, onEnd) {
       EdgeTTS.synthesize(text, lang,
-        (blob) => playAudioBlob(blob),
-        (err) => { console.warn('网络发音失败', err); toast('网络发音失败，请检查网络或切换到系统发音'); }
+        (blob) => playAudioBlob(blob, onEnd),
+        (err) => { console.warn('网络发音失败', err); toast('网络发音失败，请检查网络或切换到系统发音'); if (onEnd) onEnd(); }
       );
     }
   };
@@ -2351,19 +2359,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       toast('没有可朗读的内容');
       return;
     }
-    let delay = 0;
-    readingContent.forEach((line) => {
-      setTimeout(() => { TTS.speak(line.en, 'en-US'); }, delay);
-      delay += 4000;
-    });
-    setTimeout(() => {
-      const result = Points.earn('lesson_full_read');
-      if (result.success) {
-        showPointsToast(result.points, Points.getMessage('lesson_full_read'));
-        updatePointsDisplay();
-      }
-    }, delay + 1000);
+    let idx = 0;
+    let totalLines = readingContent.length;
+    let completed = 0;
+
+    const speakNext = () => {
+      if (idx >= totalLines) return;
+      const line = readingContent[idx];
+      idx++;
+      TTS.speak(line.en, 'en-US', function() {
+        completed++;
+        if (completed === totalLines) {
+          const result = Points.earn('lesson_full_read');
+          if (result.success) {
+            showPointsToast(result.points, Points.getMessage('lesson_full_read'));
+            updatePointsDisplay();
+          }
+        } else {
+          speakNext();
+        }
+      });
+    };
+
     toast('开始朗读整篇短文...');
+    speakNext();
   }
   function speakWord(word) {
     if (!word) { toast("没有可发音的内容"); return; }
