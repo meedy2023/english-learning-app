@@ -2166,7 +2166,7 @@ const API = ".";
           } } }
         }));
         // 情感风格：英文用 cheerful（欢快），中文用 friendly（友好）
-        const style = lang === 'zh-CN' ? 'friendly' : 'cheerful';
+        const style = lang === 'zh-CN' ? 'friendly' : 'friendly';
         // D. 英文短语/单词间加自然停顿（SSML <break>）
         let spoken = escapeXml(text);
         if (lang === 'en-US') {
@@ -2180,8 +2180,8 @@ const API = ".";
         const xmlLang = lang === 'en-US' ? 'en-GB' : lang;
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
-          + "<mstts:express-as style='" + style + "' styledegree='1.6'>"
-          + "<prosody rate='-5%' pitch='+5%'>" + spoken + "</prosody>"
+          + "<mstts:express-as style='" + style + "' styledegree='1.0'>"
+          + "<prosody rate='-20%' pitch='0%'>" + spoken + "</prosody>"
           + "</mstts:express-as></voice></speak>";
         const header = "X-RequestId:" + uuid + "\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:" + ts + "Z\r\n\r\n";
         ws.send(header + ssml);
