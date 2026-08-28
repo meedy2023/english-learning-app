@@ -621,7 +621,6 @@
     <div style="display:flex;gap:8px;margin-top:12px">
       <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevQuizQuestion()">← 上一题</button>
       <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipQuiz()">跳过</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="nextQuizQuestion()">下一题 →</button>
     </div>
     <div id="quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="quiz-num">1</span> / <span id="quiz-total">0</span> 题</div>
   </div>
@@ -735,7 +734,6 @@
   <div style="display:flex;gap:8px;margin-top:12px">
     <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevKetQuizQuestion()">← 上一题</button>
     <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipKetQuiz()">跳过</button>
-    <button class="btn btn-secondary btn-sm" style="flex:1" onclick="nextKetQuizQuestion()">下一题 →</button>
   </div>
   <div id="ket-quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="ket-quiz-num">1</span> / <span id="ket-quiz-total">0</span> 题</div>
 </div>
@@ -2458,7 +2456,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         </div>
         <div style="display:flex;gap:8px;margin-top:12px">
           <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevReviewQuestion()">← 上一个</button>
-          <button class="btn btn-secondary btn-sm" style="flex:1" onclick="nextReviewQuestion()">下一个 →</button>
         </div>
       `;
       window._rvCur = { word: word, mode: mode, options: options };
@@ -2508,8 +2505,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Review.wrong(wordId);
     }
 
-    nextBtn.style.display = 'block';
-    nextBtn.textContent = rvIdx + 1 >= rvOrder.length ? '完成复习 🎉' : '下一题 →';
+    if (rvIdx + 1 >= rvOrder.length) {
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = '完成复习 🎉';
+    }
 
     // 答题结束自动跳转下一个；最后一个不跳转，等用户手动点「完成复习」
     clearTimeout(window._rvAutoNext);
@@ -2975,8 +2974,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Review.add(correctWord.id);
     }
 
-    nextBtn.style.display = "block";
-    nextBtn.textContent = currentQuizIndex + 1 >= quizOrder.length ? "查看成绩 🎉" : "下一题 →";
+    if (currentQuizIndex + 1 >= quizOrder.length) {
+      nextBtn.style.display = "block";
+      nextBtn.textContent = "查看成绩 🎉";
+    }
 
     // 答完后自动切换下一题（无需手动点击「下一题」）；答错多停留一会儿看清答案
     clearTimeout(window._quizAutoNext);
@@ -3992,8 +3993,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       speakChinese('不对');
     }
 
-    nextBtn.style.display = 'block';
-    nextBtn.textContent = ketQuizIndex + 1 >= ketQuizQueue.length ? '查看成绩 🎉' : '下一题 →';
+    if (ketQuizIndex + 1 >= ketQuizQueue.length) {
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = '查看成绩 🎉';
+    }
 
     clearTimeout(window._ketQuizAutoNext);
     const isLast = ketQuizIndex + 1 >= ketQuizQueue.length;
