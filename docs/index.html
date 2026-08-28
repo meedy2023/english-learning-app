@@ -2236,6 +2236,9 @@ const API = ".";
         if (arr.length > 2) chunks.push(arr.slice(2));
       };
       ws.onerror = (e) => { onError && onError(e); };
+      ws.onclose = (e) => {
+        if (chunks.length === 0) onError && onError(new Error('连接被关闭(voice可能无效) code=' + e.code));
+      };
     }
   };
 
@@ -2482,11 +2485,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function previewEnVoice() {
     const v = document.getElementById('en-voice-select').value;
-    EdgeTTS.synthesize('Hello! How are you today?', 'en-US', function(b) { playAudioBlob(b); }, function() { toast('试听失败'); }, v);
+    EdgeTTS.synthesize('Hello! How are you today?', 'en-US',
+      function(b) { playAudioBlob(b); },
+      function(err) { console.warn('试听网络发音失败', err); toast('网络发音不可用，已切换系统发音试听'); TTS.speakSystem('Hello! How are you today?', 'en-US'); },
+      v);
   }
   function previewZhVoice() {
     const v = document.getElementById('zh-voice-select').value;
-    EdgeTTS.synthesize('你好，欢迎学习英语！', 'zh-CN', function(b) { playAudioBlob(b); }, function() { toast('试听失败'); }, v);
+    EdgeTTS.synthesize('你好，欢迎学习英语！', 'zh-CN',
+      function(b) { playAudioBlob(b); },
+      function(err) { console.warn('试听网络发音失败', err); toast('网络发音不可用，已切换系统发音试听'); TTS.speakSystem('你好，欢迎学习英语！', 'zh-CN'); },
+      v);
   }
   // 初始化发音类型下拉选项
   function initVoiceSelects() {
