@@ -54,6 +54,22 @@ def export_textbook():
     print("[WARN] textbook.json 未找到")
 
 
+def copy_pwa():
+    """复制 PWA 资源（manifest/sw/icons）到 docs/"""
+    for name in ["manifest.json", "sw.js"]:
+        src = os.path.join(FRONTEND, name)
+        if os.path.exists(src):
+            shutil.copy2(src, os.path.join(DOCS, name))
+            print(f"[OK] docs/{name}")
+    icons_src = os.path.join(FRONTEND, "icons")
+    icons_dst = os.path.join(DOCS, "icons")
+    if os.path.isdir(icons_src):
+        os.makedirs(icons_dst, exist_ok=True)
+        for f in os.listdir(icons_src):
+            shutil.copy2(os.path.join(icons_src, f), os.path.join(icons_dst, f))
+        print(f"[OK] docs/icons/ ({len(os.listdir(icons_src))} 个图标)")
+
+
 def build_index():
     src = os.path.join(FRONTEND, "index.html")
     with open(src, "r", encoding="utf-8") as f:
@@ -93,5 +109,6 @@ if __name__ == "__main__":
     export_words()
     export_ket()
     build_index()
+    copy_pwa()
     print("\n完成！静态版已生成在 docs/ 目录。")
     print("把 docs/ 提交并推送到 GitHub，然后在仓库 Settings -> Pages 选择 main 分支 /docs 目录即可。")

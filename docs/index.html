@@ -518,6 +518,13 @@
     body.big-font .word-item-chinese { font-size: 17px; }
 
   </style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#6c63ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="英语学习">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
   <script src="api-shim.js"></script>
 </head>
 <body>
@@ -545,6 +552,16 @@
 
   <!-- ======= 首页：模块列表 ======= -->
   <div id="view-home" class="view">
+    <div id="continue-entry" onclick="continueStudy()" style="display:none;align-items:center;justify-content:space-between;background:#eef2ff;border:1.5px solid #c3cfff;border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:26px">▶️</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#5a54e8">继续上次学习</div>
+          <div style="font-size:12px;color:#888;margin-top:2px"><span id="continue-entry-type">课文</span> · <span id="continue-entry-title"></span></div>
+        </div>
+      </div>
+      <span style="font-size:20px;color:#6c63ff">→</span>
+    </div>
     <div class="review-entry" id="review-entry" onclick="openReview()" style="display:none;align-items:center;justify-content:space-between;background:#fff5f5;border:1.5px solid #ffccc7;border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer">
       <div style="display:flex;align-items:center;gap:10px">
         <span style="font-size:26px">🔴</span>
@@ -959,6 +976,23 @@ const API = ".";
         </button>
       </div>
 
+      <div class="word-detail-card" style="border-left:4px solid #52c41a">
+        <h3 style="margin-bottom:8px;color:#333;display:flex;align-items:center;gap:8px">
+          <span style="font-size:20px">☁️</span> 数据云备份
+        </h3>
+        <div style="font-size:13px;color:#888;margin-bottom:14px;line-height:1.6">
+          把积分、学习进度、错词本、设置等全部数据打包成一个文件。换设备或重装后，用「恢复数据」一键还原，不怕丢失。
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary" onclick="exportAllData()" style="flex:1;background:#52c41a;border:none;color:white;display:flex;align-items:center;justify-content:center;gap:6px">
+            <span>📦</span> 备份全部数据
+          </button>
+          <button class="btn btn-secondary" onclick="importAllData()" style="flex:1;background:#f6ffed;border:1px solid #b7eb8f;color:#52c41a;display:flex;align-items:center;justify-content:center;gap:6px">
+            <span>🔄</span> 恢复数据
+          </button>
+        </div>
+      </div>
+
       <div class="word-detail-card"> 
         <h3 style="margin-bottom:16px;color:#333;display:flex;align-items:center;gap:8px">
           <span style="font-size:20px">📊</span>
@@ -994,6 +1028,85 @@ const API = ".";
     if (area) area.style.display = 'none';
     if (wordList) wordList.style.display = 'block';
     if (quizBar) quizBar.style.display = 'flex';
+  }
+
+  // ========== P4-③ 云同步：全量备份/恢复 ==========
+  function _syncKeys() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (!k) continue;
+      if (k.indexOf('points_') === 0 || k.indexOf('progress_') === 0 ||
+          k.indexOf('review_') === 0 || k.indexOf('last_study_') === 0 ||
+          k.indexOf('tts_engine') === 0 || k === 'big_font' || k === 'voice_guide') {
+        keys.push(k);
+      }
+    }
+    return keys;
+  }
+  function exportAllData() {
+    const keys = _syncKeys();
+    const dump = { version: '2.0', type: 'english_app_backup', exportDate: new Date().toISOString(), userId: USER_ID, data: {} };
+    keys.forEach(function (k) { dump.data[k] = localStorage.getItem(k); });
+    const jsonStr = JSON.stringify(dump, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'english_learning_backup_' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    toast('✓ 已备份 ' + keys.length + ' 项数据！请妥善保管备份文件');
+  }
+  function importAllData() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        try {
+          const importData = JSON.parse(event.target.result);
+          if (!importData || importData.type !== 'english_app_backup' || !importData.data) {
+            toast('❌ 文件格式不正确');
+            return;
+          }
+          const keys = Object.keys(importData.data);
+          if (!window.confirm('将恢复 ' + keys.length + ' 项数据。\n当前设备上的学习记录将被覆盖/合并。\n\n确定继续吗？')) {
+            toast('已取消恢复');
+            return;
+          }
+          // 合并策略：积分取大值；其余直接覆盖
+          keys.forEach(function (k) {
+            const newVal = importData.data[k];
+            if (k.indexOf('points_') === 0) {
+              const cur = localStorage.getItem(k);
+              if (cur) {
+                try {
+                  const curObj = JSON.parse(cur);
+                  const newObj = JSON.parse(newVal);
+                  const merged = JSON.parse(cur);
+                  merged.total = Math.max(curObj.total || 0, newObj.total || 0);
+                  merged.today = Math.max(curObj.today || 0, newObj.today || 0);
+                  merged.streak = Math.max(curObj.streak || 0, newObj.streak || 0);
+                  localStorage.setItem(k, JSON.stringify(merged));
+                  return;
+                } catch (err) {}
+              }
+            }
+            localStorage.setItem(k, newVal);
+          });
+          toast('✓ 恢复成功！正在刷新…');
+          setTimeout(function () { location.reload(); }, 800);
+        } catch (err) {
+          toast('❌ 文件解析失败：' + err.message);
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
   }
 
   // 导出积分数据
@@ -1335,6 +1448,9 @@ const API = ".";
       showPointsToast(result.points, Points.getMessage('lesson_open'));
       updatePointsDisplay();
     }
+
+    // P4-② 记录「继续上次学习」（课文）
+    localStorage.setItem('last_study_' + USER_ID, JSON.stringify({ type: 'lesson', title: unit.unit, grade: currentLessonGrade, unit: unit }));
 
     const area = document.getElementById('word-detail-area');
     area.style.display = 'block';
@@ -2524,6 +2640,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const data = await apiGET(url);
       const progressData = await apiGET(`/api/progress/${USER_ID}`);
       Review.refreshEntry();
+      updateContinueEntry();
       const grid = document.getElementById("module-grid");
       grid.innerHTML = "";
       for (const m of data) {
@@ -2555,9 +2672,42 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
 
+  // ========== P4-② 减少层级：继续上次学习 ==========
+  function updateContinueEntry() {
+    const el = document.getElementById('continue-entry');
+    if (!el) return;
+    const raw = localStorage.getItem('last_study_' + USER_ID);
+    let rec = null; try { rec = JSON.parse(raw); } catch (e) { rec = null; }
+    if (rec && (rec.title || rec.module)) {
+      el.style.display = 'flex';
+      document.getElementById('continue-entry-type').textContent = (rec.type === 'lesson') ? '课文' : '单词';
+      document.getElementById('continue-entry-title').textContent = rec.title || rec.module || '';
+    } else {
+      el.style.display = 'none';
+    }
+  }
+  function continueStudy() {
+    const raw = localStorage.getItem('last_study_' + USER_ID);
+    if (!raw) { toast('还没有学习记录，先学一课吧！'); return; }
+    let rec = null; try { rec = JSON.parse(raw); } catch (e) { rec = null; }
+    if (!rec) return;
+    if (rec.type === 'word' && rec.module) {
+      openModule(rec.module);
+    } else if (rec.type === 'lesson' && rec.unit && rec.unit.content) {
+      switchView('learn');
+      document.getElementById('quiz-toggle-bar').style.display = 'none';
+      const gd = document.getElementById('grade-display');
+      if (gd && rec.grade) { gd.textContent = (rec.grade.match(/^[^-]+?年级/) || [rec.grade])[0]; gd.style.display = 'inline'; }
+      showLessonDetail(rec.unit);
+    } else {
+      toast('上次的学习记录已失效，重新选一课吧！');
+    }
+  }
+
   // ========== 模块：加载单词列表 ==========
   async function openModule(module) {
     currentModule = module;
+    localStorage.setItem('last_study_' + USER_ID, JSON.stringify({ type: 'word', title: module, module: module }));
     try {
       const data = await apiGET(`/api/words?module=${encodeURIComponent(module)}`);
       currentWords = data.words;
@@ -3925,6 +4075,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 初始化 P3 优化（大字模式 + 语音引导）
   applyBigFont();
   applyVoiceGuide();
+
+  // 注册 Service Worker（PWA 离线支持）
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function (e) {
+        console.warn('SW 注册失败', e);
+      });
+    });
+  }
 </script>
 </body>
 </html>
