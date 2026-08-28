@@ -105,11 +105,9 @@
     "五上1": ["Unit 1 What's on your plate?", "五年级上册"], "五上2": ["Unit 2 A green life", "五年级上册"],
     "五上3": ["Unit 3 Happy together", "五年级上册"], "五上4": ["Unit 4 A better me", "五年级上册"],
     "五上5": ["Unit 5 Look into the future", "五年级上册"], "五上6": ["Unit 6 Enjoy the festivals", "五年级上册"],
-    "五下1": ["Module 1", "五年级下册"], "五下2": ["Module 2", "五年级下册"],
-    "五下3": ["Module 3", "五年级下册"], "五下4": ["Module 4", "五年级下册"],
-    "五下5": ["Module 5", "五年级下册"], "五下6": ["Module 6", "五年级下册"],
-    "五下7": ["Module 7", "五年级下册"], "五下8": ["Module 8", "五年级下册"],
-    "五下9": ["Module 9", "五年级下册"], "五下10": ["Module 10", "五年级下册"],
+    "五下1": ["Unit 1 Growing up", "五年级下册"], "五下2": ["Unit 2 You can make a difference", "五年级下册"],
+    "五下3": ["Unit 3 We love reading", "五年级下册"], "五下4": ["Unit 4 Back in time", "五年级下册"],
+    "五下5": ["Unit 5 Work it out", "五年级下册"], "五下6": ["Unit 6 Then and now", "五年级下册"],
   };
 
   // ---------- 课文模块列表 ----------

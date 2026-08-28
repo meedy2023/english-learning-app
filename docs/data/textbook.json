@@ -2423,657 +2423,399 @@
     ]
    },
    "下册": {
-    "Module 1 She had a little lamb": [
+    "Unit 1 Growing up": [
      {
-      "unit": "Unit 1 There are two beautiful cats on the chair.",
+      "unit": "Unit 1 Growing up (Start up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "Look! There are two beautiful cats on the chair.",
-        "translation": "看！椅子上有两只漂亮的猫。"
+        "role": "Yangyang",
+        "text": "I'm Yangyang. This is my little brother Chenchen.",
+        "translation": "我是阳阳。这是我的弟弟晨晨。"
        },
        {
-        "role": "sam",
-        "text": "There is only one now.",
-        "translation": "现在只有一只了。"
+        "role": "Yangyang",
+        "text": "I was four and Chenchen was ten months old. He cried a lot and I was not happy. But I still loved him.",
+        "translation": "我四岁，晨晨十个月大。他经常哭，我不开心。但我仍然爱他。"
        },
        {
-        "role": "lingling",
-        "text": "Well, there were two.",
-        "translation": "嗯，刚刚有两只。"
+        "role": "Yangyang",
+        "text": "I was six and Chenchen was three. He didn't listen to me and I was angry. But I still loved him.",
+        "translation": "我六岁，晨晨三岁。他不听我的话，我很生气。但我仍然爱他。"
        },
        {
-        "role": "amy",
-        "text": "Look, Lingling! It's a programme about China. Come and watch!",
-        "translation": "看，玲玲！这是一个关于中国的节目。快来看！"
+        "role": "Yangyang",
+        "text": "I was eight and Chenchen was five. We could play football together. He was not a good player, but we were happy.",
+        "translation": "我八岁，晨晨五岁。我们可以一起踢足球。他踢得不好，但我们很开心。"
        },
        {
-        "role": "lingling",
-        "text": "I'm coming!",
-        "translation": "我来了！"
+        "role": "Yangyang",
+        "text": "I'm ten now and Chenchen is seven. We go to the same school and we help each other.",
+        "translation": "我现在十岁，晨晨七岁。我们上同一所学校，互相帮助。"
+       },
+       {
+        "role": "Yangyang",
+        "text": "It's great to grow up together!",
+        "translation": "一起长大真好！"
        }
       ]
      },
      {
-      "unit": "Unit 2 Life was very different in China many years ago.",
+      "unit": "Unit 1 Growing up (Speed up)",
       "content": [
        {
-        "role": "old_lady",
-        "text": "Life was very different in China many years ago.",
-        "translation": "许多年前，中国的生活和现在大不相同。"
+        "role": "Narrator",
+        "text": "It was very hot and our training was hard.",
+        "translation": "天气很热，我们的训练很辛苦。"
        },
        {
-        "role": "old_lady",
-        "text": "We lived in a small house. We didn't have enough food.",
-        "translation": "我们住在一个小房子里。我们没有足够的食物。"
+        "role": "Narrator",
+        "text": "I was very nervous and tired on the first day.",
+        "translation": "第一天我非常紧张和疲惫。"
        },
        {
-        "role": "old_lady",
-        "text": "There weren't many buses. There weren't any televisions.",
-        "translation": "没有很多公共汽车。没有电视机。"
+        "role": "Narrator",
+        "text": "But my teacher and friends helped me a lot.",
+        "translation": "但是我的老师和朋友帮了我很多。"
        },
        {
-        "role": "old_lady",
-        "text": "Now we live in a big house. We have lots of food.",
-        "translation": "现在我们住在一座大房子里。我们有很多食物。"
+        "role": "Narrator",
+        "text": "By the end of the camp, I got much better.",
+        "translation": "到夏令营结束时，我进步了很多。"
        },
        {
-        "role": "old_lady",
-        "text": "I watch TV every day. Yesterday I watched TV with my grandchildren.",
-        "translation": "我每天都看电视。昨天我和孙子孙女一起看电视了。"
-       },
-       {
-        "role": "interviewer",
-        "text": "Thank you for talking to us.",
-        "translation": "谢谢你和我们谈话。"
-       },
-       {
-        "role": "amy",
-        "text": "China is changing.",
-        "translation": "中国正在变化。"
-       },
-       {
-        "role": "lingling",
-        "text": "I miss China! I miss my grandma!",
-        "translation": "我想念中国！我想念我的奶奶！"
+        "role": "Narrator",
+        "text": "It was the feeling of growing up.",
+        "translation": "这就是成长的感觉。"
        }
       ]
      }
     ],
-    "Module 2 She's a nice teacher": [
+    "Unit 2 You can make a difference": [
      {
-      "unit": "Unit 1 She learned to dance.",
+      "unit": "Unit 2 You can make a difference (Start up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "Who are they?",
-        "translation": "他们是谁？"
+        "role": "Narrator",
+        "text": "Daming and his friends had a race on the hill.",
+        "translation": "大明和他的朋友们在山上比赛。"
        },
        {
-        "role": "lingling",
-        "text": "They're my grandparents.",
-        "translation": "他们是我的祖父母。"
+        "role": "Daming",
+        "text": "Look! There is litter on the ground.",
+        "translation": "看！地上有垃圾。"
        },
        {
-        "role": "lingling",
-        "text": "This is my grandma. She learned to dance.",
-        "translation": "这是我奶奶。她学过跳舞。"
+        "role": "Narrator",
+        "text": "Daming saw litter on the ground. He thought that wasn't right and picked up the litter.",
+        "translation": "大明看到地上的垃圾。他觉得这样不对，于是捡起了垃圾。"
        },
        {
-        "role": "lingling",
-        "text": "She learned to cook, too. She taught languages and wrote books.",
-        "translation": "她也学过做饭。她教语言并写书。"
+        "role": "Narrator",
+        "text": "His friends got to the top first.",
+        "translation": "他的朋友们先到了山顶。"
        },
        {
-        "role": "sam",
-        "text": "Did she learn English?",
-        "translation": "她学过英语吗？"
+        "role": "Narrator",
+        "text": "Finally, Daming got to the top.",
+        "translation": "最后，大明到了山顶。"
        },
        {
-        "role": "lingling",
-        "text": "Yes, she did. She learned English at school.",
-        "translation": "是的，她学过。她在学校学过英语。"
+        "role": "Friend",
+        "text": "You are the real winner!",
+        "translation": "你才是真正的赢家！"
        }
       ]
      },
      {
-      "unit": "Unit 2 He learned to write.",
+      "unit": "Unit 2 You can make a difference (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "This is my grandpa.",
-        "translation": "这是我爷爷。"
+        "role": "Narrator",
+        "text": "The boy plays with a little dog that will become a guide dog.",
+        "translation": "男孩和一只即将成为导盲犬的小狗玩耍。"
        },
        {
-        "role": "lingling",
-        "text": "He was a driver before. He drove a bus.",
-        "translation": "他以前是司机。他开公交车。"
+        "role": "Boy",
+        "text": "I can help you. The guide dog can help people.",
+        "translation": "我可以帮助你。导盲犬能帮助人们。"
        },
        {
-        "role": "sam",
-        "text": "Did he learn English?",
-        "translation": "他学过英语吗？"
+        "role": "Narrator",
+        "text": "The old man looks lonely. The boy plays music with him.",
+        "translation": "老人看起来很孤独。男孩和他一起演奏音乐。"
        },
        {
-        "role": "lingling",
-        "text": "No, he didn't. But now he is learning English.",
-        "translation": "不，他没有。但现在他正在学英语。"
+        "role": "Boy",
+        "text": "We can play music together. He helps the old man feel happy.",
+        "translation": "我们可以一起演奏音乐。他让老人感到快乐。"
        },
        {
-        "role": "lingling",
-        "text": "He learns English every day. He can say ABC now!",
-        "translation": "他每天学英语。他现在会说字母ABC了！"
+        "role": "Narrator",
+        "text": "The two girls share lunch. The other girl has no lunch.",
+        "translation": "两个女孩分享午餐。另一个女孩没有午餐。"
+       },
+       {
+        "role": "Girl",
+        "text": "Let's share my lunch with you.",
+        "translation": "让我们和你分享我的午餐。"
        }
       ]
      }
     ],
-    "Module 3 She had eggs and sausages": [
+    "Unit 3 We love reading": [
      {
-      "unit": "Unit 1 She had eggs and sausages.",
+      "unit": "Unit 3 We love reading (Start up)",
       "content": [
        {
-        "role": "mum",
-        "text": "Sam, what did you have for breakfast?",
-        "translation": "萨姆，你早餐吃了什么？"
+        "role": "Boy",
+        "text": "What's the weather like? It's rainy.",
+        "translation": "天气怎么样？下雨了。"
        },
        {
-        "role": "sam",
-        "text": "I had eggs and sausages. I drank milk.",
-        "translation": "我吃了鸡蛋和香肠。我喝了牛奶。"
+        "role": "Boy",
+        "text": "Where is the library? It's on horseback.",
+        "translation": "图书馆在哪里？在马背上。"
        },
        {
-        "role": "mum",
-        "text": "Did Amy have eggs, too?",
-        "translation": "艾米也吃鸡蛋了吗？"
+        "role": "Narrator",
+        "text": "Today is 'library day'. The horse library comes every week, rain or sun.",
+        "translation": "今天是「图书馆日」。马背图书馆每周都来，风雨无阻。"
        },
        {
-        "role": "sam",
-        "text": "No, she didn't. She had bread and butter.",
-        "translation": "不，她没有。她吃了黄油面包。"
+        "role": "Narrator",
+        "text": "In the past, the library only came one time a month. There weren't many books. It was a small library.",
+        "translation": "过去，图书馆一个月只来一次。书不多，是个小图书馆。"
        },
        {
-        "role": "mum",
-        "text": "What about Lingling?",
-        "translation": "玲玲呢？"
-       },
-       {
-        "role": "sam",
-        "text": "She had noodles. She likes noodles very much.",
-        "translation": "她吃了面条。她非常喜欢吃面条。"
+        "role": "Boy",
+        "text": "The library brings not only books but also hope.",
+        "translation": "图书馆不仅带来书籍，还带来希望。"
        }
       ]
      },
      {
-      "unit": "Unit 2 Sam ate four hamburgers.",
+      "unit": "Unit 3 We love reading (Speed up)",
       "content": [
        {
-        "role": "dad",
-        "text": "Sam, what did you eat at the party?",
-        "translation": "萨姆，你在派对上吃了什么？"
+        "role": "Narrator",
+        "text": "In some faraway places, it is not easy for children to get books.",
+        "translation": "在一些遥远的地方，孩子们不容易得到书。"
        },
        {
-        "role": "sam",
-        "text": "I ate four hamburgers! I'm very hungry.",
-        "translation": "我吃了四个汉堡包！我非常饿。"
+        "role": "Narrator",
+        "text": "But there is a special library—the horse library. People use horses to carry books to children in the countryside.",
+        "translation": "但是有一个特别的图书馆——马背图书馆。人们用马把书运给乡村的孩子们。"
        },
        {
-        "role": "amy",
-        "text": "Four hamburgers? That's a lot!",
-        "translation": "四个汉堡包？真多！"
+        "role": "Narrator",
+        "text": "Long ago, there were no libraries in many villages. The horse library came once a week.",
+        "translation": "很久以前，许多村庄没有图书馆。马背图书馆每周来一次。"
        },
        {
-        "role": "sam",
-        "text": "I'm still hungry. I want some more food.",
-        "translation": "我还是饿。我还想吃点东西。"
+        "role": "Narrator",
+        "text": "Children were very happy to see the horse library. They could borrow books and read them at home.",
+        "translation": "孩子们看到马背图书馆非常高兴。他们可以借书回家读。"
        },
        {
-        "role": "mum",
-        "text": "No more food! You ate too much.",
-        "translation": "不能再吃了！你吃得太多了。"
+        "role": "Narrator",
+        "text": "Today, we have many libraries in cities and towns. But in some places, the horse library is still working.",
+        "translation": "今天，城市和乡镇有很多图书馆。但在一些地方，马背图书馆仍在运行。"
+       },
+       {
+        "role": "Narrator",
+        "text": "It brings books and hope to children.",
+        "translation": "它给孩子们带来书籍和希望。"
        }
       ]
      }
     ],
-    "Module 4 Let's make a home library": [
+    "Unit 4 Back in time": [
      {
-      "unit": "Unit 1 Let's make a home library.",
+      "unit": "Unit 4 Back in time (Start up)",
       "content": [
        {
-        "role": "amy",
-        "text": "We have lots of books. Let's make a home library!",
-        "translation": "我们有很多书。我们来建一个家庭图书馆吧！"
+        "role": "Girl",
+        "text": "I went to the National Museum of China yesterday.",
+        "translation": "我昨天去了中国国家博物馆。"
        },
        {
-        "role": "lingling",
-        "text": "Good idea! We can put books on the shelf.",
-        "translation": "好主意！我们可以把书放在书架上。"
+        "role": "Girl",
+        "text": "I saw an ancient dumpling. It is from Xinjiang.",
+        "translation": "我看到了一个古代饺子。它来自新疆。"
        },
        {
-        "role": "sam",
-        "text": "Let's put all the books together.",
-        "translation": "让我们把所有书放在一起吧。"
+        "role": "Girl",
+        "text": "It looks like today's dumpling. No one knows what the ancient people put in it.",
+        "translation": "它看起来像今天的饺子。没人知道古代人在里面放了什么。"
        },
        {
-        "role": "amy",
-        "text": "We can find information from books and CDs.",
-        "translation": "我们可以从书和光盘里找到信息。"
+        "role": "Narrator",
+        "text": "It is from the Tang Dynasty. People in central China brought it there.",
+        "translation": "它来自唐朝。中原地区的人们把它带到了那里。"
        },
        {
-        "role": "lingling",
-        "text": "Now we can read in our home library every day!",
-        "translation": "现在我们可以每天在家里读书了！"
+        "role": "Girl",
+        "text": "How did it get there? By the ancient Silk Road.",
+        "translation": "它是怎么到那里的？经由古代丝绸之路。"
+       },
+       {
+        "role": "Narrator",
+        "text": "It was a happy day. Let's go back in time.",
+        "translation": "那是快乐的一天。让我们回到过去。"
        }
       ]
      },
      {
-      "unit": "Unit 2 We can find information from books and CDs.",
+      "unit": "Unit 4 Back in time (Speed up)",
       "content": [
        {
-        "role": "teacher",
-        "text": "What do you want to know?",
-        "translation": "你想知道什么？"
+        "role": "Narrator",
+        "text": "I was at home yesterday. I watched TV.",
+        "translation": "我昨天在家。我看电视了。"
        },
        {
-        "role": "daming",
-        "text": "I want to know about space. I read books and watched CDs.",
-        "translation": "我想了解太空。我读书和看光盘了。"
+        "role": "Narrator",
+        "text": "They were in the park last week. They played football.",
+        "translation": "他们上周在公园。他们踢足球了。"
        },
        {
-        "role": "teacher",
-        "text": "That's great! You can find information from books and CDs.",
-        "translation": "太棒了！你可以从书和光盘里找到信息。"
+        "role": "Narrator",
+        "text": "What did you do last week? I visited my grandma.",
+        "translation": "你上周做了什么？我拜访了奶奶。"
        },
        {
-        "role": "lingling",
-        "text": "I want to know about animals. I found information in the library.",
-        "translation": "我想了解动物。我在图书馆找到了信息。"
-       },
-       {
-        "role": "teacher",
-        "text": "Books and libraries are very useful!",
-        "translation": "书和图书馆非常有用！"
+        "role": "Narrator",
+        "text": "Where were you yesterday? I was at school.",
+        "translation": "你昨天在哪里？我在学校。"
        }
       ]
      }
     ],
-    "Module 5 There's a bird in the tower": [
+    "Unit 5 Work it out": [
      {
-      "unit": "Unit 1 There's a bird in the tower.",
+      "unit": "Unit 5 Work it out (Start up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "Look! There's a bird in the tower.",
-        "translation": "看！塔里有一只鸟。"
+        "role": "Narrator",
+        "text": "Daming's mum lost her ring. She put it on the desk.",
+        "translation": "大明的妈妈丢了戒指。她把戒指放在了书桌上。"
        },
        {
-        "role": "daming",
-        "text": "Where is it? I can't see it.",
-        "translation": "在哪里？我看不见。"
+        "role": "Narrator",
+        "text": "Daming's dad lost his car key. It was on the desk.",
+        "translation": "大明的爸爸丢了车钥匙。它在书桌上。"
        },
        {
-        "role": "lingling",
-        "text": "It's on the old wall. It's a beautiful bird.",
-        "translation": "它在旧墙上。它是一只漂亮的鸟。"
+        "role": "Narrator",
+        "text": "Daming lost his coins. They were on the desk.",
+        "translation": "大明丢了硬币。它们在书桌上。"
        },
        {
-        "role": "daming",
-        "text": "I can see it now! It has red and blue feathers.",
-        "translation": "我现在能看见它了！它有红色和蓝色的羽毛。"
+        "role": "Narrator",
+        "text": "The lost things have something in common: they were on the same desk. They are all shiny things.",
+        "translation": "这些丢失的东西有个共同点：它们都在同一张书桌上。它们都是闪亮的东西。"
        },
        {
-        "role": "lingling",
-        "text": "Let's take a photo of it!",
-        "translation": "让我们给它拍张照吧！"
+        "role": "Narrator",
+        "text": "Daming looked around the house carefully. He found feathers, leaves and bird tracks.",
+        "translation": "大明仔细地环顾屋子。他发现了羽毛、树叶和鸟的爪印。"
+       },
+       {
+        "role": "Daming",
+        "text": "A bird took all the things!",
+        "translation": "是一只鸟叼走了所有的东西！"
+       },
+       {
+        "role": "Narrator",
+        "text": "Did Daming find the lost things? Yes, he did.",
+        "translation": "大明找到了丢失的东西吗？是的，他找到了。"
        }
       ]
      },
      {
-      "unit": "Unit 2 I saw a mouse in the house.",
+      "unit": "Unit 5 Work it out (Speed up)",
       "content": [
        {
-        "role": "daming",
-        "text": "I saw a mouse in the house yesterday!",
-        "translation": "昨天我在房子里看见一只老鼠！"
+        "role": "Narrator",
+        "text": "Sharp is a detective. He came to the prison to investigate the case of the thief Jim Burton.",
+        "translation": "夏普是一名侦探。他来到监狱调查小偷吉姆·伯顿的案子。"
        },
        {
-        "role": "amy",
-        "text": "A mouse? Where did you see it?",
-        "translation": "一只老鼠？你在哪里看见的？"
+        "role": "Narrator",
+        "text": "The police caught Jim, but they didn't find the stolen jewels.",
+        "translation": "警察抓到了吉姆，但没有找到被盗的珠宝。"
        },
        {
-        "role": "daming",
-        "text": "I saw it under the table. It ran away very fast!",
-        "translation": "我在桌子底下看见的。它跑得非常快！"
+        "role": "Narrator",
+        "text": "Sharp read Jim's letter to his wife. He found a hidden clue in it.",
+        "translation": "夏普读了吉姆写给妻子的信。他在信中发现了一条隐藏的线索。"
        },
        {
-        "role": "lingling",
-        "text": "There are lots of mice in old houses.",
-        "translation": "老房子里有很多老鼠。"
-       },
-       {
-        "role": "sam",
-        "text": "Let's catch it! We can put cheese in a trap.",
-        "translation": "让我们抓住它吧！我们可以把奶酪放在捕鼠夹里。"
+        "role": "Narrator",
+        "text": "From the clue, he worked out where the jewels were hidden.",
+        "translation": "根据这条线索，他弄清了珠宝藏在哪里。"
        }
       ]
      }
     ],
-    "Module 6 The moon is beautiful tonight": [
+    "Unit 6 Then and now": [
      {
-      "unit": "Unit 1 The moon is beautiful tonight.",
+      "unit": "Unit 6 Then and now (Start up)",
       "content": [
        {
-        "role": "daming",
-        "text": "Look at the moon tonight! It's beautiful.",
-        "translation": "今晚看月亮！真美。"
+        "role": "Narrator",
+        "text": "Forty years ago, the Daliang Mountains had few trees and few birds.",
+        "translation": "四十年前，大凉山的树很少，鸟也很少。"
        },
        {
-        "role": "amy",
-        "text": "The moon is bright tonight. I can see the stars.",
-        "translation": "今晚月亮很亮。我能看见星星。"
+        "role": "Narrator",
+        "text": "Yang Shanzhou gave up a good life in the city. He moved to the Daliang Mountains and worked hard to make them green.",
+        "translation": "杨善洲放弃了城里的好生活。他搬到大凉山，努力让它变绿。"
        },
        {
-        "role": "daming",
-        "text": "I want to go to the moon one day.",
-        "translation": "我想有一天去月球。"
+        "role": "Narrator",
+        "text": "He wanted to do something for his hometown.",
+        "translation": "他想为家乡做点事情。"
        },
        {
-        "role": "amy",
-        "text": "Maybe you can! People went to the moon in 1969.",
-        "translation": "也许你可以！人们在1969年登上了月球。"
+        "role": "Narrator",
+        "text": "He broke his left leg at the age of 72. But he was back to work after only half a year.",
+        "translation": "他 72 岁时摔断了左腿。但仅半年后他就回到了工作岗位。"
        },
        {
-        "role": "daming",
-        "text": "They flew in a rocket. That was amazing!",
-        "translation": "他们乘火箭飞上去的。那真令人惊叹！"
+        "role": "Narrator",
+        "text": "After 22 years, the Daliang Mountains became a green world, with over 10 million trees.",
+        "translation": "22 年后，大凉山变成了一片绿色的世界，有一千多万棵树。"
+       },
+       {
+        "role": "Narrator",
+        "text": "His hard work gave the Daliang people a brighter and greener life.",
+        "translation": "他的辛勤工作给了大凉山人民更光明、更绿色的生活。"
        }
       ]
      },
      {
-      "unit": "Unit 2 I took some photos of the moon.",
+      "unit": "Unit 6 Then and now (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "What did you do last night?",
-        "translation": "你昨晚做了什么？"
+        "role": "Narrator",
+        "text": "Then, we lived in a small house. Now, we live in a big house.",
+        "translation": "那时，我们住在小房子里。现在，我们住在大房子里。"
        },
        {
-        "role": "daming",
-        "text": "I took some photos of the moon.",
-        "translation": "我拍了一些月亮的照片。"
+        "role": "Narrator",
+        "text": "Back then there were no cars or bikes. Now, people travel by high-speed train.",
+        "translation": "那时没有汽车和自行车。现在，人们乘高铁旅行。"
        },
        {
-        "role": "lingling",
-        "text": "That's wonderful! Can I see them?",
-        "translation": "太棒了！我可以看看吗？"
+        "role": "Narrator",
+        "text": "I was short three years ago. Now I am tall.",
+        "translation": "三年前我很矮。现在我很高。"
        },
        {
-        "role": "daming",
-        "text": "Yes! Look at this photo. The moon is very big here.",
-        "translation": "可以！看这张照片。这里的月亮非常大。"
-       },
-       {
-        "role": "lingling",
-        "text": "The stars are beautiful too. Space is so amazing!",
-        "translation": "星星也很美。太空真神奇！"
-       }
-      ]
-     }
-    ],
-    "Module 7 We can save the world": [
-     {
-      "unit": "Unit 1 Don't put things in the bin.",
-      "content": [
-       {
-        "role": "teacher",
-        "text": "Look at this picture. The world is beautiful.",
-        "translation": "看这张图片。世界很美丽。"
-       },
-       {
-        "role": "amy",
-        "text": "But there is too much rubbish. Don't put things in the bin!",
-        "translation": "但有太多垃圾。不要把东西扔进垃圾桶！"
-       },
-       {
-        "role": "teacher",
-        "text": "We can reuse things. We can recycle paper and plastic.",
-        "translation": "我们可以重复使用东西。我们可以回收纸和塑料。"
-       },
-       {
-        "role": "daming",
-        "text": "We can save the world if we try our best!",
-        "translation": "如果我们尽力，我们可以拯救世界！"
-       },
-       {
-        "role": "lingling",
-        "text": "Let's all do something to help our world.",
-        "translation": "让我们都为我们的世界做点什么吧。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 The world needs love.",
-      "content": [
-       {
-        "role": "sam",
-        "text": "The world needs love and care.",
-        "translation": "世界需要爱和关爱。"
-       },
-       {
-        "role": "amy",
-        "text": "We should plant more trees. Trees make the air clean.",
-        "translation": "我们应该种更多的树。树使空气清新。"
-       },
-       {
-        "role": "lingling",
-        "text": "We should save water. Water is very important.",
-        "translation": "我们应该节约用水。水非常重要。"
-       },
-       {
-        "role": "daming",
-        "text": "And we should use less plastic. The world needs us!",
-        "translation": "而且我们应该少用塑料。世界需要我们！"
-       }
-      ]
-     }
-    ],
-    "Module 8 The tiger fights the lion": [
-     {
-      "unit": "Unit 1 The tiger is stronger than the elephant.",
-      "content": [
-       {
-        "role": "teacher",
-        "text": "Which animal is stronger, the tiger or the elephant?",
-        "translation": "哪种动物更强壮，老虎还是大象？"
-       },
-       {
-        "role": "daming",
-        "text": "The tiger is stronger than the elephant.",
-        "translation": "老虎比大象更强壮。"
-       },
-       {
-        "role": "teacher",
-        "text": "Which is taller, the giraffe or the horse?",
-        "translation": "哪种更高，长颈鹿还是马？"
-       },
-       {
-        "role": "lingling",
-        "text": "The giraffe is taller than the horse.",
-        "translation": "长颈鹿比马高。"
-       },
-       {
-        "role": "teacher",
-        "text": "In the wild, animals are very strong.",
-        "translation": "在野外，动物非常强壮。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 The tiger fights the lion.",
-      "content": [
-       {
-        "role": "sam",
-        "text": "Look at the picture. The tiger fights the lion!",
-        "translation": "看这张图。老虎和狮子在打架！"
-       },
-       {
-        "role": "amy",
-        "text": "The tiger is fast and strong. The lion is also strong.",
-        "translation": "老虎又快又壮。狮子也很强壮。"
-       },
-       {
-        "role": "daming",
-        "text": "The tiger is faster than the lion. But the lion is braver.",
-        "translation": "老虎比狮子快。但狮子更勇敢。"
-       },
-       {
-        "role": "teacher",
-        "text": "All animals are amazing. We should protect them.",
-        "translation": "所有动物都很神奇。我们应该保护它们。"
-       }
-      ]
-     }
-    ],
-    "Module 9 Are you feeling bored?": [
-     {
-      "unit": "Unit 1 Are you feeling bored?",
-      "content": [
-       {
-        "role": "mum",
-        "text": "Daming, are you feeling bored?",
-        "translation": "大明，你感到无聊吗？"
-       },
-       {
-        "role": "daming",
-        "text": "Yes, I am. There's nothing to do.",
-        "translation": "是的，我无聊。没什么事可做。"
-       },
-       {
-        "role": "mum",
-        "text": "Why don't you draw a picture?",
-        "translation": "你为什么不画一幅画呢？"
-       },
-       {
-        "role": "daming",
-        "text": "Good idea! I like drawing.",
-        "translation": "好主意！我喜欢画画。"
-       },
-       {
-        "role": "mum",
-        "text": "You can sing a song too.",
-        "translation": "你也可以唱首歌。"
-       },
-       {
-        "role": "daming",
-        "text": "Now I'm not bored anymore. I feel happy!",
-        "translation": "现在我不再无聊了。我感到开心！"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 I feel excited.",
-      "content": [
-       {
-        "role": "lingling",
-        "text": "Are you feeling excited, Amy?",
-        "translation": "你感到兴奋吗，艾米？"
-       },
-       {
-        "role": "amy",
-        "text": "Yes, I am! We're going on a trip tomorrow.",
-        "translation": "是的，我很兴奋！我们明天要去旅行。"
-       },
-       {
-        "role": "lingling",
-        "text": "Are you feeling nervous?",
-        "translation": "你感到紧张吗？"
-       },
-       {
-        "role": "amy",
-        "text": "A little. But I'm more excited than nervous.",
-        "translation": "有一点。但我更多的是兴奋而不是紧张。"
-       },
-       {
-        "role": "lingling",
-        "text": "Have a great trip! Take lots of photos!",
-        "translation": "旅途愉快！多拍些照片！"
-       }
-      ]
-     }
-    ],
-    "Module 10 What did you put in your bag?": [
-     {
-      "unit": "Unit 1 Where are you going?",
-      "content": [
-       {
-        "role": "ms_smart",
-        "text": "Where are you going this weekend, Sam?",
-        "translation": "萨姆，这个周末你要去哪里？"
-       },
-       {
-        "role": "sam",
-        "text": "I don't know.",
-        "translation": "我不知道。"
-       },
-       {
-        "role": "ms_smart",
-        "text": "When are you going to get up?",
-        "translation": "你打算什么时候起床？"
-       },
-       {
-        "role": "sam",
-        "text": "I don't know.",
-        "translation": "我不知道。"
-       },
-       {
-        "role": "ms_smart",
-        "text": "What are you going to take?",
-        "translation": "你打算带什么？"
-       },
-       {
-        "role": "sam",
-        "text": "I don't know! You always tell me what to do!",
-        "translation": "我不知道！你总是告诉我该做什么！"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 I'm going to the airport.",
-      "content": [
-       {
-        "role": "daming",
-        "text": "Where are you going, Amy?",
-        "translation": "你要去哪里，艾米？"
-       },
-       {
-        "role": "amy",
-        "text": "I'm going to the airport. I'm flying to London!",
-        "translation": "我要去机场。我要飞往伦敦！"
-       },
-       {
-        "role": "daming",
-        "text": "What did you put in your bag?",
-        "translation": "你在包里放了什么东西？"
-       },
-       {
-        "role": "amy",
-        "text": "I put clothes, shoes, and my passport in my bag.",
-        "translation": "我在包里放了衣服、鞋子和我的护照。"
-       },
-       {
-        "role": "daming",
-        "text": "When are you going to the airport?",
-        "translation": "你打算什么时候去机场？"
-       },
-       {
-        "role": "amy",
-        "text": "At seven o'clock tomorrow morning.",
-        "translation": "明天早上七点。"
-       },
-       {
-        "role": "daming",
-        "text": "Have a safe trip!",
-        "translation": "旅途安全！"
+        "role": "Narrator",
+        "text": "The world is changing very fast. It's very different from before.",
+        "translation": "世界变化得非常快。它和以前大不相同了。"
        }
       ]
      }
