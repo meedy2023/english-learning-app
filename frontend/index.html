@@ -497,6 +497,26 @@
       opacity: 0.9;
     }
 
+    /* ========== P3 优化：触控热区 ≥44px ========== */
+    button { min-height: 44px; }
+    .btn-sm { min-height: 44px; }
+    .speak-btn, .ra-btn { min-height: 44px; min-width: 44px; }
+    .nav-item { min-height: 56px; }
+    .word-item { min-height: 44px; }
+    .module-card { min-height: 44px; }
+    .tts-select { min-height: 44px; }
+
+    /* ========== P3 优化：大字模式 ========== */
+    body.big-font { zoom: 1.25; }
+    body.big-font .word-text { font-size: 52px; }
+    body.big-font .word-chinese { font-size: 28px; }
+    body.big-font .word-example { font-size: 20px; }
+    body.big-font .quiz-word { font-size: 48px; }
+    body.big-font .section-title { font-size: 19px; }
+    body.big-font .module-name { font-size: 19px; }
+    body.big-font .word-item-word { font-size: 21px; }
+    body.big-font .word-item-chinese { font-size: 17px; }
+
   </style>
   <script src="api-shim.js"></script>
 </head>
@@ -506,6 +526,8 @@
 <div class="topbar">
   <h1 id="topbar-title">📚 单词学习</h1>
   <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
+      <span id="bigfont-toggle" onclick="toggleBigFont()" title="大字模式" style="cursor:pointer;font-size:15px;padding:4px 8px;border-radius:10px">🔍</span>
+      <span id="voice-guide-toggle" onclick="toggleVoiceGuide()" title="语音引导" style="cursor:pointer;font-size:15px;padding:4px 8px;border-radius:10px">🔊</span>
       <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
       <span id="grade-display" style="display:none">三年级</span>
     </div>
@@ -1122,6 +1144,7 @@ const API = ".";
     document.getElementById("view-" + name).classList.add("active");
     const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
+    guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
     document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz") ? "none" : "inline";
     if (name === "report") loadReport();
@@ -2116,6 +2139,40 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
   setTtsEngine(ttsEngine);
+
+  // ========== P3 优化：大字模式 + 语音引导 ==========
+  let bigFontOn = localStorage.getItem('big_font') === '1';
+  let voiceGuideOn = localStorage.getItem('voice_guide') === '1';
+
+  function toggleBigFont() {
+    bigFontOn = !bigFontOn;
+    localStorage.setItem('big_font', bigFontOn ? '1' : '0');
+    applyBigFont();
+    if (voiceGuideOn) speakChinese(bigFontOn ? '已切换到大字模式' : '已恢复正常字号');
+  }
+  function applyBigFont() {
+    if (bigFontOn) document.body.classList.add('big-font');
+    else document.body.classList.remove('big-font');
+    const el = document.getElementById('bigfont-toggle');
+    if (el) el.style.background = bigFontOn ? 'rgba(255,255,255,0.4)' : 'transparent';
+  }
+  function toggleVoiceGuide() {
+    voiceGuideOn = !voiceGuideOn;
+    localStorage.setItem('voice_guide', voiceGuideOn ? '1' : '0');
+    applyVoiceGuide();
+    speakChinese(voiceGuideOn ? '语音引导已开启' : '语音引导已关闭');
+  }
+  function applyVoiceGuide() {
+    const el = document.getElementById('voice-guide-toggle');
+    if (el) {
+      el.style.background = voiceGuideOn ? 'rgba(255,255,255,0.4)' : 'transparent';
+      el.textContent = voiceGuideOn ? '🔊' : '🔇';
+    }
+  }
+  function guideSpeak(text) {
+    if (!voiceGuideOn || !text) return;
+    speakChinese(text);
+  }
 
   // ========== API 请求 ==========
   async function apiGET(path) {
@@ -3864,6 +3921,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 初始化积分显示
   updatePointsDisplay();
+
+  // 初始化 P3 优化（大字模式 + 语音引导）
+  applyBigFont();
+  applyVoiceGuide();
 </script>
 </body>
 </html>
