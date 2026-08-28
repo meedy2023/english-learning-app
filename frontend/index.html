@@ -1606,25 +1606,13 @@ const API = ".";
   // 讯飞语音听写(ASR)：录音转文字，用于跟读逐词评分
   var _raXfPending = false;
   const XFYunASR = {
-    APP_ID: 'b6392404',
-    API_KEY: 'c757277ed0729711d3b7887a9450b416',
-    API_SECRET: 'ZjA3M2ZkZTBmNTVjOTk5Njk3OThkZTRk',
-    HOST: 'iat.xf-yun.com',
-    PATH: '/v2/iat',
-    _b64(buf) {
-      const arr = new Uint8Array(buf); let bin = '';
-      for (let i = 0; i < arr.length; i++) bin += String.fromCharCode(arr[i]);
+    // 讯飞语音听写代理地址（Cloudflare Worker）。Key 藏在 Worker 端，前端不暴露。
+    // 部署 Worker 后，把下面这个地址改成你自己的：https://<你的worker>.workers.dev
+    WORKER_URL: 'https://english-asr.meedy2013.workers.dev',
+    _b64(bytes) {
+      let bin = '';
+      for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
       return btoa(bin);
-    },
-    async _signature() {
-      const date = new Date().toUTCString();
-      const origin = 'host: ' + this.HOST + '\ndate: ' + date + '\nGET ' + this.PATH + ' HTTP/1.1';
-      const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(this.API_SECRET),
-        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-      const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(origin));
-      const sigB64 = this._b64(sig);
-      const authOrigin = 'api_key="' + this.API_KEY + '", algorithm="hmac-sha256", headers="host date request-line", signature="' + sigB64 + '"';
-      return { date: date, auth: btoa(authOrigin) };
     },
     _resample(audioBuf) {
       const srcRate = audioBuf.sampleRate, targetRate = 16000;
@@ -1639,7 +1627,6 @@ const API = ".";
       return out;
     },
     recognize(blob, cb) {
-      if (typeof WebSocket === 'undefined' || !window.crypto || !crypto.subtle) { cb && cb(''); return; }
       _raXfPending = true;
       let _done = false;
       const finish = function (t) {
@@ -1654,45 +1641,14 @@ const API = ".";
           actx.close();
           const pcm = this._resample(audioBuf);
           if (!pcm.length) { finish(''); return; }
-          const { date, auth } = await this._signature();
-          const url = 'wss://' + this.HOST + this.PATH + '?authorization=' + encodeURIComponent(auth) +
-            '&date=' + encodeURIComponent(date) + '&host=' + this.HOST;
-          const ws = new WebSocket(url);
-          let result = '';
-          ws.onopen = () => {
-            ws.send(JSON.stringify({
-              common: { app_id: this.APP_ID },
-              business: { language: 'en_us', domain: 'iat', accent: 'mandarin' },
-              data: { status: 0, format: 'audio/L16;rate=16000', encoding: 'raw', audio: '' }
-            }));
-            const bytes = new Uint8Array(pcm.buffer);
-            const CHUNK = 2560; // 1280 个 Int16 = 2560 字节
-            for (let off = 0; off < bytes.length; off += CHUNK) {
-              const slice = bytes.subarray(off, off + CHUNK);
-              let bin = '';
-              for (let i = 0; i < slice.length; i++) bin += String.fromCharCode(slice[i]);
-              ws.send(JSON.stringify({ data: { status: 1, format: 'audio/L16;rate=16000', encoding: 'raw', audio: btoa(bin) } }));
-            }
-            ws.send(JSON.stringify({ data: { status: 2, format: 'audio/L16;rate=16000', encoding: 'raw', audio: '' } }));
-          };
-          ws.onmessage = (ev) => {
-            try {
-              const msg = JSON.parse(ev.data);
-              if (msg.code !== 0) return;
-              const d = msg.data && msg.data.result;
-              if (d && d.ws) {
-                let t = '';
-                d.ws.forEach(seg => { seg.cw && seg.cw.forEach(c => { t += c.w; }); });
-                result = t;
-              }
-              if (msg.data && msg.data.status === 2) {
-                try { ws.close(); } catch (e) {}
-                finish(result);
-              }
-            } catch (e) {}
-          };
-          ws.onerror = () => { try { ws.close(); } catch (e) {} finish(result); };
-          ws.onclose = () => { finish(result); };
+          const pcmB64 = this._b64(new Uint8Array(pcm.buffer));
+          const resp = await fetch(this.WORKER_URL + '/asr', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ pcm: pcmB64 })
+          });
+          const data = await resp.json();
+          finish(data.text || '');
         } catch (e) { finish(''); }
       })();
     }
