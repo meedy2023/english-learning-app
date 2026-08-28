@@ -3338,6 +3338,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function loadChoiceQuestion() {
+    clearTimeout(window._clAutoNext);
     if (cl_idx >= cl_order.length) {
       showChoiceSummary();
       return;
@@ -3387,8 +3388,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     '<div id="choice-options" style="display:flex;flex-direction:column;gap:10px;margin-top:16px"></div>' +
     '<div id="choice-feedback" style="display:none;margin-top:12px;text-align:center;padding:14px;border-radius:12px;font-size:15px;line-height:1.5"></div>' +
     '<div style="display:flex;gap:10px;margin-top:12px">' +
-      '<button id="cl-next-btn" class="btn btn-primary" style="flex:1;display:none" onclick="clNextQuestion()">下一题 →</button>' +
+      '<button class="btn btn-secondary" style="padding:12px 20px;background:#f5f5f5;border:1px solid #ddd;color:#999" onclick="prevChoiceQuestion()">← 上一题</button>' +
       '<button class="btn btn-secondary" style="padding:12px 20px;background:#f5f5f5;border:1px solid #ddd;color:#999" onclick="clSkipQuestion()">跳过</button>' +
+      '<button id="cl-next-btn" class="btn btn-primary" style="flex:1;display:none" onclick="clNextQuestion()">下一题 →</button>' +
     '</div>';
 
     const optsContainer = document.getElementById('choice-options');
@@ -3454,9 +3456,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     nextBtn.style.display = 'block';
     nextBtn.textContent = (cl_idx + 1) >= cl_order.length ? '查看成绩 🎉' : '下一题 →';
+
+    // 答完自动切下一题（最后一题不自动跳）
+    const _isLast = (cl_idx + 1) >= cl_order.length;
+    if (!_isLast) {
+      clearTimeout(window._clAutoNext);
+      window._clAutoNext = setTimeout(function() { clNextQuestion(); }, isCorrect ? 1200 : 2800);
+    }
   }
 
   function clSkipQuestion() {
+    clearTimeout(window._clAutoNext);
     cl_total++; // 跳过也算一题，但不算正确
     cl_idx++;
     loadChoiceQuestion();
@@ -3483,7 +3493,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function clNextQuestion() {
+    clearTimeout(window._clAutoNext);
     cl_idx++;
+    loadChoiceQuestion();
+  }
+
+  function prevChoiceQuestion() {
+    clearTimeout(window._clAutoNext);
+    if (cl_idx > 0) cl_idx--;
     loadChoiceQuestion();
   }
 
