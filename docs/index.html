@@ -2144,13 +2144,13 @@ const API = ".";
   // ---- 网络发音：Edge TTS（免费、无需 Key，浏览器直连 wss）----
   const EdgeTTS = {
     WS_URL: 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D18AC1447B9B4DE3946C719C8B',
-    VOICE: { 'en-US': 'en-US-JennyNeural', 'zh-CN': 'zh-CN-XiaoxiaoNeural' },
+    VOICE: { 'en-US': 'en-GB-SoniaNeural', 'zh-CN': 'zh-CN-XiaoxiaoNeural' },
     synthesize(text, lang, onAudio, onError) {
       if (typeof WebSocket === 'undefined') { onError && onError(new Error('no websocket')); return; }
       let ws;
       try { ws = new WebSocket(this.WS_URL); } catch (e) { onError && onError(e); return; }
       ws.binaryType = 'arraybuffer';
-      const voice = this.VOICE[lang] || 'en-US-JennyNeural';
+      const voice = this.VOICE[lang] || 'en-GB-SoniaNeural';
       const chunks = [];
       const uuid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
         : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -2177,7 +2177,8 @@ const API = ".";
             .replace(/! /g, "<break time='220ms'/>! ")
             .replace(/\? /g, "<break time='220ms'/>? ");
         }
-        const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + lang + "'>"
+        const xmlLang = lang === 'en-US' ? 'en-GB' : lang;
+        const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
           + "<mstts:express-as style='" + style + "' styledegree='1.6'>"
           + "<prosody rate='-5%' pitch='+5%'>" + spoken + "</prosody>"
@@ -2245,7 +2246,7 @@ const API = ".";
       try {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = lang;
+        u.lang = lang === 'en-US' ? 'en-GB' : lang;
         u.rate = lang === 'en-US' ? 0.85 : 0.95;
         if (lang === 'en-US') u.pitch = 1.2;
         const prefix = lang === 'zh-CN' ? 'zh' : 'en';
