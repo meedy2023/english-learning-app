@@ -1769,532 +1769,654 @@
   },
   "五年级": {
    "上册": {
-    "Module 1 Did you come back yesterday?": [
+    "Unit 1 What's on your plate?": [
      {
-      "unit": "Unit 1 Did you come back yesterday?",
+      "unit": "Unit 1 What's on your plate? (Start up)",
       "content": [
        {
-        "role": "mum",
-        "text": "Daming, did you come back yesterday?",
-        "translation": "大明，你昨天回来的吗？"
+        "role": "Tom",
+        "text": "Wow! There is so much food.",
+        "translation": "哇！有这么多食物。"
        },
        {
-        "role": "daming",
-        "text": "Yes, I came back yesterday evening.",
-        "translation": "是的，我昨天晚上回来的。"
+        "role": "Dad",
+        "text": "What do you want to eat?",
+        "translation": "你想吃什么？"
        },
        {
-        "role": "mum",
-        "text": "What did you do yesterday?",
-        "translation": "你昨天做了什么？"
+        "role": "Amy",
+        "text": "I want noodles in soup, salad and beef.",
+        "translation": "我想要汤面、沙拉和牛肉。"
        },
        {
-        "role": "daming",
-        "text": "I played football with my friends. It was fun!",
-        "translation": "我和朋友们踢足球了。真有趣！"
+        "role": "Tom",
+        "text": "I want chicken and beef.",
+        "translation": "我想要鸡肉和牛肉。"
+       },
+       {
+        "role": "Amy",
+        "text": "I want an apple and milk, too!",
+        "translation": "我还想要一个苹果和牛奶！"
+       },
+       {
+        "role": "Tom",
+        "text": "I like cake and cola.",
+        "translation": "我喜欢蛋糕和可乐。"
+       },
+       {
+        "role": "Dad",
+        "text": "Don't take too much! We should eat all the food on our plates.",
+        "translation": "不要拿太多！我们应该把盘子里的食物都吃完。"
+       },
+       {
+        "role": "Dad",
+        "text": "Sam, look at your plate. You should have some vegetables.",
+        "translation": "萨姆，看看你的盘子。你应该吃点蔬菜。"
+       },
+       {
+        "role": "Tom",
+        "text": "OK. Let me go and get some.",
+        "translation": "好的，我去拿一些。"
+       },
+       {
+        "role": "Amy",
+        "text": "What vegetables have you got now?",
+        "translation": "你现在拿了什么蔬菜？"
+       },
+       {
+        "role": "Tom",
+        "text": "Potatoes, a lot of potatoes.",
+        "translation": "土豆，很多土豆。"
+       },
+       {
+        "role": "Dad",
+        "text": "Oh, Sam!!! Those are chips!",
+        "translation": "哦，萨姆！！！那些是薯条！"
        }
       ]
      },
      {
-      "unit": "Unit 2 We bought ice creams",
+      "unit": "Unit 1 What's on your plate? (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "Sam and Amy went to the park yesterday.",
-        "translation": "萨姆和艾米昨天去了公园。"
+        "role": "Narrator",
+        "text": "A letter from your stomach.",
+        "translation": "一封来自你胃的信。"
        },
        {
-        "role": "daming",
-        "text": "What did they do there?",
-        "translation": "他们在那里做了什么？"
+        "role": "Stomach",
+        "text": "Every morning, you need a good breakfast.",
+        "translation": "每天早上，你都需要一顿丰盛的早餐。"
        },
        {
-        "role": "lingling",
-        "text": "They met John in the park. They bought ice creams.",
-        "translation": "他们在公园遇到了约翰。他们买了冰淇淋。"
+        "role": "Stomach",
+        "text": "Just a few biscuits are not enough!",
+        "translation": "只吃几块饼干是不够的！"
        },
        {
-        "role": "daming",
-        "text": "Did they have a nice time?",
-        "translation": "他们玩得开心吗？"
+        "role": "Stomach",
+        "text": "I often feel hungry all morning.",
+        "translation": "我整个上午经常觉得饿。"
        },
        {
-        "role": "lingling",
-        "text": "Yes, they did! But Lingling dropped her ice cream.",
-        "translation": "是的，很开心！但是玲玲把冰淇淋掉了。"
+        "role": "Stomach",
+        "text": "Then you usually eat too much for lunch.",
+        "translation": "然后你午餐通常吃得太多。"
+       },
+       {
+        "role": "Stomach",
+        "text": "You often have a lot of meat, but no vegetables and no fruit.",
+        "translation": "你经常吃很多肉，但不吃蔬菜和水果。"
+       },
+       {
+        "role": "Stomach",
+        "text": "This makes you sleepy in the afternoon.",
+        "translation": "这会让你下午犯困。"
+       },
+       {
+        "role": "Stomach",
+        "text": "And you always eat dinner too quickly so you can go and play.",
+        "translation": "而且你总是为了去玩而吃得太快。"
+       },
+       {
+        "role": "Stomach",
+        "text": "I have to work hard for a long time after dinner.",
+        "translation": "晚饭后我得长时间辛苦工作。"
+       },
+       {
+        "role": "Stomach",
+        "text": "Sally, please change your bad eating habits.",
+        "translation": "萨莉，请改掉你的坏习惯。"
+       },
+       {
+        "role": "Stomach",
+        "text": "Help me stay healthy. Then you are healthy, too.",
+        "translation": "帮我保持健康，这样你也会健康。"
        }
       ]
      }
     ],
-    "Module 2 What did you buy?": [
+    "Unit 2 A green life": [
      {
-      "unit": "Unit 1 What did you buy?",
+      "unit": "Unit 2 A green life (Start up)",
       "content": [
        {
-        "role": "mum",
-        "text": "Daming, what did you buy yesterday?",
-        "translation": "大明，你昨天买了什么？"
+        "role": "Mum",
+        "text": "The dress is too small for you, Amy.",
+        "translation": "艾米，这条裙子对你来说太小了。"
        },
        {
-        "role": "daming",
-        "text": "I bought a new pen. It's blue.",
-        "translation": "我买了一支新钢笔。是蓝色的。"
+        "role": "Amy",
+        "text": "Mum, don't throw it away. I can make use of it.",
+        "translation": "妈妈，别扔掉它。我可以利用它。"
        },
        {
-        "role": "mum",
-        "text": "Did you buy any books?",
-        "translation": "你买书了吗？"
+        "role": "Mum",
+        "text": "OK. Take it. But what for?",
+        "translation": "好的，拿去吧。但是用来做什么？"
        },
        {
-        "role": "daming",
-        "text": "Yes, I bought two English books.",
-        "translation": "是的，我买了两本英语书。"
+        "role": "Amy",
+        "text": "Wait and see!",
+        "translation": "等着瞧吧！"
+       },
+       {
+        "role": "Daming",
+        "text": "Grandpa, give those cans to me, please.",
+        "translation": "爷爷，请把那些罐子给我。"
+       },
+       {
+        "role": "Grandpa",
+        "text": "Sure, but what for?",
+        "translation": "当然可以，但是用来做什么？"
+       },
+       {
+        "role": "Daming",
+        "text": "Wait and see!",
+        "translation": "等着瞧吧！"
+       },
+       {
+        "role": "Sam",
+        "text": "Don't throw away that box, Dad! I want to use it.",
+        "translation": "爸爸，别扔掉那个盒子！我想用它。"
+       },
+       {
+        "role": "Dad",
+        "text": "OK, you can keep it. But what for?",
+        "translation": "好的，你可以留着。但是用来做什么？"
+       },
+       {
+        "role": "Sam",
+        "text": "Wait and see!",
+        "translation": "等着瞧吧！"
+       },
+       {
+        "role": "Lingling",
+        "text": "Grandma, give that old shirt to me, please.",
+        "translation": "奶奶，请把旧衬衫给我。"
+       },
+       {
+        "role": "Grandma",
+        "text": "No problem. But what for?",
+        "translation": "没问题。但是用来做什么？"
+       },
+       {
+        "role": "Lingling",
+        "text": "Wait and see!",
+        "translation": "等着瞧吧！"
+       },
+       {
+        "role": "Lingling",
+        "text": "These are houses for birds. They're also places to keep them warm.",
+        "translation": "这些是鸟的房子。它们也是给鸟儿保暖的地方。"
+       },
+       {
+        "role": "Sam",
+        "text": "I love it! Now they have a better home!",
+        "translation": "我太喜欢了！现在它们有了更好的家！"
        }
       ]
      },
      {
-      "unit": "Unit 2 How much cheese did you buy?",
+      "unit": "Unit 2 A green life (Speed up)",
       "content": [
        {
-        "role": "shopkeeper",
-        "text": "Can I help you?",
-        "translation": "请问需要什么？"
+        "role": "Narrator",
+        "text": "Dear all,",
+        "translation": "亲爱的大家："
        },
        {
-        "role": "amy",
-        "text": "How much cheese did you buy?",
-        "translation": "你买了多少奶酪？"
+        "role": "Narrator",
+        "text": "Winter is coming, so we made these houses for birds.",
+        "translation": "冬天要来了，所以我们为鸟儿做了这些房子。"
        },
        {
-        "role": "lingling",
-        "text": "I bought half a kilo of cheese.",
-        "translation": "我买了半公斤奶酪。"
+        "role": "Narrator",
+        "text": "They keep the birds safe and warm.",
+        "translation": "它们让鸟儿安全又温暖。"
        },
        {
-        "role": "amy",
-        "text": "And how much milk?",
-        "translation": "还有多少牛奶？"
+        "role": "Narrator",
+        "text": "Please don't take them away. Let's be kind to the birds.",
+        "translation": "请不要把它们拿走。让我们善待鸟儿。"
        },
        {
-        "role": "lingling",
-        "text": "I bought two bottles of milk.",
-        "translation": "我买了两瓶牛奶。"
+        "role": "Narrator",
+        "text": "We're making more houses because lots of birds need a home.",
+        "translation": "我们正在做更多房子，因为很多鸟儿需要家。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Don't throw cans, boxes, bottles or old clothes away. Give them to us.",
+        "translation": "不要把罐子、盒子、瓶子或旧衣服扔掉。把它们给我们吧。"
+       },
+       {
+        "role": "Narrator",
+        "text": "It can help a lot! Thank you so much!",
+        "translation": "这能帮上大忙！非常感谢你们！"
        }
       ]
      }
     ],
-    "Module 3 Where did you go?": [
+    "Unit 3 Happy together": [
      {
-      "unit": "Unit 1 Where did you go?",
+      "unit": "Unit 3 Happy together (Start up)",
       "content": [
        {
-        "role": "daming",
-        "text": "Where did you go last weekend?",
-        "translation": "你上周末去哪里了？"
+        "role": "Narrator",
+        "text": "For Duoduo, Tutu is his best and only friend.",
+        "translation": "对多多来说，图图是他最好、也是唯一的朋友。"
        },
        {
-        "role": "sam",
-        "text": "I went to the mountains with my family.",
-        "translation": "我和家人去爬山了。"
+        "role": "Narrator",
+        "text": "He wants to play with Tutu, but Tutu is playing with two other boys.",
+        "translation": "他想和图图一起玩，但图图正和另外两个男孩玩。"
        },
        {
-        "role": "daming",
-        "text": "That sounds great! Did you take any photos?",
-        "translation": "听起来太棒了！你拍照了吗？"
+        "role": "Narrator",
+        "text": "This makes Duoduo unhappy.",
+        "translation": "这让多多不开心。"
        },
        {
-        "role": "sam",
-        "text": "Yes, I took lots of photos. The views were beautiful.",
-        "translation": "是的，我拍了很多照片。风景很美。"
+        "role": "Narrator",
+        "text": "Tutu asks Duoduo to join them but Duoduo just walks away.",
+        "translation": "图图叫多多一起玩，但多多只是走开了。"
+       },
+       {
+        "role": "Narrator",
+        "text": "After a week, Duoduo feels sad and he misses Tutu.",
+        "translation": "一周后，多多感到难过，他很想念图图。"
+       },
+       {
+        "role": "Duoduo",
+        "text": "But Tutu may not miss me because he has new friends.",
+        "translation": "但是图图可能不想我，因为他有了新朋友。"
+       },
+       {
+        "role": "Tutu",
+        "text": "Hi Duoduo. How are you?",
+        "translation": "嗨，多多。你好吗？"
+       },
+       {
+        "role": "Duoduo",
+        "text": "I'm unhappy because I'm not your friend now.",
+        "translation": "我不开心，因为我现在不是你的朋友了。"
+       },
+       {
+        "role": "Tutu",
+        "text": "Yes, I have new friends, but you're still my friend.",
+        "translation": "是的，我有新朋友，但你仍然是我的朋友。"
+       },
+       {
+        "role": "Tutu",
+        "text": "Old friends and new friends are both very nice. Join us and they can be your friends, too.",
+        "translation": "老朋友和新朋友都很好。加入我们吧，他们也会成为你的朋友。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Now Duoduo has three best friends!",
+        "translation": "现在多多有了三个最好的朋友！"
        }
       ]
      },
      {
-      "unit": "Unit 2 Daming took a photo of his father",
+      "unit": "Unit 3 Happy together (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "What's this photo about, Daming?",
-        "translation": "这张照片是关于什么的，大明？"
+        "role": "Mum Bird",
+        "text": "You can't be friends with Dog because you're so different.",
+        "translation": "你不能和狗狗做朋友，因为你们太不一样了。"
        },
        {
-        "role": "daming",
-        "text": "Daming took a photo of his father.",
-        "translation": "大明给他爸爸拍了照片。"
+        "role": "Dad Dog",
+        "text": "You can't be friends with Bird because you're so different.",
+        "translation": "你不能和小鸟做朋友，因为你们太不一样了。"
        },
        {
-        "role": "lingling",
-        "text": "Where was your father, Daming?",
-        "translation": "你爸爸在哪里？"
+        "role": "Bird",
+        "text": "Let's show them we aren't different. Then we can be friends.",
+        "translation": "让我们证明我们并没有不同。那样我们就能做朋友了。"
        },
        {
-        "role": "daming",
-        "text": "He was in the park. He was reading a book.",
-        "translation": "他在公园里。他在读书。"
+        "role": "Dog",
+        "text": "Good idea!",
+        "translation": "好主意！"
+       },
+       {
+        "role": "Bird",
+        "text": "I am small and you are big. I eat seeds and you eat meat. I fly and you run.",
+        "translation": "我小你大。我吃种子你吃肉。我飞你跑。"
+       },
+       {
+        "role": "Bird",
+        "text": "Er, what do we share?",
+        "translation": "呃，我们有什么共同的？"
+       },
+       {
+        "role": "Dog",
+        "text": "We want to be friends but we can't. We are so different.",
+        "translation": "我们想成为朋友，但做不到。我们太不一样了。"
+       },
+       {
+        "role": "Rabbit",
+        "text": "But we are friends because we are happy together.",
+        "translation": "但我们能成为朋友，因为我们在一起很开心。"
+       },
+       {
+        "role": "Rabbit",
+        "text": "Friends play together and friends share with each other. That's the key.",
+        "translation": "朋友一起玩耍，朋友互相分享。这才是关键。"
+       },
+       {
+        "role": "Bird and Dog",
+        "text": "Let's show this to our parents. Then we can be friends — the best friends!",
+        "translation": "让我们把这一点展示给我们的父母。那样我们就能成为朋友——最好的朋友！"
        }
       ]
      }
     ],
-    "Module 4 Mum bought a new T-shirt for me": [
+    "Unit 4 A better me": [
      {
-      "unit": "Unit 1 Mum bought a new T-shirt for me",
+      "unit": "Unit 4 A better me (Start up)",
       "content": [
        {
-        "role": "daming",
-        "text": "Mum bought a new T-shirt for me. It's red.",
-        "translation": "妈妈给我买了一件新T恤。是红色的。"
+        "role": "Lingling",
+        "text": "Thursday 11 October",
+        "translation": "10月11日 星期四"
        },
        {
-        "role": "lingling",
-        "text": "It's very nice! How much was it?",
-        "translation": "真漂亮！多少钱？"
+        "role": "Lingling",
+        "text": "Our school's going to have a girls' basketball team. Amy and I want to join. We're going to have the test tomorrow.",
+        "translation": "我们学校要组建一支女子篮球队。我和艾米想加入。我们明天要参加选拔。"
        },
        {
-        "role": "daming",
-        "text": "It was fifty yuan. It was a good price.",
-        "translation": "五十元。价格很划算。"
+        "role": "Lingling",
+        "text": "Friday 12 October",
+        "translation": "10月12日 星期五"
        },
        {
-        "role": "lingling",
-        "text": "My mum bought a new dress for me. It's blue.",
-        "translation": "我妈妈给我买了一条新裙子。是蓝色的。"
+        "role": "Lingling",
+        "text": "Amy is in. But I am out. I am very sad.",
+        "translation": "艾米入选了。但我落选了。我非常难过。"
+       },
+       {
+        "role": "Lingling",
+        "text": "Sunday 14 October",
+        "translation": "10月14日 星期日"
+       },
+       {
+        "role": "Lingling",
+        "text": "Amy is so kind. She comes to play basketball with me. I'm going to work hard. I can make it next time.",
+        "translation": "艾米真好。她来和我一起打篮球。我要努力。下次我一定能成功。"
+       },
+       {
+        "role": "Lingling",
+        "text": "Friday 26 October",
+        "translation": "10月26日 星期五"
+       },
+       {
+        "role": "Lingling",
+        "text": "There's going to be a test again. I'm still not sure. But I'm going to try again.",
+        "translation": "又要选拔了。我仍然没有把握。但我要再试一次。"
+       },
+       {
+        "role": "Lingling",
+        "text": "Sunday 28 October",
+        "translation": "10月28日 星期日"
+       },
+       {
+        "role": "Lingling",
+        "text": "I'm in! I'm so happy. I'm going to play with Amy and my other friends!",
+        "translation": "我入选了！我好开心。我要和艾米以及其他朋友一起打球了！"
        }
       ]
      },
      {
-      "unit": "Unit 2 What's the matter with Daming?",
+      "unit": "Unit 4 A better me (Speed up)",
       "content": [
        {
-        "role": "amy",
-        "text": "What's the matter with Daming?",
-        "translation": "大明怎么了？"
+        "role": "Narrator",
+        "text": "Ben makes a four-week plan to get better.",
+        "translation": "本制定了一个为期四周的计划来让自己变得更好。"
        },
        {
-        "role": "lingling",
-        "text": "He lost his new T-shirt. He's very sad.",
-        "translation": "他把新T恤弄丢了。他很伤心。"
+        "role": "Narrator",
+        "text": "Week 1: He's going to eat healthily.",
+        "translation": "第一周：他打算吃得健康。"
        },
        {
-        "role": "amy",
-        "text": "Don't worry. We'll help you find it.",
-        "translation": "别担心。我们会帮你找到的。"
+        "role": "Narrator",
+        "text": "Week 2: He's going to do more exercise.",
+        "translation": "第二周：他打算做更多运动。"
        },
        {
-        "role": "daming",
-        "text": "Thank you, friends!",
-        "translation": "谢谢你们，朋友们！"
+        "role": "Narrator",
+        "text": "Week 3: He's going to tidy his room by himself.",
+        "translation": "第三周：他打算自己整理房间。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Week 4: He's going to read more books.",
+        "translation": "第四周：他打算读更多书。"
+       },
+       {
+        "role": "Narrator",
+        "text": "After a month, Ben finishes all the tasks. He feels good, so he decides to continue.",
+        "translation": "一个月后，本完成了所有任务。他感觉很好，所以决定继续。"
+       },
+       {
+        "role": "Narrator",
+        "text": "He's going to start a new four-week plan.",
+        "translation": "他打算开始一个新的四周计划。"
        }
       ]
      }
     ],
-    "Module 5 There are only nineteen crayons": [
+    "Unit 5 Look into the future": [
      {
-      "unit": "Unit 1 There are only nineteen crayons",
+      "unit": "Unit 5 Look into the future (Start up)",
       "content": [
        {
-        "role": "teacher",
-        "text": "How many crayons do you have?",
-        "translation": "你有多少蜡笔？"
+        "role": "Daming",
+        "text": "What is Dad making?",
+        "translation": "爸爸在做什么？"
        },
        {
-        "role": "amy",
-        "text": "There are only nineteen crayons. I need twenty.",
-        "translation": "只有十九支蜡笔。我需要二十支。"
+        "role": "Dad",
+        "text": "I am making a robot. I still need some time to get it to work. It will help people a lot.",
+        "translation": "我在做一个机器人。我还需要一些时间让它运转起来。它会帮人们很多忙。"
        },
        {
-        "role": "teacher",
-        "text": "Here are some more crayons for you.",
-        "translation": "这里有一些蜡笔给你。"
+        "role": "Daming",
+        "text": "What will it do for people?",
+        "translation": "它会为人们做什么？"
        },
        {
-        "role": "amy",
-        "text": "Thank you! Now I have twenty-one crayons.",
-        "translation": "谢谢！现在我有二十一支蜡笔了。"
+        "role": "Dad",
+        "text": "A lot of things.",
+        "translation": "很多事。"
+       },
+       {
+        "role": "Daming",
+        "text": "Will it do our chores?",
+        "translation": "它会做我们的家务吗？"
+       },
+       {
+        "role": "Dad",
+        "text": "Yes, it will. We will have more free time.",
+        "translation": "是的，会的。我们会有更多空闲时间。"
+       },
+       {
+        "role": "Daming",
+        "text": "Great. Will it take care of pets?",
+        "translation": "太好了。它会照顾宠物吗？"
+       },
+       {
+        "role": "Dad",
+        "text": "Yes, it will. It will keep an eye on the pets all day.",
+        "translation": "是的，会的。它会整天照看宠物。"
+       },
+       {
+        "role": "Daming",
+        "text": "Will it play with us?",
+        "translation": "它会和我们一起玩吗？"
+       },
+       {
+        "role": "Dad",
+        "text": "Yes, it will know all kinds of games and sports.",
+        "translation": "会的，它懂各种游戏和运动。"
+       },
+       {
+        "role": "Daming",
+        "text": "Then we'll have a lot of fun. Well... will it do my homework?",
+        "translation": "那我们会玩得很开心。嗯……它会做我的作业吗？"
+       },
+       {
+        "role": "Dad",
+        "text": "No, it won't!",
+        "translation": "不，不会！"
        }
       ]
      },
      {
-      "unit": "Unit 2 There are forty",
+      "unit": "Unit 5 Look into the future (Speed up)",
       "content": [
        {
-        "role": "lingling",
-        "text": "How many books do you have?",
-        "translation": "你有多少本书？"
+        "role": "Narrator",
+        "text": "Where will people live in the future?",
+        "translation": "未来人们会住在哪里？"
        },
        {
-        "role": "daming",
-        "text": "There are forty books on my shelf.",
-        "translation": "我的书架上有四十本书。"
+        "role": "Narrator",
+        "text": "People will live on the moon.",
+        "translation": "人们会住在月球上。"
        },
        {
-        "role": "lingling",
-        "text": "That's a lot of books! I have thirty.",
-        "translation": "好多书啊！我有三十本。"
+        "role": "Narrator",
+        "text": "We will travel to Mars in 2080.",
+        "translation": "2080年我们会去火星旅行。"
        },
        {
-        "role": "daming",
-        "text": "Reading is great! Let's read together.",
-        "translation": "阅读真棒！我们一起读书吧。"
+        "role": "Narrator",
+        "text": "The city will be under the sea.",
+        "translation": "城市会建在海底。"
+       },
+       {
+        "role": "Narrator",
+        "text": "The future of our city is bright.",
+        "translation": "我们城市的未来是光明的。"
+       },
+       {
+        "role": "Narrator",
+        "text": "We will use 3-D printing to make food.",
+        "translation": "我们会用3D打印来做食物。"
        }
       ]
      }
     ],
-    "Module 6 You can play football well": [
+    "Unit 6 Enjoy the festivals": [
      {
-      "unit": "Unit 1 You can play football well",
+      "unit": "Unit 6 Enjoy the festivals (Start up)",
       "content": [
        {
-        "role": "coach",
-        "text": "Sam, you can play football well!",
-        "translation": "萨姆，你足球踢得很好！"
+        "role": "Daming",
+        "text": "The Mid-Autumn Festival is coming. Let's make mooncakes for the animals at the zoo!",
+        "translation": "中秋节要来了。我们给动物园的动物做月饼吧！"
        },
        {
-        "role": "sam",
-        "text": "Thank you, coach. I practice every day.",
-        "translation": "谢谢，教练。我每天都在练习。"
+        "role": "Sam, Amy and Lingling",
+        "text": "OK! Great idea!",
+        "translation": "好的！好主意！"
        },
        {
-        "role": "coach",
-        "text": "Daming, you can run very fast.",
-        "translation": "大明，你能跑得很快。"
+        "role": "Zookeeper",
+        "text": "Hello, children! What are you going to make?",
+        "translation": "孩子们，你们好！你们打算做什么？"
        },
        {
-        "role": "daming",
-        "text": "Yes! I'm the fastest in my class.",
-        "translation": "是的！我是班里跑得最快的。"
+        "role": "Sam",
+        "text": "I'm going to make meat mooncakes for the tigers.",
+        "translation": "我要给老虎做肉馅月饼。"
+       },
+       {
+        "role": "Lingling",
+        "text": "I'm going to make bamboo mooncakes for the pandas.",
+        "translation": "我要给熊猫做竹子馅月饼。"
+       },
+       {
+        "role": "Sam",
+        "text": "How about you, Amy?",
+        "translation": "你呢，艾米？"
+       },
+       {
+        "role": "Amy",
+        "text": "I'm going to make carrot mooncakes for the rabbits.",
+        "translation": "我要给兔子做胡萝卜馅月饼。"
+       },
+       {
+        "role": "Amy",
+        "text": "Are you going to make flower mooncakes for the giraffes?",
+        "translation": "你要给长颈鹿做花馅月饼吗？"
+       },
+       {
+        "role": "Lingling",
+        "text": "They won't eat meat mooncakes. They will be very big!",
+        "translation": "它们不吃肉馅月饼。月饼会很大的！"
        }
       ]
      },
      {
-      "unit": "Unit 2 He ran very fast",
+      "unit": "Unit 6 Enjoy the festivals (Speed up)",
       "content": [
        {
-        "role": "amy",
-        "text": "Who ran in the race yesterday?",
-        "translation": "昨天谁参加了跑步比赛？"
+        "role": "Narrator",
+        "text": "What do you do at the Spring Festival?",
+        "translation": "你在春节做什么？"
        },
        {
-        "role": "lingling",
-        "text": "Daming ran very fast. He came first!",
-        "translation": "大明跑得非常快。他得了第一名！"
+        "role": "Narrator",
+        "text": "We eat dumplings and visit our relatives.",
+        "translation": "我们吃饺子、走亲访友。"
        },
        {
-        "role": "amy",
-        "text": "That's wonderful! Did Sam run fast too?",
-        "translation": "太棒了！萨姆也跑得快吗？"
+        "role": "Narrator",
+        "text": "What do you do at the Dragon Boat Festival?",
+        "translation": "你在端午节做什么？"
        },
        {
-        "role": "lingling",
-        "text": "Yes, he did. He came second.",
-        "translation": "是的，他跑得很快。他得了第二名。"
-       }
-      ]
-     }
-    ],
-    "Module 7 He can't see": [
-     {
-      "unit": "Unit 1 He can't see",
-      "content": [
-       {
-        "role": "teacher",
-        "text": "This is my friend. He can't see.",
-        "translation": "这是我朋友。他看不见。"
+        "role": "Narrator",
+        "text": "People will have dragon boat races.",
+        "translation": "人们会举行龙舟比赛。"
        },
        {
-        "role": "pupil",
-        "text": "What can he do?",
-        "translation": "他会做什么？"
+        "role": "Narrator",
+        "text": "What do you do at the Lantern Festival?",
+        "translation": "你在元宵节做什么？"
        },
        {
-        "role": "teacher",
-        "text": "He can listen very well. He can read books with his hands.",
-        "translation": "他听力很好。他能用双手读书。"
-       },
-       {
-        "role": "pupil",
-        "text": "That's amazing! We should help him.",
-        "translation": "太神奇了！我们应该帮助他。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 This little girl can't walk",
-      "content": [
-       {
-        "role": "daming",
-        "text": "Who is she? What happened to her?",
-        "translation": "她是谁？她怎么了？"
-       },
-       {
-        "role": "amy",
-        "text": "This little girl can't walk. But she can swim very well.",
-        "translation": "这个小女孩不能走路。但她游泳游得很好。"
-       },
-       {
-        "role": "daming",
-        "text": "That's wonderful! Everyone can do something well.",
-        "translation": "太棒了！每个人都能做好一些事情。"
-       },
-       {
-        "role": "lingling",
-        "text": "Yes! We should all try our best.",
-        "translation": "是的！我们都应该尽力。"
-       }
-      ]
-     }
-    ],
-    "Module 8 Dogs are very useful": [
-     {
-      "unit": "Unit 1 Dogs are very useful",
-      "content": [
-       {
-        "role": "amy",
-        "text": "Dogs are very useful. They can help people.",
-        "translation": "狗非常有用。它们能帮助人们。"
-       },
-       {
-        "role": "lingling",
-        "text": "My grandma has a dog. It can guard the house.",
-        "translation": "我奶奶有一条狗。它能看家。"
-       },
-       {
-        "role": "amy",
-        "text": "Some dogs can guide blind people. They're wonderful.",
-        "translation": "有些狗能引导盲人。它们真了不起。"
-       },
-       {
-        "role": "lingling",
-        "text": "Yes. Dogs are our good friends.",
-        "translation": "是的。狗是我们人类的好朋友。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 A dog is a useful animal",
-      "content": [
-       {
-        "role": "daming",
-        "text": "A dog is a useful animal. It can do many things.",
-        "translation": "狗是一种有用的动物。它能做很多事情。"
-       },
-       {
-        "role": "sam",
-        "text": "Some dogs can help the police. They can find bad people.",
-        "translation": "有些狗能帮助警察。它们能找到坏人。"
-       },
-       {
-        "role": "daming",
-        "text": "Dogs are amazing. I love dogs.",
-        "translation": "狗真神奇。我喜欢狗。"
-       },
-       {
-        "role": "sam",
-        "text": "Me too! They're the best friends of humans.",
-        "translation": "我也是！它们是人类最好的朋友。"
-       }
-      ]
-     }
-    ],
-    "Module 9 Are you feeling bored?": [
-     {
-      "unit": "Unit 1 Are you feeling bored?",
-      "content": [
-       {
-        "role": "mum",
-        "text": "Are you feeling bored, Daming?",
-        "translation": "你觉得无聊吗，大明？"
-       },
-       {
-        "role": "daming",
-        "text": "Yes, I am. There's nothing to do.",
-        "translation": "是的，我很无聊。没什么事情可做。"
-       },
-       {
-        "role": "mum",
-        "text": "Why don't you read a book?",
-        "translation": "你为什么不读一本书呢？"
-       },
-       {
-        "role": "daming",
-        "text": "Good idea! Reading is fun.",
-        "translation": "好主意！阅读很有趣。"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 I feel happy",
-      "content": [
-       {
-        "role": "lingling",
-        "text": "Are you feeling happy, Amy?",
-        "translation": "你感到开心吗，Amy？"
-       },
-       {
-        "role": "amy",
-        "text": "Yes, I am! I passed my English test.",
-        "translation": "是的，我很开心！我英语考试及格了。"
-       },
-       {
-        "role": "lingling",
-        "text": "Congratulations! That's wonderful news.",
-        "translation": "恭喜你！这是好消息。"
-       },
-       {
-        "role": "amy",
-        "text": "Thank you! Now I feel excited and happy.",
-        "translation": "谢谢！现在我觉得既兴奋又开心。"
-       }
-      ]
-     }
-    ],
-    "Module 10 He was in the kitchen": [
-     {
-      "unit": "Unit 1 He was in the kitchen",
-      "content": [
-       {
-        "role": "amy",
-        "text": "Let's play hide and seek!",
-        "translation": "我们玩捉迷藏吧！"
-       },
-       {
-        "role": "all",
-        "text": "OK! Where did you find Sam?",
-        "translation": "好的！你在哪里找到萨姆的？"
-       },
-       {
-        "role": "amy",
-        "text": "I found Sam in the kitchen. He was cooking!",
-        "translation": "我在厨房找到萨姆的。他在做饭！"
-       },
-       {
-        "role": "sam",
-        "text": "I was the winner. You found me last!",
-        "translation": "我是赢家。你们最后才找到我！"
-       }
-      ]
-     },
-     {
-      "unit": "Unit 2 Don't shout, please!",
-      "content": [
-       {
-        "role": "teacher",
-        "text": "Don't shout, please! This is a library.",
-        "translation": "请不要大声喧哗！这里是图书馆。"
-       },
-       {
-        "role": "pupil",
-        "text": "Sorry, we forgot. We were too excited.",
-        "translation": "对不起，我们忘了。我们太兴奋了。"
-       },
-       {
-        "role": "teacher",
-        "text": "In the library, we should be quiet.",
-        "translation": "在图书馆里，我们应该保持安静。"
-       },
-       {
-        "role": "pupil",
-        "text": "Yes, we understand. We'll be quiet now.",
-        "translation": "好的，我们明白了。我们现在会安静的。"
+        "role": "Narrator",
+        "text": "We put up lanterns and watch the lion dance.",
+        "translation": "我们挂灯笼、看舞狮。"
        }
       ]
      }
