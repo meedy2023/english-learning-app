@@ -2212,7 +2212,7 @@ const API = ".";
             .replace(/! /g, "<break time='220ms'/>! ")
             .replace(/\? /g, "<break time='220ms'/>? ");
         }
-        const xmlLang = lang === 'zh-CN' ? 'zh-CN' : (enVoice.startsWith('en-US') ? 'en-US' : 'en-GB');
+        const xmlLang = voice.startsWith('zh') ? 'zh-CN' : (voice.startsWith('en-US') ? 'en-US' : 'en-GB');
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
           + "<mstts:express-as style='" + style + "' styledegree='1.0'>"
