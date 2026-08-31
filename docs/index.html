@@ -627,7 +627,12 @@
 
   <!-- ======= 测验 ======= -->
   <div id="view-quiz" class="view">
-    <button class="btn btn-secondary" onclick="showWordList()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回单词表</button>
+    <div style="display:flex;gap:8px;margin-bottom:16px">
+      <button class="btn btn-sm tab-btn" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
+      <button class="btn btn-sm tab-btn" data-tab="choice" style="flex:1" onclick="startChoiceLearn()">🎯 单词学习</button>
+      <button class="btn btn-sm tab-btn" data-tab="textbook" style="flex:1" onclick="showTextbookList()">📖 课文学习</button>
+      <button class="btn btn-sm tab-btn" data-tab="quiz" style="flex:1" onclick="startQuiz()">🏆 闯关测验</button>
+    </div>
     <div class="quiz-card">
       <div class="quiz-prompt" id="quiz-prompt">这个单词的中文是什么意思？</div>
       <div class="quiz-word" id="quiz-word">hello</div>
@@ -1309,7 +1314,7 @@ const API = ".";
 
   let currentView = 'home';
   function setActiveTab(name) {
-    document.querySelectorAll('#quiz-toggle-bar .tab-btn').forEach(function(b) {
+    document.querySelectorAll('.tab-btn').forEach(function(b) {
       b.classList.toggle('active', b.getAttribute('data-tab') === name);
     });
   }
@@ -1415,7 +1420,7 @@ const API = ".";
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
-    document.getElementById('quiz-toggle-bar').style.display = 'none';
+    document.getElementById('quiz-toggle-bar').style.display = 'flex';
 
     const area = document.getElementById('word-list');
     area.style.display = 'block';
@@ -3638,7 +3643,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     setActiveTab('choice');
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
-    document.getElementById('quiz-toggle-bar').style.display = 'none';
+    document.getElementById('quiz-toggle-bar').style.display = 'flex';
     const area = document.getElementById('choice-learn-area');
     area.style.display = 'block';
     switchView('learn');
