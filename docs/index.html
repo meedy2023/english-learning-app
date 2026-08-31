@@ -1735,6 +1735,72 @@ const API = ".";
     }
   };
 
+  // ========== 讯飞在线语音合成（TTS，国内直连）==========
+  const XFYunTTS = {
+    APP_ID: 'b6392404',
+    API_KEY: 'c757277ed0729711d3b7887a9450b416',
+    API_SECRET: 'ZjA3M2ZkZTBmNTVjOTk5Njk3OThkZTRk',
+    HOST: 'tts-api.xfyun.cn',
+    PATH: '/v2/tts',
+    _b64(buf) {
+      const arr = new Uint8Array(buf); let bin = '';
+      for (let i = 0; i < arr.length; i++) bin += String.fromCharCode(arr[i]);
+      return btoa(bin);
+    },
+    async _signature() {
+      const date = new Date().toUTCString();
+      const origin = 'host: ' + this.HOST + '\ndate: ' + date + '\nGET ' + this.PATH + ' HTTP/1.1';
+      const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(this.API_SECRET),
+        { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(origin));
+      const sigB64 = this._b64(sig);
+      const authOrigin = 'api_key="' + this.API_KEY + '", algorithm="hmac-sha256", headers="host date request-line", signature="' + sigB64 + '"';
+      return { date: date, auth: btoa(authOrigin) };
+    },
+    synth(text, lang, onAudio, onError, voiceOverride) {
+      if (typeof WebSocket === 'undefined' || !window.crypto || !crypto.subtle) { onError && onError(new Error('no websocket')); return; }
+      const voice = voiceOverride || (lang === 'zh-CN' ? zhVoice : enVoice);
+      let ws;
+      try { ws = new WebSocket('wss://' + this.HOST + this.PATH); } catch (e) { onError && onError(e); return; }
+      ws.binaryType = 'arraybuffer';
+      const audioParts = [];
+      let finished = false;
+      ws.onopen = () => {
+        try {
+          ws.send(JSON.stringify({
+            common: { app_id: this.APP_ID },
+            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: voice, tte: 'UTF8', speed: 50, volume: 50, pitch: 50 },
+            data: { status: 2, text: this._b64(new TextEncoder().encode(text)) }
+          }));
+        } catch (e) { onError && onError(e); }
+      };
+      ws.onmessage = (ev) => {
+        try {
+          const msg = JSON.parse(ev.data);
+          if (msg.code !== 0) { try { ws.close(); } catch (e) {} onError && onError(new Error('code=' + msg.code + ' ' + (msg.message || ''))); return; }
+          if (msg.data && msg.data.audio) {
+            const bin = atob(msg.data.audio);
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            audioParts.push(bytes);
+          }
+          if (msg.data && msg.data.status === 2) {
+            finished = true;
+            if (audioParts.length > 0) {
+              const blob = new Blob(audioParts, { type: 'audio/mpeg' });
+              onAudio && onAudio(blob);
+            } else {
+              onError && onError(new Error('无音频数据'));
+            }
+            try { ws.close(); } catch (e) {}
+          }
+        } catch (e) { onError && onError(e); }
+      };
+      ws.onerror = (e) => { onError && onError(e); };
+      ws.onclose = (e) => { if (!finished) onError && onError(new Error('连接关闭 code=' + e.code)); };
+    }
+  };
+
   // ---- 跟读评分 + 静音检测辅助 ----
   let _raTargetText = '';
   let _raRecognizedText = '';
@@ -2156,20 +2222,17 @@ const API = ".";
   // ========== TTS 发音（系统 speechSynthesis + 网络 Edge TTS 兜底）==========
   // 华为等浏览器的 speechSynthesis 可能“有对象但无声”（无 TTS 引擎），此时自动切换到网络发音
   let ttsEngine = localStorage.getItem('tts_engine') || 'auto'; // auto | system | network
-  let enVoice = localStorage.getItem('en_voice') || 'en-GB-SoniaNeural'; // 英文发音类型
-  let zhVoice = localStorage.getItem('zh_voice') || 'zh-CN-XiaoxiaoNeural'; // 中文发音类型
+  let enVoice = localStorage.getItem('en_voice') || 'catherine'; // 英文发音类型
+  let zhVoice = localStorage.getItem('zh_voice') || 'xiaoyan'; // 中文发音类型
   const VOICE_OPTIONS = {
     en: [
-      { id: 'en-GB-SoniaNeural', label: '英式 · 女声（温柔，推荐）' },
-      { id: 'en-GB-RyanNeural', label: '英式 · 男声（稳重）' },
-      { id: 'en-US-JennyNeural', label: '美式 · 女声（清晰）' },
-      { id: 'en-US-AriaNeural', label: '美式 · 女声（活泼）' },
-      { id: 'en-US-GuyNeural', label: '美式 · 男声（浑厚）' }
+      { id: 'catherine', label: '凯瑟琳 · 美式女声（推荐）' },
+      { id: 'henry', label: '亨利 · 美式男声' }
     ],
     zh: [
-      { id: 'zh-CN-XiaoxiaoNeural', label: '晓晓 · 女声（标准）' },
-      { id: 'zh-CN-YunxiNeural', label: '云希 · 男声（标准）' },
-      { id: 'zh-CN-XiaoyiNeural', label: '晓伊 · 女声（童声）' }
+      { id: 'xiaoyan', label: '小燕 · 女声（标准）' },
+      { id: 'xiaofeng', label: '小峰 · 男声（标准）' },
+      { id: 'nannan', label: '楠楠 · 女童声' }
     ]
   };
 
@@ -2185,7 +2248,7 @@ const API = ".";
       let ws;
       try { ws = new WebSocket(this.WS_URL); } catch (e) { onError && onError(e); return; }
       ws.binaryType = 'arraybuffer';
-      const voice = voiceOverride || (lang === 'zh-CN' ? zhVoice : enVoice);
+      const voice = voiceOverride || (lang === 'zh-CN' ? 'zh-CN-XiaoxiaoNeural' : 'en-GB-SoniaNeural');
       const chunks = [];
       const uuid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
         : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
@@ -2212,7 +2275,7 @@ const API = ".";
             .replace(/! /g, "<break time='220ms'/>! ")
             .replace(/\? /g, "<break time='220ms'/>? ");
         }
-        const xmlLang = voice.startsWith('zh') ? 'zh-CN' : (voice.startsWith('en-US') ? 'en-US' : 'en-GB');
+        const xmlLang = lang === 'zh-CN' ? 'zh-CN' : 'en-GB';
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
           + "<mstts:express-as style='" + style + "' styledegree='1.0'>"
@@ -2297,9 +2360,15 @@ const API = ".";
       } catch (e) { this.speakNetwork(text, lang, onEnd); }
     },
     speakNetwork(text, lang, onEnd) {
-      EdgeTTS.synthesize(text, lang,
+      XFYunTTS.synth(text, lang,
         (blob) => playAudioBlob(blob, onEnd),
-        (err) => { console.warn('网络发音失败', err); toast('网络发音失败，请检查网络或切换到系统发音'); if (onEnd) onEnd(); }
+        (err) => {
+          console.warn('讯飞发音失败，兜底 EdgeTTS', err);
+          EdgeTTS.synthesize(text, lang,
+            (blob) => playAudioBlob(blob, onEnd),
+            (e2) => { console.warn('网络发音失败', e2); toast('网络发音失败，请检查网络或切换到系统发音'); if (onEnd) onEnd(); }
+          );
+        }
       );
     }
   };
@@ -2485,16 +2554,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function previewEnVoice() {
     const v = document.getElementById('en-voice-select').value;
-    EdgeTTS.synthesize('Hello! How are you today?', 'en-US',
+    XFYunTTS.synth('Hello! How are you today?', 'en-US',
       function(b) { playAudioBlob(b); },
-      function(err) { console.warn('试听网络发音失败', err); toast('网络发音不可用，已切换系统发音试听'); TTS.speakSystem('Hello! How are you today?', 'en-US'); },
+      function(err) { console.warn('试听失败', err); toast('试听失败' + (err && err.message ? '（' + err.message + '）' : '')); },
       v);
   }
   function previewZhVoice() {
     const v = document.getElementById('zh-voice-select').value;
-    EdgeTTS.synthesize('你好，欢迎学习英语！', 'zh-CN',
+    XFYunTTS.synth('你好，欢迎学习英语！', 'zh-CN',
       function(b) { playAudioBlob(b); },
-      function(err) { console.warn('试听网络发音失败', err); toast('网络发音不可用，已切换系统发音试听'); TTS.speakSystem('你好，欢迎学习英语！', 'zh-CN'); },
+      function(err) { console.warn('试听失败', err); toast('试听失败' + (err && err.message ? '（' + err.message + '）' : '')); },
       v);
   }
   // 初始化发音类型下拉选项
