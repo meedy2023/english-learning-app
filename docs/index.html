@@ -444,6 +444,19 @@
     box-shadow: 0 0 0 2px #ffc107;
   }
   @keyframes combo-pop { 0% { transform: translateX(-50%) scale(0.5); opacity: 0; } 60% { transform: translateX(-50%) scale(1.15); opacity: 1; } 100% { transform: translateX(-50%) scale(1); } }
+  @keyframes firework-fly {
+    0%   { transform: translate(0, 0) scale(1);   opacity: 1; }
+    70%  { opacity: 1; }
+    100% { transform: translate(var(--fx), var(--fy)) scale(0.2); opacity: 0; }
+  }
+  .combo-firework {
+    position: fixed;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9997;
+    animation: firework-fly 0.9s ease-out forwards;
+  }
     @keyframes ra-pulse-blue {
     0%, 100% { box-shadow: 0 0 0 0 rgba(25,118,210,0.4); }
     50% { box-shadow: 0 0 0 6px rgba(25,118,210,0); }
@@ -3468,6 +3481,40 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       el.style.opacity = '0';
       setTimeout(function () { el.style.display = 'none'; el.style.opacity = '1'; }, 250);
     }, 1200);
+    // 烟花粒子：超神(n>=5)更多更大
+    spawnFireworks(el, n);
+  }
+
+  function spawnFireworks(hostEl, n) {
+    if (!hostEl) return;
+    const rect = hostEl.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const count = n >= 5 ? 20 : 14;
+    const sizeBase = n >= 5 ? 10 : 7;
+    const distance = n >= 5 ? 130 : 95;
+    const colors = ['#ff7a00', '#ffc53d', '#ff4d4f', '#52c41a', '#1890ff', '#f759ab', '#9254de', '#faad14'];
+    const docFrag = document.createDocumentFragment();
+    const sparks = [];
+    for (let i = 0; i < count; i++) {
+      const sp = document.createElement('div');
+      sp.className = 'combo-firework';
+      const ang = (Math.PI * 2 * i) / count + (Math.random() * 0.4 - 0.2);
+      const dist = distance * (0.7 + Math.random() * 0.5);
+      sp.style.left = (cx - sizeBase / 2) + 'px';
+      sp.style.top = (cy - sizeBase / 2) + 'px';
+      sp.style.width = (sizeBase + Math.random() * 4) + 'px';
+      sp.style.height = sp.style.width;
+      sp.style.background = colors[i % colors.length];
+      sp.style.setProperty('--fx', Math.cos(ang) * dist + 'px');
+      sp.style.setProperty('--fy', Math.sin(ang) * dist + 'px');
+      docFrag.appendChild(sp);
+      sparks.push(sp);
+    }
+    document.body.appendChild(docFrag);
+    setTimeout(function () {
+      for (const s of sparks) if (s.parentNode) s.parentNode.removeChild(s);
+    }, 1000);
   }
   function hideCombo() {
     const el = document.getElementById('combo-float');
