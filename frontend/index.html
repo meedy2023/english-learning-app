@@ -2053,7 +2053,9 @@ const API = ".";
     _raState = 'playing';
     var blob = new Blob(_raChunks, { type: 'audio/webm' });
     var url = URL.createObjectURL(blob);
+    stopAllAudio();
     var audio = new Audio();
+    window._activeAudio = audio;
     audio.src = url;
     
     var btn = lineEl.closest('.ra-line-item').querySelector('.ra-btn');
@@ -2061,6 +2063,7 @@ const API = ".";
     btn.className = 'ra-btn ra-playing';
     
     audio.onended = function() {
+      if (window._activeAudio === audio) window._activeAudio = null;
       URL.revokeObjectURL(url);
 
       // 获得积分：课文跟读
@@ -2176,7 +2179,9 @@ const API = ".";
     _raState = 'playing';
     var blob = new Blob(_raChunks, { type: 'audio/webm' });
     var url = URL.createObjectURL(blob);
+    stopAllAudio();
     var audio = new Audio();
+    window._activeAudio = audio;
     audio.src = url;
     
     if (btn) {
@@ -2185,6 +2190,7 @@ const API = ".";
     }
     
     audio.onended = function() {
+      if (window._activeAudio === audio) window._activeAudio = null;
       URL.revokeObjectURL(url);
 
       // 获得积分：单词跟读
@@ -2330,13 +2336,18 @@ const API = ".";
     }
   };
 
-  function playAudioBlob(blob, onEnd) {
+  function stopAllAudio() {
+    window._audioToken = (window._audioToken || 0) + 1;
     if (window._activeAudio) {
       try { window._activeAudio.pause(); } catch (e) {}
       try { window._activeAudio.src = ''; } catch (e) {}
       window._activeAudio = null;
     }
-    window._audioToken = (window._audioToken || 0) + 1;
+    if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (e) {} }
+  }
+
+function playAudioBlob(blob, onEnd) {
+    stopAllAudio();
     const token = window._audioToken;
     const url = URL.createObjectURL(blob);
     const audio = new Audio();
@@ -2377,6 +2388,7 @@ const API = ".";
     },
     speak(text, lang, onEnd) {
       if (!text) { if (onEnd) onEnd(); return; }
+      stopAllAudio();
       lang = lang || 'en-US';
       if (this.useNetwork(lang)) this.speakNetwork(text, lang, onEnd);
       else this.speakSystem(text, lang, onEnd);
@@ -2468,13 +2480,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     _raState = 'playing';
     var blob = new Blob(_raChunks, { type: 'audio/webm' });
     var url = URL.createObjectURL(blob);
+    stopAllAudio();
     var audio = new Audio();
+    window._activeAudio = audio;
     audio.src = url;
     if (btnEl) {
       btnEl.textContent = '▶ 回放中...';
       btnEl.className = 'ra-btn ra-playing';
     }
     audio.onended = function() {
+      if (window._activeAudio === audio) window._activeAudio = null;
       URL.revokeObjectURL(url);
       const result = Points.earn('word_record');
       if (result.success) {
@@ -2592,6 +2607,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (sel) sel.value = v;
   }
   function previewEnVoice() {
+    stopAllAudio();
     const v = document.getElementById('en-voice-select').value;
     XFYunTTS.synth('Hello! How are you today?', 'en-US',
       function(b) { playAudioBlob(b); },
@@ -2599,6 +2615,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       v);
   }
   function previewZhVoice() {
+    stopAllAudio();
     const v = document.getElementById('zh-voice-select').value;
     XFYunTTS.synth('你好，欢迎学习英语！', 'zh-CN',
       function(b) { playAudioBlob(b); },
