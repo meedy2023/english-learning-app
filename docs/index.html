@@ -2787,6 +2787,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (words.length === 0) { toast('错词本为空'); return; }
       rvOrder = shuffle(words.map(function (w) { return w.id; }));
       rvIdx = 0;
+      // 第一题不显示「上一个」按钮
+      setTimeout(function () {
+        const prevBtn = document.getElementById('rv-prev-btn');
+        if (prevBtn) prevBtn.style.display = 'none';
+      }, 0);
       rvCorrect = 0;
       rvTotal = 0;
       switchView('review');
@@ -2840,7 +2845,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <button class="btn btn-primary" id="review-next-btn" onclick="nextReviewQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px">
-          <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevReviewQuestion()">← 上一个</button>
+          <button id="rv-prev-btn" class="btn btn-secondary btn-sm" style="flex:1;display:none" onclick="prevReviewQuestion()">← 上一个</button>
+          <button id="rv-skip-btn" class="btn btn-secondary btn-sm" style="flex:1" onclick="reviewSkipQuestion()">跳过</button>
         </div>
       `;
       window._rvCur = { word: word, mode: mode, options: options };
@@ -2908,6 +2914,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     clearTimeout(window._rvAutoNext);
     rvIdx++;
     loadReviewQuestion();
+    setTimeout(function () {
+      const prevBtn = document.getElementById('rv-prev-btn');
+      if (prevBtn) prevBtn.style.display = 'flex';
+    }, 0);
   }
 
   function prevReviewQuestion() {
@@ -2915,6 +2925,36 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (rvIdx <= 0) return;
     rvIdx--;
     loadReviewQuestion();
+    setTimeout(function () {
+      const prevBtn = document.getElementById('rv-prev-btn');
+      if (prevBtn) prevBtn.style.display = (rvIdx > 0 ? 'flex' : 'none');
+    }, 0);
+  }
+
+  function reviewSkipQuestion() {
+    // 跳过只算错题、不算分；与闯关测验的 skipQuiz 行为一致
+    const cur = window._rvCur;
+    if (!cur) return;
+    rvTotal++;
+    document.querySelectorAll('#review-area .choice-opt-btn').forEach(function (b) { b.style.pointerEvents = 'none'; });
+    const feedback = document.getElementById('review-feedback');
+    const nextBtn = document.getElementById('review-next-btn');
+    const word = cur.word;
+    const correctText = cur.mode === 'en2cn' ? word.chinese : word.word;
+    feedback.style.display = 'block';
+    feedback.style.background = '#f6ffed';
+    feedback.style.color = '#52c41a';
+    feedback.innerHTML = '<strong>⏭ 已跳过</strong><br>正确答案：<strong>' + correctText + '</strong>';
+    Review.wrong(word.id);
+    if (rvIdx + 1 >= rvOrder.length) {
+      nextBtn.style.display = 'block';
+      nextBtn.textContent = '完成复习 🎉';
+    }
+    clearTimeout(window._rvAutoNext);
+    const isLastQ = rvIdx + 1 >= rvOrder.length;
+    if (!isLastQ) {
+      window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, 1200);
+    }
   }
 
   function showReviewSummary() {
