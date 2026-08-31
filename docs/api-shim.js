@@ -95,19 +95,19 @@
     "三下3": ["Unit 3 Yummy food", "三年级下册"], "三下4": ["Unit 4 What's your hobby?", "三年级下册"],
     "三下5": ["Unit 5 What time is it?", "三年级下册"], "三下6": ["Unit 6 A great week", "三年级下册"],
     // 四年级
-    "四三上1": ["Unit 1 I love sports", "四年级上册"], "四三上2": ["Unit 2 Helping at home", "四年级上册"],
-    "四三上3": ["Unit 3 What's the weather like?", "四年级上册"], "四三上4": ["Unit 4 Wonderful seasons", "四年级上册"],
-    "四三上5": ["Unit 5 Let's go!", "四年级上册"], "四三上6": ["Unit 6 Find your way", "四年级上册"],
-    "四三下1": ["Unit 1 People at work", "四年级下册"], "四三下2": ["Unit 2 How do you feel today", "四年级下册"],
-    "四三下3": ["Unit 3 Everyone's got talent", "四年级下册"], "四三下4": ["Unit 4 Plant life", "四年级下册"],
-    "四三下5": ["Unit 5 School activities", "四年级下册"], "四三下6": ["Unit 6 Cool clothes", "四年级下册"],
+    "四上1": ["Unit 1 I love sports", "四年级上册"], "四上2": ["Unit 2 Helping at home", "四年级上册"],
+    "四上3": ["Unit 3 What's the weather like?", "四年级上册"], "四上4": ["Unit 4 Wonderful seasons", "四年级上册"],
+    "四上5": ["Unit 5 Let's go!", "四年级上册"], "四上6": ["Unit 6 Find your way", "四年级上册"],
+    "四下1": ["Unit 1 People at work", "四年级下册"], "四下2": ["Unit 2 How do you feel today", "四年级下册"],
+    "四下3": ["Unit 3 Everyone's got talent", "四年级下册"], "四下4": ["Unit 4 Plant life", "四年级下册"],
+    "四下5": ["Unit 5 School activities", "四年级下册"], "四下6": ["Unit 6 Cool clothes", "四年级下册"],
             // 五年级
-    "五三上1": ["Unit 1 What's on your plate?", "五年级上册"], "五三上2": ["Unit 2 A green life", "五年级上册"],
-    "五三上3": ["Unit 3 Happy together", "五年级上册"], "五三上4": ["Unit 4 A better me", "五年级上册"],
-    "五三上5": ["Unit 5 Look into the future", "五年级上册"], "五三上6": ["Unit 6 Enjoy the festivals", "五年级上册"],
-    "五三下1": ["Unit 1 Growing up", "五年级下册"], "五三下2": ["Unit 2 You can make a difference", "五年级下册"],
-    "五三下3": ["Unit 3 We love reading", "五年级下册"], "五三下4": ["Unit 4 Back in time", "五年级下册"],
-    "五三下5": ["Unit 5 Work it out", "五年级下册"], "五三下6": ["Unit 6 Then and now", "五年级下册"],
+    "五上1": ["Unit 1 What's on your plate?", "五年级上册"], "五上2": ["Unit 2 A green life", "五年级上册"],
+    "五上3": ["Unit 3 Happy together", "五年级上册"], "五上4": ["Unit 4 A better me", "五年级上册"],
+    "五上5": ["Unit 5 Look into the future", "五年级上册"], "五上6": ["Unit 6 Enjoy the festivals", "五年级上册"],
+    "五下1": ["Unit 1 Growing up", "五年级下册"], "五下2": ["Unit 2 You can make a difference", "五年级下册"],
+    "五下3": ["Unit 3 We love reading", "五年级下册"], "五下4": ["Unit 4 Back in time", "五年级下册"],
+    "五下5": ["Unit 5 Work it out", "五年级下册"], "五下6": ["Unit 6 Then and now", "五年级下册"],
   };
 
   // ---------- 课文模块列表 ----------
