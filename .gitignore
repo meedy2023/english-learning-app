@@ -14,3 +14,7 @@ __pycache__/
 *LOG.md
 TEST_GUIDE.md
 WORK_COMPLETION_REPORT.md
+
+# Cloudflare legacy
+wrangler.toml
+docs/diag.html
