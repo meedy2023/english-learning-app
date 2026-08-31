@@ -1410,6 +1410,7 @@ const API = ".";
     if (currentModule && WORD_TO_LESSON[currentModule]) {
       const mapping = WORD_TO_LESSON[currentModule];
       // 直接进入对应模块的单元列表（带上学期参数）
+      setActiveTab('textbook');
       await openLessonModule(mapping.module, mapping.grade);
       return;
     }
