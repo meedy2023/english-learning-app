@@ -1760,8 +1760,12 @@ const API = ".";
     synth(text, lang, onAudio, onError, voiceOverride) {
       if (typeof WebSocket === 'undefined' || !window.crypto || !crypto.subtle) { onError && onError(new Error('no websocket')); return; }
       const voice = voiceOverride || (lang === 'zh-CN' ? zhVoice : enVoice);
-      let ws;
-      try { ws = new WebSocket('wss://' + this.HOST + this.PATH); } catch (e) { onError && onError(e); return; }
+      (async () => {
+      try {
+      const { date, auth } = await this._signature();
+      const url = 'wss://' + this.HOST + this.PATH + '?authorization=' + encodeURIComponent(auth) +
+        '&date=' + encodeURIComponent(date) + '&host=' + this.HOST;
+      const ws = new WebSocket(url);
       ws.binaryType = 'arraybuffer';
       const audioParts = [];
       let finished = false;
@@ -1798,6 +1802,8 @@ const API = ".";
       };
       ws.onerror = (e) => { onError && onError(e); };
       ws.onclose = (e) => { if (!finished) onError && onError(new Error('连接关闭 code=' + e.code)); };
+      } catch (e) { onError && onError(e); }
+      })();
     }
   };
 
