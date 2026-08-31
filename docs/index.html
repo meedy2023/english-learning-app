@@ -2557,21 +2557,21 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function speakAll(word, chinese, exampleEn, exampleCn) {
-    // 朗读顺序：单词 -> 中文 -> 英文例句 -> 例句中文
+    // 朗读顺序：单词 -> 中文 -> 英文例句 -> 例句中文（callback 链驱动，播完一段再播下一段）
     const parts = [
-      { text: word,       lang: 'en-US', delay: 600 },
-      { text: chinese,    lang: 'zh-CN', delay: 800 },
-      { text: exampleEn,  lang: 'en-US', delay: 1000 },
-      { text: exampleCn,  lang: 'zh-CN', delay: 0   },
-    ];
-    let delay = 300;
-    for (const p of parts) {
-      setTimeout(() => {
-        if (!p.text) return;
-        TTS.speak(p.text, p.lang);
-      }, delay);
-      delay += p.delay + 200;
-    }
+      { text: word,       lang: 'en-US' },
+      { text: chinese,    lang: 'zh-CN' },
+      { text: exampleEn,  lang: 'en-US' },
+      { text: exampleCn,  lang: 'zh-CN' },
+    ].filter(p => p.text);
+    if (parts.length === 0) return;
+    let idx = 0;
+    const speakNext = () => {
+      if (idx >= parts.length) return;
+      const p = parts[idx++];
+      TTS.speak(p.text, p.lang, speakNext);
+    };
+    speakNext();
   }
 
   // 提前加载 voices（某些浏览器需要）
