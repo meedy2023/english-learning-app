@@ -184,17 +184,17 @@ def textbook_by_word_module(word_module: str):
 # 单词模块 → 课文模块+学期
 WORD_TO_LESSON_MODULE = {
     # 三年级上册（2024新版：Welcome + Unit 1~6）
-    '上0': ('Welcome to school', '三年级上册'),
-    '上1': ("Unit 1 Let's be friends!", '三年级上册'),
-    '上2': ('Unit 2 My school things', '三年级上册'),
-    '上3': ("Unit 3 It's a colourful world!", '三年级上册'),
-    '上4': ('Unit 4 Fun with numbers', '三年级上册'),
-    '上5': ("Unit 5 We're family", '三年级上册'),
-    '上6': ('Unit 6 My sweet home', '三年级上册'),
+    '三上0': ('Welcome to school', '三年级上册'),
+    '三上1': ("Unit 1 Let's be friends!", '三年级上册'),
+    '三上2': ('Unit 2 My school things', '三年级上册'),
+    '三上3': ("Unit 3 It's a colourful world!", '三年级上册'),
+    '三上4': ('Unit 4 Fun with numbers', '三年级上册'),
+    '三上5': ("Unit 5 We're family", '三年级上册'),
+    '三上6': ('Unit 6 My sweet home', '三年级上册'),
     # 三年级下册（2024新版：Unit 1~6）
-    '下1': ('Unit 1 Animal friends', '三年级下册'), '下2': ('Unit 2 Know your body', '三年级下册'),
-    '下3': ('Unit 3 Yummy food', '三年级下册'), '下4': ("Unit 4 What's your hobby?", '三年级下册'),
-    '下5': ('Unit 5 What time is it?', '三年级下册'), '下6': ('Unit 6 A great week', '三年级下册'),
+    '三下1': ('Unit 1 Animal friends', '三年级下册'), '三下2': ('Unit 2 Know your body', '三年级下册'),
+    '三下3': ('Unit 3 Yummy food', '三年级下册'), '三下4': ("Unit 4 What's your hobby?", '三年级下册'),
+    '三下5': ('Unit 5 What time is it?', '三年级下册'), '三下6': ('Unit 6 A great week', '三年级下册'),
     # 四年级
     '四上1': ('Unit 1 I love sports', '四年级上册'), '四上2': ('Unit 2 Helping at home', '四年级上册'),
     '四上3': ("Unit 3 What's the weather like?", '四年级上册'), '四上4': ('Unit 4 Wonderful seasons', '四年级上册'),
