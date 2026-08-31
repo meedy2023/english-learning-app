@@ -1454,6 +1454,9 @@ const API = ".";
   }
 
   async function openLessonModule(moduleName, grade) {
+    switchView('learn');
+    const quizBar = document.getElementById('quiz-toggle-bar');
+    if (quizBar) quizBar.style.display = 'flex';
     const gradeLabel = grade || currentLessonGrade || "三年级上册";
     currentLessonModule = moduleName;
     currentLessonGrade = grade || currentLessonGrade || '三年级上册';
