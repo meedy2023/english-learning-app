@@ -2340,7 +2340,7 @@ const API = ".";
     useNetwork(lang) {
       if (ttsEngine === 'network') return true;
       if (ttsEngine === 'system') return false;
-      return !this.hasVoice(lang); // auto: 系统无可用语音则走网络
+      return true; // auto: 优先网络(讯飞国内直连)，确保设置里的发音类型真正生效
     },
     speak(text, lang, onEnd) {
       if (!text) { if (onEnd) onEnd(); return; }
