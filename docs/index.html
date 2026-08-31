@@ -3458,9 +3458,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const big = n >= 5 ? ' ⚡超神连击！' : (n >= 3 ? ' 连击！' : '');
     el.textContent = (icons[Math.min(n, 5)] || '🔥') + ' ' + n + ' 连击' + big;
     el.style.display = 'block';
+    el.style.opacity = '1';
     el.style.animation = 'none';
     void el.offsetWidth; // 重排触发动画
     el.style.animation = 'combo-pop 0.35s ease';
+    // 展示 1.2 秒后自动渐隐消失
+    if (el._hideTimer) clearTimeout(el._hideTimer);
+    el._hideTimer = setTimeout(function () {
+      el.style.opacity = '0';
+      setTimeout(function () { el.style.display = 'none'; el.style.opacity = '1'; }, 250);
+    }, 1200);
   }
   function hideCombo() {
     const el = document.getElementById('combo-float');
