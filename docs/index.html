@@ -155,6 +155,17 @@
       color: #6c63ff;
     }
     .btn-sm { padding: 8px 16px; font-size: 13px; border-radius: 8px; }
+    /* ===== 学习页 tab（单词表/单词学习/课文学习/闯关测验）统一样式 + 高亮 ===== */
+    .tab-btn {
+      background: #f0f0f8;
+      color: #6c63ff;
+      font-weight: 600;
+    }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #4f9fff, #6c63ff);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(108, 99, 255, 0.35);
+    }
     .btn-icon {
       background: none;
       border: none;
@@ -603,10 +614,10 @@
     <button class="btn btn-secondary" onclick="switchView('home')" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回首页</button>
     <div class="section-title" id="learn-module-title">上册 Module 1</div>
     <div id="quiz-toggle-bar" style="display:flex;gap:8px;margin-bottom:12px">
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="showWordList()">📋 单词表</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="startChoiceLearn()">🎯 单词学习</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="showTextbookList()">📖 课文学习</button>
-      <button class="btn btn-primary btn-sm" style="flex:1" onclick="startQuiz()">🏆 闯关测验</button>
+      <button class="btn btn-sm tab-btn active" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
+      <button class="btn btn-sm tab-btn" data-tab="choice" style="flex:1" onclick="startChoiceLearn()">🎯 单词学习</button>
+      <button class="btn btn-sm tab-btn" data-tab="textbook" style="flex:1" onclick="showTextbookList()">📖 课文学习</button>
+      <button class="btn btn-sm tab-btn" data-tab="quiz" style="flex:1" onclick="startQuiz()">🏆 闯关测验</button>
     </div>
     <div class="word-list" id="word-list"></div>
     <div id="word-detail-area" style="display:none"></div>
@@ -1297,6 +1308,12 @@ const API = ".";
   }
 
   let currentView = 'home';
+  function setActiveTab(name) {
+    document.querySelectorAll('#quiz-toggle-bar .tab-btn').forEach(function(b) {
+      b.classList.toggle('active', b.getAttribute('data-tab') === name);
+    });
+  }
+
   function switchView(name) {
     // 学习页面内点击学习导航，不重复切换
     if (name === 'learn' && currentView === 'learn') return;
@@ -1394,6 +1411,7 @@ const API = ".";
 
     // 否则显示所有课文模块列表
     switchView('learn');
+    setActiveTab('textbook');
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
@@ -3144,6 +3162,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   async function showWordList() {
     // 确保在学习视图
     switchView("learn");
+    setActiveTab('wordlist');
     // 隐藏所有学习子视图
     document.getElementById("word-detail-area").style.display = "none";
     document.getElementById("choice-learn-area").style.display = "none";
@@ -3272,6 +3291,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const skipBtn = document.querySelector('#view-quiz .btn-secondary[onclick="skipQuiz()"]');
     if (skipBtn) skipBtn.parentElement.style.display = "flex";
     document.getElementById("quiz-hint").style.display = "block";
+    setActiveTab('quiz');
     switchView("quiz");
     loadQuizQuestion();
   }
@@ -3615,6 +3635,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     hideCombo();
     const ids = cl_words.map(w => w.id);
     cl_order = shuffle(ids);
+    setActiveTab('choice');
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('quiz-toggle-bar').style.display = 'none';
