@@ -2331,12 +2331,26 @@ const API = ".";
   };
 
   function playAudioBlob(blob, onEnd) {
+    if (window._activeAudio) {
+      try { window._activeAudio.pause(); } catch (e) {}
+      try { window._activeAudio.src = ''; } catch (e) {}
+      window._activeAudio = null;
+    }
+    window._audioToken = (window._audioToken || 0) + 1;
+    const token = window._audioToken;
     const url = URL.createObjectURL(blob);
     const audio = new Audio();
+    window._activeAudio = audio;
     audio.src = url;
-    audio.onended = () => { URL.revokeObjectURL(url); if (onEnd) onEnd(); };
-    audio.onerror = () => { URL.revokeObjectURL(url); if (onEnd) onEnd(); };
-    audio.play().catch(() => { toast('音频播放失败，请检查设备音量'); URL.revokeObjectURL(url); if (onEnd) onEnd(); });
+    const finish = () => {
+      if (token !== window._audioToken) return;
+      if (window._activeAudio === audio) window._activeAudio = null;
+      URL.revokeObjectURL(url);
+      if (onEnd) onEnd();
+    };
+    audio.onended = () => finish();
+    audio.onerror = () => finish();
+    audio.play().catch(() => { toast('音频播放失败，请检查设备音量'); finish(); });
   }
 
   // ---- 统一 TTS 调度 ----
