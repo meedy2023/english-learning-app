@@ -4159,11 +4159,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let phonicsGroups = [];
   let phonicsCurrentGroup = null;
 
-  // 判断课时标题朗读内容：单个字母读字母名（如 Aa→A），字母组合读代表词
+  // 字母名拼写映射（让 TTS 读准字母名：A→ay/eɪ/，B→bee/biː/）
+  const LETTER_NAMES = { A:'ay', B:'bee', C:'see', D:'dee', E:'ee', F:'eff', G:'gee', H:'aitch', I:'eye', J:'jay', K:'kay', L:'ell', M:'em', N:'en', O:'oh', P:'pee', Q:'cue', R:'ar', S:'ess', T:'tee', U:'you', V:'vee', W:'double-u', X:'ex', Y:'why', Z:'zee' };
+  // 标题朗读内容：单个字母读字母名（Aa→/eɪ/），字母组合读代表词（-ad→dad）
   function phonicsTitleRead(lesson) {
     const t = (lesson.title || '').trim();
     if (t.length === 2 && t[0].toLowerCase() === t[1].toLowerCase()) {
-      return t[0].toUpperCase();
+      return LETTER_NAMES[t[0].toUpperCase()] || t[0].toUpperCase();
     }
     return lesson.sound_word || t;
   }
