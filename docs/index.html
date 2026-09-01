@@ -4159,6 +4159,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let phonicsGroups = [];
   let phonicsCurrentGroup = null;
 
+  // 判断课时标题朗读内容：单个字母读字母名（如 Aa→A），字母组合读代表词
+  function phonicsTitleRead(lesson) {
+    const t = (lesson.title || '').trim();
+    if (t.length === 2 && t[0].toLowerCase() === t[1].toLowerCase()) {
+      return t[0].toUpperCase();
+    }
+    return lesson.sound_word || t;
+  }
+
   async function openPhonics() {
     switchView('phonics');
     loadPhonics();
@@ -4210,9 +4219,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const card = document.createElement('div');
         card.className = 'word-detail-card';
         card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
-        let html = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'
+        const titleRead = phonicsTitleRead(lesson);
+        let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">'
           + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
           + '<span style="font-size:16px;color:#f5a623;font-weight:700">' + lesson.sound + '</span>'
+          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakWord(\'' + esc(titleRead) + '\')">🔊 朗读</button>'
           + '</div>'
           + '<div style="font-size:12px;color:#888;margin-bottom:10px">💡 ' + lesson.tip + '</div>';
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
