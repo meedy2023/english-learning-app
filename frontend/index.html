@@ -749,7 +749,7 @@
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
         <div style="min-width:0">
           <div style="font-size:15px;font-weight:600;color:#333">🗣️ 英文发音</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">英式/美式、男声/女声</div>
+          <div style="font-size:12px;color:#999;margin-top:2px">女声/男声/儿童音</div>
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
           <select id="en-voice-select" onchange="setEnVoice(this.value)" style="font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:170px"></select>
@@ -759,7 +759,7 @@
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0">
         <div style="min-width:0">
           <div style="font-size:15px;font-weight:600;color:#333">🗣️ 中文发音</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">女声/男声/童声</div>
+          <div style="font-size:12px;color:#999;margin-top:2px">男声/女声/儿童声</div>
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
           <select id="zh-voice-select" onchange="setZhVoice(this.value)" style="font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:170px"></select>
@@ -1807,6 +1807,7 @@ const API = ".";
     synth(text, lang, onAudio, onError, voiceOverride) {
       if (typeof WebSocket === 'undefined' || !window.crypto || !crypto.subtle) { onError && onError(new Error('no websocket')); return; }
       const voice = voiceOverride || (lang === 'zh-CN' ? zhVoice : enVoice);
+      const vp = VOICE_PROFILES[voice] || { vcn: voice, pitch: 50, speed: 50 };
       (async () => {
       try {
       const { date, auth } = await this._signature();
@@ -1820,7 +1821,7 @@ const API = ".";
         try {
           ws.send(JSON.stringify({
             common: { app_id: this.APP_ID },
-            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: voice, tte: 'UTF8', speed: 50, volume: 50, pitch: 50 },
+            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: vp.vcn, tte: 'UTF8', speed: vp.speed, volume: 50, pitch: vp.pitch },
             data: { status: 2, text: this._b64(new TextEncoder().encode(text)) }
           }));
         } catch (e) { onError && onError(e); }
@@ -2337,20 +2338,26 @@ const API = ".";
   let zhVoice = localStorage.getItem('zh_voice') || 'xiaoyan'; // 中文发音类型
   const VOICE_OPTIONS = {
     en: [
-      { id: 'catherine', label: '凯瑟琳 · 美式女声（推荐）' },
-      { id: 'henry', label: '亨利 · 美式男声' },
-      { id: 'john', label: '约翰 · 美式男声' }
+      { id: 'catherine', label: '凯瑟琳 · 女声' },
+      { id: 'henry', label: '亨利 · 男声' },
+      { id: 'child_en', label: '儿童音（欢快童声）' }
     ],
     zh: [
-      { id: 'xiaoyan', label: '小燕 · 女声（标准，推荐）' },
-      { id: 'xiaofeng', label: '小峰 · 男声（标准）' },
-      { id: 'nannan', label: '楠楠 · 女童声' },
-      { id: 'aisjiuxu', label: '许久 · 男声' },
-      { id: 'aisxping', label: '小萍 · 女声' },
-      { id: 'aisjinger', label: '小婧 · 女声' },
-      { id: 'aisBABYXu', label: '许小宝 · 男童声' },
-      { id: 'xiaoyu', label: '小宇 · 男声' }
+      { id: 'xiaoyan', label: '小燕 · 女声' },
+      { id: 'xiaofeng', label: '小峰 · 男声' },
+      { id: 'aisBABYXu', label: '许小宝 · 儿童声' }
     ]
+  };
+
+  // 发音人配置：id -> 讯飞 vcn + 音调(pitch) + 语速(speed)
+  // 英文无真童声，用凯瑟琳女声 + 高音调模拟儿童音
+  const VOICE_PROFILES = {
+    catherine: { vcn: 'catherine', pitch: 50, speed: 50 },
+    henry: { vcn: 'henry', pitch: 50, speed: 50 },
+    child_en: { vcn: 'catherine', pitch: 85, speed: 55 },
+    xiaoyan: { vcn: 'xiaoyan', pitch: 50, speed: 50 },
+    xiaofeng: { vcn: 'xiaofeng', pitch: 50, speed: 50 },
+    aisBABYXu: { vcn: 'aisBABYXu', pitch: 55, speed: 50 }
   };
 
   function escapeXml(s) {
@@ -2710,6 +2717,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   // 初始化发音类型下拉选项
   function initVoiceSelects() {
+    // 兜底：清理已被移除的旧发音人选项，回退到默认值
+    if (!VOICE_OPTIONS.en.some(function(o) { return o.id === enVoice; })) { enVoice = 'catherine'; localStorage.setItem('en_voice', enVoice); }
+    if (!VOICE_OPTIONS.zh.some(function(o) { return o.id === zhVoice; })) { zhVoice = 'xiaoyan'; localStorage.setItem('zh_voice', zhVoice); }
     const enSel = document.getElementById('en-voice-select');
     const zhSel = document.getElementById('zh-voice-select');
     if (enSel) {
