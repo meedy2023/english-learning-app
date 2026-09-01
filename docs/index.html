@@ -1953,38 +1953,90 @@ const API = ".";
   }
 
   function raComputeScore() {
-    const norm = s => String(s || '').toLowerCase().replace(/[^a-z0-9'\s]/g, ' ').trim();
+    // 归一化：小写、去标点、展开缩写
+    const norm = s => String(s || '').toLowerCase()
+      .replace(/[^a-z0-9'\s]/g, ' ')
+      .replace(/\b(i'm|im)\b/g, 'i am')
+      .replace(/\b(don't|dont)\b/g, 'do not')
+      .replace(/\b(can't|cant)\b/g, 'can not')
+      .replace(/\b(won't|wont)\b/g, 'will not')
+      .replace(/\b(isn't|isnt)\b/g, 'is not')
+      .replace(/\b(aren't|arent)\b/g, 'are not')
+      .replace(/\b(doesn't|doesnt)\b/g, 'does not')
+      .replace(/\b(didn't|didnt)\b/g, 'did not')
+      .replace(/\b(it's)\b/g, 'it is')
+      .replace(/\b(that's|thats)\b/g, 'that is')
+      .replace(/\b(what's|whats)\b/g, 'what is')
+      .replace(/\b(who's|whos)\b/g, 'who is')
+      .replace(/\b(he's|hes)\b/g, 'he is')
+      .replace(/\b(she's|shes)\b/g, 'she is')
+      .replace(/\b(we're)\b/g, 'we are')
+      .replace(/\b(they're|theyre)\b/g, 'they are')
+      .replace(/\b(you're|youre)\b/g, 'you are')
+      .replace(/\b(let's|lets)\b/g, 'let us')
+      .replace(/\bits\b/g, 'it is')
+      .replace(/\s+/g, ' ')
+      .trim();
+    // 词形还原：去复数/第三人称/时态后缀，让词形差异不扣分
+    const stem = w => {
+      const SPELL = { colour: 'color', favourite: 'favorite', mum: 'mom', centre: 'center' };
+      if (SPELL[w]) return SPELL[w];
+      if (w.length <= 3) return w;
+      if (w.endsWith('ies') && w.length > 4) return w.slice(0, -3) + 'y';
+      if (w.endsWith('es') && w.length > 3 && /(ss|sh|ch|x|z|o)es$/.test(w)) return w.slice(0, -2);
+      if (w.endsWith('s') && w.length > 3 && !w.endsWith('ss') && !w.endsWith('us') && !w.endsWith('is')) return w.slice(0, -1);
+      if (w.endsWith('ing') && w.length > 5) return w.slice(0, -3);
+      if (w.endsWith('ed') && w.length > 5 && !w.endsWith('eed')) return w.slice(0, -2);
+      return w;
+    };
+    // 词级编辑距离
+    const lev = (a, b) => {
+      const m = a.length, n = b.length;
+      if (!m) return n; if (!n) return m;
+      const dp = new Array(m + 1);
+      for (let i = 0; i <= m; i++) { dp[i] = new Array(n + 1); dp[i][0] = i; }
+      for (let j = 0; j <= n; j++) dp[0][j] = j;
+      for (let i = 1; i <= m; i++) {
+        for (let j = 1; j <= n; j++) {
+          dp[i][j] = Math.min(dp[i-1][j] + 1, dp[i][j-1] + 1, dp[i-1][j-1] + (a[i-1] === b[j-1] ? 0 : 1));
+        }
+      }
+      return dp[m][n];
+    };
     const t = norm(_raTargetText);
     const s = norm(_raRecognizedText);
     if (t && s) {
-      const tw = t.split(/\s+/).filter(Boolean);
-      const sw = s.split(/\s+/).filter(Boolean);
+      const tw = t.split(/\s+/).filter(Boolean).map(stem);
+      const sw = s.split(/\s+/).filter(Boolean).map(stem);
       if (tw.length && sw.length) {
-        const tset = new Set(tw);
-        let hit = 0;
-        sw.forEach(w => { if (tset.has(w)) hit++; });
-        const precision = hit / sw.length;
-        const recall = hit / tw.length;
-        const f1 = (precision + recall) > 0 ? 2 * precision * recall / (precision + recall) : 0;
-        return Math.round(f1 * 100);
+        const dist = lev(tw, sw);
+        const sim = 1 - dist / Math.max(tw.length, sw.length);
+        // 宽容映射：正确跟读（少量词形/虚词差异）也能上高分
+        let score;
+        if (sim >= 0.85) score = 90 + (sim - 0.85) / 0.15 * 10;      // 90~100
+        else if (sim >= 0.6) score = 75 + (sim - 0.6) / 0.25 * 15;    // 75~90
+        else if (sim >= 0.4) score = 55 + (sim - 0.4) / 0.2 * 20;     // 55~75
+        else score = sim / 0.4 * 55;                                  // 0~55
+        return Math.max(0, Math.min(100, Math.round(score)));
       }
     }
     // 语音识别不可用（华为/无GMS/断网）：声学兜底评分
     return raAcousticScore();
   }
 
+
   // 声学兜底评分：语音时长占比 + 时长匹配 + 音量
   function raAcousticScore() {
     const totalMs = Date.now() - _raStartMs;
     if (totalMs <= 500) return null;
     const wordCount = String(_raTargetText || '').trim().split(/\s+/).filter(Boolean).length || 1;
-    const expectMs = Math.max(1500, wordCount * 450);
+    const expectMs = Math.max(1200, wordCount * 380);
     const ratio = _raVoiceMs / totalMs;
-    const ratioScore = Math.min(1, ratio / 0.6) * 100;
+    const ratioScore = Math.min(1, ratio / 0.55) * 100;
     const durRatio = Math.min(totalMs, expectMs) / Math.max(totalMs, expectMs);
-    const durScore = durRatio * 100;
-    const volScore = Math.min(1, _raRmsPeak / 0.06) * 100;
-    const avg = ratioScore * 0.4 + durScore * 0.35 + volScore * 0.25;
+    const durScore = 60 + durRatio * 40;
+    const volScore = Math.min(1, _raRmsPeak / 0.04) * 100;
+    const avg = ratioScore * 0.45 + durScore * 0.30 + volScore * 0.25;
     return Math.max(0, Math.min(100, Math.round(avg)));
   }
 
