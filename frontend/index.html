@@ -1359,6 +1359,7 @@ const API = ".";
     document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz" || name === "phonics") ? "none" : "inline";
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
+    if (name === "phonics") loadPhonics();
     if (name === "home") {
       // 如果没有选年级，回到年级选择页
       if (!currentGrade) { switchView('grade'); loadGrades(); return; }
@@ -1373,7 +1374,7 @@ const API = ".";
     }
     // 更新底部导航激活状态
     var navName = (name === 'ket-quiz') ? 'ket' : name;
-    ['home', 'learn', 'ket', 'report'].forEach(function(v) {
+    ['home', 'learn', 'ket', 'report', 'phonics'].forEach(function(v) {
       var el = document.getElementById('nav-' + v);
       if (el) {
         if (v === navName) el.classList.add('active');
@@ -4157,6 +4158,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     </div>
     <div id="nav-report" class="nav-item" onclick="switchView('report')">
       <span class="nav-item-icon">📊</span>报告
+    </div>
+    <div id="nav-phonics" class="nav-item" onclick="switchView('phonics')">
+      <span class="nav-item-icon">🔤</span>拼读
     </div>
   </div>
   `);
