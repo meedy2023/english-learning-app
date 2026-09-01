@@ -611,7 +611,7 @@
 
   <!-- ======= 学习：单词列表 ======= -->
   <div id="view-learn" class="view">
-    <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
+    <button id="learn-back-home" class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
     <div class="section-title" id="learn-module-title">上册 Module 1</div>
     <div id="quiz-toggle-bar" style="display:flex;gap:8px;margin-bottom:12px">
       <button class="btn btn-sm tab-btn active" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
@@ -3169,6 +3169,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 确保在学习视图
     switchView("learn");
     setActiveTab('wordlist');
+    const _bh = document.getElementById("learn-back-home");
+    if (_bh) _bh.style.display = "flex";
     // 隐藏所有学习子视图
     document.getElementById("word-detail-area").style.display = "none";
     document.getElementById("choice-learn-area").style.display = "none";
@@ -3213,6 +3215,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function showWordDetail(w) {
     document.getElementById("word-list").style.display = "none";
     document.getElementById("quiz-toggle-bar").style.display = "none";
+    const _bh = document.getElementById("learn-back-home");
+    if (_bh) _bh.style.display = "none";
     const area = document.getElementById("word-detail-area");
     area.style.display = "block";
 
