@@ -627,6 +627,7 @@
 
   <!-- ======= 测验 ======= -->
   <div id="view-quiz" class="view">
+    <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
     <div style="display:flex;gap:8px;margin-bottom:16px">
       <button class="btn btn-sm tab-btn" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
       <button class="btn btn-sm tab-btn" data-tab="choice" style="flex:1" onclick="startChoiceLearn()">🎯 单词学习</button>
@@ -3216,7 +3217,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById("word-list").style.display = "none";
     document.getElementById("quiz-toggle-bar").style.display = "none";
     const _bh = document.getElementById("learn-back-home");
-    if (_bh) _bh.style.display = "none";
+    if (_bh) _bh.style.display = "flex";
     const area = document.getElementById("word-detail-area");
     area.style.display = "block";
 
@@ -3230,7 +3231,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = s => (s || "").replace(/'/g, "\\'");
     const wordId = 'ra-word-' + w.id;
     area.innerHTML = `
-      <button class="btn btn-secondary" onclick="showWordList()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px"><span style="font-size:16px">←</span> 返回单词表</button>
       <div class="word-detail-card" id="${wordId}">
         <div class="word-type-badge">${w.type}</div>
         <div class="word-text" id="${wordId}-text">${capitalize(w.word)}</div>
@@ -3691,8 +3691,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
 
     const area = document.getElementById('choice-learn-area');
-    area.innerHTML = '<button class="btn btn-secondary" onclick="showWordList()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回单词表</button>' +
-    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+    area.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
       '<span style="font-size:13px;color:#999">' + currentModule + '</span>' +
       '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden">' +
         '<div style="height:100%;background:linear-gradient(90deg,#4f9fff,#6c63ff);width:' + pct + '%;border-radius:3px;transition:width .3s"></div>' +
