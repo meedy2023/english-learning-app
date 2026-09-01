@@ -611,7 +611,7 @@
 
   <!-- ======= 学习：单词列表 ======= -->
   <div id="view-learn" class="view">
-    <button class="btn btn-secondary" onclick="switchView('home')" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回首页</button>
+    <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
     <div class="section-title" id="learn-module-title">上册 Module 1</div>
     <div id="quiz-toggle-bar" style="display:flex;gap:8px;margin-bottom:12px">
       <button class="btn btn-sm tab-btn active" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
@@ -655,14 +655,14 @@
 
 <!-- ======= 错词复习 ======= -->
 <div id="view-review" class="view">
-  <button class="btn btn-secondary" onclick="switchView('home')" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回首页</button>
+  <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
   <div class="section-title">🔴 错词复习</div>
   <div id="review-area"></div>
 </div>
 
 <!-- 课文学习：列表页 -->
 <div id="view-lesson-list" class="view">
-    <button class="btn btn-secondary" onclick="switchView('home')" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回首页</button>
+    <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
     <div class="section-title">选择模块开始学习</div>
     <div class="module-grid" id="lesson-module-grid">
         <div class="spinner"></div>
@@ -671,7 +671,7 @@
 
 <!-- 课文学习：详情页 -->
 <div id="view-lesson-detail" class="view">
-    <button class="btn btn-secondary" onclick="showLessonList()" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回模块列表</button>
+    <button class="btn btn-secondary" onclick="showLessonList()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回模块列表</button>
     <div class="section-title" id="lesson-unit-title">课文标题</div>
     
     <div class="word-detail-card" style="text-align: left;">
@@ -775,7 +775,7 @@
       <!-- 分类列表由 JS 动态生成 -->
     </div>
     <div id="ket-content-area" style="display:none">
-      <button class="btn btn-secondary" onclick="backToKetCategories()" style="margin-bottom:12px">
+      <button class="btn btn-secondary" onclick="backToKetCategories()" style="position:sticky;top:68px;z-index:95;margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22)">
         ← 返回分类
       </button>
       <div id="ket-content-title" style="font-size:18px;font-weight:600;margin-bottom:16px"></div>
@@ -786,7 +786,7 @@
 
 <!-- ======= KET 测验 ======= -->
 <div id="view-ket-quiz" class="view">
-  <button class="btn btn-secondary" onclick="backToKetCategory()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回分类</button>
+  <button class="btn btn-secondary" onclick="backToKetCategory()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px"><span style="font-size:16px">←</span> 返回分类</button>
   <div class="quiz-card">
     <div class="quiz-prompt" id="ket-quiz-prompt">这个单词的中文是？</div>
     <div class="quiz-word" id="ket-quiz-word">word</div>
@@ -1004,7 +1004,7 @@ const API = ".";
     if (quizBar) quizBar.style.display = 'none';
 
     area.innerHTML = `
-      <button class="btn btn-secondary" onclick="hidePointsDetail()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">
+      <button class="btn btn-secondary" onclick="hidePointsDetail()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
         <span style="font-size:16px">←</span> 返回
       </button>
 
@@ -1484,7 +1484,7 @@ const API = ".";
       // 返回按钮
       const backBtn = document.createElement('button');
       backBtn.className = 'btn btn-secondary';
-      backBtn.style.cssText = 'margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500';
+      backBtn.style.cssText = 'position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px';
       backBtn.innerHTML = '<span style="font-size:16px">←</span> 返回课文模块';
       backBtn.onclick = showTextbookList;
       area.appendChild(backBtn);
@@ -1564,7 +1564,7 @@ const API = ".";
     });
     
     area.innerHTML = `
-      <button class="btn btn-secondary" onclick="backToLessonUnits()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">
+      <button class="btn btn-secondary" onclick="backToLessonUnits()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
         <span style="font-size:16px">←</span> 返回单元列表
       </button>
       
@@ -3229,7 +3229,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = s => (s || "").replace(/'/g, "\\'");
     const wordId = 'ra-word-' + w.id;
     area.innerHTML = `
-      <button class="btn btn-secondary" onclick="showWordList()" style="margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回单词表</button>
+      <button class="btn btn-secondary" onclick="showWordList()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px"><span style="font-size:16px">←</span> 返回单词表</button>
       <div class="word-detail-card" id="${wordId}">
         <div class="word-type-badge">${w.type}</div>
         <div class="word-text" id="${wordId}-text">${capitalize(w.word)}</div>
@@ -3690,7 +3690,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
 
     const area = document.getElementById('choice-learn-area');
-    area.innerHTML = '<button class="btn btn-secondary" onclick="showWordList()" style="margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500"><span style="font-size:16px">←</span> 返回单词表</button>' +
+    area.innerHTML = '<button class="btn btn-secondary" onclick="showWordList()" style="position:sticky;top:68px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回单词表</button>' +
     '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
       '<span style="font-size:13px;color:#999">' + currentModule + '</span>' +
       '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden">' +
