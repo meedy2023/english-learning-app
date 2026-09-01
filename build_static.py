@@ -70,12 +70,12 @@ def copy_phonics_audio():
         os.makedirs(dst_dir, exist_ok=True)
         cnt = 0
         for f in os.listdir(src_dir):
-            if f.endswith(".mp3"):
+            if f.endswith(".wav"):
                 shutil.copy2(os.path.join(src_dir, f), os.path.join(dst_dir, f))
                 cnt += 1
         print(f"[OK] docs/phonics/ ({cnt} 个音素音频)")
     else:
-        print("[WARN] 未找到 frontend/phonics/ 音素音频（先运行 gen_phonics_audio.py）")
+        print("[WARN] 未找到 frontend/phonics/ 音素音频（先运行 gen_phonics_espeak.py）")
 
 
 def copy_pwa():
