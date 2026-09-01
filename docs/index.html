@@ -2379,7 +2379,7 @@ const API = ".";
   // ---- 网络发音：Edge TTS（免费、无需 Key，浏览器直连 wss）----
   const EdgeTTS = {
     WS_URL: 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D18AC1447B9B4DE3946C719C8B',
-    synthesize(text, lang, onAudio, onError, voiceOverride) {
+    synthesize(text, lang, onAudio, onError, voiceOverride, ipa) {
       if (typeof WebSocket === 'undefined') { onError && onError(new Error('no websocket')); return; }
       let ws;
       try { ws = new WebSocket(this.WS_URL); } catch (e) { onError && onError(e); return; }
@@ -2399,11 +2399,11 @@ const API = ".";
             outputFormat: 'audio-24khz-48kbitrate-mono-mp3'
           } } }
         }));
-        // 情感风格：英文用 cheerful（欢快），中文用 friendly（友好）
         const style = lang === 'zh-CN' ? 'friendly' : 'friendly';
-        // D. 英文短语/单词间加自然停顿（SSML <break>）
         let spoken = escapeXml(text);
-        if (lang === 'en-US') {
+        if (ipa) {
+          spoken = "<phoneme alphabet='ipa' ph='" + ipa + "'>" + spoken + "</phoneme>";
+        } else if (lang === 'en-US') {
           // 短横线或逗号处加 200ms 停顿，单词间加 100ms
           spoken = spoken
             .replace(/, /g, "<break time='180ms'/>")
@@ -4159,9 +4159,20 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let phonicsGroups = [];
   let phonicsCurrentGroup = null;
 
-  // 标题朗读内容：读代表词取首音，即该字母/组合的自然拼读音（Aa→apple /æ/，-ad→dad /æ/）
-  function phonicsTitleRead(lesson) {
-    return lesson.sound_word || (lesson.title || '').trim();
+  // 自然拼读发音：用 EdgeTTS SSML <phoneme> 直接读 IPA 音标（如 /æ/），非 IPA 兜底读代表词
+  function speakPhonicsSound(ipa, word) {
+    let ph = (ipa || '').trim();
+    const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
+    if (isIpa) {
+      ph = ph.slice(1, -1);
+      stopAllAudio();
+      EdgeTTS.synthesize(word || 'a', 'en-US',
+        (blob) => playAudioBlob(blob),
+        (err) => { console.warn('拼读发音失败', err); toast('拼读发音失败，请检查网络'); },
+        null, ph);
+    } else {
+      speakWord(word || '');
+    }
   }
 
   async function openPhonics() {
@@ -4215,11 +4226,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const card = document.createElement('div');
         card.className = 'word-detail-card';
         card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
-        const titleRead = phonicsTitleRead(lesson);
         let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">'
           + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
           + '<span style="font-size:16px;color:#f5a623;font-weight:700">' + lesson.sound + '</span>'
-          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakWord(\'' + esc(titleRead) + '\')">🔊 朗读</button>'
+          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">🔊 朗读</button>'
           + '</div>'
           + '<div style="font-size:12px;color:#888;margin-bottom:10px">💡 ' + lesson.tip + '</div>';
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
