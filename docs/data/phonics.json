@@ -1,0 +1,1939 @@
+[
+ {
+  "id": "letters",
+  "title": "26个字母发音",
+  "desc": "每个字母在单词里的发音（Letter Sound）",
+  "lessons": [
+   {
+    "id": "letter_a",
+    "title": "Aa",
+    "sound": "/æ/",
+    "sound_word": "apple",
+    "tip": "嘴巴张大，短促有力地发出 /æ/",
+    "words": [
+     {
+      "w": "apple",
+      "c": "苹果"
+     },
+     {
+      "w": "ant",
+      "c": "蚂蚁"
+     },
+     {
+      "w": "cat",
+      "c": "猫"
+     },
+     {
+      "w": "bag",
+      "c": "书包"
+     }
+    ]
+   },
+   {
+    "id": "letter_b",
+    "title": "Bb",
+    "sound": "/b/",
+    "sound_word": "book",
+    "tip": "双唇闭合，突然张开发 /b/",
+    "words": [
+     {
+      "w": "book",
+      "c": "书"
+     },
+     {
+      "w": "ball",
+      "c": "球"
+     },
+     {
+      "w": "bed",
+      "c": "床"
+     },
+     {
+      "w": "banana",
+      "c": "香蕉"
+     }
+    ]
+   },
+   {
+    "id": "letter_c",
+    "title": "Cc",
+    "sound": "/k/",
+    "sound_word": "cat",
+    "tip": "舌根抵软腭，发 /k/",
+    "words": [
+     {
+      "w": "cat",
+      "c": "猫"
+     },
+     {
+      "w": "cup",
+      "c": "杯子"
+     },
+     {
+      "w": "car",
+      "c": "汽车"
+     },
+     {
+      "w": "cake",
+      "c": "蛋糕"
+     }
+    ]
+   },
+   {
+    "id": "letter_d",
+    "title": "Dd",
+    "sound": "/d/",
+    "sound_word": "dog",
+    "tip": "舌尖抵上齿龈，发 /d/",
+    "words": [
+     {
+      "w": "dog",
+      "c": "狗"
+     },
+     {
+      "w": "duck",
+      "c": "鸭子"
+     },
+     {
+      "w": "desk",
+      "c": "书桌"
+     },
+     {
+      "w": "door",
+      "c": "门"
+     }
+    ]
+   },
+   {
+    "id": "letter_e",
+    "title": "Ee",
+    "sound": "/e/",
+    "sound_word": "egg",
+    "tip": "嘴巴微张，发短音 /e/",
+    "words": [
+     {
+      "w": "egg",
+      "c": "鸡蛋"
+     },
+     {
+      "w": "elephant",
+      "c": "大象"
+     },
+     {
+      "w": "pen",
+      "c": "钢笔"
+     },
+     {
+      "w": "red",
+      "c": "红色"
+     }
+    ]
+   },
+   {
+    "id": "letter_f",
+    "title": "Ff",
+    "sound": "/f/",
+    "sound_word": "fish",
+    "tip": "上齿轻咬下唇，送气发 /f/",
+    "words": [
+     {
+      "w": "fish",
+      "c": "鱼"
+     },
+     {
+      "w": "fox",
+      "c": "狐狸"
+     },
+     {
+      "w": "frog",
+      "c": "青蛙"
+     },
+     {
+      "w": "foot",
+      "c": "脚"
+     }
+    ]
+   },
+   {
+    "id": "letter_g",
+    "title": "Gg",
+    "sound": "/g/",
+    "sound_word": "goat",
+    "tip": "舌根抵软腭，发 /g/",
+    "words": [
+     {
+      "w": "goat",
+      "c": "山羊"
+     },
+     {
+      "w": "girl",
+      "c": "女孩"
+     },
+     {
+      "w": "green",
+      "c": "绿色"
+     },
+     {
+      "w": "grape",
+      "c": "葡萄"
+     }
+    ]
+   },
+   {
+    "id": "letter_h",
+    "title": "Hh",
+    "sound": "/h/",
+    "sound_word": "hat",
+    "tip": "嘴巴张开，轻轻送气发 /h/",
+    "words": [
+     {
+      "w": "hat",
+      "c": "帽子"
+     },
+     {
+      "w": "hen",
+      "c": "母鸡"
+     },
+     {
+      "w": "hand",
+      "c": "手"
+     },
+     {
+      "w": "house",
+      "c": "房子"
+     }
+    ]
+   },
+   {
+    "id": "letter_i",
+    "title": "Ii",
+    "sound": "/ɪ/",
+    "sound_word": "insect",
+    "tip": "嘴巴微张，发短音 /ɪ/",
+    "words": [
+     {
+      "w": "insect",
+      "c": "昆虫"
+     },
+     {
+      "w": "ink",
+      "c": "墨水"
+     },
+     {
+      "w": "pig",
+      "c": "猪"
+     },
+     {
+      "w": "fish",
+      "c": "鱼"
+     }
+    ]
+   },
+   {
+    "id": "letter_j",
+    "title": "Jj",
+    "sound": "/dʒ/",
+    "sound_word": "jam",
+    "tip": "舌尖抵上齿龈，发 /dʒ/",
+    "words": [
+     {
+      "w": "jam",
+      "c": "果酱"
+     },
+     {
+      "w": "juice",
+      "c": "果汁"
+     },
+     {
+      "w": "jump",
+      "c": "跳"
+     },
+     {
+      "w": "jacket",
+      "c": "夹克"
+     }
+    ]
+   },
+   {
+    "id": "letter_k",
+    "title": "Kk",
+    "sound": "/k/",
+    "sound_word": "kite",
+    "tip": "舌根抵软腭，发 /k/",
+    "words": [
+     {
+      "w": "kite",
+      "c": "风筝"
+     },
+     {
+      "w": "key",
+      "c": "钥匙"
+     },
+     {
+      "w": "king",
+      "c": "国王"
+     },
+     {
+      "w": "kitchen",
+      "c": "厨房"
+     }
+    ]
+   },
+   {
+    "id": "letter_l",
+    "title": "Ll",
+    "sound": "/l/",
+    "sound_word": "lion",
+    "tip": "舌尖抵上齿龈，发 /l/",
+    "words": [
+     {
+      "w": "lion",
+      "c": "狮子"
+     },
+     {
+      "w": "leg",
+      "c": "腿"
+     },
+     {
+      "w": "lamp",
+      "c": "灯"
+     },
+     {
+      "w": "leaf",
+      "c": "树叶"
+     }
+    ]
+   },
+   {
+    "id": "letter_m",
+    "title": "Mm",
+    "sound": "/m/",
+    "sound_word": "monkey",
+    "tip": "双唇闭合，发鼻音 /m/",
+    "words": [
+     {
+      "w": "monkey",
+      "c": "猴子"
+     },
+     {
+      "w": "milk",
+      "c": "牛奶"
+     },
+     {
+      "w": "moon",
+      "c": "月亮"
+     },
+     {
+      "w": "mouth",
+      "c": "嘴"
+     }
+    ]
+   },
+   {
+    "id": "letter_n",
+    "title": "Nn",
+    "sound": "/n/",
+    "sound_word": "nose",
+    "tip": "舌尖抵上齿龈，发鼻音 /n/",
+    "words": [
+     {
+      "w": "nose",
+      "c": "鼻子"
+     },
+     {
+      "w": "nest",
+      "c": "鸟巢"
+     },
+     {
+      "w": "nurse",
+      "c": "护士"
+     },
+     {
+      "w": "night",
+      "c": "夜晚"
+     }
+    ]
+   },
+   {
+    "id": "letter_o",
+    "title": "Oo",
+    "sound": "/ɒ/",
+    "sound_word": "orange",
+    "tip": "嘴巴张大成圆形，发短音 /ɒ/",
+    "words": [
+     {
+      "w": "orange",
+      "c": "橙子"
+     },
+     {
+      "w": "octopus",
+      "c": "章鱼"
+     },
+     {
+      "w": "box",
+      "c": "盒子"
+     },
+     {
+      "w": "dog",
+      "c": "狗"
+     }
+    ]
+   },
+   {
+    "id": "letter_p",
+    "title": "Pp",
+    "sound": "/p/",
+    "sound_word": "pig",
+    "tip": "双唇闭合，突然送气发 /p/",
+    "words": [
+     {
+      "w": "pig",
+      "c": "猪"
+     },
+     {
+      "w": "pen",
+      "c": "钢笔"
+     },
+     {
+      "w": "pencil",
+      "c": "铅笔"
+     },
+     {
+      "w": "panda",
+      "c": "熊猫"
+     }
+    ]
+   },
+   {
+    "id": "letter_q",
+    "title": "Qq",
+    "sound": "/kw/",
+    "sound_word": "queen",
+    "tip": "常与 u 一起，发 /kw/",
+    "words": [
+     {
+      "w": "queen",
+      "c": "女王"
+     },
+     {
+      "w": "quilt",
+      "c": "被子"
+     },
+     {
+      "w": "question",
+      "c": "问题"
+     },
+     {
+      "w": "quiet",
+      "c": "安静"
+     }
+    ]
+   },
+   {
+    "id": "letter_r",
+    "title": "Rr",
+    "sound": "/r/",
+    "sound_word": "rabbit",
+    "tip": "舌尖卷起，发 /r/",
+    "words": [
+     {
+      "w": "rabbit",
+      "c": "兔子"
+     },
+     {
+      "w": "rain",
+      "c": "雨"
+     },
+     {
+      "w": "red",
+      "c": "红色"
+     },
+     {
+      "w": "rose",
+      "c": "玫瑰"
+     }
+    ]
+   },
+   {
+    "id": "letter_s",
+    "title": "Ss",
+    "sound": "/s/",
+    "sound_word": "sun",
+    "tip": "舌尖抵下齿，送气发 /s/",
+    "words": [
+     {
+      "w": "sun",
+      "c": "太阳"
+     },
+     {
+      "w": "snake",
+      "c": "蛇"
+     },
+     {
+      "w": "star",
+      "c": "星星"
+     },
+     {
+      "w": "sock",
+      "c": "袜子"
+     }
+    ]
+   },
+   {
+    "id": "letter_t",
+    "title": "Tt",
+    "sound": "/t/",
+    "sound_word": "tiger",
+    "tip": "舌尖抵上齿龈，发 /t/",
+    "words": [
+     {
+      "w": "tiger",
+      "c": "老虎"
+     },
+     {
+      "w": "table",
+      "c": "桌子"
+     },
+     {
+      "w": "tree",
+      "c": "树"
+     },
+     {
+      "w": "tea",
+      "c": "茶"
+     }
+    ]
+   },
+   {
+    "id": "letter_u",
+    "title": "Uu",
+    "sound": "/ʌ/",
+    "sound_word": "umbrella",
+    "tip": "嘴巴微张，发短音 /ʌ/",
+    "words": [
+     {
+      "w": "umbrella",
+      "c": "雨伞"
+     },
+     {
+      "w": "up",
+      "c": "向上"
+     },
+     {
+      "w": "bus",
+      "c": "公共汽车"
+     },
+     {
+      "w": "sun",
+      "c": "太阳"
+     }
+    ]
+   },
+   {
+    "id": "letter_v",
+    "title": "Vv",
+    "sound": "/v/",
+    "sound_word": "van",
+    "tip": "上齿轻咬下唇，发 /v/",
+    "words": [
+     {
+      "w": "van",
+      "c": "货车"
+     },
+     {
+      "w": "violin",
+      "c": "小提琴"
+     },
+     {
+      "w": "vest",
+      "c": "背心"
+     },
+     {
+      "w": "vegetable",
+      "c": "蔬菜"
+     }
+    ]
+   },
+   {
+    "id": "letter_w",
+    "title": "Ww",
+    "sound": "/w/",
+    "sound_word": "water",
+    "tip": "双唇收圆，发 /w/",
+    "words": [
+     {
+      "w": "water",
+      "c": "水"
+     },
+     {
+      "w": "watch",
+      "c": "手表"
+     },
+     {
+      "w": "window",
+      "c": "窗户"
+     },
+     {
+      "w": "wolf",
+      "c": "狼"
+     }
+    ]
+   },
+   {
+    "id": "letter_x",
+    "title": "Xx",
+    "sound": "/ks/",
+    "sound_word": "box",
+    "tip": "发 /ks/，常在词尾",
+    "words": [
+     {
+      "w": "box",
+      "c": "盒子"
+     },
+     {
+      "w": "fox",
+      "c": "狐狸"
+     },
+     {
+      "w": "six",
+      "c": "六"
+     },
+     {
+      "w": "x-ray",
+      "c": "X光"
+     }
+    ]
+   },
+   {
+    "id": "letter_y",
+    "title": "Yy",
+    "sound": "/j/",
+    "sound_word": "yellow",
+    "tip": "发 /j/，也可作元音 /aɪ/",
+    "words": [
+     {
+      "w": "yellow",
+      "c": "黄色"
+     },
+     {
+      "w": "yo-yo",
+      "c": "溜溜球"
+     },
+     {
+      "w": "yes",
+      "c": "是的"
+     },
+     {
+      "w": "yogurt",
+      "c": "酸奶"
+     }
+    ]
+   },
+   {
+    "id": "letter_z",
+    "title": "Zz",
+    "sound": "/z/",
+    "sound_word": "zebra",
+    "tip": "舌尖抵下齿，发 /z/",
+    "words": [
+     {
+      "w": "zebra",
+      "c": "斑马"
+     },
+     {
+      "w": "zoo",
+      "c": "动物园"
+     },
+     {
+      "w": "zero",
+      "c": "零"
+     },
+     {
+      "w": "zip",
+      "c": "拉链"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "short_vowels",
+  "title": "短元音组合",
+  "desc": "辅音+短元音+辅音（Word Family 词族）",
+  "lessons": [
+   {
+    "id": "sf_ad",
+    "title": "-ad",
+    "sound": "/æd/",
+    "sound_word": "dad",
+    "tip": "短音 a + d",
+    "words": [
+     {
+      "w": "dad",
+      "c": "爸爸"
+     },
+     {
+      "w": "sad",
+      "c": "难过的"
+     },
+     {
+      "w": "mad",
+      "c": "生气的"
+     },
+     {
+      "w": "bad",
+      "c": "坏的"
+     }
+    ]
+   },
+   {
+    "id": "sf_ag",
+    "title": "-ag",
+    "sound": "/æg/",
+    "sound_word": "bag",
+    "tip": "短音 a + g",
+    "words": [
+     {
+      "w": "bag",
+      "c": "书包"
+     },
+     {
+      "w": "rag",
+      "c": "抹布"
+     },
+     {
+      "w": "tag",
+      "c": "标签"
+     },
+     {
+      "w": "flag",
+      "c": "旗帜"
+     }
+    ]
+   },
+   {
+    "id": "sf_am",
+    "title": "-am",
+    "sound": "/æm/",
+    "sound_word": "ham",
+    "tip": "短音 a + m",
+    "words": [
+     {
+      "w": "ham",
+      "c": "火腿"
+     },
+     {
+      "w": "jam",
+      "c": "果酱"
+     },
+     {
+      "w": "yam",
+      "c": "山药"
+     },
+     {
+      "w": "dam",
+      "c": "水坝"
+     }
+    ]
+   },
+   {
+    "id": "sf_an",
+    "title": "-an",
+    "sound": "/æn/",
+    "sound_word": "man",
+    "tip": "短音 a + n",
+    "words": [
+     {
+      "w": "man",
+      "c": "男人"
+     },
+     {
+      "w": "fan",
+      "c": "风扇"
+     },
+     {
+      "w": "pan",
+      "c": "平底锅"
+     },
+     {
+      "w": "van",
+      "c": "货车"
+     }
+    ]
+   },
+   {
+    "id": "sf_ap",
+    "title": "-ap",
+    "sound": "/æp/",
+    "sound_word": "cap",
+    "tip": "短音 a + p",
+    "words": [
+     {
+      "w": "cap",
+      "c": "帽子"
+     },
+     {
+      "w": "map",
+      "c": "地图"
+     },
+     {
+      "w": "tap",
+      "c": "水龙头"
+     },
+     {
+      "w": "nap",
+      "c": "小睡"
+     }
+    ]
+   },
+   {
+    "id": "sf_at",
+    "title": "-at",
+    "sound": "/æt/",
+    "sound_word": "cat",
+    "tip": "短音 a + t",
+    "words": [
+     {
+      "w": "cat",
+      "c": "猫"
+     },
+     {
+      "w": "hat",
+      "c": "帽子"
+     },
+     {
+      "w": "bat",
+      "c": "蝙蝠"
+     },
+     {
+      "w": "rat",
+      "c": "老鼠"
+     }
+    ]
+   },
+   {
+    "id": "sf_en",
+    "title": "-en",
+    "sound": "/en/",
+    "sound_word": "hen",
+    "tip": "短音 e + n",
+    "words": [
+     {
+      "w": "hen",
+      "c": "母鸡"
+     },
+     {
+      "w": "pen",
+      "c": "钢笔"
+     },
+     {
+      "w": "ten",
+      "c": "十"
+     },
+     {
+      "w": "men",
+      "c": "男人们"
+     }
+    ]
+   },
+   {
+    "id": "sf_et",
+    "title": "-et",
+    "sound": "/et/",
+    "sound_word": "pet",
+    "tip": "短音 e + t",
+    "words": [
+     {
+      "w": "pet",
+      "c": "宠物"
+     },
+     {
+      "w": "net",
+      "c": "网"
+     },
+     {
+      "w": "wet",
+      "c": "湿的"
+     },
+     {
+      "w": "jet",
+      "c": "喷气机"
+     }
+    ]
+   },
+   {
+    "id": "sf_ed",
+    "title": "-ed",
+    "sound": "/ed/",
+    "sound_word": "red",
+    "tip": "短音 e + d",
+    "words": [
+     {
+      "w": "red",
+      "c": "红色"
+     },
+     {
+      "w": "bed",
+      "c": "床"
+     },
+     {
+      "w": "fed",
+      "c": "喂了"
+     },
+     {
+      "w": "ted",
+      "c": "泰迪"
+     }
+    ]
+   },
+   {
+    "id": "sf_ig",
+    "title": "-ig",
+    "sound": "/ɪg/",
+    "sound_word": "pig",
+    "tip": "短音 i + g",
+    "words": [
+     {
+      "w": "pig",
+      "c": "猪"
+     },
+     {
+      "w": "big",
+      "c": "大的"
+     },
+     {
+      "w": "dig",
+      "c": "挖"
+     },
+     {
+      "w": "wig",
+      "c": "假发"
+     }
+    ]
+   },
+   {
+    "id": "sf_in",
+    "title": "-in",
+    "sound": "/ɪn/",
+    "sound_word": "pin",
+    "tip": "短音 i + n",
+    "words": [
+     {
+      "w": "pin",
+      "c": "别针"
+     },
+     {
+      "w": "win",
+      "c": "赢"
+     },
+     {
+      "w": "fin",
+      "c": "鱼鳍"
+     },
+     {
+      "w": "bin",
+      "c": "垃圾桶"
+     }
+    ]
+   },
+   {
+    "id": "sf_ip",
+    "title": "-ip",
+    "sound": "/ɪp/",
+    "sound_word": "lip",
+    "tip": "短音 i + p",
+    "words": [
+     {
+      "w": "lip",
+      "c": "嘴唇"
+     },
+     {
+      "w": "zip",
+      "c": "拉链"
+     },
+     {
+      "w": "ship",
+      "c": "船"
+     },
+     {
+      "w": "chip",
+      "c": "薯片"
+     }
+    ]
+   },
+   {
+    "id": "sf_it",
+    "title": "-it",
+    "sound": "/ɪt/",
+    "sound_word": "sit",
+    "tip": "短音 i + t",
+    "words": [
+     {
+      "w": "sit",
+      "c": "坐"
+     },
+     {
+      "w": "hit",
+      "c": "打"
+     },
+     {
+      "w": "fit",
+      "c": "合身"
+     },
+     {
+      "w": "bit",
+      "c": "一点"
+     }
+    ]
+   },
+   {
+    "id": "sf_ix",
+    "title": "-ix",
+    "sound": "/ɪks/",
+    "sound_word": "six",
+    "tip": "短音 i + x",
+    "words": [
+     {
+      "w": "six",
+      "c": "六"
+     },
+     {
+      "w": "fix",
+      "c": "修理"
+     },
+     {
+      "w": "mix",
+      "c": "混合"
+     }
+    ]
+   },
+   {
+    "id": "sf_id",
+    "title": "-id",
+    "sound": "/ɪd/",
+    "sound_word": "kid",
+    "tip": "短音 i + d",
+    "words": [
+     {
+      "w": "kid",
+      "c": "小孩"
+     },
+     {
+      "w": "lid",
+      "c": "盖子"
+     },
+     {
+      "w": "hid",
+      "c": "躲藏了"
+     }
+    ]
+   },
+   {
+    "id": "sf_og",
+    "title": "-og",
+    "sound": "/ɒg/",
+    "sound_word": "dog",
+    "tip": "短音 o + g",
+    "words": [
+     {
+      "w": "dog",
+      "c": "狗"
+     },
+     {
+      "w": "frog",
+      "c": "青蛙"
+     },
+     {
+      "w": "log",
+      "c": "木头"
+     },
+     {
+      "w": "jog",
+      "c": "慢跑"
+     }
+    ]
+   },
+   {
+    "id": "sf_ot",
+    "title": "-ot",
+    "sound": "/ɒt/",
+    "sound_word": "hot",
+    "tip": "短音 o + t",
+    "words": [
+     {
+      "w": "hot",
+      "c": "热的"
+     },
+     {
+      "w": "pot",
+      "c": "锅"
+     },
+     {
+      "w": "dot",
+      "c": "点"
+     },
+     {
+      "w": "cot",
+      "c": "小床"
+     }
+    ]
+   },
+   {
+    "id": "sf_ox",
+    "title": "-ox",
+    "sound": "/ɒks/",
+    "sound_word": "box",
+    "tip": "短音 o + x",
+    "words": [
+     {
+      "w": "box",
+      "c": "盒子"
+     },
+     {
+      "w": "fox",
+      "c": "狐狸"
+     },
+     {
+      "w": "ox",
+      "c": "公牛"
+     }
+    ]
+   },
+   {
+    "id": "sf_ug",
+    "title": "-ug",
+    "sound": "/ʌg/",
+    "sound_word": "bug",
+    "tip": "短音 u + g",
+    "words": [
+     {
+      "w": "bug",
+      "c": "虫子"
+     },
+     {
+      "w": "mug",
+      "c": "马克杯"
+     },
+     {
+      "w": "hug",
+      "c": "拥抱"
+     },
+     {
+      "w": "rug",
+      "c": "地毯"
+     }
+    ]
+   },
+   {
+    "id": "sf_un",
+    "title": "-un",
+    "sound": "/ʌn/",
+    "sound_word": "sun",
+    "tip": "短音 u + n",
+    "words": [
+     {
+      "w": "sun",
+      "c": "太阳"
+     },
+     {
+      "w": "run",
+      "c": "跑"
+     },
+     {
+      "w": "fun",
+      "c": "有趣的"
+     },
+     {
+      "w": "bun",
+      "c": "小圆面包"
+     }
+    ]
+   },
+   {
+    "id": "sf_ut",
+    "title": "-ut",
+    "sound": "/ʌt/",
+    "sound_word": "cut",
+    "tip": "短音 u + t",
+    "words": [
+     {
+      "w": "cut",
+      "c": "切"
+     },
+     {
+      "w": "nut",
+      "c": "坚果"
+     },
+     {
+      "w": "hut",
+      "c": "小屋"
+     },
+     {
+      "w": "shut",
+      "c": "关闭"
+     }
+    ]
+   },
+   {
+    "id": "sf_ub",
+    "title": "-ub",
+    "sound": "/ʌb/",
+    "sound_word": "cub",
+    "tip": "短音 u + b",
+    "words": [
+     {
+      "w": "cub",
+      "c": "幼崽"
+     },
+     {
+      "w": "tub",
+      "c": "浴盆"
+     },
+     {
+      "w": "rub",
+      "c": "摩擦"
+     },
+     {
+      "w": "club",
+      "c": "俱乐部"
+     }
+    ]
+   },
+   {
+    "id": "sf_ud",
+    "title": "-ud",
+    "sound": "/ʌd/",
+    "sound_word": "mud",
+    "tip": "短音 u + d",
+    "words": [
+     {
+      "w": "mud",
+      "c": "泥"
+     },
+     {
+      "w": "bud",
+      "c": "花蕾"
+     }
+    ]
+   },
+   {
+    "id": "sf_um",
+    "title": "-um",
+    "sound": "/ʌm/",
+    "sound_word": "gum",
+    "tip": "短音 u + m",
+    "words": [
+     {
+      "w": "gum",
+      "c": "口香糖"
+     },
+     {
+      "w": "yum",
+      "c": "好吃的"
+     },
+     {
+      "w": "plum",
+      "c": "李子"
+     },
+     {
+      "w": "drum",
+      "c": "鼓"
+     }
+    ]
+   },
+   {
+    "id": "sf_up",
+    "title": "-up",
+    "sound": "/ʌp/",
+    "sound_word": "cup",
+    "tip": "短音 u + p",
+    "words": [
+     {
+      "w": "cup",
+      "c": "杯子"
+     },
+     {
+      "w": "up",
+      "c": "向上"
+     },
+     {
+      "w": "pup",
+      "c": "小狗"
+     },
+     {
+      "w": "jump",
+      "c": "跳"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "long_vowels",
+  "title": "长元音组合",
+  "desc": "Magic E（不发音的e）+ 元音组合",
+  "lessons": [
+   {
+    "id": "lv_ae",
+    "title": "a_e",
+    "sound": "/eɪ/",
+    "sound_word": "cake",
+    "tip": "结尾不发音的 e，让 a 发字母本音",
+    "words": [
+     {
+      "w": "cake",
+      "c": "蛋糕"
+     },
+     {
+      "w": "name",
+      "c": "名字"
+     },
+     {
+      "w": "game",
+      "c": "游戏"
+     },
+     {
+      "w": "lake",
+      "c": "湖"
+     },
+     {
+      "w": "make",
+      "c": "制作"
+     }
+    ]
+   },
+   {
+    "id": "lv_ie",
+    "title": "i_e",
+    "sound": "/aɪ/",
+    "sound_word": "kite",
+    "tip": "结尾不发音的 e，让 i 发字母本音",
+    "words": [
+     {
+      "w": "kite",
+      "c": "风筝"
+     },
+     {
+      "w": "bike",
+      "c": "自行车"
+     },
+     {
+      "w": "like",
+      "c": "喜欢"
+     },
+     {
+      "w": "five",
+      "c": "五"
+     },
+     {
+      "w": "nine",
+      "c": "九"
+     }
+    ]
+   },
+   {
+    "id": "lv_oe",
+    "title": "o_e",
+    "sound": "/əʊ/",
+    "sound_word": "home",
+    "tip": "结尾不发音的 e，让 o 发字母本音",
+    "words": [
+     {
+      "w": "home",
+      "c": "家"
+     },
+     {
+      "w": "nose",
+      "c": "鼻子"
+     },
+     {
+      "w": "rose",
+      "c": "玫瑰"
+     },
+     {
+      "w": "rope",
+      "c": "绳子"
+     },
+     {
+      "w": "note",
+      "c": "笔记"
+     }
+    ]
+   },
+   {
+    "id": "lv_ue",
+    "title": "u_e",
+    "sound": "/juː/",
+    "sound_word": "cute",
+    "tip": "结尾不发音的 e，让 u 发字母本音",
+    "words": [
+     {
+      "w": "cute",
+      "c": "可爱的"
+     },
+     {
+      "w": "cube",
+      "c": "立方体"
+     },
+     {
+      "w": "tube",
+      "c": "管子"
+     },
+     {
+      "w": "use",
+      "c": "使用"
+     },
+     {
+      "w": "mule",
+      "c": "骡子"
+     }
+    ]
+   },
+   {
+    "id": "lv_ee_e",
+    "title": "e_e",
+    "sound": "/iː/",
+    "sound_word": "these",
+    "tip": "结尾不发音的 e，让 e 发字母本音",
+    "words": [
+     {
+      "w": "these",
+      "c": "这些"
+     },
+     {
+      "w": "eve",
+      "c": "前夕"
+     },
+     {
+      "w": "theme",
+      "c": "主题"
+     }
+    ]
+   },
+   {
+    "id": "lv_ai",
+    "title": "ai / ay",
+    "sound": "/eɪ/",
+    "sound_word": "rain",
+    "tip": "ai/ay 都发长音 a",
+    "words": [
+     {
+      "w": "rain",
+      "c": "雨"
+     },
+     {
+      "w": "train",
+      "c": "火车"
+     },
+     {
+      "w": "day",
+      "c": "天"
+     },
+     {
+      "w": "play",
+      "c": "玩"
+     },
+     {
+      "w": "say",
+      "c": "说"
+     }
+    ]
+   },
+   {
+    "id": "lv_ee",
+    "title": "ee / ea",
+    "sound": "/iː/",
+    "sound_word": "see",
+    "tip": "ee/ea 都发长音 e",
+    "words": [
+     {
+      "w": "see",
+      "c": "看见"
+     },
+     {
+      "w": "tree",
+      "c": "树"
+     },
+     {
+      "w": "bee",
+      "c": "蜜蜂"
+     },
+     {
+      "w": "sea",
+      "c": "海"
+     },
+     {
+      "w": "eat",
+      "c": "吃"
+     }
+    ]
+   },
+   {
+    "id": "lv_oa",
+    "title": "oa / ow",
+    "sound": "/əʊ/",
+    "sound_word": "boat",
+    "tip": "oa/ow 都发长音 o",
+    "words": [
+     {
+      "w": "boat",
+      "c": "船"
+     },
+     {
+      "w": "coat",
+      "c": "外套"
+     },
+     {
+      "w": "goat",
+      "c": "山羊"
+     },
+     {
+      "w": "snow",
+      "c": "雪"
+     },
+     {
+      "w": "grow",
+      "c": "生长"
+     }
+    ]
+   },
+   {
+    "id": "lv_igh",
+    "title": "ie / igh",
+    "sound": "/aɪ/",
+    "sound_word": "pie",
+    "tip": "ie/igh 都发长音 i",
+    "words": [
+     {
+      "w": "pie",
+      "c": "馅饼"
+     },
+     {
+      "w": "tie",
+      "c": "领带"
+     },
+     {
+      "w": "high",
+      "c": "高的"
+     },
+     {
+      "w": "night",
+      "c": "夜晚"
+     },
+     {
+      "w": "light",
+      "c": "灯"
+     }
+    ]
+   },
+   {
+    "id": "lv_oo",
+    "title": "ue / oo",
+    "sound": "/uː/",
+    "sound_word": "blue",
+    "tip": "ue/oo 都发长音 u",
+    "words": [
+     {
+      "w": "blue",
+      "c": "蓝色"
+     },
+     {
+      "w": "glue",
+      "c": "胶水"
+     },
+     {
+      "w": "moon",
+      "c": "月亮"
+     },
+     {
+      "w": "food",
+      "c": "食物"
+     },
+     {
+      "w": "zoo",
+      "c": "动物园"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "consonant_blends",
+  "title": "辅音字母组合",
+  "desc": "辅音连缀（blends）与辅音字母组合（digraphs）",
+  "lessons": [
+   {
+    "id": "cb_l",
+    "title": "bl/cl/fl/gl/pl/sl",
+    "sound": "l 连缀",
+    "sound_word": "blue",
+    "tip": "辅音 + l 的组合，两个音连读",
+    "words": [
+     {
+      "w": "blue",
+      "c": "蓝色"
+     },
+     {
+      "w": "clock",
+      "c": "时钟"
+     },
+     {
+      "w": "flag",
+      "c": "旗帜"
+     },
+     {
+      "w": "glass",
+      "c": "玻璃"
+     },
+     {
+      "w": "plane",
+      "c": "飞机"
+     },
+     {
+      "w": "sleep",
+      "c": "睡觉"
+     }
+    ]
+   },
+   {
+    "id": "cb_r",
+    "title": "br/cr/dr/fr/gr/pr/tr",
+    "sound": "r 连缀",
+    "sound_word": "bread",
+    "tip": "辅音 + r 的组合，两个音连读",
+    "words": [
+     {
+      "w": "bread",
+      "c": "面包"
+     },
+     {
+      "w": "crab",
+      "c": "螃蟹"
+     },
+     {
+      "w": "drum",
+      "c": "鼓"
+     },
+     {
+      "w": "frog",
+      "c": "青蛙"
+     },
+     {
+      "w": "grape",
+      "c": "葡萄"
+     },
+     {
+      "w": "tree",
+      "c": "树"
+     }
+    ]
+   },
+   {
+    "id": "cb_ch",
+    "title": "ch / sh / th / wh / ph",
+    "sound": "字母组合",
+    "sound_word": "chair",
+    "tip": "两个字母合成一个新音（digraph）",
+    "words": [
+     {
+      "w": "chair",
+      "c": "椅子"
+     },
+     {
+      "w": "ship",
+      "c": "船"
+     },
+     {
+      "w": "three",
+      "c": "三"
+     },
+     {
+      "w": "whale",
+      "c": "鲸鱼"
+     },
+     {
+      "w": "phone",
+      "c": "电话"
+     }
+    ]
+   },
+   {
+    "id": "cb_ck",
+    "title": "ck / ng / nk",
+    "sound": "尾音组合",
+    "sound_word": "duck",
+    "tip": "常出现在词尾的组合",
+    "words": [
+     {
+      "w": "duck",
+      "c": "鸭子"
+     },
+     {
+      "w": "sock",
+      "c": "袜子"
+     },
+     {
+      "w": "sing",
+      "c": "唱歌"
+     },
+     {
+      "w": "ring",
+      "c": "戒指"
+     },
+     {
+      "w": "pink",
+      "c": "粉色"
+     }
+    ]
+   },
+   {
+    "id": "cb_s",
+    "title": "sm/sn/sp/st/sw",
+    "sound": "s 连缀",
+    "sound_word": "smile",
+    "tip": "s + 辅音的组合",
+    "words": [
+     {
+      "w": "smile",
+      "c": "微笑"
+     },
+     {
+      "w": "snake",
+      "c": "蛇"
+     },
+     {
+      "w": "spoon",
+      "c": "勺子"
+     },
+     {
+      "w": "star",
+      "c": "星星"
+     },
+     {
+      "w": "swim",
+      "c": "游泳"
+     }
+    ]
+   },
+   {
+    "id": "cb_soft",
+    "title": "soft c / g",
+    "sound": "软音",
+    "sound_word": "city",
+    "tip": "c 在 e/i/y 前发 /s/，g 在 e/i/y 前发 /dʒ/",
+    "words": [
+     {
+      "w": "city",
+      "c": "城市"
+     },
+     {
+      "w": "ice",
+      "c": "冰"
+     },
+     {
+      "w": "rice",
+      "c": "米饭"
+     },
+     {
+      "w": "giraffe",
+      "c": "长颈鹿"
+     },
+     {
+      "w": "orange",
+      "c": "橙子"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "id": "vowel_teams",
+  "title": "元音字母组合",
+  "desc": "R 元音（r-controlled）+ 双元音（diphthongs）",
+  "lessons": [
+   {
+    "id": "vt_ar",
+    "title": "ar",
+    "sound": "/ɑː/",
+    "sound_word": "car",
+    "tip": "r 元音，a 被 r 控制发长音",
+    "words": [
+     {
+      "w": "car",
+      "c": "汽车"
+     },
+     {
+      "w": "star",
+      "c": "星星"
+     },
+     {
+      "w": "arm",
+      "c": "手臂"
+     },
+     {
+      "w": "park",
+      "c": "公园"
+     }
+    ]
+   },
+   {
+    "id": "vt_erirur",
+    "title": "er / ir / ur",
+    "sound": "/ɜː/",
+    "sound_word": "her",
+    "tip": "er/ir/ur 都发同一个 r 元音",
+    "words": [
+     {
+      "w": "her",
+      "c": "她的"
+     },
+     {
+      "w": "teacher",
+      "c": "老师"
+     },
+     {
+      "w": "bird",
+      "c": "鸟"
+     },
+     {
+      "w": "girl",
+      "c": "女孩"
+     },
+     {
+      "w": "nurse",
+      "c": "护士"
+     }
+    ]
+   },
+   {
+    "id": "vt_or",
+    "title": "or",
+    "sound": "/ɔː/",
+    "sound_word": "fork",
+    "tip": "r 元音，o 被 r 控制",
+    "words": [
+     {
+      "w": "fork",
+      "c": "叉子"
+     },
+     {
+      "w": "horse",
+      "c": "马"
+     },
+     {
+      "w": "corn",
+      "c": "玉米"
+     },
+     {
+      "w": "short",
+      "c": "短的"
+     }
+    ]
+   },
+   {
+    "id": "vt_oi",
+    "title": "oi / oy",
+    "sound": "/ɔɪ/",
+    "sound_word": "coin",
+    "tip": "双元音，从 o 滑到 i",
+    "words": [
+     {
+      "w": "coin",
+      "c": "硬币"
+     },
+     {
+      "w": "oil",
+      "c": "油"
+     },
+     {
+      "w": "boy",
+      "c": "男孩"
+     },
+     {
+      "w": "toy",
+      "c": "玩具"
+     }
+    ]
+   },
+   {
+    "id": "vt_ou",
+    "title": "ou / ow",
+    "sound": "/aʊ/",
+    "sound_word": "house",
+    "tip": "双元音，从 a 滑到 u",
+    "words": [
+     {
+      "w": "house",
+      "c": "房子"
+     },
+     {
+      "w": "mouse",
+      "c": "老鼠"
+     },
+     {
+      "w": "cow",
+      "c": "奶牛"
+     },
+     {
+      "w": "flower",
+      "c": "花"
+     },
+     {
+      "w": "down",
+      "c": "向下"
+     }
+    ]
+   },
+   {
+    "id": "vt_oo",
+    "title": "oo (短)",
+    "sound": "/ʊ/",
+    "sound_word": "book",
+    "tip": "oo 在 k 前发短音 /ʊ/",
+    "words": [
+     {
+      "w": "book",
+      "c": "书"
+     },
+     {
+      "w": "look",
+      "c": "看"
+     },
+     {
+      "w": "cook",
+      "c": "厨师"
+     },
+     {
+      "w": "foot",
+      "c": "脚"
+     }
+    ]
+   },
+   {
+    "id": "vt_aw",
+    "title": "au / aw",
+    "sound": "/ɔː/",
+    "sound_word": "autumn",
+    "tip": "au/aw 都发长音 o",
+    "words": [
+     {
+      "w": "autumn",
+      "c": "秋天"
+     },
+     {
+      "w": "because",
+      "c": "因为"
+     },
+     {
+      "w": "draw",
+      "c": "画"
+     },
+     {
+      "w": "saw",
+      "c": "锯子"
+     }
+    ]
+   }
+  ]
+ }
+]

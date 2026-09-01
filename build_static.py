@@ -40,6 +40,14 @@ def export_ket():
     print("[OK] ket.json")
 
 
+def export_phonics():
+    import phonics_data
+    phonics = getattr(phonics_data, "PHONICS", [])
+    with open(os.path.join(DATA_DIR, "phonics.json"), "w", encoding="utf-8") as f:
+        json.dump(phonics, f, ensure_ascii=False, indent=1)
+    print(f"[OK] phonics.json  ({len(phonics)} \u7ec4)")
+
+
 def export_textbook():
     # 优先读新版多年级结构，回退到旧版
     for src_name in ["textbook_data.json", "textbook3_data.json"]:
@@ -108,6 +116,7 @@ if __name__ == "__main__":
     export_textbook()
     export_words()
     export_ket()
+    export_phonics()
     build_index()
     copy_pwa()
     print("\n完成！静态版已生成在 docs/ 目录。")

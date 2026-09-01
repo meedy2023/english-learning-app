@@ -6,7 +6,7 @@
   const _origFetch = window.fetch ? window.fetch.bind(window) : null;
 
   // ---------- 数据容器 ----------
-  const DATA = { words: [], textbook: {}, ket: {} };
+  const DATA = { words: [], textbook: {}, ket: {}, phonics: [] };
   let _ready = null;
 
   function loadData() {
@@ -15,11 +15,13 @@
       fetch("./data/words.json").then((r) => r.json()),
       fetch("./data/textbook.json").then((r) => r.json()),
       fetch("./data/ket.json").then((r) => r.json()),
+      fetch("./data/phonics.json").then((r) => r.json()).catch(() => []),
     ])
-      .then(([w, t, k]) => {
+      .then(([w, t, k, p]) => {
         DATA.words = Array.isArray(w) ? w : w.words || [];
         DATA.textbook = t || {};
         DATA.ket = k || {};
+        DATA.phonics = p || [];
       })
       .catch((e) => {
         console.error("[静态版] 数据加载失败：", e);
@@ -371,6 +373,21 @@
         const c = params.get("category");
         const r = (DATA.ket["短文"] && DATA.ket["短文"][c]) || null;
         return json({ reading: r });
+      }
+
+      // ===== 自然拼读系列 =====
+      if (api === "phonics") {
+        return json({
+          groups: DATA.phonics.map((g) => ({
+            id: g.id, title: g.title, desc: g.desc, lesson_count: (g.lessons || []).length,
+          })),
+        });
+      }
+      if (api.startsWith("phonics/")) {
+        const gid = decodeURIComponent(api.slice("phonics/".length));
+        const g = DATA.phonics.find((x) => x.id === gid);
+        if (!g) return json({ detail: "未找到该拼读分组" }, 404);
+        return json({ group: g });
       }
 
       return json({ detail: "未知接口: " + api }, 404);

@@ -11,6 +11,7 @@ from typing import Optional, List
 import json
 from words_data import WORDS, get_words_by_module, search_words, get_all_modules, get_all_grades
 from ket_data import KET_DATA
+from phonics_data import PHONICS
 
 app = FastAPI()
 
@@ -378,6 +379,32 @@ def get_ket_reading(category: str):
     if "短文" in KET_DATA and category in KET_DATA["短文"]:
         return {"reading": KET_DATA["短文"][category]}
     return {"reading": None}
+
+
+# ========== 自然拼读 API ==========
+
+@app.get("/api/phonics")
+def get_phonics():
+    """获取自然拼读全部课程结构（不含例词，仅分组/课时元信息）"""
+    groups = []
+    for g in PHONICS:
+        groups.append({
+            "id": g["id"],
+            "title": g["title"],
+            "desc": g["desc"],
+            "lesson_count": len(g["lessons"]),
+        })
+    return {"groups": groups}
+
+
+@app.get("/api/phonics/{group_id}")
+def get_phonics_group(group_id: str):
+    """获取指定自然拼读分组（含课时与例词）"""
+    for g in PHONICS:
+        if g["id"] == group_id:
+            return {"group": g}
+    from fastapi import HTTPException
+    raise HTTPException(status_code=404, detail="未找到该拼读分组")
 
 
 if __name__ == "__main__":
