@@ -4165,7 +4165,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
     if (isIpa) {
       const core = ph.slice(1, -1);
-      const url = 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav';
+      const url = 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.mp3';
       stopAllAudio();
       const token = window._audioToken;
       const audio = new Audio();
