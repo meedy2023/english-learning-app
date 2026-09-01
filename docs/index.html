@@ -1457,6 +1457,11 @@ const API = ".";
     switchView('learn');
     const quizBar = document.getElementById('quiz-toggle-bar');
     if (quizBar) quizBar.style.display = 'flex';
+    // 隐藏其他学习子视图，显示课文列表容器
+    document.getElementById('word-detail-area').style.display = 'none';
+    document.getElementById('choice-learn-area').style.display = 'none';
+    const _wl = document.getElementById('word-list');
+    if (_wl) _wl.style.display = 'block';
     const gradeLabel = grade || currentLessonGrade || "三年级上册";
     currentLessonModule = moduleName;
     currentLessonGrade = grade || currentLessonGrade || '三年级上册';
