@@ -1323,6 +1323,10 @@ const API = ".";
   function switchView(name) {
     // 学习页面内点击学习导航，不重复切换
     if (name === 'learn' && currentView === 'learn') return;
+    if (name !== 'learn') {
+      var _lbh = document.getElementById('learn-back-home');
+      if (_lbh) _lbh.style.top = '84px';
+    }
     currentView = name;
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
@@ -1527,6 +1531,9 @@ const API = ".";
 
     const area = document.getElementById('word-detail-area');
     area.style.display = 'block';
+    // 课文详情页：单独调大「返回首页」吸顶距离，避免与顶栏过近
+    var _lbh = document.getElementById('learn-back-home');
+    if (_lbh) _lbh.style.top = '100px';
     
     document.getElementById('topbar-title').textContent = '📖 ' + unit.unit;
     
@@ -1562,7 +1569,7 @@ const API = ".";
     });
     
     area.innerHTML = `
-      <button class="btn btn-secondary" onclick="backToLessonUnits()" style="position:sticky;top:136px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
+      <button class="btn btn-secondary" onclick="backToLessonUnits()" style="position:sticky;top:156px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
         <span style="font-size:16px">←</span> 返回单元列表
       </button>
       
@@ -1647,6 +1654,8 @@ const API = ".";
   }
 
   function backToLessonUnits() {
+    var _lbh = document.getElementById('learn-back-home');
+    if (_lbh) _lbh.style.top = '84px';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('word-list').style.display = 'block';
     showTextbookList();
