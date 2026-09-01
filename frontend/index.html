@@ -4164,12 +4164,20 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     let ph = (ipa || '').trim();
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
     if (isIpa) {
-      ph = ph.slice(1, -1);
+      const core = ph.slice(1, -1);
+      const url = 'phonics/' + encodeURIComponent(core) + '.mp3';
       stopAllAudio();
-      EdgeTTS.synthesize(word || 'a', 'en-US',
-        (blob) => playAudioBlob(blob),
-        (err) => { console.warn('拼读发音失败', err); toast('拼读发音失败，请检查网络'); },
-        null, ph);
+      const token = window._audioToken;
+      const audio = new Audio();
+      window._activeAudio = audio;
+      audio.src = url;
+      const finish = () => {
+        if (token !== window._audioToken) return;
+        if (window._activeAudio === audio) window._activeAudio = null;
+      };
+      audio.onended = () => finish();
+      audio.onerror = () => { toast('发音文件缺失'); finish(); };
+      audio.play().catch(() => { toast('音频播放失败'); finish(); });
     } else {
       speakWord(word || '');
     }

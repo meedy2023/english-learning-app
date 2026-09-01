@@ -62,6 +62,22 @@ def export_textbook():
     print("[WARN] textbook.json 未找到")
 
 
+def copy_phonics_audio():
+    """复制自然拼读音素音频到 docs/phonics/（若已生成）"""
+    src_dir = os.path.join(FRONTEND, "phonics")
+    dst_dir = os.path.join(DOCS, "phonics")
+    if os.path.isdir(src_dir):
+        os.makedirs(dst_dir, exist_ok=True)
+        cnt = 0
+        for f in os.listdir(src_dir):
+            if f.endswith(".mp3"):
+                shutil.copy2(os.path.join(src_dir, f), os.path.join(dst_dir, f))
+                cnt += 1
+        print(f"[OK] docs/phonics/ ({cnt} 个音素音频)")
+    else:
+        print("[WARN] 未找到 frontend/phonics/ 音素音频（先运行 gen_phonics_audio.py）")
+
+
 def copy_pwa():
     """复制 PWA 资源（manifest/sw/icons）到 docs/"""
     for name in ["manifest.json", "sw.js"]:
@@ -118,6 +134,7 @@ if __name__ == "__main__":
     export_ket()
     export_phonics()
     build_index()
+    copy_phonics_audio()
     copy_pwa()
     print("\n完成！静态版已生成在 docs/ 目录。")
     print("把 docs/ 提交并推送到 GitHub，然后在仓库 Settings -> Pages 选择 main 分支 /docs 目录即可。")
