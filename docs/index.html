@@ -1879,6 +1879,7 @@ const API = ".";
   let _raSilenceStop = null;
   // 声学兜底评分跟踪
   let _raStartMs = 0;
+  let _raTotalMs = 0;
   let _raVoiceMs = 0;
   let _raRmsPeak = 0;
   let _raRmsSum = 0;
@@ -1959,6 +1960,7 @@ const API = ".";
   }
 
   function raEndAnalysis() {
+    _raTotalMs = Date.now() - _raStartMs;
     if (_raSilenceTimer) { clearTimeout(_raSilenceTimer); _raSilenceTimer = null; }
     _raSilenceStart = null;
     _raSilenceStop = null;
@@ -2023,14 +2025,37 @@ const API = ".";
       const tw = t.split(/\s+/).filter(Boolean).map(stem);
       const sw = s.split(/\s+/).filter(Boolean).map(stem);
       if (tw.length && sw.length) {
-        const dist = lev(tw, sw);
-        const sim = 1 - dist / Math.max(tw.length, sw.length);
-        // 宽容映射：正确跟读（少量词形/虚词差异）也能上高分
+        // 逐字母 ASR 误拆分修复：识别成 "c a t" 时合并为 "cat"
+        let sw2 = sw;
+        if (sw.length > 1 && sw.every(w => w.length === 1)) sw2 = [sw.join('')];
+        // 字符级相似度：单词少/多识别一个字母不扣重分
+        const charSim = (a, b) => {
+          if (!a.length || !b.length) return 0;
+          return 1 - lev(a.split(''), b.split('')) / Math.max(a.length, b.length);
+        };
+        // 目标词逐个找最佳匹配（贪心），统计覆盖率与匹配质量
+        const used = new Array(sw2.length).fill(false);
+        let matched = 0, matchSum = 0;
+        for (const ti of tw) {
+          let bestIdx = -1, bestSim = 0;
+          for (let j = 0; j < sw2.length; j++) {
+            if (used[j]) continue;
+            const sim = charSim(ti, sw2[j]);
+            if (sim > bestSim) { bestSim = sim; bestIdx = j; }
+          }
+          if (bestIdx >= 0 && bestSim >= 0.55) { used[bestIdx] = true; matched++; matchSum += bestSim; }
+        }
+        const coverage = matched / tw.length;
+        const quality = matched > 0 ? matchSum / matched : 0;
+        const extraPenalty = Math.min(Math.max(0, sw2.length - matched), 3) * 2;
         let score;
-        if (sim >= 0.85) score = 90 + (sim - 0.85) / 0.15 * 10;      // 90~100
-        else if (sim >= 0.6) score = 75 + (sim - 0.6) / 0.25 * 15;    // 75~90
-        else if (sim >= 0.4) score = 55 + (sim - 0.4) / 0.2 * 20;     // 55~75
-        else score = sim / 0.4 * 55;                                  // 0~55
+        if (coverage >= 0.9) score = 90 + (coverage - 0.9) / 0.1 * 10;
+        else if (coverage >= 0.7) score = 80 + (coverage - 0.7) / 0.2 * 10;
+        else if (coverage >= 0.5) score = 70 + (coverage - 0.5) / 0.2 * 10;
+        else if (coverage >= 0.3) score = 60 + (coverage - 0.3) / 0.2 * 10;
+        else score = coverage / 0.3 * 60;
+        if (quality < 0.95) score -= (0.95 - quality) * 20;
+        score -= extraPenalty;
         return Math.max(0, Math.min(100, Math.round(score)));
       }
     }
@@ -2041,15 +2066,15 @@ const API = ".";
 
   // 声学兜底评分：语音时长占比 + 时长匹配 + 音量
   function raAcousticScore() {
-    const totalMs = Date.now() - _raStartMs;
+    const totalMs = _raTotalMs || (Date.now() - _raStartMs);
     if (totalMs <= 500) return null;
     const wordCount = String(_raTargetText || '').trim().split(/\s+/).filter(Boolean).length || 1;
     const expectMs = Math.max(1200, wordCount * 380);
     const ratio = _raVoiceMs / totalMs;
-    const ratioScore = Math.min(1, ratio / 0.55) * 100;
+    const ratioScore = Math.min(1, ratio / 0.45) * 100;
     const durRatio = Math.min(totalMs, expectMs) / Math.max(totalMs, expectMs);
-    const durScore = 60 + durRatio * 40;
-    const volScore = Math.min(1, _raRmsPeak / 0.04) * 100;
+    const durScore = 70 + durRatio * 30;
+    const volScore = Math.min(1, _raRmsPeak / 0.025) * 100;
     const avg = ratioScore * 0.45 + durScore * 0.30 + volScore * 0.25;
     return Math.max(0, Math.min(100, Math.round(avg)));
   }
