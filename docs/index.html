@@ -36,7 +36,7 @@
   .tts-engine-hint { font-size:12px; color:#999; }
 
     /* ========== 页面容器 ========== */
-    .container { max-width: 480px; margin: 0 auto; padding: 16px 16px 80px; }
+    .container { max-width: 480px; margin: 0 auto; padding: 16px 16px 120px; }
 
     /* ========== 视图切换 ========== */
     .view { display: none; }
@@ -228,6 +228,7 @@
       z-index: 100;
       max-width: 480px;
       margin: 0 auto;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
     }
     .nav-item {
       flex: 1;
