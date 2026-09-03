@@ -1916,12 +1916,12 @@ const API = ".";
           const rms = Math.sqrt(sum / data.length);
           _raRmsSum += rms; _raRmsCount++;
           if (rms > _raRmsPeak) _raRmsPeak = rms;
-          if (rms >= 0.018) _raVoiceMs += 120;
+          if (rms >= 0.012) _raVoiceMs += 120;
           if (Date.now() - _startAt < 2500) {
             _raSilenceTimer = setTimeout(checkSilence, 120);
             return;
           }
-          if (rms < 0.018) {
+          if (rms < 0.012) {
             if (!_raSilenceStart) _raSilenceStart = Date.now();
             if (Date.now() - _raSilenceStart > 1500) {
               if (_raSilenceStop) _raSilenceStop();
@@ -2070,12 +2070,12 @@ const API = ".";
     if (totalMs <= 500) return null;
     const wordCount = String(_raTargetText || '').trim().split(/\s+/).filter(Boolean).length || 1;
     const expectMs = Math.max(1200, wordCount * 380);
-    const ratio = _raVoiceMs / totalMs;
-    const ratioScore = Math.min(1, ratio / 0.45) * 100;
-    const durRatio = Math.min(totalMs, expectMs) / Math.max(totalMs, expectMs);
-    const durScore = 70 + durRatio * 30;
+    // 用实际发声时长(而非含静音的总时长)匹配期望时长，前后犹豫不扣分
+    const voiceMs = _raVoiceMs || (totalMs * 0.7);
+    const durRatio = Math.min(voiceMs, expectMs) / Math.max(voiceMs, expectMs);
+    const durScore = 75 + durRatio * 25;
     const volScore = Math.min(1, _raRmsPeak / 0.025) * 100;
-    const avg = ratioScore * 0.45 + durScore * 0.30 + volScore * 0.25;
+    const avg = durScore * 0.6 + volScore * 0.4;
     return Math.max(0, Math.min(100, Math.round(avg)));
   }
 
