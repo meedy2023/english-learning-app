@@ -2021,6 +2021,7 @@ const API = ".";
     };
     const t = norm(_raTargetText);
     const s = norm(_raRecognizedText);
+    const acoustic = raAcousticScore();
     if (t && s) {
       const tw = t.split(/\s+/).filter(Boolean).map(stem);
       const sw = s.split(/\s+/).filter(Boolean).map(stem);
@@ -2056,7 +2057,10 @@ const API = ".";
         else score = coverage / 0.3 * 60;
         if (quality < 0.95) score -= (0.95 - quality) * 20;
         score -= extraPenalty;
-        return Math.max(0, Math.min(100, Math.round(score)));
+        const contentScore = Math.max(0, Math.min(100, score));
+        // 融合：内容正确性(65%) + 声学时长/音量(35%)，读对但轻声/时长不足也适当反映
+        const ac = (acoustic !== null) ? acoustic : 80;
+        return Math.max(0, Math.min(100, Math.round(contentScore * 0.65 + ac * 0.35)));
       }
     }
     // 语音识别不可用（华为/无GMS/断网）：声学兜底评分
