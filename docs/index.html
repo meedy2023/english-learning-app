@@ -1883,7 +1883,10 @@ const API = ".";
   let _raVoiceMs = 0;
   let _raRmsPeak = 0;
   let _raRmsSum = 0;
+  let _raRmsSqSum = 0;
   let _raRmsCount = 0;
+  let _raPauses = { short: 0, mid: 0, long: 0 };
+  let _raScoreDetail = null;
 
   function raBeginAnalysis(stream, targetText, onSilence) {
     _raTargetText = targetText || '';
@@ -1893,7 +1896,9 @@ const API = ".";
     _raVoiceMs = 0;
     _raRmsPeak = 0;
     _raRmsSum = 0;
+    _raRmsSqSum = 0;
     _raRmsCount = 0;
+    _raPauses = { short: 0, mid: 0, long: 0 };
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
     if (AudioCtx && stream) {
       try {
@@ -1914,7 +1919,7 @@ const API = ".";
             sum += v * v;
           }
           const rms = Math.sqrt(sum / data.length);
-          _raRmsSum += rms; _raRmsCount++;
+          _raRmsSum += rms; _raRmsSqSum += rms * rms; _raRmsCount++;
           if (rms > _raRmsPeak) _raRmsPeak = rms;
           if (rms >= 0.012) _raVoiceMs += 120;
           if (Date.now() - _startAt < 2500) {
@@ -1928,6 +1933,13 @@ const API = ".";
               return;
             }
           } else {
+            // 静音→有声 转换：统计这次停顿的时长并分级
+            if (_raSilenceStart !== null) {
+              const gap = Date.now() - _raSilenceStart;
+              if (gap >= 800) _raPauses.long++;
+              else if (gap >= 300) _raPauses.mid++;
+              else if (gap >= 150) _raPauses.short++;
+            }
             _raSilenceStart = null;
           }
           _raSilenceTimer = setTimeout(checkSilence, 120);
@@ -2019,52 +2031,94 @@ const API = ".";
       }
       return dp[m][n];
     };
+    const charSim = (a, b) => {
+      if (!a.length || !b.length) return 0;
+      return 1 - lev(a.split(''), b.split('')) / Math.max(a.length, b.length);
+    };
+
     const t = norm(_raTargetText);
     const s = norm(_raRecognizedText);
-    const acoustic = raAcousticScore();
-    if (t && s) {
-      const tw = t.split(/\s+/).filter(Boolean).map(stem);
-      const sw = s.split(/\s+/).filter(Boolean).map(stem);
-      if (tw.length && sw.length) {
-        // 逐字母 ASR 误拆分修复：识别成 "c a t" 时合并为 "cat"
-        let sw2 = sw;
-        if (sw.length > 1 && sw.every(w => w.length === 1)) sw2 = [sw.join('')];
-        // 字符级相似度：单词少/多识别一个字母不扣重分
-        const charSim = (a, b) => {
-          if (!a.length || !b.length) return 0;
-          return 1 - lev(a.split(''), b.split('')) / Math.max(a.length, b.length);
-        };
-        // 目标词逐个找最佳匹配（贪心），统计覆盖率与匹配质量
-        const used = new Array(sw2.length).fill(false);
-        let matched = 0, matchSum = 0;
-        for (const ti of tw) {
-          let bestIdx = -1, bestSim = 0;
-          for (let j = 0; j < sw2.length; j++) {
-            if (used[j]) continue;
-            const sim = charSim(ti, sw2[j]);
-            if (sim > bestSim) { bestSim = sim; bestIdx = j; }
-          }
-          if (bestIdx >= 0 && bestSim >= 0.55) { used[bestIdx] = true; matched++; matchSum += bestSim; }
+    const tw = t.split(/\s+/).filter(Boolean).map(stem);
+    const sw = s.split(/\s+/).filter(Boolean).map(stem);
+    const wordCount = tw.length || 1;
+    const hasText = !!(t && s && tw.length && sw.length);
+
+    // ============ 维度一：准确度 (Accuracy) ============
+    // 有识别文本：字符级相似度(匹配质量) + 严重错误(音素混淆)额外扣分
+    let accuracy = 100;
+    let matched = 0, matchSum = 0, severeCount = 0;
+    if (hasText) {
+      let sw2 = sw;
+      if (sw.length > 1 && sw.every(w => w.length === 1)) sw2 = [sw.join('')];
+      const used = new Array(sw2.length).fill(false);
+      for (const ti of tw) {
+        let bestIdx = -1, bestSim = 0;
+        for (let j = 0; j < sw2.length; j++) {
+          if (used[j]) continue;
+          const sim = charSim(ti, sw2[j]);
+          if (sim > bestSim) { bestSim = sim; bestIdx = j; }
         }
-        const coverage = matched / tw.length;
-        const quality = matched > 0 ? matchSum / matched : 0;
-        const extraPenalty = Math.min(Math.max(0, sw2.length - matched), 3) * 2;
-        let score;
-        if (coverage >= 0.9) score = 90 + (coverage - 0.9) / 0.1 * 10;
-        else if (coverage >= 0.7) score = 80 + (coverage - 0.7) / 0.2 * 10;
-        else if (coverage >= 0.5) score = 70 + (coverage - 0.5) / 0.2 * 10;
-        else if (coverage >= 0.3) score = 60 + (coverage - 0.3) / 0.2 * 10;
-        else score = coverage / 0.3 * 60;
-        if (quality < 0.95) score -= (0.95 - quality) * 20;
-        score -= extraPenalty;
-        const contentScore = Math.max(0, Math.min(100, score));
-        // 融合：内容正确性(65%) + 声学时长/音量(35%)，读对但轻声/时长不足也适当反映
-        const ac = (acoustic !== null) ? acoustic : 80;
-        return Math.max(0, Math.min(100, Math.round(contentScore * 0.65 + ac * 0.35)));
+        if (bestIdx >= 0 && bestSim >= 0.5) {
+          used[bestIdx] = true; matched++; matchSum += bestSim;
+          if (bestSim < 0.7) severeCount++;   // 相似度低 = 音素混淆严重错误
+        }
       }
+      const quality = matched > 0 ? matchSum / matched : 0;
+      accuracy = Math.round(quality * 100 - severeCount * 8);
+      accuracy = Math.max(0, Math.min(100, accuracy));
+    } else {
+      // 无识别文本（断网/华为无GMS）：准确度用声学近似
+      accuracy = 75;
     }
-    // 语音识别不可用（华为/无GMS/断网）：声学兜底评分
-    return raAcousticScore();
+
+    // ============ 维度二：完整度 (Completeness) ============
+    // 漏词断崖下跌：漏1词 100→50，漏2词→20，漏3+→0
+    let completeness = 100;
+    if (hasText) {
+      const missed = tw.length - matched;
+      if (missed <= 0) completeness = 100;
+      else if (missed === 1) completeness = 50;
+      else if (missed === 2) completeness = 20;
+      else completeness = 0;
+    } else {
+      completeness = 80;
+    }
+
+    // ============ 维度三：流利度 (Fluency) ============
+    // 停顿分级扣分 + 语速
+    let fluency = 100;
+    const p = _raPauses || { short: 0, mid: 0, long: 0 };
+    fluency -= p.short * 5;   // 词内卡顿（短停顿）
+    fluency -= p.mid * 10;    // 词间长停顿
+    fluency -= p.long * 20;   // 超长停顿
+    const totalMs = _raTotalMs || (Date.now() - _raStartMs);
+    const expectMs = Math.max(1200, wordCount * 380);
+    const voiceMs = _raVoiceMs || (totalMs * 0.7);
+    const speedRatio = voiceMs / expectMs;
+    if (speedRatio < 0.5) fluency -= 15;       // 读太快
+    else if (speedRatio > 2.0) fluency -= 10;  // 读太慢
+    fluency = Math.max(0, Math.min(100, fluency));
+
+    // ============ 维度四：韵律 (Prosody) ============
+    // 近似：音量(50%) + 能量起伏/重音节奏(50%)
+    let prosody = 70;
+    const volScore = Math.min(1, (_raRmsPeak || 0) / 0.025) * 100;
+    let energyVar = 0;
+    if (_raRmsCount > 0) {
+      const mean = _raRmsSum / _raRmsCount;
+      energyVar = Math.max(0, (_raRmsSqSum / _raRmsCount) - mean * mean);
+    }
+    let varScore = 100;
+    if (energyVar < 0.003) varScore = 50;      // 平铺直叙无起伏
+    else if (energyVar > 0.05) varScore = 60;  // 起伏过大会刺耳
+    else varScore = 100;                        // 适中起伏 = 自然重音
+    prosody = Math.round(volScore * 0.5 + varScore * 0.5);
+    prosody = Math.max(0, Math.min(100, prosody));
+
+    // ============ 加权总分 ============
+    const total = accuracy * 0.50 + completeness * 0.25 + fluency * 0.15 + prosody * 0.10;
+    _raScoreDetail = { accuracy: Math.round(accuracy), completeness: Math.round(completeness), fluency: Math.round(fluency), prosody: Math.round(prosody) };
+    return Math.max(0, Math.min(100, Math.round(total)));
   }
 
 
@@ -2106,7 +2160,26 @@ const API = ".";
         <div style="font-size:20px;margin-bottom:4px">${stars}</div>
         <div style="font-size:48px;font-weight:800;color:#6c63ff;margin-bottom:8px">${score}<span style="font-size:20px;color:#999"> 分</span></div>
         <div style="font-size:15px;color:#666;margin-bottom:8px">${msg}</div>
-        <div style="font-size:12px;color:#bbb;margin-bottom:16px">${_raRecognizedText ? '已与原句逐词比对' : '发音流畅度参考（联网识别更准）'}</div>
+        <div style="font-size:12px;color:#bbb;margin-bottom:12px">${_raRecognizedText ? '已与原句逐词比对' : '发音流畅度参考（联网识别更准）'}</div>
+        ${_raScoreDetail ? `
+        <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px">
+          <div style="flex:1;background:#f6f8ff;border-radius:12px;padding:8px 4px">
+            <div style="font-size:11px;color:#999">准确度</div>
+            <div style="font-size:16px;font-weight:700;color:#6c63ff">${_raScoreDetail.accuracy}</div>
+          </div>
+          <div style="flex:1;background:#f6f8ff;border-radius:12px;padding:8px 4px">
+            <div style="font-size:11px;color:#999">完整度</div>
+            <div style="font-size:16px;font-weight:700;color:#6c63ff">${_raScoreDetail.completeness}</div>
+          </div>
+          <div style="flex:1;background:#f6f8ff;border-radius:12px;padding:8px 4px">
+            <div style="font-size:11px;color:#999">流利度</div>
+            <div style="font-size:16px;font-weight:700;color:#6c63ff">${_raScoreDetail.fluency}</div>
+          </div>
+          <div style="flex:1;background:#f6f8ff;border-radius:12px;padding:8px 4px">
+            <div style="font-size:11px;color:#999">韵律</div>
+            <div style="font-size:16px;font-weight:700;color:#6c63ff">${_raScoreDetail.prosody}</div>
+          </div>
+        </div>` : ''}
         <button onclick="document.getElementById('ra-score-overlay').remove()" style="padding:10px 28px;font-size:15px;background:#6c63ff;color:white;border:none;border-radius:24px;cursor:pointer">继续</button>
       </div>
     `;
