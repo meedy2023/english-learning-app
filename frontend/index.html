@@ -2043,6 +2043,18 @@ const API = ".";
     const wordCount = tw.length || 1;
     const hasText = !!(t && s && tw.length && sw.length);
 
+    // ============ 完全无声拦截 ============
+    // 峰值音量从未达到发声阈值(0.012)且发声时长极短 → 说明根本没读，直接 0 分
+    // （区别于"有说话但 ASR 识别失败/断网"：后者 rmsPeak 会远超 0.012）
+    if (!hasText) {
+      const rmsPeak = _raRmsPeak || 0;
+      const voiceMs = _raVoiceMs || 0;
+      if (rmsPeak < 0.012 && voiceMs < 120) {
+        _raScoreDetail = { accuracy: 0, completeness: 0, fluency: 0, prosody: 0 };
+        return 0;
+      }
+    }
+
     // ============ 维度一：准确度 (Accuracy) ============
     // 有识别文本：字符级相似度(匹配质量) + 严重错误(音素混淆)额外扣分
     let accuracy = 100;
