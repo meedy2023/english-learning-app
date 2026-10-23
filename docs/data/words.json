@@ -2455,7 +2455,7 @@
   "example_cn": "猫喵喵叫。"
  },
  {
-  "id": 774,
+  "id": 102,
   "module": "三下1",
   "grade": "三年级",
   "word": "animal",
@@ -2466,7 +2466,7 @@
   "example_cn": "这只动物很可爱。"
  },
  {
-  "id": 775,
+  "id": 103,
   "module": "三下1",
   "grade": "三年级",
   "word": "panda",
@@ -2477,7 +2477,7 @@
   "example_cn": "熊猫是黑白相间的。"
  },
  {
-  "id": 776,
+  "id": 104,
   "module": "三下1",
   "grade": "三年级",
   "word": "elephant",
@@ -2488,7 +2488,7 @@
   "example_cn": "大象又大又强壮。"
  },
  {
-  "id": 777,
+  "id": 105,
   "module": "三下1",
   "grade": "三年级",
   "word": "bear",
@@ -2499,7 +2499,7 @@
   "example_cn": "熊是棕色的。"
  },
  {
-  "id": 778,
+  "id": 106,
   "module": "三下1",
   "grade": "三年级",
   "word": "giraffe",
@@ -2510,7 +2510,7 @@
   "example_cn": "长颈鹿很高。"
  },
  {
-  "id": 779,
+  "id": 107,
   "module": "三下1",
   "grade": "三年级",
   "word": "monkey",
@@ -2521,7 +2521,7 @@
   "example_cn": "猴子很滑稽。"
  },
  {
-  "id": 780,
+  "id": 125,
   "module": "三下1",
   "grade": "三年级",
   "word": "them",
@@ -2532,7 +2532,7 @@
   "example_cn": "看看它们。"
  },
  {
-  "id": 781,
+  "id": 121,
   "module": "三下1",
   "grade": "三年级",
   "word": "draw",
@@ -2543,7 +2543,7 @@
   "example_cn": "我会画老虎。"
  },
  {
-  "id": 782,
+  "id": 108,
   "module": "三下1",
   "grade": "三年级",
   "word": "tiger",
@@ -2554,7 +2554,7 @@
   "example_cn": "老虎很强壮。"
  },
  {
-  "id": 783,
+  "id": 117,
   "module": "三下1",
   "grade": "三年级",
   "word": "strong",
@@ -2565,7 +2565,7 @@
   "example_cn": "熊很强壮。"
  },
  {
-  "id": 784,
+  "id": 114,
   "module": "三下1",
   "grade": "三年级",
   "word": "short",
@@ -2576,7 +2576,7 @@
   "example_cn": "长颈鹿不矮。"
  },
  {
-  "id": 785,
+  "id": 119,
   "module": "三下1",
   "grade": "三年级",
   "word": "white",
@@ -2587,7 +2587,7 @@
   "example_cn": "熊猫是白色的。"
  },
  {
-  "id": 786,
+  "id": 120,
   "module": "三下1",
   "grade": "三年级",
   "word": "brown",
@@ -2598,7 +2598,7 @@
   "example_cn": "熊是棕色的。"
  },
  {
-  "id": 787,
+  "id": 113,
   "module": "三下1",
   "grade": "三年级",
   "word": "tall",
@@ -2631,7 +2631,7 @@
   "example_cn": "鸵鸟跑得快。"
  },
  {
-  "id": 790,
+  "id": 118,
   "module": "三下1",
   "grade": "三年级",
   "word": "fast",
@@ -2653,7 +2653,7 @@
   "example_cn": "变色龙很小。"
  },
  {
-  "id": 792,
+  "id": 116,
   "module": "三下1",
   "grade": "三年级",
   "word": "small",
@@ -2664,7 +2664,7 @@
   "example_cn": "变色龙很小。"
  },
  {
-  "id": 793,
+  "id": 109,
   "module": "三下1",
   "grade": "三年级",
   "word": "lion",
@@ -2675,7 +2675,7 @@
   "example_cn": "狮子很强壮。"
  },
  {
-  "id": 794,
+  "id": 112,
   "module": "三下1",
   "grade": "三年级",
   "word": "cute",
@@ -2697,7 +2697,7 @@
   "example_cn": "我们出去吧。"
  },
  {
-  "id": 796,
+  "id": 111,
   "module": "三下1",
   "grade": "三年级",
   "word": "zoo",
@@ -2708,7 +2708,7 @@
   "example_cn": "我们去动物园吧。"
  },
  {
-  "id": 797,
+  "id": 124,
   "module": "三下1",
   "grade": "三年级",
   "word": "go",
@@ -2719,7 +2719,7 @@
   "example_cn": "我们去动物园吧。"
  },
  {
-  "id": 798,
+  "id": 110,
   "module": "三下1",
   "grade": "三年级",
   "word": "zebra",
@@ -2730,7 +2730,7 @@
   "example_cn": "斑马是黑白相间的。"
  },
  {
-  "id": 799,
+  "id": 123,
   "module": "三下1",
   "grade": "三年级",
   "word": "move",
@@ -2752,7 +2752,7 @@
   "example_cn": "这条路很长。"
  },
  {
-  "id": 801,
+  "id": 122,
   "module": "三下1",
   "grade": "三年级",
   "word": "dance",
@@ -2829,7 +2829,7 @@
   "example_cn": "一只鞋在路上。"
  },
  {
-  "id": 808,
+  "id": 126,
   "module": "三下2",
   "grade": "三年级",
   "word": "body",
@@ -2840,7 +2840,7 @@
   "example_cn": "摸摸你的身体。"
  },
  {
-  "id": 809,
+  "id": 127,
   "module": "三下2",
   "grade": "三年级",
   "word": "head",
@@ -2851,7 +2851,7 @@
   "example_cn": "这是我的头。"
  },
  {
-  "id": 810,
+  "id": 129,
   "module": "三下2",
   "grade": "三年级",
   "word": "eye",
@@ -2862,7 +2862,7 @@
   "example_cn": "我有两只眼睛。"
  },
  {
-  "id": 811,
+  "id": 130,
   "module": "三下2",
   "grade": "三年级",
   "word": "ear",
@@ -2873,7 +2873,7 @@
   "example_cn": "摸摸你的耳朵。"
  },
  {
-  "id": 812,
+  "id": 131,
   "module": "三下2",
   "grade": "三年级",
   "word": "mouth",
@@ -2884,7 +2884,7 @@
   "example_cn": "张开你的嘴。"
  },
  {
-  "id": 813,
+  "id": 132,
   "module": "三下2",
   "grade": "三年级",
   "word": "nose",
@@ -2895,7 +2895,7 @@
   "example_cn": "这是我的鼻子。"
  },
  {
-  "id": 814,
+  "id": 139,
   "module": "三下2",
   "grade": "三年级",
   "word": "touch",
@@ -2906,7 +2906,7 @@
   "example_cn": "摸摸你的鼻子。"
  },
  {
-  "id": 815,
+  "id": 133,
   "module": "三下2",
   "grade": "三年级",
   "word": "hand",
@@ -2917,7 +2917,7 @@
   "example_cn": "洗洗你的手。"
  },
  {
-  "id": 816,
+  "id": 134,
   "module": "三下2",
   "grade": "三年级",
   "word": "arm",
@@ -2928,7 +2928,7 @@
   "example_cn": "这是我的手臂。"
  },
  {
-  "id": 817,
+  "id": 135,
   "module": "三下2",
   "grade": "三年级",
   "word": "leg",
@@ -2939,7 +2939,7 @@
   "example_cn": "我的腿很长。"
  },
  {
-  "id": 818,
+  "id": 136,
   "module": "三下2",
   "grade": "三年级",
   "word": "foot",
@@ -2962,7 +2962,7 @@
   "example_cn": "我的脚很冷。"
  },
  {
-  "id": 820,
+  "id": 137,
   "module": "三下2",
   "grade": "三年级",
   "word": "toe",
@@ -3030,7 +3030,7 @@
   "example_cn": "这是我的作品。"
  },
  {
-  "id": 826,
+  "id": 144,
   "module": "三下2",
   "grade": "三年级",
   "word": "snowman",
@@ -3041,7 +3041,7 @@
   "example_cn": "我们堆个雪人吧。"
  },
  {
-  "id": 827,
+  "id": 145,
   "module": "三下2",
   "grade": "三年级",
   "word": "long",
@@ -3107,7 +3107,7 @@
   "example_cn": "我今天身体很好。"
  },
  {
-  "id": 833,
+  "id": 140,
   "module": "三下2",
   "grade": "三年级",
   "word": "hear",
@@ -3118,7 +3118,7 @@
   "example_cn": "我用耳朵听。"
  },
  {
-  "id": 834,
+  "id": 141,
   "module": "三下2",
   "grade": "三年级",
   "word": "smell",
@@ -3129,7 +3129,7 @@
   "example_cn": "我用鼻子闻。"
  },
  {
-  "id": 835,
+  "id": 142,
   "module": "三下2",
   "grade": "三年级",
   "word": "talk",
@@ -3140,7 +3140,7 @@
   "example_cn": "我用嘴说话。"
  },
  {
-  "id": 836,
+  "id": 143,
   "module": "三下2",
   "grade": "三年级",
   "word": "eat",
@@ -3228,7 +3228,7 @@
   "example_cn": "回答我的问题。"
  },
  {
-  "id": 844,
+  "id": 138,
   "module": "三下2",
   "grade": "三年级",
   "word": "hair",
@@ -3250,7 +3250,7 @@
   "example_cn": "我们各不相同。"
  },
  {
-  "id": 846,
+  "id": 128,
   "module": "三下2",
   "grade": "三年级",
   "word": "face",
@@ -3261,7 +3261,7 @@
   "example_cn": "洗洗你的脸。"
  },
  {
-  "id": 847,
+  "id": 146,
   "module": "三下3",
   "grade": "三年级",
   "word": "yummy",
@@ -3272,7 +3272,7 @@
   "example_cn": "蛋糕很好吃。"
  },
  {
-  "id": 848,
+  "id": 147,
   "module": "三下3",
   "grade": "三年级",
   "word": "food",
@@ -3283,7 +3283,7 @@
   "example_cn": "我喜欢中国食物。"
  },
  {
-  "id": 849,
+  "id": 156,
   "module": "三下3",
   "grade": "三年级",
   "word": "strawberry",
@@ -3294,7 +3294,7 @@
   "example_cn": "我喜欢草莓。"
  },
  {
-  "id": 850,
+  "id": 157,
   "module": "三下3",
   "grade": "三年级",
   "word": "tomato",
@@ -3305,7 +3305,7 @@
   "example_cn": "这是一个番茄。"
  },
  {
-  "id": 851,
+  "id": 150,
   "module": "三下3",
   "grade": "三年级",
   "word": "noodle",
@@ -3316,7 +3316,7 @@
   "example_cn": "我喜欢面条。"
  },
  {
-  "id": 852,
+  "id": 158,
   "module": "三下3",
   "grade": "三年级",
   "word": "carrot",
@@ -3327,7 +3327,7 @@
   "example_cn": "兔子喜欢胡萝卜。"
  },
  {
-  "id": 853,
+  "id": 153,
   "module": "三下3",
   "grade": "三年级",
   "word": "chicken",
@@ -3338,7 +3338,7 @@
   "example_cn": "我喜欢鸡肉。"
  },
  {
-  "id": 854,
+  "id": 152,
   "module": "三下3",
   "grade": "三年级",
   "word": "fish",
@@ -3349,7 +3349,7 @@
   "example_cn": "这鱼很新鲜。"
  },
  {
-  "id": 855,
+  "id": 149,
   "module": "三下3",
   "grade": "三年级",
   "word": "rice",
@@ -3360,7 +3360,7 @@
   "example_cn": "我午饭吃米饭。"
  },
  {
-  "id": 856,
+  "id": 151,
   "module": "三下3",
   "grade": "三年级",
   "word": "meat",
@@ -3371,7 +3371,7 @@
   "example_cn": "我不吃很多肉。"
  },
  {
-  "id": 857,
+  "id": 155,
   "module": "三下3",
   "grade": "三年级",
   "word": "fruit",
@@ -3382,7 +3382,7 @@
   "example_cn": "水果对我们有益。"
  },
  {
-  "id": 858,
+  "id": 154,
   "module": "三下3",
   "grade": "三年级",
   "word": "vegetable",
@@ -3393,7 +3393,7 @@
   "example_cn": "多吃蔬菜。"
  },
  {
-  "id": 859,
+  "id": 162,
   "module": "三下3",
   "grade": "三年级",
   "word": "salad",
@@ -3404,7 +3404,7 @@
   "example_cn": "我喜欢沙拉。"
  },
  {
-  "id": 860,
+  "id": 159,
   "module": "三下3",
   "grade": "三年级",
   "word": "banana",
@@ -3426,7 +3426,7 @@
   "example_cn": "我喜欢豆子。"
  },
  {
-  "id": 862,
+  "id": 161,
   "module": "三下3",
   "grade": "三年级",
   "word": "cucumber",
@@ -3470,7 +3470,7 @@
   "example_cn": "你呢？"
  },
  {
-  "id": 866,
+  "id": 160,
   "module": "三下3",
   "grade": "三年级",
   "word": "grape",
@@ -3481,7 +3481,7 @@
   "example_cn": "我喜欢葡萄。"
  },
  {
-  "id": 867,
+  "id": 163,
   "module": "三下3",
   "grade": "三年级",
   "word": "juice",
@@ -3525,7 +3525,7 @@
   "example_cn": "早餐准备好了。"
  },
  {
-  "id": 871,
+  "id": 190,
   "module": "三下3",
   "grade": "三年级",
   "word": "time",
@@ -3657,7 +3657,7 @@
   "example_cn": "我每天阅读。"
  },
  {
-  "id": 883,
+  "id": 213,
   "module": "三下3",
   "grade": "三年级",
   "word": "week",
@@ -3679,7 +3679,7 @@
   "example_cn": "树很高。"
  },
  {
-  "id": 885,
+  "id": 164,
   "module": "三下3",
   "grade": "三年级",
   "word": "milk",
@@ -3767,7 +3767,7 @@
   "example_cn": "我喜欢寿司。"
  },
  {
-  "id": 893,
+  "id": 165,
   "module": "三下3",
   "grade": "三年级",
   "word": "cake",
@@ -3778,7 +3778,7 @@
   "example_cn": "蛋糕很好吃。"
  },
  {
-  "id": 894,
+  "id": 168,
   "module": "三下4",
   "grade": "三年级",
   "word": "hobby",
@@ -3789,7 +3789,7 @@
   "example_cn": "你的爱好是什么？"
  },
  {
-  "id": 895,
+  "id": 169,
   "module": "三下4",
   "grade": "三年级",
   "word": "free",
@@ -3800,7 +3800,7 @@
   "example_cn": "空闲时我读书。"
  },
  {
-  "id": 896,
+  "id": 170,
   "module": "三下4",
   "grade": "三年级",
   "word": "after",
@@ -3811,7 +3811,7 @@
   "example_cn": "晚饭后我读书。"
  },
  {
-  "id": 897,
+  "id": 171,
   "module": "三下4",
   "grade": "三年级",
   "word": "swim",
@@ -3855,7 +3855,7 @@
   "example_cn": "这些是我的书。"
  },
  {
-  "id": 901,
+  "id": 172,
   "module": "三下4",
   "grade": "三年级",
   "word": "tai chi",
@@ -3866,7 +3866,7 @@
   "example_cn": "我奶奶打太极。"
  },
  {
-  "id": 902,
+  "id": 173,
   "module": "三下4",
   "grade": "三年级",
   "word": "his",
@@ -3877,7 +3877,7 @@
   "example_cn": "这是他的爱好。"
  },
  {
-  "id": 903,
+  "id": 174,
   "module": "三下4",
   "grade": "三年级",
   "word": "insect",
@@ -3899,7 +3899,7 @@
   "example_cn": "这个男人是我的老师。"
  },
  {
-  "id": 905,
+  "id": 175,
   "module": "三下4",
   "grade": "三年级",
   "word": "learn",
@@ -3910,7 +3910,7 @@
   "example_cn": "我从他身上学到很多。"
  },
  {
-  "id": 906,
+  "id": 176,
   "module": "三下4",
   "grade": "三年级",
   "word": "plant",
@@ -3921,7 +3921,7 @@
   "example_cn": "她喜欢植物。"
  },
  {
-  "id": 907,
+  "id": 177,
   "module": "三下4",
   "grade": "三年级",
   "word": "when",
@@ -3932,7 +3932,7 @@
   "example_cn": "你什么时候读书？"
  },
  {
-  "id": 908,
+  "id": 178,
   "module": "三下4",
   "grade": "三年级",
   "word": "question",
@@ -3943,7 +3943,7 @@
   "example_cn": "他问了一个问题。"
  },
  {
-  "id": 909,
+  "id": 179,
   "module": "三下4",
   "grade": "三年级",
   "word": "watch",
@@ -3954,7 +3954,7 @@
   "example_cn": "他观察螳螂。"
  },
  {
-  "id": 910,
+  "id": 180,
   "module": "三下4",
   "grade": "三年级",
   "word": "study",
@@ -3987,7 +3987,7 @@
   "example_cn": "它停在叶子上。"
  },
  {
-  "id": 913,
+  "id": 181,
   "module": "三下4",
   "grade": "三年级",
   "word": "interesting",
@@ -3998,7 +3998,7 @@
   "example_cn": "这很有趣。"
  },
  {
-  "id": 914,
+  "id": 182,
   "module": "三下4",
   "grade": "三年级",
   "word": "grow",
@@ -4020,7 +4020,7 @@
   "example_cn": "我想快快长大。"
  },
  {
-  "id": 916,
+  "id": 183,
   "module": "三下4",
   "grade": "三年级",
   "word": "country",
@@ -4031,7 +4031,7 @@
   "example_cn": "中国是个大国。"
  },
  {
-  "id": 917,
+  "id": 184,
   "module": "三下4",
   "grade": "三年级",
   "word": "robot",
@@ -4042,7 +4042,7 @@
   "example_cn": "他喜欢机器人。"
  },
  {
-  "id": 918,
+  "id": 185,
   "module": "三下4",
   "grade": "三年级",
   "word": "kite",
@@ -4053,7 +4053,7 @@
   "example_cn": "她喜欢做风筝。"
  },
  {
-  "id": 919,
+  "id": 186,
   "module": "三下4",
   "grade": "三年级",
   "word": "skate",
@@ -4064,7 +4064,7 @@
   "example_cn": "他喜欢滑冰。"
  },
  {
-  "id": 920,
+  "id": 187,
   "module": "三下4",
   "grade": "三年级",
   "word": "ice",
@@ -4075,7 +4075,7 @@
   "example_cn": "在冰上滑冰很有趣。"
  },
  {
-  "id": 921,
+  "id": 188,
   "module": "三下4",
   "grade": "三年级",
   "word": "ski",
@@ -4086,7 +4086,7 @@
   "example_cn": "他们喜欢滑雪。"
  },
  {
-  "id": 922,
+  "id": 189,
   "module": "三下4",
   "grade": "三年级",
   "word": "garden",
@@ -4108,7 +4108,7 @@
   "example_cn": "时钟滴答响。"
  },
  {
-  "id": 924,
+  "id": 202,
   "module": "三下5",
   "grade": "三年级",
   "word": "tell",
@@ -4119,7 +4119,7 @@
   "example_cn": "告诉我时间。"
  },
  {
-  "id": 925,
+  "id": 191,
   "module": "三下5",
   "grade": "三年级",
   "word": "clock",
@@ -4130,7 +4130,7 @@
   "example_cn": "看时钟。"
  },
  {
-  "id": 926,
+  "id": 192,
   "module": "三下5",
   "grade": "三年级",
   "word": "o'clock",
@@ -4141,7 +4141,7 @@
   "example_cn": "七点了。"
  },
  {
-  "id": 927,
+  "id": 193,
   "module": "三下5",
   "grade": "三年级",
   "word": "fifteen",
@@ -4152,7 +4152,7 @@
   "example_cn": "现在一点十五分。"
  },
  {
-  "id": 928,
+  "id": 194,
   "module": "三下5",
   "grade": "三年级",
   "word": "thirty",
@@ -4163,7 +4163,7 @@
   "example_cn": "现在七点三十分。"
  },
  {
-  "id": 929,
+  "id": 195,
   "module": "三下5",
   "grade": "三年级",
   "word": "forty-five",
@@ -4174,7 +4174,7 @@
   "example_cn": "现在一点四十五分。"
  },
  {
-  "id": 930,
+  "id": 198,
   "module": "三下5",
   "grade": "三年级",
   "word": "dinner",
@@ -4185,7 +4185,7 @@
   "example_cn": "该吃晚饭了。"
  },
  {
-  "id": 931,
+  "id": 196,
   "module": "三下5",
   "grade": "三年级",
   "word": "half",
@@ -4196,7 +4196,7 @@
   "example_cn": "现在七点半。"
  },
  {
-  "id": 932,
+  "id": 197,
   "module": "三下5",
   "grade": "三年级",
   "word": "past",
@@ -4229,7 +4229,7 @@
   "example_cn": "呃！太早了。"
  },
  {
-  "id": 935,
+  "id": 199,
   "module": "三下5",
   "grade": "三年级",
   "word": "homework",
@@ -4240,7 +4240,7 @@
   "example_cn": "我做家庭作业。"
  },
  {
-  "id": 936,
+  "id": 201,
   "module": "三下5",
   "grade": "三年级",
   "word": "need",
@@ -4251,7 +4251,7 @@
   "example_cn": "我需要一个时钟。"
  },
  {
-  "id": 937,
+  "id": 203,
   "module": "三下5",
   "grade": "三年级",
   "word": "activity",
@@ -4273,7 +4273,7 @@
   "example_cn": "这是她的书。"
  },
  {
-  "id": 939,
+  "id": 205,
   "module": "三下5",
   "grade": "三年级",
   "word": "class",
@@ -4284,7 +4284,7 @@
   "example_cn": "该上课了。"
  },
  {
-  "id": 940,
+  "id": 204,
   "module": "三下5",
   "grade": "三年级",
   "word": "evening",
@@ -4306,7 +4306,7 @@
   "example_cn": "我给朋友打电话。"
  },
  {
-  "id": 942,
+  "id": 206,
   "module": "三下6",
   "grade": "三年级",
   "word": "Monday",
@@ -4317,7 +4317,7 @@
   "example_cn": "今天星期一。"
  },
  {
-  "id": 943,
+  "id": 207,
   "module": "三下6",
   "grade": "三年级",
   "word": "Tuesday",
@@ -4328,7 +4328,7 @@
   "example_cn": "今天星期二。"
  },
  {
-  "id": 944,
+  "id": 208,
   "module": "三下6",
   "grade": "三年级",
   "word": "Wednesday",
@@ -4339,7 +4339,7 @@
   "example_cn": "今天星期三。"
  },
  {
-  "id": 945,
+  "id": 209,
   "module": "三下6",
   "grade": "三年级",
   "word": "Thursday",
@@ -4350,7 +4350,7 @@
   "example_cn": "今天星期四。"
  },
  {
-  "id": 946,
+  "id": 210,
   "module": "三下6",
   "grade": "三年级",
   "word": "Friday",
@@ -4361,7 +4361,7 @@
   "example_cn": "我星期五读书。"
  },
  {
-  "id": 947,
+  "id": 211,
   "module": "三下6",
   "grade": "三年级",
   "word": "Saturday",
@@ -4372,7 +4372,7 @@
   "example_cn": "我星期六踢足球。"
  },
  {
-  "id": 948,
+  "id": 212,
   "module": "三下6",
   "grade": "三年级",
   "word": "Sunday",
@@ -4383,7 +4383,7 @@
   "example_cn": "我星期日去公园。"
  },
  {
-  "id": 949,
+  "id": 215,
   "module": "三下6",
   "grade": "三年级",
   "word": "park",
@@ -4394,7 +4394,7 @@
   "example_cn": "我去公园。"
  },
  {
-  "id": 950,
+  "id": 216,
   "module": "三下6",
   "grade": "三年级",
   "word": "visit",
@@ -4405,7 +4405,7 @@
   "example_cn": "我看望奶奶。"
  },
  {
-  "id": 951,
+  "id": 220,
   "module": "三下6",
   "grade": "三年级",
   "word": "lesson",
@@ -4416,7 +4416,7 @@
   "example_cn": "我有一节钢琴课。"
  },
  {
-  "id": 952,
+  "id": 217,
   "module": "三下6",
   "grade": "三年级",
   "word": "football",
@@ -4482,7 +4482,7 @@
   "example_cn": "我有东西给你。"
  },
  {
-  "id": 958,
+  "id": 221,
   "module": "三下6",
   "grade": "三年级",
   "word": "idea",
@@ -4515,7 +4515,7 @@
   "example_cn": "她教英语。"
  },
  {
-  "id": 961,
+  "id": 219,
   "module": "三下6",
   "grade": "三年级",
   "word": "English",
@@ -4537,7 +4537,7 @@
   "example_cn": "这是给你的卡片。"
  },
  {
-  "id": 963,
+  "id": 222,
   "module": "三下6",
   "grade": "三年级",
   "word": "busy",
@@ -4603,7 +4603,7 @@
   "example_cn": "当然！我们走吧。"
  },
  {
-  "id": 969,
+  "id": 223,
   "module": "三下6",
   "grade": "三年级",
   "word": "flower",
@@ -4669,7 +4669,7 @@
   "example_cn": "我用电脑。"
  },
  {
-  "id": 975,
+  "id": 218,
   "module": "三下6",
   "grade": "三年级",
   "word": "music",
@@ -4717,8 +4717,8 @@
   "module": "四上1",
   "grade": "四年级",
   "word": "far",
-  "phonetic": "/fɑː(r)/",
-  "chinese": "远；远的",
+  "phonetic": "/fɑː/",
+  "chinese": "远",
   "type": "adverb",
   "example_en": "I can jump far.",
   "example_cn": "我能跳得远。"
@@ -4729,7 +4729,7 @@
   "grade": "四年级",
   "word": "ping-pong",
   "phonetic": "/ˈpɪŋ pɒŋ/",
-  "chinese": "乒乓球运动",
+  "chinese": "乒乓球",
   "type": "noun",
   "example_en": "I can play ping-pong.",
   "example_cn": "我会打乒乓球。"
@@ -4740,7 +4740,7 @@
   "grade": "四年级",
   "word": "volleyball",
   "phonetic": "/ˈvɒlibɔːl/",
-  "chinese": "排球（运动）",
+  "chinese": "排球",
   "type": "noun",
   "example_en": "She can play volleyball.",
   "example_cn": "她会打排球。"
@@ -4790,28 +4790,6 @@
   "example_cn": "因为我喜欢它。"
  },
  {
-  "id": 234,
-  "module": "四上1",
-  "grade": "四年级",
-  "word": "cancer",
-  "phonetic": "/ˈkænsə(r)/",
-  "chinese": "癌（症）",
-  "type": "noun",
-  "example_en": "He lost one leg because of cancer.",
-  "example_cn": "他因为癌症失去了一条腿。"
- },
- {
-  "id": 235,
-  "module": "四上1",
-  "grade": "四年级",
-  "word": "across",
-  "phonetic": "/əˈkrɒs/",
-  "chinese": "横跨",
-  "type": "preposition",
-  "example_en": "He ran across Canada.",
-  "example_cn": "他跑遍加拿大。"
- },
- {
   "id": 236,
   "module": "四上1",
   "grade": "四年级",
@@ -4819,8 +4797,8 @@
   "phonetic": "/ˈmʌni/",
   "chinese": "钱",
   "type": "noun",
-  "example_en": "He got money for the people.",
-  "example_cn": "他为人们筹钱。"
+  "example_en": "We need some money.",
+  "example_cn": "我们需要一些钱。"
  },
  {
   "id": 237,
@@ -4828,10 +4806,10 @@
   "grade": "四年级",
   "word": "hard",
   "phonetic": "/hɑːd/",
-  "chinese": "困难的；努力地",
+  "chinese": "困难的",
   "type": "adjective",
-  "example_en": "Work hard!",
-  "example_cn": "努力工作！"
+  "example_en": "It is hard, but I try.",
+  "example_cn": "这很难，但我尝试。"
  },
  {
   "id": 238,
@@ -4841,8 +4819,8 @@
   "phonetic": "/kaɪnd/",
   "chinese": "友善的",
   "type": "adjective",
-  "example_en": "Many kind people help me.",
-  "example_cn": "许多善良的人帮助我。"
+  "example_en": "She is kind.",
+  "example_cn": "她很友善。"
  },
  {
   "id": 239,
@@ -4852,8 +4830,8 @@
   "phonetic": "/kiːp/",
   "chinese": "持续",
   "type": "verb",
-  "example_en": "Keep running!",
-  "example_cn": "持续跑步！"
+  "example_en": "Keep trying!",
+  "example_cn": "坚持尝试！"
  },
  {
   "id": 240,
@@ -4861,7 +4839,7 @@
   "grade": "四年级",
   "word": "month",
   "phonetic": "/mʌnθ/",
-  "chinese": "一个月",
+  "chinese": "月",
   "type": "noun",
   "example_en": "There are twelve months in a year.",
   "example_cn": "一年有十二个月。"
@@ -4874,7 +4852,7 @@
   "phonetic": "/ɪl/",
   "chinese": "生病的",
   "type": "adjective",
-  "example_en": "He is ill.",
+  "example_en": "He was ill.",
   "example_cn": "他生病了。"
  },
  {
@@ -4882,8 +4860,8 @@
   "module": "四上1",
   "grade": "四年级",
   "word": "year",
-  "phonetic": "/jɪə(r)/",
-  "chinese": "年；年度",
+  "phonetic": "/jɪə/",
+  "chinese": "年",
   "type": "noun",
   "example_en": "Happy New Year!",
   "example_cn": "新年快乐！"
@@ -4893,11 +4871,11 @@
   "module": "四上1",
   "grade": "四年级",
   "word": "remember",
-  "phonetic": "/rɪˈmembə(r)/",
-  "chinese": "纪念；记住",
+  "phonetic": "/rɪˈmembə/",
+  "chinese": "记住",
   "type": "verb",
-  "example_en": "Let's remember Terry.",
-  "example_cn": "让我们纪念特里。"
+  "example_en": "I remember his name.",
+  "example_cn": "我记得他的名字。"
  },
  {
   "id": 244,
@@ -4907,8 +4885,8 @@
   "phonetic": "/feɪl/",
   "chinese": "失败",
   "type": "verb",
-  "example_en": "It's OK to fail.",
-  "example_cn": "失败没关系。"
+  "example_en": "Don't be afraid to fail.",
+  "example_cn": "不要害怕失败。"
  },
  {
   "id": 245,
@@ -4918,19 +4896,19 @@
   "phonetic": "/ɡɪv/",
   "chinese": "给予",
   "type": "verb",
-  "example_en": "Don't give up!",
-  "example_cn": "不要放弃！"
+  "example_en": "Give it a try.",
+  "example_cn": "试一试吧。"
  },
  {
   "id": 246,
   "module": "四上1",
   "grade": "四年级",
   "word": "never",
-  "phonetic": "/ˈnevə(r)/",
-  "chinese": "决不，永不",
+  "phonetic": "/ˈnevə/",
+  "chinese": "决不",
   "type": "adverb",
-  "example_en": "Never stop!",
-  "example_cn": "永不停止！"
+  "example_en": "Never give up!",
+  "example_cn": "决不放弃！"
  },
  {
   "id": 247,
@@ -4938,21 +4916,21 @@
   "grade": "四年级",
   "word": "try",
   "phonetic": "/traɪ/",
-  "chinese": "努力；尝试",
+  "chinese": "尝试",
   "type": "verb",
-  "example_en": "Try your best!",
-  "example_cn": "尽你最大的努力！"
+  "example_en": "I try again.",
+  "example_cn": "我再试一次。"
  },
  {
   "id": 248,
   "module": "四上1",
   "grade": "四年级",
   "word": "player",
-  "phonetic": "/ˈpleɪə(r)/",
-  "chinese": "运动员，选手",
+  "phonetic": "/ˈpleɪə/",
+  "chinese": "运动员",
   "type": "noun",
   "example_en": "He is a good player.",
-  "example_cn": "他是个好运动员。"
+  "example_cn": "他是一名好运动员。"
  },
  {
   "id": 249,
@@ -4962,19 +4940,19 @@
   "phonetic": "/əˈbɪləti/",
   "chinese": "能力",
   "type": "noun",
-  "example_en": "Everyone has an ability.",
+  "example_en": "Everyone has abilities.",
   "example_cn": "每个人都有能力。"
  },
  {
-  "id": 250,
-  "module": "四上2",
+  "id": 235,
+  "module": "四上1",
   "grade": "四年级",
-  "word": "chore",
-  "phonetic": "/tʃɔː(r)/",
-  "chinese": "家庭杂务",
-  "type": "noun",
-  "example_en": "Chores can be fun!",
-  "example_cn": "家务也可以很有趣！"
+  "word": "across",
+  "phonetic": "/əˈkrɒs/",
+  "chinese": "横跨",
+  "type": "preposition",
+  "example_en": "He swims across the river.",
+  "example_cn": "他游过河。"
  },
  {
   "id": 251,
@@ -4984,8 +4962,8 @@
   "phonetic": "/wɒʃ/",
   "chinese": "洗",
   "type": "verb",
-  "example_en": "Wash the dishes.",
-  "example_cn": "洗碗。"
+  "example_en": "I wash the dishes.",
+  "example_cn": "我洗碗。"
  },
  {
   "id": 252,
@@ -4993,10 +4971,10 @@
   "grade": "四年级",
   "word": "dish",
   "phonetic": "/dɪʃ/",
-  "chinese": "盘子，碟子",
+  "chinese": "盘子",
   "type": "noun",
-  "example_en": "Wash the dishes.",
-  "example_cn": "洗碗。"
+  "example_en": "This dish is clean.",
+  "example_cn": "这个盘子很干净。"
  },
  {
   "id": 253,
@@ -5006,8 +4984,8 @@
   "phonetic": "/fiːd/",
   "chinese": "喂养",
   "type": "verb",
-  "example_en": "Feed the dog.",
-  "example_cn": "喂狗。"
+  "example_en": "I feed the dog.",
+  "example_cn": "我喂狗。"
  },
  {
   "id": 254,
@@ -5015,32 +4993,21 @@
   "grade": "四年级",
   "word": "sweep",
   "phonetic": "/swiːp/",
-  "chinese": "扫，打扫",
+  "chinese": "扫",
   "type": "verb",
-  "example_en": "Sweep the floor.",
-  "example_cn": "扫地。"
- },
- {
-  "id": 255,
-  "module": "四上2",
-  "grade": "四年级",
-  "word": "tidy",
-  "phonetic": "/ˈtaɪdi/",
-  "chinese": "整理，收拾",
-  "type": "verb",
-  "example_en": "Tidy your room.",
-  "example_cn": "整理你的房间。"
+  "example_en": "I sweep the floor.",
+  "example_cn": "我扫地。"
  },
  {
   "id": 256,
   "module": "四上2",
   "grade": "四年级",
   "word": "floor",
-  "phonetic": "/flɔː(r)/",
-  "chinese": "地板，地面",
+  "phonetic": "/flɔː/",
+  "chinese": "地板",
   "type": "noun",
-  "example_en": "Clean the floor.",
-  "example_cn": "擦地板。"
+  "example_en": "The floor is clean.",
+  "example_cn": "地板很干净。"
  },
  {
   "id": 257,
@@ -5051,7 +5018,40 @@
   "chinese": "垃圾",
   "type": "noun",
   "example_en": "Take out the rubbish.",
-  "example_cn": "倒垃圾。"
+  "example_cn": "把垃圾拿出去。"
+ },
+ {
+  "id": 250,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "chore",
+  "phonetic": "/tʃɔː/",
+  "chinese": "家庭杂务",
+  "type": "noun",
+  "example_en": "I do chores at home.",
+  "example_cn": "我在家做家务。"
+ },
+ {
+  "id": 1007,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "to-do list",
+  "phonetic": "/tə ˈduː lɪst/",
+  "chinese": "待办清单",
+  "type": "noun",
+  "example_en": "This is my to-do list.",
+  "example_cn": "这是我的待办清单。"
+ },
+ {
+  "id": 268,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "may",
+  "phonetic": "/meɪ/",
+  "chinese": "可以",
+  "type": "verb",
+  "example_en": "May I go outside?",
+  "example_cn": "我可以出去吗？"
  },
  {
   "id": 258,
@@ -5061,8 +5061,19 @@
   "phonetic": "/ˌaʊtˈsaɪd/",
   "chinese": "在室外",
   "type": "adverb",
-  "example_en": "May I play outside?",
-  "example_cn": "我可以出去玩吗？"
+  "example_en": "We play outside.",
+  "example_cn": "我们在外面玩。"
+ },
+ {
+  "id": 255,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "tidy",
+  "phonetic": "/ˈtaɪdi/",
+  "chinese": "整理",
+  "type": "verb",
+  "example_en": "Tidy your room.",
+  "example_cn": "整理你的房间。"
  },
  {
   "id": 259,
@@ -5072,8 +5083,8 @@
   "phonetic": "/ˈiːzi/",
   "chinese": "容易的",
   "type": "adjective",
-  "example_en": "That's easy.",
-  "example_cn": "那很容易。"
+  "example_en": "It is easy.",
+  "example_cn": "这很容易。"
  },
  {
   "id": 260,
@@ -5081,10 +5092,21 @@
   "grade": "四年级",
   "word": "clean",
   "phonetic": "/kliːn/",
-  "chinese": "清洁的，干净的",
+  "chinese": "干净的",
   "type": "adjective",
-  "example_en": "The room is clean.",
-  "example_cn": "房间很干净。"
+  "example_en": "My room is clean.",
+  "example_cn": "我的房间很干净。"
+ },
+ {
+  "id": 1013,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "job",
+  "phonetic": "/dʒəʊb/",
+  "chinese": "任务",
+  "type": "noun",
+  "example_en": "This is my job.",
+  "example_cn": "这是我的任务。"
  },
  {
   "id": 261,
@@ -5094,8 +5116,8 @@
   "phonetic": "/ˈdɜːti/",
   "chinese": "脏的",
   "type": "adjective",
-  "example_en": "It's so dirty now.",
-  "example_cn": "现在它好脏啊。"
+  "example_en": "The floor is dirty.",
+  "example_cn": "地板很脏。"
  },
  {
   "id": 262,
@@ -5103,21 +5125,10 @@
   "grade": "四年级",
   "word": "desk",
   "phonetic": "/desk/",
-  "chinese": "书桌，写字台",
+  "chinese": "书桌",
   "type": "noun",
-  "example_en": "Clean the desk.",
-  "example_cn": "擦书桌。"
- },
- {
-  "id": 263,
-  "module": "四上2",
-  "grade": "四年级",
-  "word": "wall",
-  "phonetic": "/wɔːl/",
-  "chinese": "墙",
-  "type": "noun",
-  "example_en": "Clean the wall.",
-  "example_cn": "擦墙。"
+  "example_en": "My desk is tidy.",
+  "example_cn": "我的书桌很整洁。"
  },
  {
   "id": 264,
@@ -5127,8 +5138,8 @@
   "phonetic": "/əˈɡen/",
   "chinese": "再一次",
   "type": "adverb",
-  "example_en": "Do it again.",
-  "example_cn": "再做一次。"
+  "example_en": "Try again!",
+  "example_cn": "再试一次！"
  },
  {
   "id": 265,
@@ -5136,21 +5147,10 @@
   "grade": "四年级",
   "word": "also",
   "phonetic": "/ˈɔːlsəʊ/",
-  "chinese": "也，除此之外还",
+  "chinese": "还",
   "type": "adverb",
-  "example_en": "I also help at home.",
-  "example_cn": "我也在家帮忙。"
- },
- {
-  "id": 266,
-  "module": "四上2",
-  "grade": "四年级",
-  "word": "finish",
-  "phonetic": "/ˈfɪnɪʃ/",
-  "chinese": "完成",
-  "type": "verb",
-  "example_en": "I finish my chores.",
-  "example_cn": "我完成了我的家务。"
+  "example_en": "I also help Mum.",
+  "example_cn": "我还帮妈妈。"
  },
  {
   "id": 267,
@@ -5164,22 +5164,176 @@
   "example_cn": "没问题！"
  },
  {
-  "id": 268,
+  "id": 266,
   "module": "四上2",
   "grade": "四年级",
-  "word": "may",
-  "phonetic": "/meɪ/",
-  "chinese": "可以",
-  "type": "modal verb",
-  "example_en": "May I play outside?",
-  "example_cn": "我可以出去玩吗？"
+  "word": "finish",
+  "phonetic": "/ˈfɪnɪʃ/",
+  "chinese": "完成",
+  "type": "verb",
+  "example_en": "I finish my work.",
+  "example_cn": "我完成了任务。"
+ },
+ {
+  "id": 1020,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "sunshine",
+  "phonetic": "/ˈsʌnʃaɪn/",
+  "chinese": "阳光",
+  "type": "noun",
+  "example_en": "We work in the sunshine.",
+  "example_cn": "我们在阳光下干活。"
+ },
+ {
+  "id": 1021,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "sometimes",
+  "phonetic": "/ˈsʌmtaɪmz/",
+  "chinese": "有时",
+  "type": "adverb",
+  "example_en": "Sometimes I cook.",
+  "example_cn": "有时我做饭。"
+ },
+ {
+  "id": 1022,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "tired",
+  "phonetic": "/ˈtaɪəd/",
+  "chinese": "疲惫的",
+  "type": "adjective",
+  "example_en": "I am tired.",
+  "example_cn": "我很疲惫。"
+ },
+ {
+  "id": 483,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "helpful",
+  "phonetic": "/ˈhelpfl/",
+  "chinese": "有帮助的",
+  "type": "adjective",
+  "example_en": "He is helpful.",
+  "example_cn": "他很有帮助。"
+ },
+ {
+  "id": 283,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "warm",
+  "phonetic": "/wɔːm/",
+  "chinese": "温暖的",
+  "type": "adjective",
+  "example_en": "The sunshine is warm.",
+  "example_cn": "阳光很温暖。"
+ },
+ {
+  "id": 1025,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "water",
+  "phonetic": "/ˈwɔːtə/",
+  "chinese": "浇水",
+  "type": "verb",
+  "example_en": "I water the flowers.",
+  "example_cn": "我浇花。"
+ },
+ {
+  "id": 1026,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "yard",
+  "phonetic": "/jɑːd/",
+  "chinese": "庭院",
+  "type": "noun",
+  "example_en": "The yard is big.",
+  "example_cn": "庭院很大。"
+ },
+ {
+  "id": 1027,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "helper",
+  "phonetic": "/ˈhelpə/",
+  "chinese": "帮手",
+  "type": "noun",
+  "example_en": "I am Mum's helper.",
+  "example_cn": "我是妈妈的小帮手。"
+ },
+ {
+  "id": 1028,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "pick",
+  "phonetic": "/pɪk/",
+  "chinese": "采摘",
+  "type": "verb",
+  "example_en": "We pick apples.",
+  "example_cn": "我们摘苹果。"
+ },
+ {
+  "id": 1029,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "pig",
+  "phonetic": "/pɪɡ/",
+  "chinese": "猪",
+  "type": "noun",
+  "example_en": "The pig is fat.",
+  "example_cn": "猪很肥。"
+ },
+ {
+  "id": 1030,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "cow",
+  "phonetic": "/kaʊ/",
+  "chinese": "奶牛",
+  "type": "noun",
+  "example_en": "The cow gives milk.",
+  "example_cn": "奶牛产奶。"
+ },
+ {
+  "id": 1031,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "collect",
+  "phonetic": "/kəˈlekt/",
+  "chinese": "收集",
+  "type": "verb",
+  "example_en": "I collect the eggs.",
+  "example_cn": "我收集鸡蛋。"
+ },
+ {
+  "id": 1032,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "cut",
+  "phonetic": "/kʌt/",
+  "chinese": "修剪",
+  "type": "verb",
+  "example_en": "I cut the grass.",
+  "example_cn": "我修剪草。"
+ },
+ {
+  "id": 1033,
+  "module": "四上2",
+  "grade": "四年级",
+  "word": "grass",
+  "phonetic": "/ɡrɑːs/",
+  "chinese": "草",
+  "type": "noun",
+  "example_en": "The grass is green.",
+  "example_cn": "草是绿色的。"
  },
  {
   "id": 269,
   "module": "四上3",
   "grade": "四年级",
   "word": "weather",
-  "phonetic": "/ˈweðə(r)/",
+  "phonetic": "/ˈweðə/",
   "chinese": "天气",
   "type": "noun",
   "example_en": "What's the weather like?",
@@ -5193,8 +5347,8 @@
   "phonetic": "/ˈsʌni/",
   "chinese": "阳光充足的",
   "type": "adjective",
-  "example_en": "It's sunny and warm.",
-  "example_cn": "晴朗又暖和。"
+  "example_en": "It is sunny today.",
+  "example_cn": "今天是晴天。"
  },
  {
   "id": 271,
@@ -5204,8 +5358,8 @@
   "phonetic": "/klaʊd/",
   "chinese": "云",
   "type": "noun",
-  "example_en": "The clouds go by.",
-  "example_cn": "云飘过去了。"
+  "example_en": "Look at the cloud.",
+  "example_cn": "看那朵云。"
  },
  {
   "id": 272,
@@ -5215,8 +5369,8 @@
   "phonetic": "/ˈklaʊdi/",
   "chinese": "多云的",
   "type": "adjective",
-  "example_en": "It's windy and cloudy.",
-  "example_cn": "又刮风又阴天。"
+  "example_en": "It is cloudy.",
+  "example_cn": "天是多云的。"
  },
  {
   "id": 273,
@@ -5226,19 +5380,8 @@
   "phonetic": "/wɪnd/",
   "chinese": "风",
   "type": "noun",
-  "example_en": "The wind blows around.",
-  "example_cn": "风吹来吹去。"
- },
- {
-  "id": 274,
-  "module": "四上3",
-  "grade": "四年级",
-  "word": "windy",
-  "phonetic": "/ˈwɪndi/",
-  "chinese": "有风的",
-  "type": "adjective",
-  "example_en": "It's windy.",
-  "example_cn": "起风了。"
+  "example_en": "The wind is strong.",
+  "example_cn": "风很大。"
  },
  {
   "id": 275,
@@ -5246,10 +5389,21 @@
   "grade": "四年级",
   "word": "blow",
   "phonetic": "/bləʊ/",
-  "chinese": "吹，刮",
+  "chinese": "吹",
   "type": "verb",
   "example_en": "The wind blows.",
-  "example_cn": "风在吹。"
+  "example_cn": "风吹着。"
+ },
+ {
+  "id": 274,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "windy",
+  "phonetic": "/ˈwɪndi/",
+  "chinese": "多风的",
+  "type": "adjective",
+  "example_en": "It is windy.",
+  "example_cn": "今天风大。"
  },
  {
   "id": 276,
@@ -5259,8 +5413,8 @@
   "phonetic": "/reɪn/",
   "chinese": "雨",
   "type": "noun",
-  "example_en": "The rain comes down.",
-  "example_cn": "雨落下来了。"
+  "example_en": "I like the rain.",
+  "example_cn": "我喜欢雨。"
  },
  {
   "id": 277,
@@ -5270,8 +5424,8 @@
   "phonetic": "/ˈreɪni/",
   "chinese": "多雨的",
   "type": "adjective",
-  "example_en": "It's rainy now.",
-  "example_cn": "现在下雨了。"
+  "example_en": "It is rainy.",
+  "example_cn": "今天下雨。"
  },
  {
   "id": 278,
@@ -5281,19 +5435,19 @@
   "phonetic": "/snəʊ/",
   "chinese": "雪",
   "type": "noun",
-  "example_en": "The snow dances around.",
-  "example_cn": "雪飞舞着。"
+  "example_en": "The snow is white.",
+  "example_cn": "雪是白色的。"
  },
  {
-  "id": 279,
+  "id": 286,
   "module": "四上3",
   "grade": "四年级",
-  "word": "snowy",
-  "phonetic": "/ˈsnəʊi/",
-  "chinese": "下雪的",
+  "word": "any",
+  "phonetic": "/ˈeni/",
+  "chinese": "任何一个",
   "type": "adjective",
-  "example_en": "It's snowy.",
-  "example_cn": "下雪了。"
+  "example_en": "Do you have any questions?",
+  "example_cn": "你有问题吗？"
  },
  {
   "id": 280,
@@ -5303,41 +5457,19 @@
   "phonetic": "/kəʊld/",
   "chinese": "冷的",
   "type": "adjective",
-  "example_en": "It's rainy and cold.",
-  "example_cn": "下雨又寒冷。"
+  "example_en": "It is cold.",
+  "example_cn": "天很冷。"
  },
  {
-  "id": 281,
+  "id": 287,
   "module": "四上3",
   "grade": "四年级",
-  "word": "hot",
-  "phonetic": "/hɒt/",
-  "chinese": "热的",
-  "type": "adjective",
-  "example_en": "It's hot.",
-  "example_cn": "天气很热。"
- },
- {
-  "id": 282,
-  "module": "四上3",
-  "grade": "四年级",
-  "word": "cool",
-  "phonetic": "/kuːl/",
-  "chinese": "凉爽的",
-  "type": "adjective",
-  "example_en": "Oh, it's cool!",
-  "example_cn": "哦，好凉快！"
- },
- {
-  "id": 283,
-  "module": "四上3",
-  "grade": "四年级",
-  "word": "warm",
-  "phonetic": "/wɔːm/",
-  "chinese": "暖和的",
-  "type": "adjective",
-  "example_en": "It's sunny and warm.",
-  "example_cn": "晴朗又暖和。"
+  "word": "or",
+  "phonetic": "/ɔː/",
+  "chinese": "或者",
+  "type": "conjunction",
+  "example_en": "Is it cold or warm?",
+  "example_cn": "是冷还是暖？"
  },
  {
   "id": 284,
@@ -5345,43 +5477,142 @@
   "grade": "四年级",
   "word": "enjoy",
   "phonetic": "/ɪnˈdʒɔɪ/",
-  "chinese": "享受……的乐趣",
+  "chinese": "享受",
   "type": "verb",
-  "example_en": "Enjoy them all!",
-  "example_cn": "全都享受！"
+  "example_en": "I enjoy the snow.",
+  "example_cn": "我享受雪。"
  },
  {
-  "id": 285,
+  "id": 1048,
   "module": "四上3",
   "grade": "四年级",
-  "word": "by",
-  "phonetic": "/baɪ/",
-  "chinese": "经过",
-  "type": "preposition",
-  "example_en": "The clouds go by.",
-  "example_cn": "云飘过去了。"
+  "word": "diary",
+  "phonetic": "/ˈdaɪəri/",
+  "chinese": "日记",
+  "type": "noun",
+  "example_en": "I write in my diary.",
+  "example_cn": "我写日记。"
  },
  {
-  "id": 286,
+  "id": 407,
   "module": "四上3",
   "grade": "四年级",
-  "word": "any",
-  "phonetic": "/ˈeni/",
-  "chinese": "任何一个",
-  "type": "determiner",
-  "example_en": "In any weather, we have fun.",
-  "example_cn": "无论什么天气，我们都开心。"
+  "word": "special",
+  "phonetic": "/ˈspeʃl/",
+  "chinese": "特别的",
+  "type": "adjective",
+  "example_en": "Today is special.",
+  "example_cn": "今天很特别。"
  },
  {
-  "id": 287,
+  "id": 354,
   "module": "四上3",
   "grade": "四年级",
-  "word": "or",
-  "phonetic": "/ɔː(r)/",
-  "chinese": "或者",
-  "type": "conjunction",
-  "example_en": "Hot, cold, cool or warm.",
-  "example_cn": "热、冷、凉或暖。"
+  "word": "teacher",
+  "phonetic": "/ˈtiːtʃə/",
+  "chinese": "老师",
+  "type": "noun",
+  "example_en": "My teacher is kind.",
+  "example_cn": "我的老师很友善。"
+ },
+ {
+  "id": 1051,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "taste",
+  "phonetic": "/teɪst/",
+  "chinese": "有……味道",
+  "type": "verb",
+  "example_en": "The ice cream tastes sweet.",
+  "example_cn": "冰激凌尝起来很甜。"
+ },
+ {
+  "id": 1052,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "ice cream",
+  "phonetic": "/ˌaɪs ˈkriːm/",
+  "chinese": "冰激凌",
+  "type": "noun",
+  "example_en": "I like ice cream.",
+  "example_cn": "我喜欢冰激凌。"
+ },
+ {
+  "id": 1053,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "real",
+  "phonetic": "/ˈrɪəl/",
+  "chinese": "真的",
+  "type": "adjective",
+  "example_en": "Is it real?",
+  "example_cn": "它是真的吗？"
+ },
+ {
+  "id": 1054,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "later",
+  "phonetic": "/ˈleɪtə/",
+  "chinese": "之后",
+  "type": "adverb",
+  "example_en": "See you later.",
+  "example_cn": "回头见。"
+ },
+ {
+  "id": 636,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "surprise",
+  "phonetic": "/səˈpraɪz/",
+  "chinese": "惊喜",
+  "type": "noun",
+  "example_en": "What a surprise!",
+  "example_cn": "真是个惊喜！"
+ },
+ {
+  "id": 418,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "coat",
+  "phonetic": "/kəʊt/",
+  "chinese": "外套",
+  "type": "noun",
+  "example_en": "Put on your coat.",
+  "example_cn": "穿上你的外套。"
+ },
+ {
+  "id": 1057,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "turn",
+  "phonetic": "/tɜːn/",
+  "chinese": "转动",
+  "type": "verb",
+  "example_en": "Turn on the TV.",
+  "example_cn": "打开电视。"
+ },
+ {
+  "id": 1058,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "TV",
+  "phonetic": "/ˌtiː ˈviː/",
+  "chinese": "电视",
+  "type": "noun",
+  "example_en": "I watch TV.",
+  "example_cn": "我看电视。"
+ },
+ {
+  "id": 1059,
+  "module": "四上3",
+  "grade": "四年级",
+  "word": "report",
+  "phonetic": "/rɪˈpɔːt/",
+  "chinese": "报道",
+  "type": "noun",
+  "example_en": "This is the weather report.",
+  "example_cn": "这是天气预报。"
  },
  {
   "id": 288,
@@ -5391,8 +5622,8 @@
   "phonetic": "/ˈsiːzn/",
   "chinese": "季节",
   "type": "noun",
-  "example_en": "There are four seasons.",
-  "example_cn": "有四个季节。"
+  "example_en": "Spring is my favourite season.",
+  "example_cn": "春天是我最喜欢的季节。"
  },
  {
   "id": 289,
@@ -5400,21 +5631,21 @@
   "grade": "四年级",
   "word": "spring",
   "phonetic": "/sprɪŋ/",
-  "chinese": "春天，春季",
+  "chinese": "春天",
   "type": "noun",
-  "example_en": "Spring is here!",
-  "example_cn": "春天来了！"
+  "example_en": "It is warm in spring.",
+  "example_cn": "春天很暖和。"
  },
  {
   "id": 290,
   "module": "四上4",
   "grade": "四年级",
   "word": "summer",
-  "phonetic": "/ˈsʌmə(r)/",
-  "chinese": "夏天，夏季",
+  "phonetic": "/ˈsʌmə/",
+  "chinese": "夏天",
   "type": "noun",
-  "example_en": "It's summer.",
-  "example_cn": "夏天到了。"
+  "example_en": "It is hot in summer.",
+  "example_cn": "夏天很热。"
  },
  {
   "id": 291,
@@ -5424,85 +5655,19 @@
   "phonetic": "/ˈɔːtəm/",
   "chinese": "秋天",
   "type": "noun",
-  "example_en": "It's autumn. I like autumn best!",
-  "example_cn": "秋天到了。我最喜欢秋天！"
+  "example_en": "It is cool in autumn.",
+  "example_cn": "秋天很凉爽。"
  },
  {
   "id": 292,
   "module": "四上4",
   "grade": "四年级",
   "word": "winter",
-  "phonetic": "/ˈwɪntə(r)/",
-  "chinese": "冬天，冬季",
+  "phonetic": "/ˈwɪntə/",
+  "chinese": "冬天",
   "type": "noun",
-  "example_en": "It's winter.",
-  "example_cn": "冬天到了。"
- },
- {
-  "id": 293,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "snowstorm",
-  "phonetic": "/ˈsnəʊstɔːm/",
-  "chinese": "雪暴，暴风雪",
-  "type": "noun",
-  "example_en": "A snowstorm comes.",
-  "example_cn": "暴风雪来了。"
- },
- {
-  "id": 294,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "beach",
-  "phonetic": "/biːtʃ/",
-  "chinese": "海滩",
-  "type": "noun",
-  "example_en": "I go to the beach in summer.",
-  "example_cn": "夏天我去海滩。"
- },
- {
-  "id": 295,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "sea",
-  "phonetic": "/siː/",
-  "chinese": "海，海洋",
-  "type": "noun",
-  "example_en": "The sea is blue.",
-  "example_cn": "大海是蓝色的。"
- },
- {
-  "id": 296,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "equator",
-  "phonetic": "/ɪˈkweɪtə(r)/",
-  "chinese": "赤道",
-  "type": "noun",
-  "example_en": "The equator is hot.",
-  "example_cn": "赤道很热。"
- },
- {
-  "id": 297,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "fly",
-  "phonetic": "/flaɪ/",
-  "chinese": "放飞",
-  "type": "verb",
-  "example_en": "Fly kites in spring.",
-  "example_cn": "春天放风筝。"
- },
- {
-  "id": 298,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "join",
-  "phonetic": "/dʒɔɪn/",
-  "chinese": "参与，加入",
-  "type": "verb",
-  "example_en": "Join us!",
-  "example_cn": "加入我们！"
+  "example_en": "It is cold in winter.",
+  "example_cn": "冬天很冷。"
  },
  {
   "id": 299,
@@ -5516,15 +5681,81 @@
   "example_cn": "你最喜欢的季节是什么？"
  },
  {
+  "id": 1066,
+  "module": "四上4",
+  "grade": "四年级",
+  "word": "birthday",
+  "phonetic": "/ˈbɜːθdeɪ/",
+  "chinese": "生日",
+  "type": "noun",
+  "example_en": "My birthday is in May.",
+  "example_cn": "我的生日在五月。"
+ },
+ {
+  "id": 297,
+  "module": "四上4",
+  "grade": "四年级",
+  "word": "fly",
+  "phonetic": "/flaɪ/",
+  "chinese": "放飞",
+  "type": "verb",
+  "example_en": "Let's fly a kite.",
+  "example_cn": "我们放风筝吧。"
+ },
+ {
+  "id": 293,
+  "module": "四上4",
+  "grade": "四年级",
+  "word": "snowstorm",
+  "phonetic": "/ˈsnəʊstɔːm/",
+  "chinese": "雪暴",
+  "type": "noun",
+  "example_en": "There is a snowstorm.",
+  "example_cn": "下雪暴了。"
+ },
+ {
+  "id": 294,
+  "module": "四上4",
+  "grade": "四年级",
+  "word": "beach",
+  "phonetic": "/biːtʃ/",
+  "chinese": "海滩",
+  "type": "noun",
+  "example_en": "We go to the beach.",
+  "example_cn": "我们去海滩。"
+ },
+ {
+  "id": 295,
+  "module": "四上4",
+  "grade": "四年级",
+  "word": "sea",
+  "phonetic": "/siː/",
+  "chinese": "海",
+  "type": "noun",
+  "example_en": "The sea is blue.",
+  "example_cn": "海是蓝色的。"
+ },
+ {
+  "id": 296,
+  "module": "四上4",
+  "grade": "四年级",
+  "word": "equator",
+  "phonetic": "/ɪˈkweɪtə/",
+  "chinese": "赤道",
+  "type": "noun",
+  "example_en": "The equator goes round the earth.",
+  "example_cn": "赤道环绕地球。"
+ },
+ {
   "id": 300,
   "module": "四上4",
   "grade": "四年级",
   "word": "round",
   "phonetic": "/raʊnd/",
-  "chinese": "到处",
+  "chinese": "循环地",
   "type": "adverb",
-  "example_en": "The apple is round.",
-  "example_cn": "苹果是圆的。"
+  "example_en": "The year goes round.",
+  "example_cn": "一年又一年循环。"
  },
  {
   "id": 301,
@@ -5532,32 +5763,21 @@
   "grade": "四年级",
   "word": "quite",
   "phonetic": "/kwaɪt/",
-  "chinese": "非常，十分",
+  "chinese": "非常",
   "type": "adverb",
-  "example_en": "It's quite warm.",
-  "example_cn": "天气十分暖和。"
+  "example_en": "It is quite cold.",
+  "example_cn": "天气相当冷。"
  },
  {
-  "id": 302,
+  "id": 298,
   "module": "四上4",
   "grade": "四年级",
-  "word": "umbrella",
-  "phonetic": "/ʌmˈbrelə/",
-  "chinese": "雨伞",
-  "type": "noun",
-  "example_en": "The apple tree is like a sun umbrella.",
-  "example_cn": "苹果树像一把太阳伞。"
- },
- {
-  "id": 303,
-  "module": "四上4",
-  "grade": "四年级",
-  "word": "share",
-  "phonetic": "/ʃeə(r)/",
-  "chinese": "分享",
+  "word": "join",
+  "phonetic": "/dʒɔɪn/",
+  "chinese": "加入",
   "type": "verb",
-  "example_en": "Can I share the apples?",
-  "example_cn": "我能分享这些苹果吗？"
+  "example_en": "Join us!",
+  "example_cn": "加入我们吧！"
  },
  {
   "id": 304,
@@ -5565,21 +5785,21 @@
   "grade": "四年级",
   "word": "bus",
   "phonetic": "/bʌs/",
-  "chinese": "公交车，公共汽车",
+  "chinese": "公交车",
   "type": "noun",
-  "example_en": "We go by bus.",
-  "example_cn": "我们坐公交车去。"
+  "example_en": "I go to school by bus.",
+  "example_cn": "我坐公交车上学。"
  },
  {
   "id": 305,
   "module": "四上5",
   "grade": "四年级",
   "word": "car",
-  "phonetic": "/kɑː(r)/",
+  "phonetic": "/kɑː/",
   "chinese": "汽车",
   "type": "noun",
-  "example_en": "Let's go by car!",
-  "example_cn": "我们开车去吧！"
+  "example_en": "Dad drives a car.",
+  "example_cn": "爸爸开汽车。"
  },
  {
   "id": 306,
@@ -5587,109 +5807,10 @@
   "grade": "四年级",
   "word": "train",
   "phonetic": "/treɪn/",
-  "chinese": "火车，列车",
+  "chinese": "火车",
   "type": "noun",
-  "example_en": "We go by train.",
-  "example_cn": "我们坐火车去。"
- },
- {
-  "id": 307,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "plane",
-  "phonetic": "/pleɪn/",
-  "chinese": "飞机",
-  "type": "noun",
-  "example_en": "We go by plane.",
-  "example_cn": "我们坐飞机去。"
- },
- {
-  "id": 308,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "ship",
-  "phonetic": "/ʃɪp/",
-  "chinese": "大船",
-  "type": "noun",
-  "example_en": "We go by ship across the sea.",
-  "example_cn": "我们坐大船横跨大海。"
- },
- {
-  "id": 309,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "bike",
-  "phonetic": "/baɪk/",
-  "chinese": "自行车",
-  "type": "noun",
-  "example_en": "I go to school by bike.",
-  "example_cn": "我骑自行车去上学。"
- },
- {
-  "id": 310,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "subway",
-  "phonetic": "/ˈsʌbweɪ/",
-  "chinese": "地铁",
-  "type": "noun",
-  "example_en": "They go by subway.",
-  "example_cn": "他们坐地铁去。"
- },
- {
-  "id": 311,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "tram",
-  "phonetic": "/træm/",
-  "chinese": "有轨电车",
-  "type": "noun",
-  "example_en": "They go to work by tram.",
-  "example_cn": "他们乘有轨电车去上班。"
- },
- {
-  "id": 312,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "truck",
-  "phonetic": "/trʌk/",
-  "chinese": "货车，卡车",
-  "type": "noun",
-  "example_en": "They go by truck.",
-  "example_cn": "他们坐卡车去。"
- },
- {
-  "id": 313,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "travel",
-  "phonetic": "/ˈtrævl/",
-  "chinese": "旅行",
-  "type": "verb",
-  "example_en": "They travel a long way.",
-  "example_cn": "他们长途旅行。"
- },
- {
-  "id": 314,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "wear",
-  "phonetic": "/weə(r)/",
-  "chinese": "穿；戴",
-  "type": "verb",
-  "example_en": "She wears green clothes.",
-  "example_cn": "她穿绿色的衣服。"
- },
- {
-  "id": 315,
-  "module": "四上5",
-  "grade": "四年级",
-  "word": "live",
-  "phonetic": "/lɪv/",
-  "chinese": "住，居住",
-  "type": "verb",
-  "example_en": "He lives in a small town.",
-  "example_cn": "他住在一个小镇上。"
+  "example_en": "The train is fast.",
+  "example_cn": "火车很快。"
  },
  {
   "id": 316,
@@ -5699,8 +5820,8 @@
   "phonetic": "/ˈsɪti/",
   "chinese": "城市",
   "type": "noun",
-  "example_en": "Wuxi is a beautiful city.",
-  "example_cn": "无锡是一座美丽的城市。"
+  "example_en": "Beijing is a big city.",
+  "example_cn": "北京是个大城市。"
  },
  {
   "id": 317,
@@ -5708,10 +5829,32 @@
   "grade": "四年级",
   "word": "town",
   "phonetic": "/taʊn/",
-  "chinese": "镇，城镇",
+  "chinese": "镇",
   "type": "noun",
-  "example_en": "From city to town.",
-  "example_cn": "从城市到小镇。"
+  "example_en": "I live in a small town.",
+  "example_cn": "我住在一个小镇。"
+ },
+ {
+  "id": 308,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "ship",
+  "phonetic": "/ʃɪp/",
+  "chinese": "大船",
+  "type": "noun",
+  "example_en": "The ship is big.",
+  "example_cn": "大船很大。"
+ },
+ {
+  "id": 307,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "plane",
+  "phonetic": "/pleɪn/",
+  "chinese": "飞机",
+  "type": "noun",
+  "example_en": "The plane flies in the sky.",
+  "example_cn": "飞机在天上飞。"
  },
  {
   "id": 318,
@@ -5719,10 +5862,10 @@
   "grade": "四年级",
   "word": "sky",
   "phonetic": "/skaɪ/",
-  "chinese": "天，天空",
+  "chinese": "天空",
   "type": "noun",
-  "example_en": "High up in the sky.",
-  "example_cn": "高高飞在天上。"
+  "example_en": "The sky is blue.",
+  "example_cn": "天空是蓝色的。"
  },
  {
   "id": 319,
@@ -5730,10 +5873,32 @@
   "grade": "四年级",
   "word": "place",
   "phonetic": "/pleɪs/",
-  "chinese": "地方，地点",
+  "chinese": "地方",
   "type": "noun",
-  "example_en": "We go to different places.",
-  "example_cn": "我们去不同的地方。"
+  "example_en": "This is a nice place.",
+  "example_cn": "这是个好地方。"
+ },
+ {
+  "id": 323,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "near",
+  "phonetic": "/nɪə/",
+  "chinese": "近的",
+  "type": "adjective",
+  "example_en": "The park is near.",
+  "example_cn": "公园很近。"
+ },
+ {
+  "id": 313,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "travel",
+  "phonetic": "/ˈtrævl/",
+  "chinese": "旅行",
+  "type": "verb",
+  "example_en": "I travel by train.",
+  "example_cn": "我坐火车旅行。"
  },
  {
   "id": 320,
@@ -5741,10 +5906,10 @@
   "grade": "四年级",
   "word": "way",
   "phonetic": "/weɪ/",
-  "chinese": "方式，方法",
+  "chinese": "方式",
   "type": "noun",
-  "example_en": "Go in a green way.",
-  "example_cn": "以绿色的方式出行。"
+  "example_en": "What's the best way to go?",
+  "example_cn": "最好的出行方式是什么？"
  },
  {
   "id": 321,
@@ -5754,8 +5919,8 @@
   "phonetic": "/ˈpɪknɪk/",
   "chinese": "野餐",
   "type": "noun",
-  "example_en": "Let's go for a picnic.",
-  "example_cn": "我们去野餐吧。"
+  "example_en": "We have a picnic.",
+  "example_cn": "我们去野餐。"
  },
  {
   "id": 322,
@@ -5765,30 +5930,96 @@
   "phonetic": "/ˈmɪnɪt/",
   "chinese": "分钟",
   "type": "noun",
-  "example_en": "Meet in five minutes.",
-  "example_cn": "五分钟后见。"
+  "example_en": "It takes ten minutes.",
+  "example_cn": "要花十分钟。"
  },
  {
-  "id": 323,
+  "id": 314,
   "module": "四上5",
   "grade": "四年级",
-  "word": "near",
-  "phonetic": "/nɪə(r)/",
-  "chinese": "（距离）近的",
-  "type": "adjective",
-  "example_en": "The park is near our school.",
-  "example_cn": "公园在我们学校附近。"
+  "word": "wear",
+  "phonetic": "/weə/",
+  "chinese": "穿",
+  "type": "verb",
+  "example_en": "I wear a hat.",
+  "example_cn": "我戴着帽子。"
+ },
+ {
+  "id": 315,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "live",
+  "phonetic": "/lɪv/",
+  "chinese": "居住",
+  "type": "verb",
+  "example_en": "I live in Shanghai.",
+  "example_cn": "我住在上海。"
+ },
+ {
+  "id": 1091,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "away",
+  "phonetic": "/əˈweɪ/",
+  "chinese": "离开",
+  "type": "adverb",
+  "example_en": "The city is far away.",
+  "example_cn": "城市很远。"
+ },
+ {
+  "id": 312,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "truck",
+  "phonetic": "/trʌk/",
+  "chinese": "货车",
+  "type": "noun",
+  "example_en": "The truck is big.",
+  "example_cn": "货车很大。"
  },
  {
   "id": 324,
   "module": "四上5",
   "grade": "四年级",
   "word": "bamboo",
-  "phonetic": "/ˌbæmˈbuː/",
-  "chinese": "竹，竹子",
+  "phonetic": "/bæmˈbuː/",
+  "chinese": "竹子",
   "type": "noun",
   "example_en": "Pandas eat bamboo.",
   "example_cn": "熊猫吃竹子。"
+ },
+ {
+  "id": 309,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "bike",
+  "phonetic": "/baɪk/",
+  "chinese": "自行车",
+  "type": "noun",
+  "example_en": "I ride a bike.",
+  "example_cn": "我骑自行车。"
+ },
+ {
+  "id": 310,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "subway",
+  "phonetic": "/ˈsʌbweɪ/",
+  "chinese": "地铁",
+  "type": "noun",
+  "example_en": "We take the subway.",
+  "example_cn": "我们坐地铁。"
+ },
+ {
+  "id": 311,
+  "module": "四上5",
+  "grade": "四年级",
+  "word": "tram",
+  "phonetic": "/træm/",
+  "chinese": "有轨电车",
+  "type": "noun",
+  "example_en": "The tram is slow.",
+  "example_cn": "有轨电车很慢。"
  },
  {
   "id": 325,
@@ -5798,8 +6029,8 @@
   "phonetic": "/wiːl/",
   "chinese": "车轮",
   "type": "noun",
-  "example_en": "The car has four wheels.",
-  "example_cn": "这辆车有四个轮子。"
+  "example_en": "The wheel is round.",
+  "example_cn": "车轮是圆的。"
  },
  {
   "id": 326,
@@ -5807,21 +6038,10 @@
   "grade": "四年级",
   "word": "left",
   "phonetic": "/left/",
-  "chinese": "向左，朝左",
+  "chinese": "向左",
   "type": "adverb",
   "example_en": "Turn left.",
   "example_cn": "向左转。"
- },
- {
-  "id": 327,
-  "module": "四上6",
-  "grade": "四年级",
-  "word": "right",
-  "phonetic": "/raɪt/",
-  "chinese": "向右",
-  "type": "adverb",
-  "example_en": "Turn right.",
-  "example_cn": "向右转。"
  },
  {
   "id": 328,
@@ -5831,8 +6051,8 @@
   "phonetic": "/streɪt/",
   "chinese": "笔直地",
   "type": "adverb",
-  "example_en": "Go straight on.",
-  "example_cn": "直走。"
+  "example_en": "Go straight.",
+  "example_cn": "笔直走。"
  },
  {
   "id": 329,
@@ -5840,21 +6060,21 @@
   "grade": "四年级",
   "word": "library",
   "phonetic": "/ˈlaɪbrəri/",
-  "chinese": "图书室；图书馆",
+  "chinese": "图书馆",
   "type": "noun",
-  "example_en": "Here's the library.",
-  "example_cn": "这里是图书馆。"
+  "example_en": "I read in the library.",
+  "example_cn": "我在图书馆看书。"
  },
  {
   "id": 330,
   "module": "四上6",
   "grade": "四年级",
   "word": "centre",
-  "phonetic": "/ˈsentə(r)/",
+  "phonetic": "/ˈsentə/",
   "chinese": "中心",
   "type": "noun",
-  "example_en": "Here's the sports centre.",
-  "example_cn": "这里是体育中心。"
+  "example_en": "The library is in the centre.",
+  "example_cn": "图书馆在中心。"
  },
  {
   "id": 331,
@@ -5864,8 +6084,8 @@
   "phonetic": "/ˈsɪnəmə/",
   "chinese": "电影院",
   "type": "noun",
-  "example_en": "Let's go to the cinema.",
-  "example_cn": "我们去电影院吧。"
+  "example_en": "We go to the cinema.",
+  "example_cn": "我们去电影院。"
  },
  {
   "id": 332,
@@ -5875,8 +6095,8 @@
   "phonetic": "/ˈhɒspɪtl/",
   "chinese": "医院",
   "type": "noun",
-  "example_en": "He works at the hospital.",
-  "example_cn": "他在医院工作。"
+  "example_en": "The hospital is near.",
+  "example_cn": "医院很近。"
  },
  {
   "id": 333,
@@ -5886,8 +6106,8 @@
   "phonetic": "/ˈsuːpəmɑːkɪt/",
   "chinese": "超市",
   "type": "noun",
-  "example_en": "I go to the supermarket.",
-  "example_cn": "我去超市购物。"
+  "example_en": "Mum goes to the supermarket.",
+  "example_cn": "妈妈去超市。"
  },
  {
   "id": 334,
@@ -5895,10 +6115,10 @@
   "grade": "四年级",
   "word": "museum",
   "phonetic": "/mjuˈziːəm/",
-  "chinese": "博物馆，博物院",
+  "chinese": "博物馆",
   "type": "noun",
-  "example_en": "Go to the museum.",
-  "example_cn": "去博物馆。"
+  "example_en": "The museum is old.",
+  "example_cn": "博物馆很古老。"
  },
  {
   "id": 335,
@@ -5906,10 +6126,10 @@
   "grade": "四年级",
   "word": "tomorrow",
   "phonetic": "/təˈmɒrəʊ/",
-  "chinese": "（在）明天",
+  "chinese": "明天",
   "type": "adverb",
-  "example_en": "Let's find out tomorrow.",
-  "example_cn": "我们明天去查个明白。"
+  "example_en": "See you tomorrow.",
+  "example_cn": "明天见。"
  },
  {
   "id": 336,
@@ -5917,10 +6137,10 @@
   "grade": "四年级",
   "word": "woman",
   "phonetic": "/ˈwʊmən/",
-  "chinese": "成年女子，妇女",
+  "chinese": "妇女",
   "type": "noun",
-  "example_en": "The woman is my mother.",
-  "example_cn": "这个女人是我的妈妈。"
+  "example_en": "The woman is my aunt.",
+  "example_cn": "这位妇女是我姑母。"
  },
  {
   "id": 337,
@@ -5928,10 +6148,10 @@
   "grade": "四年级",
   "word": "wish",
   "phonetic": "/wɪʃ/",
-  "chinese": "希望，愿望",
+  "chinese": "愿望",
   "type": "noun",
-  "example_en": "Best wishes!",
-  "example_cn": "最好的祝愿！"
+  "example_en": "Make a wish!",
+  "example_cn": "许个愿吧！"
  },
  {
   "id": 338,
@@ -5939,10 +6159,10 @@
   "grade": "四年级",
   "word": "step",
   "phonetic": "/step/",
-  "chinese": "步；一步（的距离）",
+  "chinese": "步",
   "type": "noun",
-  "example_en": "Walk 50 steps.",
-  "example_cn": "走五十步。"
+  "example_en": "One step at a time.",
+  "example_cn": "一步一步来。"
  },
  {
   "id": 339,
@@ -5952,8 +6172,8 @@
   "phonetic": "/əʊn/",
   "chinese": "自己的",
   "type": "adjective",
-  "example_en": "On my own.",
-  "example_cn": "独自；靠自己。"
+  "example_en": "This is my own book.",
+  "example_cn": "这是我自己的书。"
  },
  {
   "id": 340,
@@ -5963,8 +6183,8 @@
   "phonetic": "/krɒs/",
   "chinese": "横穿",
   "type": "verb",
-  "example_en": "Cross the road.",
-  "example_cn": "过马路。"
+  "example_en": "Cross the road carefully.",
+  "example_cn": "小心过马路。"
  },
  {
   "id": 341,
@@ -5972,65 +6192,153 @@
   "grade": "四年级",
   "word": "careful",
   "phonetic": "/ˈkeəfl/",
-  "chinese": "谨慎的",
+  "chinese": "小心的",
   "type": "adjective",
   "example_en": "Be careful!",
-  "example_cn": "当心，小心！"
+  "example_cn": "小心！"
  },
  {
   "id": 342,
   "module": "四上6",
   "grade": "四年级",
   "word": "underground",
-  "phonetic": "/ˌʌndəˈɡraʊnd/",
-  "chinese": "在地（面）下",
+  "phonetic": "/ˈʌndəɡraʊnd/",
+  "chinese": "在地下",
   "type": "adverb",
-  "example_en": "Take the underground train.",
-  "example_cn": "坐地铁列车。"
+  "example_en": "The train goes underground.",
+  "example_cn": "火车在地下开。"
  },
  {
-  "id": 343,
+  "id": 349,
   "module": "四下1",
   "grade": "四年级",
-  "word": "work",
-  "phonetic": "/wɜːk/",
-  "chinese": "工作",
-  "type": "verb",
-  "example_en": "My father works in a school.",
-  "example_cn": "我爸爸在学校工作。"
+  "word": "doctor",
+  "phonetic": "/ˈdɒktə/",
+  "chinese": "医生",
+  "type": "noun",
+  "example_en": "The doctor helps people.",
+  "example_cn": "医生帮助人们。"
+ },
+ {
+  "id": 351,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "fireman",
+  "phonetic": "/ˈfaɪəmən/",
+  "chinese": "消防队员",
+  "type": "noun",
+  "example_en": "The fireman is brave.",
+  "example_cn": "消防队员很勇敢。"
  },
  {
   "id": 344,
   "module": "四下1",
   "grade": "四年级",
   "word": "farmer",
-  "phonetic": "/ˈfɑːmə(r)/",
+  "phonetic": "/ˈfɑːmə/",
   "chinese": "农民",
   "type": "noun",
-  "example_en": "The farmer works in the fields.",
+  "example_en": "The farmer works in the field.",
   "example_cn": "农民在田里干活。"
  },
  {
-  "id": 345,
+  "id": 1117,
   "module": "四下1",
   "grade": "四年级",
-  "word": "painter",
-  "phonetic": "/ˈpeɪntə(r)/",
-  "chinese": "画家",
+  "word": "cook",
+  "phonetic": "/kʊk/",
+  "chinese": "厨师",
   "type": "noun",
-  "example_en": "The painter uses a brush.",
-  "example_cn": "画家用画笔。"
+  "example_en": "The cook makes nice food.",
+  "example_cn": "厨师做好吃的饭菜。"
  },
  {
-  "id": 346,
+  "id": 1118,
   "module": "四下1",
   "grade": "四年级",
-  "word": "scientist",
-  "phonetic": "/ˈsaɪəntɪst/",
-  "chinese": "科学家",
+  "word": "police",
+  "phonetic": "/pəˈliːs/",
+  "chinese": "警察",
   "type": "noun",
-  "example_en": "He is a scientist.",
-  "example_cn": "他是一位科学家。"
+  "example_en": "The police help us.",
+  "example_cn": "警察帮助我们。"
+ },
+ {
+  "id": 1119,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "police officer",
+  "phonetic": "/pəˈliːs ˈɒfɪsə/",
+  "chinese": "警官",
+  "type": "noun",
+  "example_en": "He is a police officer.",
+  "example_cn": "他是一名警官。"
+ },
+ {
+  "id": 1120,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "station",
+  "phonetic": "/ˈsteɪʃn/",
+  "chinese": "站",
+  "type": "noun",
+  "example_en": "The station is near.",
+  "example_cn": "车站很近。"
+ },
+ {
+  "id": 1121,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "police station",
+  "phonetic": "/pəˈliːs ˈsteɪʃn/",
+  "chinese": "警察局",
+  "type": "noun",
+  "example_en": "This is the police station.",
+  "example_cn": "这是警察局。"
+ },
+ {
+  "id": 1122,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "fire",
+  "phonetic": "/ˈfaɪə/",
+  "chinese": "火",
+  "type": "noun",
+  "example_en": "The fire is hot.",
+  "example_cn": "火很烫。"
+ },
+ {
+  "id": 1123,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "fire station",
+  "phonetic": "/ˈfaɪə ˈsteɪʃn/",
+  "chinese": "消防站",
+  "type": "noun",
+  "example_en": "The fire station is there.",
+  "example_cn": "消防站在那边。"
+ },
+ {
+  "id": 1124,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "restaurant",
+  "phonetic": "/ˈrestrɒnt/",
+  "chinese": "餐馆",
+  "type": "noun",
+  "example_en": "We eat at the restaurant.",
+  "example_cn": "我们在餐馆吃饭。"
+ },
+ {
+  "id": 1125,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "father",
+  "phonetic": "/ˈfɑːðə/",
+  "chinese": "父亲",
+  "type": "noun",
+  "example_en": "My father is a doctor.",
+  "example_cn": "我父亲是医生。"
  },
  {
   "id": 347,
@@ -6040,8 +6348,30 @@
   "phonetic": "/fiːld/",
   "chinese": "田地",
   "type": "noun",
-  "example_en": "He often works in the fields.",
-  "example_cn": "他经常在田里工作。"
+  "example_en": "The field is big.",
+  "example_cn": "田地很大。"
+ },
+ {
+  "id": 345,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "painter",
+  "phonetic": "/ˈpeɪntə/",
+  "chinese": "画家",
+  "type": "noun",
+  "example_en": "She is a painter.",
+  "example_cn": "她是一名画家。"
+ },
+ {
+  "id": 1128,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "use",
+  "phonetic": "/juːz/",
+  "chinese": "使用",
+  "type": "verb",
+  "example_en": "I use a brush.",
+  "example_cn": "我用画笔。"
  },
  {
   "id": 348,
@@ -6051,19 +6381,118 @@
   "phonetic": "/brʌʃ/",
   "chinese": "画笔",
   "type": "noun",
-  "example_en": "He uses his brush a lot.",
-  "example_cn": "他经常用画笔。"
+  "example_en": "This is my brush.",
+  "example_cn": "这是我的画笔。"
  },
  {
-  "id": 349,
+  "id": 346,
   "module": "四下1",
   "grade": "四年级",
-  "word": "doctor",
-  "phonetic": "/ˈdɒktə(r)/",
-  "chinese": "医生",
+  "word": "scientist",
+  "phonetic": "/ˈsaɪəntɪst/",
+  "chinese": "科学家",
   "type": "noun",
-  "example_en": "The doctor helps sick people.",
-  "example_cn": "医生帮助病人。"
+  "example_en": "She is a scientist.",
+  "example_cn": "她是一名科学家。"
+ },
+ {
+  "id": 576,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "writer",
+  "phonetic": "/ˈraɪtə/",
+  "chinese": "作家",
+  "type": "noun",
+  "example_en": "He is a writer.",
+  "example_cn": "他是一名作家。"
+ },
+ {
+  "id": 1132,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "worker",
+  "phonetic": "/ˈwɜːkə/",
+  "chinese": "工人",
+  "type": "noun",
+  "example_en": "The worker makes cars.",
+  "example_cn": "工人制造汽车。"
+ },
+ {
+  "id": 1133,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "aunt",
+  "phonetic": "/ɑːnt/",
+  "chinese": "姑母",
+  "type": "noun",
+  "example_en": "My aunt is a nurse.",
+  "example_cn": "我姑母是护士。"
+ },
+ {
+  "id": 1134,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "night",
+  "phonetic": "/naɪt/",
+  "chinese": "夜晚",
+  "type": "noun",
+  "example_en": "I sleep at night.",
+  "example_cn": "我晚上睡觉。"
+ },
+ {
+  "id": 1135,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "owl",
+  "phonetic": "/aʊl/",
+  "chinese": "猫头鹰",
+  "type": "noun",
+  "example_en": "The owl sleeps in the day.",
+  "example_cn": "猫头鹰白天睡觉。"
+ },
+ {
+  "id": 1136,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "night owl",
+  "phonetic": "/ˌnaɪt ˈaʊl/",
+  "chinese": "夜猫子",
+  "type": "noun",
+  "example_en": "He is a night owl.",
+  "example_cn": "他是个夜猫子。"
+ },
+ {
+  "id": 353,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "driver",
+  "phonetic": "/ˈdraɪvə/",
+  "chinese": "司机",
+  "type": "noun",
+  "example_en": "The driver drives a taxi.",
+  "example_cn": "司机开出租车。"
+ },
+ {
+  "id": 1138,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "taxi",
+  "phonetic": "/ˈtæksi/",
+  "chinese": "出租车",
+  "type": "noun",
+  "example_en": "We take a taxi.",
+  "example_cn": "我们坐出租车。"
+ },
+ {
+  "id": 1139,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "safe",
+  "phonetic": "/seɪf/",
+  "chinese": "安全的",
+  "type": "adjective",
+  "example_en": "The taxi is safe.",
+  "example_cn": "出租车很安全。"
  },
  {
   "id": 350,
@@ -6073,19 +6502,52 @@
   "phonetic": "/nɜːs/",
   "chinese": "护士",
   "type": "noun",
-  "example_en": "The nurse looks after patients.",
-  "example_cn": "护士照顾病人。"
+  "example_en": "The nurse is kind.",
+  "example_cn": "护士很友善。"
  },
  {
-  "id": 351,
+  "id": 1141,
   "module": "四下1",
   "grade": "四年级",
-  "word": "fireman",
-  "phonetic": "/ˈfaɪəmən/",
-  "chinese": "消防员",
+  "word": "brighten",
+  "phonetic": "/ˈbraɪtn/",
+  "chinese": "使更明亮",
+  "type": "verb",
+  "example_en": "Flowers brighten the room.",
+  "example_cn": "花让房间更明亮。"
+ },
+ {
+  "id": 1142,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "uncle",
+  "phonetic": "/ˈʌŋkl/",
+  "chinese": "叔叔",
   "type": "noun",
-  "example_en": "The fireman is brave.",
-  "example_cn": "消防员很勇敢。"
+  "example_en": "My uncle is a cook.",
+  "example_cn": "我叔叔是厨师。"
+ },
+ {
+  "id": 1143,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "bake",
+  "phonetic": "/beɪk/",
+  "chinese": "烘烤",
+  "type": "verb",
+  "example_en": "I bake a cake.",
+  "example_cn": "我烤蛋糕。"
+ },
+ {
+  "id": 1144,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "bee",
+  "phonetic": "/biː/",
+  "chinese": "蜜蜂",
+  "type": "noun",
+  "example_en": "The bee is busy.",
+  "example_cn": "蜜蜂很忙。"
  },
  {
   "id": 352,
@@ -6095,41 +6557,63 @@
   "phonetic": "/ˈpəʊstmən/",
   "chinese": "邮递员",
   "type": "noun",
-  "example_en": "The postman delivers letters.",
+  "example_en": "The postman brings letters.",
   "example_cn": "邮递员送信。"
  },
  {
-  "id": 353,
+  "id": 559,
   "module": "四下1",
   "grade": "四年级",
-  "word": "driver",
-  "phonetic": "/ˈdraɪvə(r)/",
-  "chinese": "司机",
-  "type": "noun",
-  "example_en": "The bus driver drives the bus.",
-  "example_cn": "公交车司机开公交车。"
+  "word": "poor",
+  "phonetic": "/pɔː/",
+  "chinese": "贫穷的",
+  "type": "adjective",
+  "example_en": "The poor man needs help.",
+  "example_cn": "那个穷人需要帮助。"
  },
  {
-  "id": 354,
+  "id": 1147,
   "module": "四下1",
   "grade": "四年级",
-  "word": "teacher",
-  "phonetic": "/ˈtiːtʃə(r)/",
-  "chinese": "老师",
-  "type": "noun",
-  "example_en": "My mother is a teacher.",
-  "example_cn": "我妈妈是老师。"
+  "word": "bring",
+  "phonetic": "/brɪŋ/",
+  "chinese": "带来",
+  "type": "verb",
+  "example_en": "Bring me the letter.",
+  "example_cn": "把信带给我。"
  },
  {
-  "id": 355,
+  "id": 1148,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "letter",
+  "phonetic": "/ˈletə/",
+  "chinese": "信",
+  "type": "noun",
+  "example_en": "I write a letter.",
+  "example_cn": "我写一封信。"
+ },
+ {
+  "id": 1149,
+  "module": "四下1",
+  "grade": "四年级",
+  "word": "mountain",
+  "phonetic": "/ˈmaʊntən/",
+  "chinese": "高山",
+  "type": "noun",
+  "example_en": "The mountain is high.",
+  "example_cn": "高山很高。"
+ },
+ {
+  "id": 362,
   "module": "四下2",
   "grade": "四年级",
-  "word": "happy",
-  "phonetic": "/ˈhæpi/",
-  "chinese": "开心的",
-  "type": "adjective",
-  "example_en": "I'm happy today.",
-  "example_cn": "我今天很开心。"
+  "word": "laugh",
+  "phonetic": "/lɑːf/",
+  "chinese": "笑",
+  "type": "verb",
+  "example_en": "We laugh together.",
+  "example_cn": "我们一起笑。"
  },
  {
   "id": 356,
@@ -6137,10 +6621,21 @@
   "grade": "四年级",
   "word": "sad",
   "phonetic": "/sæd/",
-  "chinese": "难过的",
+  "chinese": "伤心的",
   "type": "adjective",
-  "example_en": "She is sad.",
-  "example_cn": "她很难过。"
+  "example_en": "Don't be sad.",
+  "example_cn": "别伤心。"
+ },
+ {
+  "id": 363,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "cry",
+  "phonetic": "/kraɪ/",
+  "chinese": "哭",
+  "type": "verb",
+  "example_en": "The baby cries.",
+  "example_cn": "婴儿哭了。"
  },
  {
   "id": 357,
@@ -6154,6 +6649,39 @@
   "example_cn": "他很生气。"
  },
  {
+  "id": 1154,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "frown",
+  "phonetic": "/fraʊn/",
+  "chinese": "皱眉",
+  "type": "verb",
+  "example_en": "Why do you frown?",
+  "example_cn": "你为什么皱眉？"
+ },
+ {
+  "id": 1155,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "scared",
+  "phonetic": "/skeəd/",
+  "chinese": "害怕的",
+  "type": "adjective",
+  "example_en": "I am scared.",
+  "example_cn": "我很害怕。"
+ },
+ {
+  "id": 1156,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "shake",
+  "phonetic": "/ʃeɪk/",
+  "chinese": "发抖",
+  "type": "verb",
+  "example_en": "My hands shake.",
+  "example_cn": "我的手发抖。"
+ },
+ {
   "id": 358,
   "module": "四下2",
   "grade": "四年级",
@@ -6161,30 +6689,30 @@
   "phonetic": "/ɪkˈsaɪtɪd/",
   "chinese": "兴奋的",
   "type": "adjective",
-  "example_en": "I'm so excited!",
-  "example_cn": "我太兴奋了！"
+  "example_en": "I am excited.",
+  "example_cn": "我很兴奋。"
  },
  {
-  "id": 359,
+  "id": 1158,
   "module": "四下2",
   "grade": "四年级",
-  "word": "worried",
-  "phonetic": "/ˈwʌrid/",
-  "chinese": "担心的",
-  "type": "adjective",
-  "example_en": "Are you worried?",
-  "example_cn": "你担心吗？"
- },
- {
-  "id": 360,
-  "module": "四下2",
-  "grade": "四年级",
-  "word": "feeling",
-  "phonetic": "/ˈfiːlɪŋ/",
-  "chinese": "感觉",
+  "word": "opera",
+  "phonetic": "/ˈɒprə/",
+  "chinese": "歌剧",
   "type": "noun",
-  "example_en": "I'm feeling better now.",
-  "example_cn": "我现在感觉好多了。"
+  "example_en": "Grandpa likes opera.",
+  "example_cn": "爷爷喜欢歌剧。"
+ },
+ {
+  "id": 364,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "next",
+  "phonetic": "/nekst/",
+  "chinese": "下一个的",
+  "type": "adjective",
+  "example_en": "The next day is Monday.",
+  "example_cn": "第二天是星期一。"
  },
  {
   "id": 361,
@@ -6194,63 +6722,30 @@
   "phonetic": "/kɒf/",
   "chinese": "咳嗽",
   "type": "verb",
-  "example_en": "She is coughing.",
-  "example_cn": "她在咳嗽。"
- },
- {
-  "id": 362,
-  "module": "四下2",
-  "grade": "四年级",
-  "word": "laugh",
-  "phonetic": "/lɑːf/",
-  "chinese": "笑",
-  "type": "verb",
-  "example_en": "They laugh together.",
-  "example_cn": "他们一起笑。"
- },
- {
-  "id": 363,
-  "module": "四下2",
-  "grade": "四年级",
-  "word": "cry",
-  "phonetic": "/kraɪ/",
-  "chinese": "哭",
-  "type": "verb",
-  "example_en": "Don't cry.",
-  "example_cn": "别哭。"
- },
- {
-  "id": 364,
-  "module": "四下2",
-  "grade": "四年级",
-  "word": "next",
-  "phonetic": "/nekst/",
-  "chinese": "紧接着的",
-  "type": "adjective",
-  "example_en": "See you next time.",
-  "example_cn": "下次见。"
+  "example_en": "I have a cough.",
+  "example_cn": "我咳嗽。"
  },
  {
   "id": 365,
   "module": "四下2",
   "grade": "四年级",
   "word": "better",
-  "phonetic": "/ˈbetə(r)/",
+  "phonetic": "/ˈbetə/",
   "chinese": "好转的",
   "type": "adjective",
-  "example_en": "I'm feeling better.",
-  "example_cn": "我感觉好多了。"
+  "example_en": "I feel better now.",
+  "example_cn": "我现在好多了。"
  },
  {
-  "id": 366,
+  "id": 1162,
   "module": "四下2",
   "grade": "四年级",
-  "word": "should",
-  "phonetic": "/ʃʊd/",
-  "chinese": "应该",
-  "type": "modal",
-  "example_en": "You should rest.",
-  "example_cn": "你应该休息。"
+  "word": "practise",
+  "phonetic": "/ˈpræktɪs/",
+  "chinese": "练习",
+  "type": "verb",
+  "example_en": "I practise the piano.",
+  "example_cn": "我练习钢琴。"
  },
  {
   "id": 367,
@@ -6260,8 +6755,107 @@
   "phonetic": "/ɡɪft/",
   "chinese": "礼物",
   "type": "noun",
-  "example_en": "A gift for you.",
-  "example_cn": "给你的礼物。"
+  "example_en": "Here is a gift for you.",
+  "example_cn": "这是给你的礼物。"
+ },
+ {
+  "id": 1164,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "surprised",
+  "phonetic": "/səˈpraɪzd/",
+  "chinese": "吃惊的",
+  "type": "adjective",
+  "example_en": "She is surprised.",
+  "example_cn": "她很吃惊。"
+ },
+ {
+  "id": 1165,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "model",
+  "phonetic": "/ˈmɒdl/",
+  "chinese": "模型",
+  "type": "noun",
+  "example_en": "This is a plane model.",
+  "example_cn": "这是一个飞机模型。"
+ },
+ {
+  "id": 1166,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "bang",
+  "phonetic": "/bæŋ/",
+  "chinese": "砰",
+  "type": "noun",
+  "example_en": "The balloon goes bang.",
+  "example_cn": "气球砰的一声。"
+ },
+ {
+  "id": 1167,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "shout",
+  "phonetic": "/ʃaʊt/",
+  "chinese": "呼喊",
+  "type": "verb",
+  "example_en": "Don't shout!",
+  "example_cn": "不要呼喊！"
+ },
+ {
+  "id": 366,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "should",
+  "phonetic": "/ʃʊd/",
+  "chinese": "应该",
+  "type": "verb",
+  "example_en": "You should rest.",
+  "example_cn": "你应该休息。"
+ },
+ {
+  "id": 1169,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "break",
+  "phonetic": "/breɪk/",
+  "chinese": "使破裂",
+  "type": "verb",
+  "example_en": "Don't break the window.",
+  "example_cn": "别把窗户打破了。"
+ },
+ {
+  "id": 360,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "feeling",
+  "phonetic": "/ˈfiːlɪŋ/",
+  "chinese": "感觉",
+  "type": "noun",
+  "example_en": "I have a strange feeling.",
+  "example_cn": "我有一种奇怪的感觉。"
+ },
+ {
+  "id": 1171,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "huge",
+  "phonetic": "/hjuːdʒ/",
+  "chinese": "巨大的",
+  "type": "adjective",
+  "example_en": "The elephant is huge.",
+  "example_cn": "大象是巨大的。"
+ },
+ {
+  "id": 359,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "worried",
+  "phonetic": "/ˈwʌrid/",
+  "chinese": "担心的",
+  "type": "adjective",
+  "example_en": "Mum is worried.",
+  "example_cn": "妈妈很担心。"
  },
  {
   "id": 368,
@@ -6271,8 +6865,19 @@
   "phonetic": "/striːt/",
   "chinese": "街道",
   "type": "noun",
-  "example_en": "Cross the street.",
-  "example_cn": "过马路。"
+  "example_en": "The street is busy.",
+  "example_cn": "街道很热闹。"
+ },
+ {
+  "id": 1174,
+  "module": "四下2",
+  "grade": "四年级",
+  "word": "hit",
+  "phonetic": "/hɪt/",
+  "chinese": "撞击",
+  "type": "verb",
+  "example_en": "The ball hits the window.",
+  "example_cn": "球撞到了窗户。"
  },
  {
   "id": 369,
@@ -6280,87 +6885,10 @@
   "grade": "四年级",
   "word": "talent",
   "phonetic": "/ˈtælənt/",
-  "chinese": "才能",
+  "chinese": "天资；天赋；才能",
   "type": "noun",
-  "example_en": "Everyone's got talent!",
-  "example_cn": "每个人都有才能！"
- },
- {
-  "id": 370,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "dancer",
-  "phonetic": "/ˈdɑːnsə(r)/",
-  "chinese": "舞蹈演员",
-  "type": "noun",
-  "example_en": "She is a dancer.",
-  "example_cn": "她是舞蹈演员。"
- },
- {
-  "id": 371,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "win",
-  "phonetic": "/wɪn/",
-  "chinese": "赢",
-  "type": "verb",
-  "example_en": "I can win.",
-  "example_cn": "我能赢。"
- },
- {
-  "id": 372,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "boy",
-  "phonetic": "/bɔɪ/",
-  "chinese": "男孩",
-  "type": "noun",
-  "example_en": "The boy is clever.",
-  "example_cn": "这个男孩很聪明。"
- },
- {
-  "id": 373,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "just",
-  "phonetic": "/dʒʌst/",
-  "chinese": "就，只是",
-  "type": "adverb",
-  "example_en": "Just go and dance.",
-  "example_cn": "去跳舞吧。"
- },
- {
-  "id": 374,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "magic",
-  "phonetic": "/ˈmædʒɪk/",
-  "chinese": "魔术",
-  "type": "noun",
-  "example_en": "She does magic.",
-  "example_cn": "她变魔术。"
- },
- {
-  "id": 375,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "puzzle",
-  "phonetic": "/ˈpʌzl/",
-  "chinese": "拼图",
-  "type": "noun",
-  "example_en": "I do puzzles.",
-  "example_cn": "我做拼图。"
- },
- {
-  "id": 376,
-  "module": "四下3",
-  "grade": "四年级",
-  "word": "shine",
-  "phonetic": "/ʃaɪn/",
-  "chinese": "表现突出",
-  "type": "verb",
-  "example_en": "Hard work makes me shine.",
-  "example_cn": "努力使我闪闪发光。"
+  "example_en": "Everyone has a talent.",
+  "example_cn": "每个人都有天赋。"
  },
  {
   "id": 377,
@@ -6368,10 +6896,76 @@
   "grade": "四年级",
   "word": "act",
   "phonetic": "/ækt/",
-  "chinese": "演出",
+  "chinese": "演出；扮演",
   "type": "verb",
-  "example_en": "He acts in the show.",
-  "example_cn": "他在演出中表演。"
+  "example_en": "She acts in the play.",
+  "example_cn": "她在剧里演出。"
+ },
+ {
+  "id": 374,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "magic",
+  "phonetic": "/ˈmædʒɪk/",
+  "chinese": "魔术；戏法",
+  "type": "noun",
+  "example_en": "I like magic.",
+  "example_cn": "我喜欢魔术。"
+ },
+ {
+  "id": 376,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "shine",
+  "phonetic": "/ʃaɪn/",
+  "chinese": "表现突出；出众",
+  "type": "verb",
+  "example_en": "You shine on the stage.",
+  "example_cn": "你在舞台上很出众。"
+ },
+ {
+  "id": 375,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "puzzle",
+  "phonetic": "/ˈpʌzl/",
+  "chinese": "拼图游戏",
+  "type": "noun",
+  "example_en": "I do a puzzle.",
+  "example_cn": "我做拼图游戏。"
+ },
+ {
+  "id": 370,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "dancer",
+  "phonetic": "/ˈdɑːnsə/",
+  "chinese": "舞蹈演员",
+  "type": "noun",
+  "example_en": "She is a good dancer.",
+  "example_cn": "她是个好舞者。"
+ },
+ {
+  "id": 371,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "win",
+  "phonetic": "/wɪn/",
+  "chinese": "获胜；赢",
+  "type": "verb",
+  "example_en": "I want to win.",
+  "example_cn": "我想赢。"
+ },
+ {
+  "id": 373,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "just",
+  "phonetic": "/dʒʌst/",
+  "chinese": "就；只是",
+  "type": "adverb",
+  "example_en": "Just try!",
+  "example_cn": "尽管去试！"
  },
  {
   "id": 378,
@@ -6379,21 +6973,45 @@
   "grade": "四年级",
   "word": "duck",
   "phonetic": "/dʌk/",
-  "chinese": "鸭子",
+  "chinese": "鸭",
   "type": "noun",
   "example_en": "The duck can swim.",
   "example_cn": "鸭子会游泳。"
  },
  {
-  "id": 379,
+  "id": 372,
   "module": "四下3",
   "grade": "四年级",
-  "word": "slowly",
-  "phonetic": "/ˈsləʊli/",
-  "chinese": "缓慢地",
-  "type": "adverb",
-  "example_en": "He walks slowly.",
-  "example_cn": "他走得很慢。"
+  "word": "boy",
+  "phonetic": "/bɔɪ/",
+  "chinese": "男孩；儿子",
+  "type": "noun",
+  "example_en": "The boy can sing.",
+  "example_cn": "男孩会唱歌。"
+ },
+ {
+  "id": 1185,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "anything",
+  "phonetic": "/ˈeniθɪŋ/",
+  "chinese": "任何事情；无论何事",
+  "cn_short": "任何事情",
+  "type": "pronoun",
+  "example_en": "I can do anything.",
+  "example_cn": "我什么都能做。"
+ },
+ {
+  "id": 1186,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "cock-a-doodle-doo",
+  "phonetic": "/ˌkɒk ə ˌduːdl ˈduː/",
+  "chinese": "（公鸡啼叫的）喔喔声",
+  "cn_short": "喔喔声",
+  "type": "noun",
+  "example_en": "The cock says cock-a-doodle-doo.",
+  "example_cn": "公鸡喔喔叫。"
  },
  {
   "id": 380,
@@ -6401,10 +7019,153 @@
   "grade": "四年级",
   "word": "enough",
   "phonetic": "/ɪˈnʌf/",
-  "chinese": "足够的",
+  "chinese": "足够（的）",
   "type": "adjective",
-  "example_en": "That's enough.",
-  "example_cn": "足够了。"
+  "example_en": "I have enough time.",
+  "example_cn": "我有足够的时间。"
+ },
+ {
+  "id": 379,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "slowly",
+  "phonetic": "/ˈsləʊli/",
+  "chinese": "缓慢地；慢慢地",
+  "type": "adverb",
+  "example_en": "Please speak slowly.",
+  "example_cn": "请慢慢说。"
+ },
+ {
+  "id": 1189,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "do magic with a hat",
+  "phonetic": "/duː ˈmædʒɪk/",
+  "chinese": "用帽子变魔术",
+  "type": "phrase",
+  "example_en": "He can do magic with a hat.",
+  "example_cn": "他会用帽子变魔术。"
+ },
+ {
+  "id": 1190,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "take photos",
+  "phonetic": "/teɪk ˈfəʊtəʊz/",
+  "chinese": "拍照",
+  "type": "phrase",
+  "example_en": "I take photos.",
+  "example_cn": "我拍照。"
+ },
+ {
+  "id": 1191,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "do puzzles",
+  "phonetic": "/duː ˈpʌzlz/",
+  "chinese": "做拼图游戏",
+  "type": "phrase",
+  "example_en": "I do puzzles.",
+  "example_cn": "我做拼图游戏。"
+ },
+ {
+  "id": 1192,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "with one look",
+  "phonetic": "/wɪð wʌn lʊk/",
+  "chinese": "只需一眼",
+  "type": "phrase",
+  "example_en": "She draws it with one look.",
+  "example_cn": "她只需一眼就能画出来。"
+ },
+ {
+  "id": 1193,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "write stories",
+  "phonetic": "/raɪt ˈstɔːriz/",
+  "chinese": "写故事",
+  "type": "phrase",
+  "example_en": "I write stories.",
+  "example_cn": "我写故事。"
+ },
+ {
+  "id": 1194,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "dance show",
+  "phonetic": "/ˈdɑːns ʃəʊ/",
+  "chinese": "舞蹈表演",
+  "type": "noun",
+  "example_en": "The dance show is great.",
+  "example_cn": "舞蹈表演很棒。"
+ },
+ {
+  "id": 1195,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "teach sb. to do sth.",
+  "phonetic": "/tiːtʃ/",
+  "chinese": "教某人做某事",
+  "type": "phrase",
+  "example_en": "She teaches me to dance.",
+  "example_cn": "她教我跳舞。"
+ },
+ {
+  "id": 1196,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "be good at...",
+  "phonetic": "/biː ɡʊd æt/",
+  "chinese": "擅长……",
+  "type": "phrase",
+  "example_en": "I am good at maths.",
+  "example_cn": "我擅长数学。"
+ },
+ {
+  "id": 1197,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "the best dancer",
+  "phonetic": "/ðə best ˈdɑːnsə/",
+  "chinese": "最棒的舞者",
+  "type": "phrase",
+  "example_en": "She is the best dancer.",
+  "example_cn": "她是最棒的舞者。"
+ },
+ {
+  "id": 1198,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "day and night",
+  "phonetic": "/ˌdeɪ ənd ˈnaɪt/",
+  "chinese": "夜以继日",
+  "type": "phrase",
+  "example_en": "He practises day and night.",
+  "example_cn": "他夜以继日地练习。"
+ },
+ {
+  "id": 1199,
+  "module": "四下3",
+  "grade": "四年级",
+  "word": "play the piano",
+  "phonetic": "/pleɪ/",
+  "chinese": "弹钢琴",
+  "type": "phrase",
+  "example_en": "I play the piano.",
+  "example_cn": "我弹钢琴。"
+ },
+ {
+  "id": 1200,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "life",
+  "phonetic": "/laɪf/",
+  "chinese": "生活",
+  "type": "noun",
+  "example_en": "This is the life of a plant.",
+  "example_cn": "这是植物的一生。"
  },
  {
   "id": 381,
@@ -6414,8 +7175,19 @@
   "phonetic": "/siːd/",
   "chinese": "种子",
   "type": "noun",
-  "example_en": "Plant the seeds.",
-  "example_cn": "种下种子。"
+  "example_en": "Plant a seed.",
+  "example_cn": "种下一粒种子。"
+ },
+ {
+  "id": 390,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "earth",
+  "phonetic": "/ɜːθ/",
+  "chinese": "泥土",
+  "type": "noun",
+  "example_en": "Put the seed in the earth.",
+  "example_cn": "把种子放进泥土里。"
  },
  {
   "id": 382,
@@ -6425,8 +7197,8 @@
   "phonetic": "/ruːt/",
   "chinese": "根",
   "type": "noun",
-  "example_en": "The roots are under the earth.",
-  "example_cn": "根在泥土下面。"
+  "example_en": "The root grows down.",
+  "example_cn": "根向下长。"
  },
  {
   "id": 383,
@@ -6436,6 +7208,17 @@
   "phonetic": "/stem/",
   "chinese": "茎",
   "type": "noun",
+  "example_en": "The stem grows up.",
+  "example_cn": "茎向上长。"
+ },
+ {
+  "id": 396,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "thin",
+  "phonetic": "/θɪn/",
+  "chinese": "细的",
+  "type": "adjective",
   "example_en": "The stem is thin.",
   "example_cn": "茎很细。"
  },
@@ -6451,17 +7234,6 @@
   "example_cn": "叶子是绿色的。"
  },
  {
-  "id": 385,
-  "module": "四下4",
-  "grade": "四年级",
-  "word": "flower",
-  "phonetic": "/ˈflaʊə(r)/",
-  "chinese": "花",
-  "type": "noun",
-  "example_en": "The flower is beautiful.",
-  "example_cn": "花很漂亮。"
- },
- {
   "id": 386,
   "module": "四下4",
   "grade": "四年级",
@@ -6469,52 +7241,19 @@
   "phonetic": "/dɪɡ/",
   "chinese": "挖",
   "type": "verb",
-  "example_en": "We're digging.",
-  "example_cn": "我们在挖土。"
- },
- {
-  "id": 387,
-  "module": "四下4",
-  "grade": "四年级",
-  "word": "plant",
-  "phonetic": "/plɑːnt/",
-  "chinese": "种植",
-  "type": "verb",
-  "example_en": "Plant a seed.",
-  "example_cn": "种一颗种子。"
- },
- {
-  "id": 388,
-  "module": "四下4",
-  "grade": "四年级",
-  "word": "grow",
-  "phonetic": "/ɡrəʊ/",
-  "chinese": "生长",
-  "type": "verb",
-  "example_en": "The seeds are growing.",
-  "example_cn": "种子在生长。"
+  "example_en": "Dig a hole.",
+  "example_cn": "挖个坑。"
  },
  {
   "id": 389,
   "module": "四下4",
   "grade": "四年级",
   "word": "sunflower",
-  "phonetic": "/ˈsʌnflaʊə(r)/",
+  "phonetic": "/ˈsʌnflaʊə/",
   "chinese": "向日葵",
   "type": "noun",
-  "example_en": "I've got sunflower seeds.",
-  "example_cn": "我有葵花籽。"
- },
- {
-  "id": 390,
-  "module": "四下4",
-  "grade": "四年级",
-  "word": "earth",
-  "phonetic": "/ɜːθ/",
-  "chinese": "泥土",
-  "type": "noun",
-  "example_en": "Put the seeds in the earth.",
-  "example_cn": "把种子放进土里。"
+  "example_en": "The sunflower is tall.",
+  "example_cn": "向日葵很高。"
  },
  {
   "id": 391,
@@ -6524,8 +7263,8 @@
   "phonetic": "/wiːt/",
   "chinese": "小麦",
   "type": "noun",
-  "example_en": "Water the wheat.",
-  "example_cn": "给小麦浇水。"
+  "example_en": "The wheat is gold.",
+  "example_cn": "小麦是金色的。"
  },
  {
   "id": 392,
@@ -6535,30 +7274,8 @@
   "phonetic": "/ˈkɒtn/",
   "chinese": "棉花",
   "type": "noun",
-  "example_en": "Pick cotton.",
-  "example_cn": "摘棉花。"
- },
- {
-  "id": 393,
-  "module": "四下4",
-  "grade": "四年级",
-  "word": "will",
-  "phonetic": "/wɪl/",
-  "chinese": "将，会",
-  "type": "modal",
-  "example_en": "His dreams will come true.",
-  "example_cn": "他的梦想会实现。"
- },
- {
-  "id": 394,
-  "module": "四下4",
-  "grade": "四年级",
-  "word": "paper",
-  "phonetic": "/ˈpeɪpə(r)/",
-  "chinese": "纸",
-  "type": "noun",
-  "example_en": "We use plants to make paper.",
-  "example_cn": "我们用植物造纸。"
+  "example_en": "This is cotton.",
+  "example_cn": "这是棉花。"
  },
  {
   "id": 395,
@@ -6566,65 +7283,98 @@
   "grade": "四年级",
   "word": "sleep",
   "phonetic": "/sliːp/",
-  "chinese": "睡",
+  "chinese": "睡觉",
   "type": "verb",
-  "example_en": "I sleep at night.",
-  "example_cn": "我晚上睡觉。"
+  "example_en": "I sleep eight hours.",
+  "example_cn": "我睡八小时。"
  },
  {
-  "id": 396,
+  "id": 1212,
   "module": "四下4",
   "grade": "四年级",
-  "word": "thin",
-  "phonetic": "/θɪn/",
-  "chinese": "细的",
-  "type": "adjective",
-  "example_en": "The stem is thin.",
-  "example_cn": "茎很细。"
- },
- {
-  "id": 397,
-  "module": "四下5",
-  "grade": "四年级",
-  "word": "hour",
-  "phonetic": "/ˈaʊə(r)/",
-  "chinese": "小时",
+  "word": "mouse",
+  "phonetic": "/maʊs/",
+  "chinese": "老鼠",
   "type": "noun",
-  "example_en": "One hour.",
-  "example_cn": "一小时。"
+  "example_en": "The mouse is small.",
+  "example_cn": "老鼠很小。"
  },
  {
-  "id": 398,
-  "module": "四下5",
+  "id": 1213,
+  "module": "四下4",
   "grade": "四年级",
-  "word": "student",
-  "phonetic": "/ˈstjuːdnt/",
-  "chinese": "学生",
+  "word": "grain",
+  "phonetic": "/ɡreɪn/",
+  "chinese": "谷粒",
   "type": "noun",
-  "example_en": "I'm a student.",
-  "example_cn": "我是学生。"
+  "example_en": "The mouse eats the grain.",
+  "example_cn": "老鼠吃谷粒。"
  },
  {
-  "id": 399,
-  "module": "四下5",
+  "id": 473,
+  "module": "四下4",
   "grade": "四年级",
-  "word": "hometown",
-  "phonetic": "/ˈhəʊmtaʊn/",
-  "chinese": "家乡",
+  "word": "miss",
+  "phonetic": "/mɪs/",
+  "chinese": "想念",
+  "type": "verb",
+  "example_en": "I miss my friend.",
+  "example_cn": "我想念我的朋友。"
+ },
+ {
+  "id": 393,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "will",
+  "phonetic": "/wɪl/",
+  "chinese": "将要",
+  "type": "verb",
+  "example_en": "It will grow.",
+  "example_cn": "它会长大的。"
+ },
+ {
+  "id": 1216,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "everything",
+  "phonetic": "/ˈevriθɪŋ/",
+  "chinese": "所有事物",
+  "type": "pronoun",
+  "example_en": "Everything grows in spring.",
+  "example_cn": "春天万物生长。"
+ },
+ {
+  "id": 1217,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "cabbage",
+  "phonetic": "/ˈkæbɪdʒ/",
+  "chinese": "卷心菜",
   "type": "noun",
-  "example_en": "My hometown is beautiful.",
-  "example_cn": "我的家乡很漂亮。"
+  "example_en": "The cabbage is big.",
+  "example_cn": "卷心菜很大。"
  },
  {
-  "id": 400,
+  "id": 394,
+  "module": "四下4",
+  "grade": "四年级",
+  "word": "paper",
+  "phonetic": "/ˈpeɪpə/",
+  "chinese": "纸",
+  "type": "noun",
+  "example_en": "I draw on paper.",
+  "example_cn": "我在纸上画画。"
+ },
+ {
+  "id": 1219,
   "module": "四下5",
   "grade": "四年级",
-  "word": "lovely",
-  "phonetic": "/ˈlʌvli/",
-  "chinese": "可爱的",
-  "type": "adjective",
-  "example_en": "The bird is lovely.",
-  "example_cn": "这只鸟很可爱。"
+  "word": "event",
+  "phonetic": "/ɪˈvent/",
+  "chinese": "活动",
+  "type": "noun",
+  "example_en": "Sports Day is a big event.",
+  "example_cn": "运动会是项大活动。"
  },
  {
   "id": 401,
@@ -6634,8 +7384,8 @@
   "phonetic": "/ˈdrɑːmə/",
   "chinese": "戏剧",
   "type": "noun",
-  "example_en": "It's Drama Night.",
-  "example_cn": "这是戏剧之夜。"
+  "example_en": "I like drama.",
+  "example_cn": "我喜欢戏剧。"
  },
  {
   "id": 402,
@@ -6645,8 +7395,19 @@
   "phonetic": "/trɪp/",
   "chinese": "旅行",
   "type": "noun",
-  "example_en": "We go on a field trip.",
-  "example_cn": "我们去户外研学。"
+  "example_en": "We go on a trip.",
+  "example_cn": "我们去旅行。"
+ },
+ {
+  "id": 404,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "fair",
+  "phonetic": "/feə/",
+  "chinese": "集市",
+  "type": "noun",
+  "example_en": "The school fair is fun.",
+  "example_cn": "学校集市很有趣。"
  },
  {
   "id": 403,
@@ -6654,87 +7415,230 @@
   "grade": "四年级",
   "word": "festival",
   "phonetic": "/ˈfestɪvl/",
-  "chinese": "节，汇演",
+  "chinese": "节日",
   "type": "noun",
-  "example_en": "The Art Festival.",
-  "example_cn": "艺术节。"
+  "example_en": "Spring Festival is coming.",
+  "example_cn": "春节快到了。"
  },
  {
-  "id": 404,
+  "id": 1224,
   "module": "四下5",
   "grade": "四年级",
-  "word": "fair",
-  "phonetic": "/feə(r)/",
-  "chinese": "集市，游艺会",
+  "word": "horn",
+  "phonetic": "/hɔːn/",
+  "chinese": "角",
   "type": "noun",
-  "example_en": "The school fair.",
-  "example_cn": "学校集市。"
+  "example_en": "The goat has two horns.",
+  "example_cn": "山羊有两只角。"
  },
  {
-  "id": 405,
+  "id": 1225,
   "module": "四下5",
   "grade": "四年级",
-  "word": "culture",
-  "phonetic": "/ˈkʌltʃə(r)/",
-  "chinese": "文化",
+  "word": "dot",
+  "phonetic": "/dɒt/",
+  "chinese": "点",
   "type": "noun",
-  "example_en": "The culture fair.",
-  "example_cn": "文化集市。"
+  "example_en": "Join the dots.",
+  "example_cn": "把点连起来。"
  },
  {
-  "id": 406,
+  "id": 1226,
   "module": "四下5",
   "grade": "四年级",
-  "word": "keeper",
-  "phonetic": "/ˈkiːpə(r)/",
-  "chinese": "看守人",
+  "word": "raindrop",
+  "phonetic": "/ˈreɪndrɒp/",
+  "chinese": "雨点",
   "type": "noun",
-  "example_en": "The forest keeper.",
-  "example_cn": "护林员。"
- },
- {
-  "id": 407,
-  "module": "四下5",
-  "grade": "四年级",
-  "word": "special",
-  "phonetic": "/ˈspeʃl/",
-  "chinese": "特殊的",
-  "type": "adjective",
-  "example_en": "A special day.",
-  "example_cn": "特别的一天。"
+  "example_en": "A raindrop falls.",
+  "example_cn": "一滴雨点落下来。"
  },
  {
   "id": 408,
   "module": "四下5",
   "grade": "四年级",
   "word": "more",
-  "phonetic": "/mɔː(r)/",
+  "phonetic": "/mɔː/",
   "chinese": "更多的",
   "type": "adjective",
-  "example_en": "Are there more?",
-  "example_cn": "还有更多吗？"
+  "example_en": "I need more time.",
+  "example_cn": "我需要更多时间。"
  },
  {
-  "id": 409,
-  "module": "四下6",
+  "id": 1228,
+  "module": "四下5",
   "grade": "四年级",
-  "word": "clothes",
-  "phonetic": "/kləʊðz/",
-  "chinese": "衣服",
+  "word": "write",
+  "phonetic": "/raɪt/",
+  "chinese": "书写",
+  "type": "verb",
+  "example_en": "I write a note.",
+  "example_cn": "我写笔记。"
+ },
+ {
+  "id": 1229,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "those",
+  "phonetic": "/ðəʊz/",
+  "chinese": "那些",
+  "type": "pronoun",
+  "example_en": "Those are my books.",
+  "example_cn": "那些是我的书。"
+ },
+ {
+  "id": 1230,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "forest",
+  "phonetic": "/ˈfɒrɪst/",
+  "chinese": "森林",
   "type": "noun",
-  "example_en": "Cool clothes.",
-  "example_cn": "酷酷的衣服。"
+  "example_en": "The forest is big.",
+  "example_cn": "森林很大。"
+ },
+ {
+  "id": 1231,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "nature",
+  "phonetic": "/ˈneɪtʃə/",
+  "chinese": "大自然",
+  "type": "noun",
+  "example_en": "We love nature.",
+  "example_cn": "我们热爱大自然。"
+ },
+ {
+  "id": 1232,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "hunt",
+  "phonetic": "/hʌnt/",
+  "chinese": "搜寻",
+  "type": "noun",
+  "example_en": "We go on a nature hunt.",
+  "example_cn": "我们去寻找大自然。"
+ },
+ {
+  "id": 406,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "keeper",
+  "phonetic": "/ˈkiːpə/",
+  "chinese": "看守人",
+  "type": "noun",
+  "example_en": "The keeper looks after the animals.",
+  "example_cn": "看守人照看动物。"
+ },
+ {
+  "id": 400,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "lovely",
+  "phonetic": "/ˈlʌvli/",
+  "chinese": "可爱的",
+  "type": "adjective",
+  "example_en": "What a lovely day!",
+  "example_cn": "多好的一天！"
+ },
+ {
+  "id": 398,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "student",
+  "phonetic": "/ˈstjuːdnt/",
+  "chinese": "学生",
+  "type": "noun",
+  "example_en": "He is a good student.",
+  "example_cn": "他是个好学生。"
+ },
+ {
+  "id": 1236,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "fall",
+  "phonetic": "/fɔːl/",
+  "chinese": "落下",
+  "type": "verb",
+  "example_en": "Leaves fall in autumn.",
+  "example_cn": "秋天叶子落下。"
+ },
+ {
+  "id": 1237,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "off",
+  "phonetic": "/ɒf/",
+  "chinese": "离开",
+  "type": "adverb",
+  "example_en": "The leaf falls off the tree.",
+  "example_cn": "叶子从树上掉下。"
+ },
+ {
+  "id": 1238,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "fall off",
+  "phonetic": "/ˌfɔːl ˈɒf/",
+  "chinese": "掉下",
+  "type": "phrase",
+  "example_en": "Don't fall off the bike.",
+  "example_cn": "别从自行车上掉下来。"
+ },
+ {
+  "id": 397,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "hour",
+  "phonetic": "/ˈaʊə/",
+  "chinese": "小时",
+  "type": "noun",
+  "example_en": "It takes an hour.",
+  "example_cn": "要花一小时。"
+ },
+ {
+  "id": 405,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "culture",
+  "phonetic": "/ˈkʌltʃə/",
+  "chinese": "文化",
+  "type": "noun",
+  "example_en": "We learn about culture.",
+  "example_cn": "我们了解文化。"
+ },
+ {
+  "id": 1241,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "note",
+  "phonetic": "/nəʊt/",
+  "chinese": "笔记",
+  "type": "noun",
+  "example_en": "I write a note.",
+  "example_cn": "我写一张便条。"
+ },
+ {
+  "id": 1242,
+  "module": "四下5",
+  "grade": "四年级",
+  "word": "vote",
+  "phonetic": "/vəʊt/",
+  "chinese": "选票",
+  "type": "noun",
+  "example_en": "We have a vote.",
+  "example_cn": "我们投票表决。"
  },
  {
   "id": 410,
   "module": "四下6",
   "grade": "四年级",
   "word": "T-shirt",
-  "phonetic": "/ˈtiːʃɜːt/",
-  "chinese": "T恤衫",
+  "phonetic": "/ˈtiː ʃɜːt/",
+  "chinese": "T恤",
   "type": "noun",
   "example_en": "I wear a T-shirt.",
-  "example_cn": "我穿T恤衫。"
+  "example_cn": "我穿T恤。"
  },
  {
   "id": 411,
@@ -6742,10 +7646,10 @@
   "grade": "四年级",
   "word": "skirt",
   "phonetic": "/skɜːt/",
-  "chinese": "半身裙",
+  "chinese": "裙子",
   "type": "noun",
-  "example_en": "A blue skirt.",
-  "example_cn": "一条蓝裙子。"
+  "example_en": "The skirt is red.",
+  "example_cn": "裙子是红色的。"
  },
  {
   "id": 412,
@@ -6755,8 +7659,8 @@
   "phonetic": "/ʃɔːts/",
   "chinese": "短裤",
   "type": "noun",
-  "example_en": "Wear shorts.",
-  "example_cn": "穿短裤。"
+  "example_en": "I wear shorts in summer.",
+  "example_cn": "夏天我穿短裤。"
  },
  {
   "id": 413,
@@ -6766,8 +7670,8 @@
   "phonetic": "/ʃɜːt/",
   "chinese": "衬衫",
   "type": "noun",
-  "example_en": "A white shirt.",
-  "example_cn": "一件白衬衫。"
+  "example_en": "This shirt is white.",
+  "example_cn": "这件衬衫是白色的。"
  },
  {
   "id": 414,
@@ -6777,30 +7681,8 @@
   "phonetic": "/ˈtraʊzəz/",
   "chinese": "裤子",
   "type": "noun",
-  "example_en": "Wear trousers.",
-  "example_cn": "穿裤子。"
- },
- {
-  "id": 415,
-  "module": "四下6",
-  "grade": "四年级",
-  "word": "dress",
-  "phonetic": "/dres/",
-  "chinese": "连衣裙",
-  "type": "noun",
-  "example_en": "My favourite dress.",
-  "example_cn": "我最喜欢的连衣裙。"
- },
- {
-  "id": 416,
-  "module": "四下6",
-  "grade": "四年级",
-  "word": "sweater",
-  "phonetic": "/ˈswetə(r)/",
-  "chinese": "毛衣",
-  "type": "noun",
-  "example_en": "A warm sweater.",
-  "example_cn": "一件暖和的毛衣。"
+  "example_en": "These trousers are long.",
+  "example_cn": "这条裤子很长。"
  },
  {
   "id": 417,
@@ -6810,30 +7692,19 @@
   "phonetic": "/skɑːf/",
   "chinese": "围巾",
   "type": "noun",
-  "example_en": "A red scarf.",
-  "example_cn": "一条红围巾。"
+  "example_en": "The scarf is warm.",
+  "example_cn": "围巾很暖和。"
  },
  {
-  "id": 418,
+  "id": 416,
   "module": "四下6",
   "grade": "四年级",
-  "word": "coat",
-  "phonetic": "/kəʊt/",
-  "chinese": "外套",
+  "word": "sweater",
+  "phonetic": "/ˈswetə/",
+  "chinese": "毛衣",
   "type": "noun",
-  "example_en": "A big coat.",
-  "example_cn": "一件大外套。"
- },
- {
-  "id": 419,
-  "module": "四下6",
-  "grade": "四年级",
-  "word": "wear",
-  "phonetic": "/weə(r)/",
-  "chinese": "穿",
-  "type": "verb",
-  "example_en": "I'm wearing a dress.",
-  "example_cn": "我穿着连衣裙。"
+  "example_en": "I wear a sweater.",
+  "example_cn": "我穿毛衣。"
  },
  {
   "id": 420,
@@ -6843,19 +7714,63 @@
   "phonetic": "/ˈpɑːti/",
   "chinese": "聚会",
   "type": "noun",
-  "example_en": "Go to the party.",
-  "example_cn": "去聚会。"
+  "example_en": "We have a party.",
+  "example_cn": "我们开聚会。"
  },
  {
-  "id": 421,
+  "id": 415,
   "module": "四下6",
   "grade": "四年级",
-  "word": "uniform",
-  "phonetic": "/ˈjuːnɪfɔːm/",
-  "chinese": "制服",
+  "word": "dress",
+  "phonetic": "/dres/",
+  "chinese": "连衣裙",
   "type": "noun",
-  "example_en": "School uniform.",
-  "example_cn": "校服。"
+  "example_en": "The dress is pretty.",
+  "example_cn": "连衣裙很漂亮。"
+ },
+ {
+  "id": 1252,
+  "module": "四下6",
+  "grade": "四年级",
+  "word": "end",
+  "phonetic": "/end/",
+  "chinese": "末尾",
+  "type": "noun",
+  "example_en": "At the end of the day, I rest.",
+  "example_cn": "一天结束时，我休息。"
+ },
+ {
+  "id": 1253,
+  "module": "四下6",
+  "grade": "四年级",
+  "word": "dressmaker",
+  "phonetic": "/ˈdresmeɪkə/",
+  "chinese": "裁缝",
+  "type": "noun",
+  "example_en": "The dressmaker makes dresses.",
+  "example_cn": "裁缝做连衣裙。"
+ },
+ {
+  "id": 1254,
+  "module": "四下6",
+  "grade": "四年级",
+  "word": "Christmas",
+  "phonetic": "/ˈkrɪsməs/",
+  "chinese": "圣诞节",
+  "type": "noun",
+  "example_en": "Merry Christmas!",
+  "example_cn": "圣诞快乐！"
+ },
+ {
+  "id": 626,
+  "module": "四下6",
+  "grade": "四年级",
+  "word": "same",
+  "phonetic": "/seɪm/",
+  "chinese": "相同的",
+  "type": "adjective",
+  "example_en": "We have the same bag.",
+  "example_cn": "我们有相同的包。"
  },
  {
   "id": 422,
@@ -6863,21 +7778,10 @@
   "grade": "四年级",
   "word": "wrong",
   "phonetic": "/rɒŋ/",
-  "chinese": "错误的",
+  "chinese": "不正确的",
   "type": "adjective",
-  "example_en": "That's wrong.",
-  "example_cn": "那不对。"
- },
- {
-  "id": 423,
-  "module": "四下6",
-  "grade": "四年级",
-  "word": "clever",
-  "phonetic": "/ˈklevə(r)/",
-  "chinese": "聪明的",
-  "type": "adjective",
-  "example_en": "Mum is clever.",
-  "example_cn": "妈妈很聪明。"
+  "example_en": "This is the wrong size.",
+  "example_cn": "这个尺码不对。"
  },
  {
   "id": 424,
@@ -6885,10 +7789,10 @@
   "grade": "五年级",
   "word": "plate",
   "phonetic": "/pleɪt/",
-  "chinese": "盘;碟",
+  "chinese": "盘",
   "type": "noun",
-  "example_en": "There is so much food on my plate.",
-  "example_cn": "我的盘子里有好多食物。"
+  "example_en": "The food is on the plate.",
+  "example_cn": "食物在盘子里。"
  },
  {
   "id": 425,
@@ -6896,10 +7800,32 @@
   "grade": "五年级",
   "word": "group",
   "phonetic": "/ɡruːp/",
-  "chinese": "组;群",
+  "chinese": "群体",
   "type": "noun",
   "example_en": "We work in groups.",
-  "example_cn": "我们分组合作。"
+  "example_cn": "我们分组活动。"
+ },
+ {
+  "id": 1259,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "food group",
+  "phonetic": "/ˈfuːd ɡruːp/",
+  "chinese": "食物类别",
+  "type": "noun",
+  "example_en": "Fruit is a food group.",
+  "example_cn": "水果是一类食物。"
+ },
+ {
+  "id": 1260,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "fruit",
+  "phonetic": "/fruːt/",
+  "chinese": "水果",
+  "type": "noun",
+  "example_en": "I eat fruit every day.",
+  "example_cn": "我每天吃水果。"
  },
  {
   "id": 426,
@@ -6909,8 +7835,8 @@
   "phonetic": "/ˈkændi/",
   "chinese": "糖果",
   "type": "noun",
-  "example_en": "I like candy.",
-  "example_cn": "我喜欢糖果。"
+  "example_en": "Too much candy is bad.",
+  "example_cn": "太多糖果不好。"
  },
  {
   "id": 427,
@@ -6920,8 +7846,8 @@
   "phonetic": "/ˈtʃɒklət/",
   "chinese": "巧克力",
   "type": "noun",
-  "example_en": "I want some chocolate.",
-  "example_cn": "我想要一些巧克力。"
+  "example_en": "I like chocolate.",
+  "example_cn": "我喜欢巧克力。"
  },
  {
   "id": 428,
@@ -6931,19 +7857,19 @@
   "phonetic": "/ˈkəʊlə/",
   "chinese": "可乐",
   "type": "noun",
-  "example_en": "I like cola.",
-  "example_cn": "我喜欢可乐。"
+  "example_en": "Don't drink too much cola.",
+  "example_cn": "别喝太多可乐。"
  },
  {
-  "id": 429,
+  "id": 1264,
   "module": "五上1",
   "grade": "五年级",
-  "word": "chip",
-  "phonetic": "/tʃɪp/",
-  "chinese": "薯条",
+  "word": "chips",
+  "phonetic": "/tʃɪps/",
+  "chinese": "炸薯条",
   "type": "noun",
-  "example_en": "Those are chips.",
-  "example_cn": "那些是薯条。"
+  "example_en": "I like chips.",
+  "example_cn": "我喜欢炸薯条。"
  },
  {
   "id": 430,
@@ -6953,8 +7879,8 @@
   "phonetic": "/suːp/",
   "chinese": "汤",
   "type": "noun",
-  "example_en": "I want noodles in soup.",
-  "example_cn": "我想要汤面。"
+  "example_en": "The soup is hot.",
+  "example_cn": "汤很烫。"
  },
  {
   "id": 431,
@@ -6964,19 +7890,19 @@
   "phonetic": "/pəˈteɪtəʊ/",
   "chinese": "土豆",
   "type": "noun",
-  "example_en": "I have a lot of potatoes.",
-  "example_cn": "我有很多土豆。"
+  "example_en": "This is a potato.",
+  "example_cn": "这是一个土豆。"
  },
  {
-  "id": 432,
+  "id": 1267,
   "module": "五上1",
   "grade": "五年级",
-  "word": "stomach",
-  "phonetic": "/ˈstʌmək/",
-  "chinese": "胃",
+  "word": "meat",
+  "phonetic": "/miːt/",
+  "chinese": "肉",
   "type": "noun",
-  "example_en": "My stomach feels heavy.",
-  "example_cn": "我的胃感觉沉甸甸的。"
+  "example_en": "I eat meat.",
+  "example_cn": "我吃肉。"
  },
  {
   "id": 433,
@@ -6986,8 +7912,8 @@
   "phonetic": "/bred/",
   "chinese": "面包",
   "type": "noun",
-  "example_en": "Have some bread.",
-  "example_cn": "吃些面包吧。"
+  "example_en": "I eat bread for breakfast.",
+  "example_cn": "我早餐吃面包。"
  },
  {
   "id": 434,
@@ -6997,52 +7923,74 @@
   "phonetic": "/ˈbɪskɪt/",
   "chinese": "饼干",
   "type": "noun",
-  "example_en": "Just a few biscuits are not enough.",
-  "example_cn": "只吃几块饼干是不够的。"
+  "example_en": "The biscuit is sweet.",
+  "example_cn": "饼干是甜的。"
  },
  {
-  "id": 435,
+  "id": 1270,
   "module": "五上1",
   "grade": "五年级",
-  "word": "habit",
-  "phonetic": "/ˈhæbɪt/",
-  "chinese": "习惯",
+  "word": "oats",
+  "phonetic": "/əʊts/",
+  "chinese": "燕麦",
   "type": "noun",
-  "example_en": "Change your bad eating habits.",
-  "example_cn": "改掉你的坏饮食习惯。"
+  "example_en": "Oats are healthy.",
+  "example_cn": "燕麦很健康。"
  },
  {
-  "id": 436,
+  "id": 1271,
   "module": "五上1",
   "grade": "五年级",
-  "word": "choose",
-  "phonetic": "/tʃuːz/",
-  "chinese": "选择",
-  "type": "verb",
-  "example_en": "You should choose healthy food.",
-  "example_cn": "你应该选择健康的食物。"
+  "word": "nut",
+  "phonetic": "/nʌt/",
+  "chinese": "坚果",
+  "type": "noun",
+  "example_en": "I like nuts.",
+  "example_cn": "我喜欢坚果。"
  },
  {
-  "id": 437,
+  "id": 1272,
   "module": "五上1",
   "grade": "五年级",
-  "word": "heavy",
-  "phonetic": "/ˈhevi/",
-  "chinese": "重的;油腻的",
-  "type": "adjective",
-  "example_en": "The food is too heavy.",
-  "example_cn": "这食物太油腻了。"
+  "word": "sugar",
+  "phonetic": "/ˈʃʊɡə/",
+  "chinese": "糖",
+  "type": "noun",
+  "example_en": "Too much sugar is bad for you.",
+  "example_cn": "太多糖对你不好。"
  },
  {
-  "id": 438,
+  "id": 1273,
   "module": "五上1",
   "grade": "五年级",
-  "word": "sleepy",
-  "phonetic": "/ˈsliːpi/",
-  "chinese": "困倦的",
-  "type": "adjective",
-  "example_en": "It makes you sleepy.",
-  "example_cn": "它让你犯困。"
+  "word": "bottle",
+  "phonetic": "/ˈbɒtl/",
+  "chinese": "瓶子",
+  "type": "noun",
+  "example_en": "I drink from a bottle.",
+  "example_cn": "我用瓶子喝。"
+ },
+ {
+  "id": 1274,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "oil",
+  "phonetic": "/ɔɪl/",
+  "chinese": "油",
+  "type": "noun",
+  "example_en": "We cook with oil.",
+  "example_cn": "我们用油做菜。"
+ },
+ {
+  "id": 1275,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "snack",
+  "phonetic": "/snæk/",
+  "chinese": "零食",
+  "type": "noun",
+  "example_en": "I have a snack.",
+  "example_cn": "我吃点零食。"
  },
  {
   "id": 439,
@@ -7052,8 +8000,63 @@
   "phonetic": "/ˈhelθi/",
   "chinese": "健康的",
   "type": "adjective",
-  "example_en": "Eat healthy food.",
-  "example_cn": "吃健康的食物。"
+  "example_en": "Vegetables are healthy.",
+  "example_cn": "蔬菜很健康。"
+ },
+ {
+  "id": 437,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "heavy",
+  "phonetic": "/ˈhevi/",
+  "chinese": "沉重的",
+  "type": "adjective",
+  "example_en": "The box is heavy.",
+  "example_cn": "箱子很沉。"
+ },
+ {
+  "id": 438,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "sleepy",
+  "phonetic": "/ˈsliːpi/",
+  "chinese": "困倦的",
+  "type": "adjective",
+  "example_en": "I feel sleepy.",
+  "example_cn": "我感到困倦。"
+ },
+ {
+  "id": 436,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "choose",
+  "phonetic": "/tʃuːz/",
+  "chinese": "挑选",
+  "type": "verb",
+  "example_en": "Choose your food.",
+  "example_cn": "挑选你的食物。"
+ },
+ {
+  "id": 624,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "change",
+  "phonetic": "/tʃeɪndʒ/",
+  "chinese": "改变",
+  "type": "verb",
+  "example_en": "I change my habits.",
+  "example_cn": "我改变我的习惯。"
+ },
+ {
+  "id": 1281,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "slow",
+  "phonetic": "/sləʊ/",
+  "chinese": "慢下来",
+  "type": "adjective",
+  "example_en": "Slow down and eat well.",
+  "example_cn": "慢下来，好好吃饭。"
  },
  {
   "id": 440,
@@ -7063,8 +8066,8 @@
   "phonetic": "/ˈjuːʒuəli/",
   "chinese": "通常",
   "type": "adverb",
-  "example_en": "I usually eat too much for lunch.",
-  "example_cn": "我午餐通常吃太多。"
+  "example_en": "I usually walk to school.",
+  "example_cn": "我通常走路上学。"
  },
  {
   "id": 441,
@@ -7074,19 +8077,52 @@
   "phonetic": "/ˈɔːlweɪz/",
   "chinese": "总是",
   "type": "adverb",
-  "example_en": "I always eat dinner too quickly.",
-  "example_cn": "我总是吃得太快。"
+  "example_en": "I always eat breakfast.",
+  "example_cn": "我总是吃早餐。"
+ },
+ {
+  "id": 599,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "quickly",
+  "phonetic": "/ˈkwɪkli/",
+  "chinese": "快速地",
+  "type": "adverb",
+  "example_en": "He runs quickly.",
+  "example_cn": "他跑得很快。"
  },
  {
   "id": 442,
   "module": "五上1",
   "grade": "五年级",
   "word": "another",
-  "phonetic": "/əˈnʌðə(r)/",
+  "phonetic": "/əˈnʌðə/",
   "chinese": "另一个",
-  "type": "det.",
-  "example_en": "I want another apple.",
-  "example_cn": "我想要另一个苹果。"
+  "type": "adjective",
+  "example_en": "Would you like another one?",
+  "example_cn": "你还想要一个吗？"
+ },
+ {
+  "id": 1286,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "a few",
+  "phonetic": "/ə fjuː/",
+  "chinese": "一些",
+  "type": "phrase",
+  "example_en": "I eat a few nuts.",
+  "example_cn": "我吃一些坚果。"
+ },
+ {
+  "id": 1287,
+  "module": "五上1",
+  "grade": "五年级",
+  "word": "that's enough",
+  "phonetic": "/ðæts ɪˈnʌf/",
+  "chinese": "够了",
+  "type": "phrase",
+  "example_en": "That's enough, thank you.",
+  "example_cn": "够了，谢谢。"
  },
  {
   "id": 443,
@@ -7094,8 +8130,8 @@
   "grade": "五年级",
   "word": "waste",
   "phonetic": "/weɪst/",
-  "chinese": "废料;废弃物",
-  "type": "noun",
+  "chinese": "浪费",
+  "type": "verb",
   "example_en": "Don't waste food.",
   "example_cn": "不要浪费食物。"
  },
@@ -7105,10 +8141,164 @@
   "grade": "五年级",
   "word": "plastic",
   "phonetic": "/ˈplæstɪk/",
-  "chinese": "塑料制的",
-  "type": "adjective",
-  "example_en": "Use less plastic.",
-  "example_cn": "少用塑料。"
+  "chinese": "塑料",
+  "type": "noun",
+  "example_en": "This bag is plastic.",
+  "example_cn": "这个袋子是塑料的。"
+ },
+ {
+  "id": 1290,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "secret",
+  "phonetic": "/ˈsiːkrɪt/",
+  "chinese": "秘密",
+  "type": "noun",
+  "example_en": "I have a secret.",
+  "example_cn": "我有一个秘密。"
+ },
+ {
+  "id": 1291,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "tablecloth",
+  "phonetic": "/ˈteɪblklɒθ/",
+  "chinese": "桌布",
+  "type": "noun",
+  "example_en": "The tablecloth is old.",
+  "example_cn": "桌布很旧。"
+ },
+ {
+  "id": 1292,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "chessboard",
+  "phonetic": "/ˈtʃesbɔːd/",
+  "chinese": "棋盘",
+  "type": "noun",
+  "example_en": "We make a chessboard.",
+  "example_cn": "我们做一个棋盘。"
+ },
+ {
+  "id": 1293,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "carton",
+  "phonetic": "/ˈkɑːtn/",
+  "chinese": "纸盒",
+  "type": "noun",
+  "example_en": "The carton is empty.",
+  "example_cn": "纸盒是空的。"
+ },
+ {
+  "id": 1294,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "thousand",
+  "phonetic": "/ˈθaʊznd/",
+  "chinese": "千",
+  "type": "number",
+  "example_en": "There are a thousand ways.",
+  "example_cn": "有一千种方法。"
+ },
+ {
+  "id": 450,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "metal",
+  "phonetic": "/ˈmetl/",
+  "chinese": "金属",
+  "type": "noun",
+  "example_en": "The spoon is metal.",
+  "example_cn": "勺子是金属的。"
+ },
+ {
+  "id": 451,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "newspaper",
+  "phonetic": "/ˈnjuːzpeɪpə/",
+  "chinese": "报纸",
+  "type": "noun",
+  "example_en": "Dad reads a newspaper.",
+  "example_cn": "爸爸看报纸。"
+ },
+ {
+  "id": 1297,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "beginning",
+  "phonetic": "/bɪˈɡɪnɪŋ/",
+  "chinese": "开始",
+  "type": "noun",
+  "example_en": "This is the beginning.",
+  "example_cn": "这是开始。"
+ },
+ {
+  "id": 1298,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "start",
+  "phonetic": "/stɑːt/",
+  "chinese": "开始",
+  "type": "verb",
+  "example_en": "Let's start now.",
+  "example_cn": "我们现在开始。"
+ },
+ {
+  "id": 1299,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "seat",
+  "phonetic": "/siːt/",
+  "chinese": "座位",
+  "type": "noun",
+  "example_en": "This is my seat.",
+  "example_cn": "这是我的座位。"
+ },
+ {
+  "id": 1300,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "land",
+  "phonetic": "/lænd/",
+  "chinese": "陆地",
+  "type": "noun",
+  "example_en": "The land is green.",
+  "example_cn": "陆地是绿色的。"
+ },
+ {
+  "id": 449,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "reduce",
+  "phonetic": "/rɪˈdjuːs/",
+  "chinese": "减少",
+  "type": "verb",
+  "example_en": "We reduce waste.",
+  "example_cn": "我们减少浪费。"
+ },
+ {
+  "id": 448,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "reuse",
+  "phonetic": "/ˌriːˈjuːz/",
+  "chinese": "再利用",
+  "type": "verb",
+  "example_en": "We reuse the boxes.",
+  "example_cn": "我们再利用盒子。"
+ },
+ {
+  "id": 447,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "recycle",
+  "phonetic": "/ˌriːˈsaɪkl/",
+  "chinese": "回收利用",
+  "type": "verb",
+  "example_en": "We recycle paper.",
+  "example_cn": "我们回收纸。"
  },
  {
   "id": 445,
@@ -7122,6 +8312,28 @@
   "example_cn": "别把它扔掉。"
  },
  {
+  "id": 1305,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "mean",
+  "phonetic": "/miːn/",
+  "chinese": "意味着",
+  "type": "verb",
+  "example_en": "What does it mean?",
+  "example_cn": "它是什么意思？"
+ },
+ {
+  "id": 1306,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "turn into",
+  "phonetic": "/ˌtɜːn ˈɪntə/",
+  "chinese": "变成",
+  "type": "phrase",
+  "example_en": "It turns into a box.",
+  "example_cn": "它变成了一个盒子。"
+ },
+ {
   "id": 446,
   "module": "五上2",
   "grade": "五年级",
@@ -7129,228 +8341,96 @@
   "phonetic": "/ˈjuːsfl/",
   "chinese": "有用的",
   "type": "adjective",
-  "example_en": "Old things are useful.",
-  "example_cn": "旧东西是有用的。"
+  "example_en": "The box is useful.",
+  "example_cn": "盒子很有用。"
  },
  {
-  "id": 447,
+  "id": 1308,
   "module": "五上2",
   "grade": "五年级",
-  "word": "recycle",
-  "phonetic": "/ˌriːˈsaɪkl/",
-  "chinese": "回收利用",
-  "type": "verb",
-  "example_en": "We recycle boxes and cans.",
-  "example_cn": "我们回收盒子和罐子。"
- },
- {
-  "id": 448,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "reuse",
-  "phonetic": "/ˌriːˈjuːz/",
-  "chinese": "再使用",
-  "type": "verb",
-  "example_en": "We can reuse old things.",
-  "example_cn": "我们可以再利用旧东西。"
- },
- {
-  "id": 449,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "reduce",
-  "phonetic": "/rɪˈdjuːs/",
-  "chinese": "减少",
-  "type": "verb",
-  "example_en": "We should reduce plastic.",
-  "example_cn": "我们应该减少塑料。"
- },
- {
-  "id": 450,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "metal",
-  "phonetic": "/ˈmetl/",
-  "chinese": "金属",
-  "type": "noun",
-  "example_en": "The can is made of metal.",
-  "example_cn": "罐子是金属做的。"
- },
- {
-  "id": 451,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "newspaper",
-  "phonetic": "/ˈnjuːzpeɪpə(r)/",
-  "chinese": "报纸",
-  "type": "noun",
-  "example_en": "I read a newspaper.",
-  "example_cn": "我读报纸。"
- },
- {
-  "id": 452,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "save",
-  "phonetic": "/seɪv/",
-  "chinese": "节约",
-  "type": "verb",
-  "example_en": "We save water.",
-  "example_cn": "我们节约用水。"
- },
- {
-  "id": 453,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "plant",
-  "phonetic": "/plɑːnt/",
-  "chinese": "种植",
-  "type": "verb",
-  "example_en": "We plant trees.",
-  "example_cn": "我们植树。"
- },
- {
-  "id": 454,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "earth",
-  "phonetic": "/ɜːθ/",
-  "chinese": "地球",
-  "type": "noun",
-  "example_en": "Take care of the earth.",
-  "example_cn": "爱护地球。"
- },
- {
-  "id": 455,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "rubbish",
-  "phonetic": "/ˈrʌbɪʃ/",
-  "chinese": "垃圾",
-  "type": "noun",
-  "example_en": "Pick up rubbish.",
-  "example_cn": "捡起垃圾。"
- },
- {
-  "id": 456,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "bird",
-  "phonetic": "/bɜːd/",
-  "chinese": "鸟",
-  "type": "noun",
-  "example_en": "We make houses for birds.",
-  "example_cn": "我们为鸟儿做房子。"
- },
- {
-  "id": 457,
-  "module": "五上2",
-  "grade": "五年级",
-  "word": "warm",
-  "phonetic": "/wɔːm/",
-  "chinese": "温暖的",
+  "word": "flat",
+  "phonetic": "/flæt/",
+  "chinese": "平的",
   "type": "adjective",
-  "example_en": "They keep the birds warm.",
-  "example_cn": "它们让鸟儿保暖。"
+  "example_en": "The box is flat.",
+  "example_cn": "盒子是平的。"
  },
  {
-  "id": 458,
+  "id": 1309,
   "module": "五上2",
   "grade": "五年级",
-  "word": "can",
-  "phonetic": "/kæn/",
-  "chinese": "罐子",
-  "type": "noun",
-  "example_en": "Give those cans to me.",
-  "example_cn": "把那些罐子给我。"
+  "word": "single-use",
+  "phonetic": "/ˌsɪŋɡl ˈjuːs/",
+  "chinese": "一次性的",
+  "type": "adjective",
+  "example_en": "Don't use single-use bags.",
+  "example_cn": "别用一次性袋子。"
  },
  {
-  "id": 459,
+  "id": 1310,
   "module": "五上2",
   "grade": "五年级",
-  "word": "box",
-  "phonetic": "/bɒks/",
-  "chinese": "盒子",
+  "word": "each",
+  "phonetic": "/iːtʃ/",
+  "chinese": "每个",
+  "type": "adjective",
+  "example_en": "Each of us can help.",
+  "example_cn": "我们每个人都能帮忙。"
+ },
+ {
+  "id": 1311,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "neighbour",
+  "phonetic": "/ˈneɪbə/",
+  "chinese": "邻居",
   "type": "noun",
-  "example_en": "Don't throw away that box.",
-  "example_cn": "别扔掉那个盒子。"
+  "example_en": "My neighbour is kind.",
+  "example_cn": "我的邻居很友善。"
  },
  {
-  "id": 460,
-  "module": "五上3",
+  "id": 1312,
+  "module": "五上2",
   "grade": "五年级",
-  "word": "unhappy",
-  "phonetic": "/ʌnˈhæpi/",
-  "chinese": "不高兴的",
-  "type": "adjective",
-  "example_en": "This makes Duoduo unhappy.",
-  "example_cn": "这让多多不开心。"
- },
- {
-  "id": 461,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "funny",
-  "phonetic": "/ˈfʌni/",
-  "chinese": "有趣的",
-  "type": "adjective",
-  "example_en": "He is funny.",
-  "example_cn": "他很有趣。"
- },
- {
-  "id": 462,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "musical",
-  "phonetic": "/ˈmjuːzɪkl/",
-  "chinese": "音乐的",
-  "type": "adjective",
-  "example_en": "He is very musical.",
-  "example_cn": "他很有音乐天赋。"
- },
- {
-  "id": 463,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "similar",
-  "phonetic": "/ˈsɪmələ(r)/",
-  "chinese": "相似的",
-  "type": "adjective",
-  "example_en": "They are similar.",
-  "example_cn": "他们很相似。"
- },
- {
-  "id": 464,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "different",
-  "phonetic": "/ˈdɪfrənt/",
-  "chinese": "不同的",
-  "type": "adjective",
-  "example_en": "We are so different.",
-  "example_cn": "我们太不一样了。"
- },
- {
-  "id": 465,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "both",
-  "phonetic": "/bəʊθ/",
-  "chinese": "两者都",
+  "word": "yours",
+  "phonetic": "/jɔːz/",
+  "chinese": "你的",
   "type": "pronoun",
-  "example_en": "Old friends and new friends are both nice.",
-  "example_cn": "老朋友和新朋友都很好。"
+  "example_en": "This book is yours.",
+  "example_cn": "这本书是你的。"
  },
  {
-  "id": 466,
-  "module": "五上3",
+  "id": 1313,
+  "module": "五上2",
   "grade": "五年级",
-  "word": "difference",
-  "phonetic": "/ˈdɪfrəns/",
-  "chinese": "差异",
-  "type": "noun",
-  "example_en": "Friends with differences.",
-  "example_cn": "有差异的朋友。"
+  "word": "as",
+  "phonetic": "/æz/",
+  "chinese": "作为",
+  "type": "preposition",
+  "example_en": "Use it as a pot.",
+  "example_cn": "把它当花盆用。"
+ },
+ {
+  "id": 1314,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "over",
+  "phonetic": "/ˈəʊvə/",
+  "chinese": "超过",
+  "type": "preposition",
+  "example_en": "Over a thousand people come.",
+  "example_cn": "一千多人来。"
+ },
+ {
+  "id": 1315,
+  "module": "五上2",
+  "grade": "五年级",
+  "word": "into",
+  "phonetic": "/ˈɪntə/",
+  "chinese": "进入",
+  "type": "preposition",
+  "example_en": "It goes into the bin.",
+  "example_cn": "它进了垃圾桶。"
  },
  {
   "id": 467,
@@ -7360,8 +8440,19 @@
   "phonetic": "/ˈræbɪt/",
   "chinese": "兔子",
   "type": "noun",
-  "example_en": "Rabbit is very kind.",
-  "example_cn": "兔子很善良。"
+  "example_en": "The rabbit is white.",
+  "example_cn": "兔子是白色的。"
+ },
+ {
+  "id": 1317,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "key",
+  "phonetic": "/kiː/",
+  "chinese": "关键",
+  "type": "noun",
+  "example_en": "Talking is the key.",
+  "example_cn": "沟通是关键。"
  },
  {
   "id": 468,
@@ -7369,10 +8460,10 @@
   "grade": "五年级",
   "word": "parent",
   "phonetic": "/ˈpeərənt/",
-  "chinese": "父亲或母亲",
+  "chinese": "父母",
   "type": "noun",
-  "example_en": "Show this to our parents.",
-  "example_cn": "把这一点展示给我们的父母。"
+  "example_en": "My parents love me.",
+  "example_cn": "我父母爱我。"
  },
  {
   "id": 469,
@@ -7380,10 +8471,21 @@
   "grade": "五年级",
   "word": "fight",
   "phonetic": "/faɪt/",
-  "chinese": "争吵",
+  "chinese": "打架",
+  "type": "verb",
+  "example_en": "Don't fight with your friends.",
+  "example_cn": "别和朋友打架。"
+ },
+ {
+  "id": 479,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "plan",
+  "phonetic": "/plæn/",
+  "chinese": "计划",
   "type": "noun",
-  "example_en": "Don't fight.",
-  "example_cn": "不要争吵。"
+  "example_en": "We make a plan.",
+  "example_cn": "我们做个计划。"
  },
  {
   "id": 470,
@@ -7393,8 +8495,63 @@
   "phonetic": "/ˈɑːɡjuː/",
   "chinese": "争论",
   "type": "verb",
-  "example_en": "Don't argue with each other.",
-  "example_cn": "不要互相争论。"
+  "example_en": "Don't argue.",
+  "example_cn": "别争论。"
+ },
+ {
+  "id": 460,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "unhappy",
+  "phonetic": "/ʌnˈhæpi/",
+  "chinese": "不开心的",
+  "type": "adjective",
+  "example_en": "He is unhappy.",
+  "example_cn": "他不开心。"
+ },
+ {
+  "id": 461,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "funny",
+  "phonetic": "/ˈfʌni/",
+  "chinese": "有趣的",
+  "type": "adjective",
+  "example_en": "The story is funny.",
+  "example_cn": "故事很有趣。"
+ },
+ {
+  "id": 462,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "musical",
+  "phonetic": "/ˈmjuːzɪkl/",
+  "chinese": "音乐的",
+  "type": "adjective",
+  "example_en": "We watch a musical.",
+  "example_cn": "我们看音乐剧。"
+ },
+ {
+  "id": 463,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "similar",
+  "phonetic": "/ˈsɪmələ/",
+  "chinese": "相似的",
+  "type": "adjective",
+  "example_en": "Our hobbies are similar.",
+  "example_cn": "我们的爱好相似。"
+ },
+ {
+  "id": 466,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "difference",
+  "phonetic": "/ˈdɪfrəns/",
+  "chinese": "差异",
+  "type": "noun",
+  "example_en": "We talk about our differences.",
+  "example_cn": "我们谈论我们的差异。"
  },
  {
   "id": 471,
@@ -7404,52 +8561,41 @@
   "phonetic": "/sɒlv/",
   "chinese": "解决",
   "type": "verb",
-  "example_en": "We can solve problems.",
-  "example_cn": "我们能解决问题。"
+  "example_en": "We solve the problem.",
+  "example_cn": "我们解决问题。"
  },
  {
-  "id": 472,
+  "id": 1328,
   "module": "五上3",
   "grade": "五年级",
-  "word": "friendship",
-  "phonetic": "/ˈfrendʃɪp/",
-  "chinese": "友谊",
-  "type": "noun",
-  "example_en": "What's the key to friendship?",
-  "example_cn": "友谊的关键是什么？"
- },
- {
-  "id": 473,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "miss",
-  "phonetic": "/mɪs/",
-  "chinese": "想念",
-  "type": "verb",
-  "example_en": "He misses Tutu.",
-  "example_cn": "他想念图图。"
- },
- {
-  "id": 474,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "share",
-  "phonetic": "/ʃeə(r)/",
-  "chinese": "分享",
-  "type": "verb",
-  "example_en": "Friends share with each other.",
-  "example_cn": "朋友互相分享。"
- },
- {
-  "id": 475,
-  "module": "五上3",
-  "grade": "五年级",
-  "word": "together",
-  "phonetic": "/təˈɡeðə(r)/",
-  "chinese": "一起",
+  "word": "openly",
+  "phonetic": "/ˈəʊpənli/",
+  "chinese": "公开地",
   "type": "adverb",
-  "example_en": "We are happy together.",
-  "example_cn": "我们在一起很开心。"
+  "example_en": "We talk openly.",
+  "example_cn": "我们公开地谈。"
+ },
+ {
+  "id": 465,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "both",
+  "phonetic": "/bəʊθ/",
+  "chinese": "两者都",
+  "type": "pronoun",
+  "example_en": "We both like music.",
+  "example_cn": "我们都喜欢音乐。"
+ },
+ {
+  "id": 1330,
+  "module": "五上3",
+  "grade": "五年级",
+  "word": "between",
+  "phonetic": "/bɪˈtwiːn/",
+  "chinese": "在……之间",
+  "type": "preposition",
+  "example_en": "The ball is between us.",
+  "example_cn": "球在我们之间。"
  },
  {
   "id": 476,
@@ -7459,173 +8605,8 @@
   "phonetic": "/ɡəʊl/",
   "chinese": "目标",
   "type": "noun",
-  "example_en": "My goal is to do better in school.",
-  "example_cn": "我的目标是在学校表现更好。"
- },
- {
-  "id": 477,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "better",
-  "phonetic": "/ˈbetə(r)/",
-  "chinese": "更好的",
-  "type": "adjective",
-  "example_en": "I want to be a better me.",
-  "example_cn": "我想成为更好的自己。"
- },
- {
-  "id": 478,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "improve",
-  "phonetic": "/ɪmˈpruːv/",
-  "chinese": "提高;改善",
-  "type": "verb",
-  "example_en": "I will improve my English.",
-  "example_cn": "我会提高我的英语。"
- },
- {
-  "id": 479,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "plan",
-  "phonetic": "/plæn/",
-  "chinese": "计划",
-  "type": "noun",
-  "example_en": "Make a plan to get better.",
-  "example_cn": "制定一个变得更好的计划。"
- },
- {
-  "id": 480,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "try",
-  "phonetic": "/traɪ/",
-  "chinese": "努力;尝试",
-  "type": "verb",
-  "example_en": "I will try again.",
-  "example_cn": "我会再试一次。"
- },
- {
-  "id": 481,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "hard-working",
-  "phonetic": "/ˌhɑːdˈwɜːkɪŋ/",
-  "chinese": "勤奋的",
-  "type": "adjective",
-  "example_en": "He is hard-working.",
-  "example_cn": "他很勤奋。"
- },
- {
-  "id": 482,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "polite",
-  "phonetic": "/pəˈlaɪt/",
-  "chinese": "礼貌的",
-  "type": "adjective",
-  "example_en": "Be polite to others.",
-  "example_cn": "对他人有礼貌。"
- },
- {
-  "id": 483,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "helpful",
-  "phonetic": "/ˈhelpfl/",
-  "chinese": "有帮助的",
-  "type": "adjective",
-  "example_en": "She is helpful.",
-  "example_cn": "她乐于助人。"
- },
- {
-  "id": 484,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "confident",
-  "phonetic": "/ˈkɒnfɪdənt/",
-  "chinese": "自信的",
-  "type": "adjective",
-  "example_en": "I want to be confident.",
-  "example_cn": "我想变得自信。"
- },
- {
-  "id": 485,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "brave",
-  "phonetic": "/breɪv/",
-  "chinese": "勇敢的",
-  "type": "adjective",
-  "example_en": "Be brave!",
-  "example_cn": "要勇敢！"
- },
- {
-  "id": 486,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "careful",
-  "phonetic": "/ˈkeəfl/",
-  "chinese": "细心的",
-  "type": "adjective",
-  "example_en": "You should be careful.",
-  "example_cn": "你应该细心。"
- },
- {
-  "id": 487,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "careless",
-  "phonetic": "/ˈkeələs/",
-  "chinese": "粗心的",
-  "type": "adjective",
-  "example_en": "Don't be careless.",
-  "example_cn": "不要粗心。"
- },
- {
-  "id": 488,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "exercise",
-  "phonetic": "/ˈeksəsaɪz/",
-  "chinese": "锻炼",
-  "type": "verb",
-  "example_en": "Do more exercise.",
-  "example_cn": "多做运动。"
- },
- {
-  "id": 489,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "healthily",
-  "phonetic": "/ˈhelθɪli/",
-  "chinese": "健康地",
-  "type": "adverb",
-  "example_en": "Eat and drink healthily.",
-  "example_cn": "健康饮食。"
- },
- {
-  "id": 490,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "fail",
-  "phonetic": "/feɪl/",
-  "chinese": "失败",
-  "type": "verb",
-  "example_en": "It's OK to fail.",
-  "example_cn": "失败没关系。"
- },
- {
-  "id": 491,
-  "module": "五上4",
-  "grade": "五年级",
-  "word": "wish",
-  "phonetic": "/wɪʃ/",
-  "chinese": "愿望",
-  "type": "noun",
-  "example_en": "What's your wish?",
-  "example_cn": "你的愿望是什么？"
+  "example_en": "My goal is to run faster.",
+  "example_cn": "我的目标是跑得更快。"
  },
  {
   "id": 492,
@@ -7635,41 +8616,338 @@
   "phonetic": "/ˈsɜːveɪ/",
   "chinese": "调查",
   "type": "noun",
-  "example_en": "Complete the survey.",
-  "example_cn": "完成调查。"
+  "example_en": "We do a survey.",
+  "example_cn": "我们做调查。"
  },
  {
-  "id": 493,
+  "id": 1333,
   "module": "五上4",
   "grade": "五年级",
-  "word": "join",
-  "phonetic": "/dʒɔɪn/",
-  "chinese": "参加",
+  "word": "top",
+  "phonetic": "/tɒp/",
+  "chinese": "顶部",
+  "type": "noun",
+  "example_en": "He is at the top.",
+  "example_cn": "他在顶部。"
+ },
+ {
+  "id": 1334,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "test",
+  "phonetic": "/test/",
+  "chinese": "测试",
+  "type": "noun",
+  "example_en": "We have a test today.",
+  "example_cn": "我们今天有测试。"
+ },
+ {
+  "id": 1335,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "October",
+  "phonetic": "/ɒkˈtəʊbə/",
+  "chinese": "十月",
+  "type": "noun",
+  "example_en": "My birthday is in October.",
+  "example_cn": "我的生日在十月。"
+ },
+ {
+  "id": 1336,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "sentence",
+  "phonetic": "/ˈsentəns/",
+  "chinese": "句子",
+  "type": "noun",
+  "example_en": "Write a sentence.",
+  "example_cn": "写一个句子。"
+ },
+ {
+  "id": 1337,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "November",
+  "phonetic": "/nəʊˈvembə/",
+  "chinese": "十一月",
+  "type": "noun",
+  "example_en": "November is cold.",
+  "example_cn": "十一月很冷。"
+ },
+ {
+  "id": 1338,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "match",
+  "phonetic": "/mætʃ/",
+  "chinese": "比赛",
+  "type": "noun",
+  "example_en": "We watch a football match.",
+  "example_cn": "我们看足球比赛。"
+ },
+ {
+  "id": 1339,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "skill",
+  "phonetic": "/skɪl/",
+  "chinese": "技能",
+  "type": "noun",
+  "example_en": "Reading is a good skill.",
+  "example_cn": "阅读是项好技能。"
+ },
+ {
+  "id": 1340,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "pass",
+  "phonetic": "/pɑːs/",
+  "chinese": "通过",
   "type": "verb",
-  "example_en": "I want to join the team.",
-  "example_cn": "我想加入球队。"
+  "example_en": "I pass the test.",
+  "example_cn": "我通过了测试。"
+ },
+ {
+  "id": 1341,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "medicine",
+  "phonetic": "/ˈmedsn/",
+  "chinese": "药",
+  "type": "noun",
+  "example_en": "Take the medicine.",
+  "example_cn": "把药吃了。"
+ },
+ {
+  "id": 1342,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "classroom",
+  "phonetic": "/ˈklɑːsruːm/",
+  "chinese": "教室",
+  "type": "noun",
+  "example_en": "The classroom is big.",
+  "example_cn": "教室很大。"
+ },
+ {
+  "id": 1343,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "metre",
+  "phonetic": "/ˈmiːtə/",
+  "chinese": "米",
+  "type": "noun",
+  "example_en": "I run 100 metres.",
+  "example_cn": "我跑100米。"
+ },
+ {
+  "id": 1344,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "race",
+  "phonetic": "/reɪs/",
+  "chinese": "赛跑",
+  "type": "noun",
+  "example_en": "I win the race.",
+  "example_cn": "我赢了赛跑。"
+ },
+ {
+  "id": 1345,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "drink",
+  "phonetic": "/drɪŋk/",
+  "chinese": "喝",
+  "type": "verb",
+  "example_en": "Drink more water.",
+  "example_cn": "多喝水。"
+ },
+ {
+  "id": 488,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "exercise",
+  "phonetic": "/ˈeksəsaɪz/",
+  "chinese": "锻炼",
+  "type": "noun",
+  "example_en": "Exercise is good for you.",
+  "example_cn": "锻炼对你有好处。"
+ },
+ {
+  "id": 1347,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "complete",
+  "phonetic": "/kəmˈpliːt/",
+  "chinese": "完成",
+  "type": "verb",
+  "example_en": "I complete the race.",
+  "example_cn": "我完成了比赛。"
+ },
+ {
+  "id": 478,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "improve",
+  "phonetic": "/ɪmˈpruːv/",
+  "chinese": "改善",
+  "type": "verb",
+  "example_en": "I want to improve.",
+  "example_cn": "我想进步。"
+ },
+ {
+  "id": 1349,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "shoot",
+  "phonetic": "/ʃuːt/",
+  "chinese": "射击",
+  "type": "verb",
+  "example_en": "Shoot the ball!",
+  "example_cn": "射门！"
+ },
+ {
+  "id": 1350,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "sell",
+  "phonetic": "/sel/",
+  "chinese": "卖",
+  "type": "verb",
+  "example_en": "They sell fruit.",
+  "example_cn": "他们卖水果。"
+ },
+ {
+  "id": 1351,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "buy",
+  "phonetic": "/baɪ/",
+  "chinese": "买",
+  "type": "verb",
+  "example_en": "I buy a book.",
+  "example_cn": "我买一本书。"
+ },
+ {
+  "id": 1352,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "rush",
+  "phonetic": "/rʌʃ/",
+  "chinese": "冲",
+  "type": "verb",
+  "example_en": "Don't rush!",
+  "example_cn": "别急！"
+ },
+ {
+  "id": 638,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "climb",
+  "phonetic": "/klaɪm/",
+  "chinese": "爬",
+  "type": "verb",
+  "example_en": "I climb the hill.",
+  "example_cn": "我爬山。"
+ },
+ {
+  "id": 1354,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "set",
+  "phonetic": "/set/",
+  "chinese": "设置",
+  "type": "verb",
+  "example_en": "He sets a record.",
+  "example_cn": "他创了纪录。"
+ },
+ {
+  "id": 1355,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "afraid",
+  "phonetic": "/əˈfreɪd/",
+  "chinese": "害怕的",
+  "type": "adjective",
+  "example_en": "Don't be afraid.",
+  "example_cn": "别害怕。"
+ },
+ {
+  "id": 489,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "healthily",
+  "phonetic": "/ˈhelθɪli/",
+  "chinese": "健康地",
+  "type": "adverb",
+  "example_en": "We eat healthily.",
+  "example_cn": "我们吃得健康。"
+ },
+ {
+  "id": 1357,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "moreover",
+  "phonetic": "/mɔːˈrəʊvə/",
+  "chinese": "此外",
+  "type": "adverb",
+  "example_en": "Moreover, I read every day.",
+  "example_cn": "此外，我每天阅读。"
+ },
+ {
+  "id": 1358,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "late",
+  "phonetic": "/leɪt/",
+  "chinese": "晚",
+  "type": "adjective",
+  "example_en": "Don't be late.",
+  "example_cn": "别迟到。"
+ },
+ {
+  "id": 540,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "before",
+  "phonetic": "/bɪˈfɔː/",
+  "chinese": "以前",
+  "type": "adverb",
+  "example_en": "Wash hands before you eat.",
+  "example_cn": "吃饭前先洗手。"
+ },
+ {
+  "id": 1360,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "rock climbing",
+  "phonetic": "/ˈrɒk ˌklaɪmɪŋ/",
+  "chinese": "攀岩",
+  "type": "noun",
+  "example_en": "I like rock climbing.",
+  "example_cn": "我喜欢攀岩。"
+ },
+ {
+  "id": 1361,
+  "module": "五上4",
+  "grade": "五年级",
+  "word": "set the world record",
+  "phonetic": "/ˌset ðə wɜːld ˈrekɔːd/",
+  "chinese": "创造世界纪录",
+  "type": "phrase",
+  "example_en": "He sets the world record.",
+  "example_cn": "他创造了世界纪录。"
  },
  {
   "id": 494,
   "module": "五上5",
   "grade": "五年级",
   "word": "future",
-  "phonetic": "/ˈfjuːtʃə(r)/",
+  "phonetic": "/ˈfjuːtʃə/",
   "chinese": "未来",
   "type": "noun",
-  "example_en": "Look into the future.",
-  "example_cn": "展望未来。"
- },
- {
-  "id": 495,
-  "module": "五上5",
-  "grade": "五年级",
-  "word": "robot",
-  "phonetic": "/ˈrəʊbɒt/",
-  "chinese": "机器人",
-  "type": "noun",
-  "example_en": "I am making a robot.",
-  "example_cn": "我在做一个机器人。"
+  "example_en": "The future is exciting.",
+  "example_cn": "未来令人期待。"
  },
  {
   "id": 496,
@@ -7679,8 +8957,8 @@
   "phonetic": "/lɪft/",
   "chinese": "电梯",
   "type": "noun",
-  "example_en": "The lift goes up.",
-  "example_cn": "电梯上升。"
+  "example_en": "Take the lift.",
+  "example_cn": "坐电梯。"
  },
  {
   "id": 497,
@@ -7690,19 +8968,19 @@
   "phonetic": "/pet/",
   "chinese": "宠物",
   "type": "noun",
-  "example_en": "It will take care of pets.",
-  "example_cn": "它会照顾宠物。"
+  "example_en": "I have a pet dog.",
+  "example_cn": "我有一只宠物狗。"
  },
  {
   "id": 498,
   "module": "五上5",
   "grade": "五年级",
   "word": "dinosaur",
-  "phonetic": "/ˈdaɪnəsɔː(r)/",
+  "phonetic": "/ˈdaɪnəsɔː/",
   "chinese": "恐龙",
   "type": "noun",
-  "example_en": "I like dinosaurs.",
-  "example_cn": "我喜欢恐龙。"
+  "example_en": "Dinosaurs lived long ago.",
+  "example_cn": "恐龙生活在很久以前。"
  },
  {
   "id": 499,
@@ -7710,43 +8988,32 @@
   "grade": "五年级",
   "word": "housework",
   "phonetic": "/ˈhaʊswɜːk/",
-  "chinese": "家务(劳动)",
+  "chinese": "家务",
   "type": "noun",
-  "example_en": "It will do our housework.",
-  "example_cn": "它会做家务。"
+  "example_en": "Robots do the housework.",
+  "example_cn": "机器人做家务。"
  },
  {
   "id": 500,
   "module": "五上5",
   "grade": "五年级",
   "word": "danger",
-  "phonetic": "/ˈdeɪndʒə(r)/",
+  "phonetic": "/ˈdeɪndʒə/",
   "chinese": "危险",
   "type": "noun",
-  "example_en": "The animal is in danger.",
-  "example_cn": "这只动物处境危险。"
+  "example_en": "The lion is a danger.",
+  "example_cn": "狮子有危险。"
  },
  {
   "id": 501,
   "module": "五上5",
   "grade": "五年级",
   "word": "disaster",
-  "phonetic": "/dɪˈzɑːstə(r)/",
+  "phonetic": "/dɪˈzɑːstə/",
   "chinese": "灾难",
   "type": "noun",
-  "example_en": "Help people in disasters.",
-  "example_cn": "帮助受灾的人。"
- },
- {
-  "id": 502,
-  "module": "五上5",
-  "grade": "五年级",
-  "word": "send",
-  "phonetic": "/send/",
-  "chinese": "送出,发出",
-  "type": "verb",
-  "example_en": "I will send you a card.",
-  "example_cn": "我会给你寄一张卡片。"
+  "example_en": "It is a disaster!",
+  "example_cn": "真是一场灾难！"
  },
  {
   "id": 503,
@@ -7756,19 +9023,8 @@
   "phonetic": "/ˈbækpæk/",
   "chinese": "背包",
   "type": "noun",
-  "example_en": "I have a new backpack.",
-  "example_cn": "我有一个新背包。"
- },
- {
-  "id": 504,
-  "module": "五上5",
-  "grade": "五年级",
-  "word": "celebrate",
-  "phonetic": "/ˈselɪbreɪt/",
-  "chinese": "庆祝",
-  "type": "verb",
-  "example_en": "We celebrate the festival.",
-  "example_cn": "我们庆祝节日。"
+  "example_en": "My backpack is heavy.",
+  "example_cn": "我的背包很重。"
  },
  {
   "id": 505,
@@ -7776,10 +9032,10 @@
   "grade": "五年级",
   "word": "hundred",
   "phonetic": "/ˈhʌndrəd/",
-  "chinese": "一百",
+  "chinese": "百",
   "type": "number",
-  "example_en": "In one hundred years.",
-  "example_cn": "在一百年后。"
+  "example_en": "I can count to one hundred.",
+  "example_cn": "我能数到一百。"
  },
  {
   "id": 506,
@@ -7787,10 +9043,10 @@
   "grade": "五年级",
   "word": "pie",
   "phonetic": "/paɪ/",
-  "chinese": "水果馅饼",
+  "chinese": "馅饼",
   "type": "noun",
-  "example_en": "I like apple pie.",
-  "example_cn": "我喜欢苹果派。"
+  "example_en": "The pie is yummy.",
+  "example_cn": "馅饼很好吃。"
  },
  {
   "id": 507,
@@ -7798,21 +9054,21 @@
   "grade": "五年级",
   "word": "fries",
   "phonetic": "/fraɪz/",
-  "chinese": "炸马铃薯条",
+  "chinese": "炸薯条",
   "type": "noun",
-  "example_en": "I want some fries.",
-  "example_cn": "我想要一些薯条。"
+  "example_en": "I like fish and fries.",
+  "example_cn": "我喜欢炸鱼薯条。"
  },
  {
-  "id": 508,
+  "id": 1373,
   "module": "五上5",
   "grade": "五年级",
-  "word": "bright",
-  "phonetic": "/braɪt/",
-  "chinese": "光明的;明亮的",
-  "type": "adjective",
-  "example_en": "The future is bright.",
-  "example_cn": "未来是光明的。"
+  "word": "mind",
+  "phonetic": "/maɪnd/",
+  "chinese": "头脑",
+  "type": "noun",
+  "example_en": "A good book feeds the mind.",
+  "example_cn": "好书滋养头脑。"
  },
  {
   "id": 509,
@@ -7822,63 +9078,52 @@
   "phonetic": "/pɪl/",
   "chinese": "药丸",
   "type": "noun",
-  "example_en": "Take the pill.",
-  "example_cn": "吃药片。"
+  "example_en": "This is a smart pill.",
+  "example_cn": "这是一颗智能药丸。"
  },
  {
-  "id": 510,
+  "id": 502,
   "module": "五上5",
   "grade": "五年级",
-  "word": "moon",
-  "phonetic": "/muːn/",
-  "chinese": "月球",
-  "type": "noun",
-  "example_en": "People will live on the moon.",
-  "example_cn": "人们会住在月球上。"
- },
- {
-  "id": 511,
-  "module": "五上5",
-  "grade": "五年级",
-  "word": "Mars",
-  "phonetic": "/mɑːz/",
-  "chinese": "火星",
-  "type": "noun",
-  "example_en": "We will travel to Mars.",
-  "example_cn": "我们会去火星旅行。"
- },
- {
-  "id": 512,
-  "module": "五上5",
-  "grade": "五年级",
-  "word": "space",
-  "phonetic": "/speɪs/",
-  "chinese": "太空",
-  "type": "noun",
-  "example_en": "We will travel in space.",
-  "example_cn": "我们会在太空旅行。"
- },
- {
-  "id": 513,
-  "module": "五上5",
-  "grade": "五年级",
-  "word": "travel",
-  "phonetic": "/ˈtrævl/",
-  "chinese": "旅行",
+  "word": "send",
+  "phonetic": "/send/",
+  "chinese": "发送",
   "type": "verb",
-  "example_en": "We will travel to other planets.",
-  "example_cn": "我们会去其他星球旅行。"
+  "example_en": "I send a message.",
+  "example_cn": "我发送消息。"
  },
  {
-  "id": 514,
-  "module": "五上6",
+  "id": 504,
+  "module": "五上5",
   "grade": "五年级",
-  "word": "festival",
-  "phonetic": "/ˈfestɪvl/",
-  "chinese": "节日",
-  "type": "noun",
-  "example_en": "Enjoy the festivals.",
-  "example_cn": "享受节日。"
+  "word": "celebrate",
+  "phonetic": "/ˈselɪbreɪt/",
+  "chinese": "庆祝",
+  "type": "verb",
+  "example_en": "We celebrate the New Year.",
+  "example_cn": "我们庆祝新年。"
+ },
+ {
+  "id": 1377,
+  "module": "五上5",
+  "grade": "五年级",
+  "word": "underwater",
+  "phonetic": "/ˌʌndəˈwɔːtə/",
+  "chinese": "水下的",
+  "type": "adjective",
+  "example_en": "We visit an underwater city.",
+  "example_cn": "我们参观水下城市。"
+ },
+ {
+  "id": 508,
+  "module": "五上5",
+  "grade": "五年级",
+  "word": "bright",
+  "phonetic": "/braɪt/",
+  "chinese": "明亮的",
+  "type": "adjective",
+  "example_en": "The future is bright.",
+  "example_cn": "未来是光明的。"
  },
  {
   "id": 515,
@@ -7888,30 +9133,30 @@
   "phonetic": "/ˈmuːnkeɪk/",
   "chinese": "月饼",
   "type": "noun",
-  "example_en": "Let's make mooncakes.",
-  "example_cn": "我们做月饼吧。"
+  "example_en": "I eat mooncakes.",
+  "example_cn": "我吃月饼。"
  },
  {
   "id": 516,
   "module": "五上6",
   "grade": "五年级",
   "word": "September",
-  "phonetic": "/sepˈtembə(r)/",
+  "phonetic": "/sepˈtembə/",
   "chinese": "九月",
   "type": "noun",
-  "example_en": "School begins in September.",
-  "example_cn": "学校九月开学。"
+  "example_en": "School starts in September.",
+  "example_cn": "九月开学。"
  },
  {
   "id": 517,
   "module": "五上6",
   "grade": "五年级",
   "word": "zookeeper",
-  "phonetic": "/ˈzuːkiːpə(r)/",
-  "chinese": "动物园饲养员",
+  "phonetic": "/ˈzuːkiːpə/",
+  "chinese": "动物园管理员",
   "type": "noun",
-  "example_en": "The zookeeper takes care of the animals.",
-  "example_cn": "动物园管理员照顾动物。"
+  "example_en": "The zookeeper feeds the animals.",
+  "example_cn": "动物园管理员喂动物。"
  },
  {
   "id": 518,
@@ -7921,8 +9166,8 @@
   "phonetic": "/ˈkændl/",
   "chinese": "蜡烛",
   "type": "noun",
-  "example_en": "Light a candle.",
-  "example_cn": "点燃蜡烛。"
+  "example_en": "Blow out the candle.",
+  "example_cn": "吹灭蜡烛。"
  },
  {
   "id": 519,
@@ -7941,10 +9186,10 @@
   "grade": "五年级",
   "word": "bell",
   "phonetic": "/bel/",
-  "chinese": "钟;响铃",
+  "chinese": "铃",
   "type": "noun",
   "example_en": "The bell rings.",
-  "example_cn": "钟响了。"
+  "example_cn": "铃响了。"
  },
  {
   "id": 521,
@@ -7954,19 +9199,41 @@
   "phonetic": "/ˈmɪdnaɪt/",
   "chinese": "午夜",
   "type": "noun",
-  "example_en": "We stay up until midnight.",
-  "example_cn": "我们熬夜到午夜。"
+  "example_en": "We cheer at midnight.",
+  "example_cn": "我们在午夜欢呼。"
+ },
+ {
+  "id": 524,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "light",
+  "phonetic": "/laɪt/",
+  "chinese": "灯光",
+  "type": "noun",
+  "example_en": "The light is bright.",
+  "example_cn": "灯光很亮。"
+ },
+ {
+  "id": 1387,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "merry",
+  "phonetic": "/ˈmeri/",
+  "chinese": "愉快的",
+  "type": "adjective",
+  "example_en": "Merry Christmas!",
+  "example_cn": "圣诞快乐！"
  },
  {
   "id": 522,
   "module": "五上6",
   "grade": "五年级",
   "word": "cheer",
-  "phonetic": "/tʃɪə(r)/",
-  "chinese": "欢呼,喝彩",
+  "phonetic": "/tʃɪə/",
+  "chinese": "欢呼",
   "type": "verb",
-  "example_en": "They cheer and hug each other.",
-  "example_cn": "他们互相欢呼拥抱。"
+  "example_en": "We cheer for the team.",
+  "example_cn": "我们为队伍欢呼。"
  },
  {
   "id": 523,
@@ -7976,19 +9243,85 @@
   "phonetic": "/hʌɡ/",
   "chinese": "拥抱",
   "type": "verb",
-  "example_en": "Give me a hug.",
-  "example_cn": "抱抱我。"
+  "example_en": "I hug my mum.",
+  "example_cn": "我拥抱妈妈。"
  },
  {
-  "id": 524,
+  "id": 1390,
   "module": "五上6",
   "grade": "五年级",
-  "word": "light",
-  "phonetic": "/laɪt/",
-  "chinese": "灯",
+  "word": "festival",
+  "phonetic": "/ˈfestɪvl/",
+  "chinese": "节日",
   "type": "noun",
-  "example_en": "Put up balloons and lights.",
-  "example_cn": "挂气球和灯。"
+  "example_en": "The Mid-Autumn Festival is fun.",
+  "example_cn": "中秋节很有趣。"
+ },
+ {
+  "id": 1391,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "important",
+  "phonetic": "/ɪmˈpɔːtnt/",
+  "chinese": "重要的",
+  "type": "adjective",
+  "example_en": "Family is important.",
+  "example_cn": "家人很重要。"
+ },
+ {
+  "id": 1392,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "special",
+  "phonetic": "/ˈspeʃl/",
+  "chinese": "特别的",
+  "type": "adjective",
+  "example_en": "This day is special.",
+  "example_cn": "这一天很特别。"
+ },
+ {
+  "id": 1393,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "meal",
+  "phonetic": "/miːl/",
+  "chinese": "一餐",
+  "type": "noun",
+  "example_en": "We have a big meal.",
+  "example_cn": "我们吃一顿大餐。"
+ },
+ {
+  "id": 510,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "moon",
+  "phonetic": "/muːn/",
+  "chinese": "月亮",
+  "type": "noun",
+  "example_en": "The moon is round.",
+  "example_cn": "月亮是圆的。"
+ },
+ {
+  "id": 1395,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "mid-autumn",
+  "phonetic": "/ˌmɪd ˈɔːtəm/",
+  "chinese": "中秋",
+  "type": "noun",
+  "example_en": "We eat mooncakes at mid-autumn.",
+  "example_cn": "中秋节我们吃月饼。"
+ },
+ {
+  "id": 1396,
+  "module": "五上6",
+  "grade": "五年级",
+  "word": "harvest",
+  "phonetic": "/ˈhɑːvɪst/",
+  "chinese": "丰收",
+  "type": "noun",
+  "example_en": "Autumn is harvest time.",
+  "example_cn": "秋天是丰收的季节。"
  },
  {
   "id": 525,
@@ -7998,8 +9331,8 @@
   "phonetic": "/ˈlæntən/",
   "chinese": "灯笼",
   "type": "noun",
-  "example_en": "Put up lanterns.",
-  "example_cn": "挂灯笼。"
+  "example_en": "The lantern is red.",
+  "example_cn": "灯笼是红色的。"
  },
  {
   "id": 526,
@@ -8009,1250 +9342,1713 @@
   "phonetic": "/ˈdʌmplɪŋ/",
   "chinese": "饺子",
   "type": "noun",
-  "example_en": "We eat dumplings.",
-  "example_cn": "我们吃饺子。"
+  "example_en": "I eat dumplings.",
+  "example_cn": "我吃饺子。"
  },
  {
-  "id": 527,
+  "id": 1399,
   "module": "五上6",
   "grade": "五年级",
-  "word": "dragon",
-  "phonetic": "/ˈdræɡən/",
-  "chinese": "龙",
+  "word": "turkey",
+  "phonetic": "/ˈtɜːki/",
+  "chinese": "火鸡",
   "type": "noun",
-  "example_en": "Dragon Boat Festival.",
-  "example_cn": "端午节。"
+  "example_en": "We eat turkey at Christmas.",
+  "example_cn": "圣诞节我们吃火鸡。"
  },
  {
-  "id": 528,
+  "id": 1400,
   "module": "五上6",
   "grade": "五年级",
-  "word": "bamboo",
-  "phonetic": "/ˌbæmˈbuː/",
-  "chinese": "竹子",
+  "word": "present",
+  "phonetic": "/ˈpreznt/",
+  "chinese": "礼物",
   "type": "noun",
-  "example_en": "Make bamboo mooncakes.",
-  "example_cn": "做竹子馅月饼。"
+  "example_en": "Here is a present for you.",
+  "example_cn": "这是给你的礼物。"
  },
  {
-  "id": 529,
+  "id": 475,
   "module": "五上6",
-  "grade": "五年级",
-  "word": "carrot",
-  "phonetic": "/ˈkærət/",
-  "chinese": "胡萝卜",
-  "type": "noun",
-  "example_en": "Make carrot mooncakes.",
-  "example_cn": "做胡萝卜馅月饼。"
- },
- {
-  "id": 530,
-  "module": "五上6",
-  "grade": "五年级",
-  "word": "zoo",
-  "phonetic": "/zuː/",
-  "chinese": "动物园",
-  "type": "noun",
-  "example_en": "The animals are at the zoo.",
-  "example_cn": "动物们在动物园。"
- },
- {
-  "id": 531,
-  "module": "五上6",
-  "grade": "五年级",
-  "word": "tiger",
-  "phonetic": "/ˈtaɪɡə(r)/",
-  "chinese": "老虎",
-  "type": "noun",
-  "example_en": "Meat mooncakes for the tigers.",
-  "example_cn": "给老虎的肉馅月饼。"
- },
- {
-  "id": 532,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "tall",
-  "phonetic": "/tɔːl/",
-  "chinese": "高的",
-  "type": "adjective",
-  "example_en": "Now I am tall.",
-  "example_cn": "现在我很高。"
- },
- {
-  "id": 533,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "short",
-  "phonetic": "/ʃɔːt/",
-  "chinese": "矮的；短的",
-  "type": "adjective",
-  "example_en": "I was short before.",
-  "example_cn": "我以前很矮。"
- },
- {
-  "id": 534,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "young",
-  "phonetic": "/jʌŋ/",
-  "chinese": "年轻的",
-  "type": "adjective",
-  "example_en": "My grandpa was young then.",
-  "example_cn": "我爷爷那时很年轻。"
- },
- {
-  "id": 535,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "old",
-  "phonetic": "/əʊld/",
-  "chinese": "年老的；旧的",
-  "type": "adjective",
-  "example_en": "Now they are old.",
-  "example_cn": "现在他们老了。"
- },
- {
-  "id": 536,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "strong",
-  "phonetic": "/strɒŋ/",
-  "chinese": "强壮的",
-  "type": "adjective",
-  "example_en": "He is tall and strong.",
-  "example_cn": "他高大强壮。"
- },
- {
-  "id": 537,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "thin",
-  "phonetic": "/θɪn/",
-  "chinese": "瘦的",
-  "type": "adjective",
-  "example_en": "She was thin before.",
-  "example_cn": "她以前很瘦。"
- },
- {
-  "id": 538,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "big",
-  "phonetic": "/bɪɡ/",
-  "chinese": "大的",
-  "type": "adjective",
-  "example_en": "I am big now.",
-  "example_cn": "我现在长大了。"
- },
- {
-  "id": 539,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "small",
-  "phonetic": "/smɔːl/",
-  "chinese": "小的",
-  "type": "adjective",
-  "example_en": "I was small then.",
-  "example_cn": "我那时很小。"
- },
- {
-  "id": 540,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "before",
-  "phonetic": "/bɪˈfɔː(r)/",
-  "chinese": "以前",
-  "type": "adverb",
-  "example_en": "I was short before.",
-  "example_cn": "我以前很矮。"
- },
- {
-  "id": 541,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "grow",
-  "phonetic": "/ɡrəʊ/",
-  "chinese": "成长；生长",
-  "type": "verb",
-  "example_en": "I grow every day.",
-  "example_cn": "我每天都在成长。"
- },
- {
-  "id": 542,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "grow up",
-  "phonetic": "/ɡrəʊ ʌp/",
-  "chinese": "长大",
-  "type": "verb",
-  "example_en": "It's great to grow up together.",
-  "example_cn": "一起长大真好。"
- },
- {
-  "id": 543,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "was",
-  "phonetic": "/wɒz/",
-  "chinese": "是（is/am的过去式）",
-  "type": "verb",
-  "example_en": "I was four years old.",
-  "example_cn": "我那时四岁。"
- },
- {
-  "id": 544,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "were",
-  "phonetic": "/wɜː(r)/",
-  "chinese": "是（are的过去式）",
-  "type": "verb",
-  "example_en": "We were happy together.",
-  "example_cn": "我们在一起很开心。"
- },
- {
-  "id": 545,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "could",
-  "phonetic": "/kʊd/",
-  "chinese": "能（can的过去式）",
-  "type": "modal",
-  "example_en": "I could play football.",
-  "example_cn": "我会踢足球了。"
- },
- {
-  "id": 546,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "swim",
-  "phonetic": "/swɪm/",
-  "chinese": "游泳",
-  "type": "verb",
-  "example_en": "I couldn't swim before. Now I can swim.",
-  "example_cn": "我以前不会游泳，现在会了。"
- },
- {
-  "id": 547,
-  "module": "五下1",
-  "grade": "五年级",
-  "word": "play",
-  "phonetic": "/pleɪ/",
-  "chinese": "玩；踢",
-  "type": "verb",
-  "example_en": "We could play football together.",
-  "example_cn": "我们可以一起踢足球。"
- },
- {
-  "id": 548,
-  "module": "五下1",
   "grade": "五年级",
   "word": "together",
-  "phonetic": "/təˈɡeðə(r)/",
+  "phonetic": "/təˈɡeðə/",
   "chinese": "一起",
   "type": "adverb",
-  "example_en": "We help each other together.",
-  "example_cn": "我们互相帮助。"
+  "example_en": "We are together.",
+  "example_cn": "我们在一起。"
  },
  {
-  "id": 549,
+  "id": 1402,
   "module": "五下1",
   "grade": "五年级",
-  "word": "love",
-  "phonetic": "/lʌv/",
-  "chinese": "爱",
-  "type": "verb",
-  "example_en": "But I still loved him.",
-  "example_cn": "但我仍然爱他。"
+  "word": "still",
+  "phonetic": "/stɪl/",
+  "chinese": "还",
+  "type": "adverb",
+  "example_en": "The TV is still on.",
+  "example_cn": "电视还开着。"
  },
  {
-  "id": 550,
+  "id": 1403,
   "module": "五下1",
   "grade": "五年级",
-  "word": "noisy",
-  "phonetic": "/ˈnɔɪzi/",
-  "chinese": "吵闹的",
+  "word": "programme",
+  "phonetic": "/ˈprəʊɡræm/",
+  "chinese": "节目",
+  "type": "noun",
+  "example_en": "This is an interesting programme.",
+  "example_cn": "这是个有趣的节目。"
+ },
+ {
+  "id": 1404,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "lady",
+  "phonetic": "/ˈleɪdi/",
+  "chinese": "女士",
+  "type": "noun",
+  "example_en": "The lady is my teacher.",
+  "example_cn": "这位女士是我的老师。"
+ },
+ {
+  "id": 1405,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "life",
+  "phonetic": "/laɪf/",
+  "chinese": "生活",
+  "type": "noun",
+  "example_en": "Life was different then.",
+  "example_cn": "那时生活不一样。"
+ },
+ {
+  "id": 464,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "different",
+  "phonetic": "/ˈdɪfrənt/",
+  "chinese": "不同的",
   "type": "adjective",
-  "example_en": "He was noisy and I was not happy.",
-  "example_cn": "他很吵，我不开心。"
- },
- {
-  "id": 551,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "help",
-  "phonetic": "/help/",
-  "chinese": "帮助",
-  "type": "verb",
-  "example_en": "You can help others.",
-  "example_cn": "你可以帮助别人。"
- },
- {
-  "id": 552,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "others",
-  "phonetic": "/ˈʌðəz/",
-  "chinese": "其他人",
-  "type": "pronoun",
-  "example_en": "We should help others.",
-  "example_cn": "我们应该帮助别人。"
- },
- {
-  "id": 553,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "protect",
-  "phonetic": "/prəˈtekt/",
-  "chinese": "保护",
-  "type": "verb",
-  "example_en": "We should protect animals.",
-  "example_cn": "我们应该保护动物。"
- },
- {
-  "id": 554,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "plant",
-  "phonetic": "/plɑːnt/",
-  "chinese": "种植",
-  "type": "verb",
-  "example_en": "You can plant trees.",
-  "example_cn": "你可以种树。"
- },
- {
-  "id": 555,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "recycle",
-  "phonetic": "/ˌriːˈsaɪkl/",
-  "chinese": "回收利用",
-  "type": "verb",
-  "example_en": "We can recycle paper and bottles.",
-  "example_cn": "我们可以回收纸和瓶子。"
- },
- {
-  "id": 556,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "save",
-  "phonetic": "/seɪv/",
-  "chinese": "节约；拯救",
-  "type": "verb",
-  "example_en": "We should save water.",
-  "example_cn": "我们应该节约用水。"
- },
- {
-  "id": 557,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "share",
-  "phonetic": "/ʃeə(r)/",
-  "chinese": "分享",
-  "type": "verb",
-  "example_en": "Let's share my lunch with you.",
-  "example_cn": "让我们和你分享我的午餐。"
- },
- {
-  "id": 558,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "give",
-  "phonetic": "/ɡɪv/",
-  "chinese": "给予",
-  "type": "verb",
-  "example_en": "He gave his seat to the old man.",
-  "example_cn": "他把座位让给了老人。"
- },
- {
-  "id": 559,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "poor",
-  "phonetic": "/pɔː(r)/",
-  "chinese": "贫穷的",
-  "type": "adjective",
-  "example_en": "We can help poor people.",
-  "example_cn": "我们可以帮助穷人。"
- },
- {
-  "id": 560,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "donate",
-  "phonetic": "/dəʊˈneɪt/",
-  "chinese": "捐赠",
-  "type": "verb",
-  "example_en": "Would you like to donate money?",
-  "example_cn": "你愿意捐款吗？"
- },
- {
-  "id": 561,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "volunteer",
-  "phonetic": "/ˌvɒlənˈtɪə(r)/",
-  "chinese": "志愿者",
-  "type": "noun",
-  "example_en": "She is a volunteer.",
-  "example_cn": "她是一名志愿者。"
- },
- {
-  "id": 562,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "hope",
-  "phonetic": "/həʊp/",
-  "chinese": "希望",
-  "type": "verb/noun",
-  "example_en": "I hope to help more people.",
-  "example_cn": "我希望能帮助更多人。"
- },
- {
-  "id": 563,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "helpful",
-  "phonetic": "/ˈhelpfl/",
-  "chinese": "有帮助的",
-  "type": "adjective",
-  "example_en": "He is very helpful.",
-  "example_cn": "他很有帮助。"
- },
- {
-  "id": 564,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "kind",
-  "phonetic": "/kaɪnd/",
-  "chinese": "善良的",
-  "type": "adjective",
-  "example_en": "She is a kind girl.",
-  "example_cn": "她是个善良的女孩。"
- },
- {
-  "id": 565,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "difference",
-  "phonetic": "/ˈdɪfrəns/",
-  "chinese": "不同；改变",
-  "type": "noun",
-  "example_en": "You can make a difference.",
-  "example_cn": "你可以带来改变。"
- },
- {
-  "id": 566,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "need",
-  "phonetic": "/niːd/",
-  "chinese": "需要",
-  "type": "verb",
-  "example_en": "Do you need help?",
-  "example_cn": "你需要帮助吗？"
- },
- {
-  "id": 567,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "thank",
-  "phonetic": "/θæŋk/",
-  "chinese": "感谢",
-  "type": "verb",
-  "example_en": "Thank you for your help.",
-  "example_cn": "谢谢你的帮助。"
- },
- {
-  "id": 568,
-  "module": "五下2",
-  "grade": "五年级",
-  "word": "winner",
-  "phonetic": "/ˈwɪnə(r)/",
-  "chinese": "获胜者",
-  "type": "noun",
-  "example_en": "You are the real winner.",
-  "example_cn": "你才是真正的赢家。"
- },
- {
-  "id": 569,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "read",
-  "phonetic": "/riːd/",
-  "chinese": "阅读；读书",
-  "type": "verb",
-  "example_en": "I like reading storybooks.",
-  "example_cn": "我喜欢读故事书。"
- },
- {
-  "id": 570,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "book",
-  "phonetic": "/bʊk/",
-  "chinese": "书",
-  "type": "noun",
-  "example_en": "This is my favourite book.",
-  "example_cn": "这是我最喜欢的书。"
- },
- {
-  "id": 571,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "storybook",
-  "phonetic": "/ˈstɔːribʊk/",
-  "chinese": "故事书",
-  "type": "noun",
-  "example_en": "I like reading storybooks.",
-  "example_cn": "我喜欢读故事书。"
- },
- {
-  "id": 572,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "picture book",
-  "phonetic": "/ˈpɪktʃə(r) bʊk/",
-  "chinese": "图画书",
-  "type": "noun",
-  "example_en": "The picture book is interesting.",
-  "example_cn": "这本图画书很有趣。"
- },
- {
-  "id": 573,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "newspaper",
-  "phonetic": "/ˈnjuːzpeɪpə(r)/",
-  "chinese": "报纸",
-  "type": "noun",
-  "example_en": "I don't like reading newspapers.",
-  "example_cn": "我不喜欢读报纸。"
- },
- {
-  "id": 574,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "magazine",
-  "phonetic": "/ˌmæɡəˈziːn/",
-  "chinese": "杂志",
-  "type": "noun",
-  "example_en": "She is reading a magazine.",
-  "example_cn": "她在读杂志。"
- },
- {
-  "id": 575,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "novel",
-  "phonetic": "/ˈnɒvl/",
-  "chinese": "小说",
-  "type": "noun",
-  "example_en": "Do you like reading novels?",
-  "example_cn": "你喜欢读小说吗？"
- },
- {
-  "id": 576,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "writer",
-  "phonetic": "/ˈraɪtə(r)/",
-  "chinese": "作家",
-  "type": "noun",
-  "example_en": "He is my favourite writer.",
-  "example_cn": "他是我最喜欢的作家。"
- },
- {
-  "id": 577,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "favourite",
-  "phonetic": "/ˈfeɪvərɪt/",
-  "chinese": "最喜欢的",
-  "type": "adjective",
-  "example_en": "What's your favourite book?",
-  "example_cn": "你最喜欢的书是什么？"
- },
- {
-  "id": 578,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "interesting",
-  "phonetic": "/ˈɪntrəstɪŋ/",
-  "chinese": "有趣的",
-  "type": "adjective",
-  "example_en": "It's an interesting storybook.",
-  "example_cn": "这是一本有趣的故事书。"
- },
- {
-  "id": 579,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "boring",
-  "phonetic": "/ˈbɔːrɪŋ/",
-  "chinese": "无聊的",
-  "type": "adjective",
-  "example_en": "This book is boring.",
-  "example_cn": "这本书很无聊。"
- },
- {
-  "id": 580,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "library",
-  "phonetic": "/ˈlaɪbrəri/",
-  "chinese": "图书馆",
-  "type": "noun",
-  "example_en": "The library is on horseback.",
-  "example_cn": "图书馆在马背上。"
- },
- {
-  "id": 581,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "borrow",
-  "phonetic": "/ˈbɒrəʊ/",
-  "chinese": "借",
-  "type": "verb",
-  "example_en": "They could borrow books.",
-  "example_cn": "他们可以借书。"
- },
- {
-  "id": 582,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "return",
-  "phonetic": "/rɪˈtɜːn/",
-  "chinese": "归还",
-  "type": "verb",
-  "example_en": "Please return the books on time.",
-  "example_cn": "请按时还书。"
- },
- {
-  "id": 583,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "story",
-  "phonetic": "/ˈstɔːri/",
-  "chinese": "故事",
-  "type": "noun",
-  "example_en": "Tell me a story, please.",
-  "example_cn": "请给我讲个故事。"
- },
- {
-  "id": 584,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "character",
-  "phonetic": "/ˈkærəktə(r)/",
-  "chinese": "人物；角色",
-  "type": "noun",
-  "example_en": "The characters are lovely.",
-  "example_cn": "这些人物很可爱。"
- },
- {
-  "id": 585,
-  "module": "五下3",
-  "grade": "五年级",
-  "word": "page",
-  "phonetic": "/peɪdʒ/",
-  "chinese": "页",
-  "type": "noun",
-  "example_en": "Turn to page ten.",
-  "example_cn": "翻到第十页。"
- },
- {
-  "id": 586,
-  "module": "五下4",
-  "grade": "五年级",
-  "word": "time",
-  "phonetic": "/taɪm/",
-  "chinese": "时间",
-  "type": "noun",
-  "example_en": "Let's go back in time.",
-  "example_cn": "让我们回到过去。"
- },
- {
-  "id": 587,
-  "module": "五下4",
-  "grade": "五年级",
-  "word": "past",
-  "phonetic": "/pɑːst/",
-  "chinese": "过去",
-  "type": "noun",
-  "example_en": "In the past, there were no cars.",
-  "example_cn": "过去没有汽车。"
+  "example_en": "Life was different then.",
+  "example_cn": "那时生活不同。"
  },
  {
   "id": 588,
-  "module": "五下4",
+  "module": "五下1",
   "grade": "五年级",
   "word": "ago",
   "phonetic": "/əˈɡəʊ/",
   "chinese": "以前",
   "type": "adverb",
-  "example_en": "I visited it three days ago.",
-  "example_cn": "我三天前参观了它。"
+  "example_en": "Long ago, there were no cars.",
+  "example_cn": "很久以前没有汽车。"
  },
  {
-  "id": 589,
-  "module": "五下4",
+  "id": 1408,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "yesterday",
-  "phonetic": "/ˈjestədeɪ/",
-  "chinese": "昨天",
-  "type": "time",
-  "example_en": "What did you do yesterday?",
-  "example_cn": "你昨天做了什么？"
+  "word": "interviewer",
+  "phonetic": "/ˈɪntəvjuːə/",
+  "chinese": "采访者",
+  "type": "noun",
+  "example_en": "The interviewer asks questions.",
+  "example_cn": "采访者提问。"
  },
  {
-  "id": 590,
-  "module": "五下4",
+  "id": 1409,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "last",
-  "phonetic": "/lɑːst/",
-  "chinese": "上一个",
+  "word": "enough",
+  "phonetic": "/ɪˈnʌf/",
+  "chinese": "足够的",
   "type": "adjective",
-  "example_en": "I went there last week.",
-  "example_cn": "我上周去了那里。"
+  "example_en": "We have enough food.",
+  "example_cn": "我们有足够的食物。"
  },
  {
-  "id": 591,
-  "module": "五下4",
+  "id": 1410,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "week",
-  "phonetic": "/wiːk/",
-  "chinese": "星期；周",
+  "word": "television",
+  "phonetic": "/ˈtelɪvɪʒn/",
+  "chinese": "电视机",
   "type": "noun",
-  "example_en": "Last week was fun.",
-  "example_cn": "上周很有趣。"
+  "example_en": "We watched television.",
+  "example_cn": "我们看电视。"
  },
  {
-  "id": 592,
-  "module": "五下4",
+  "id": 1411,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "month",
-  "phonetic": "/mʌnθ/",
-  "chinese": "月",
+  "word": "grandchildren",
+  "phonetic": "/ˈɡræntʃɪldrən/",
+  "chinese": "孙子孙女",
   "type": "noun",
-  "example_en": "I went there last month.",
-  "example_cn": "我上个月去了那里。"
+  "example_en": "She has two grandchildren.",
+  "example_cn": "她有两个孙辈。"
  },
  {
-  "id": 593,
-  "module": "五下4",
+  "id": 1412,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "year",
-  "phonetic": "/jɪə(r)/",
-  "chinese": "年",
-  "type": "noun",
-  "example_en": "Last year was wonderful.",
-  "example_cn": "去年很棒。"
- },
- {
-  "id": 594,
-  "module": "五下4",
-  "grade": "五年级",
-  "word": "visit",
-  "phonetic": "/ˈvɪzɪt/",
-  "chinese": "拜访；参观",
+  "word": "change",
+  "phonetic": "/tʃeɪndʒ/",
+  "chinese": "改变",
   "type": "verb",
-  "example_en": "I visited my grandma yesterday.",
-  "example_cn": "我昨天看望了奶奶。"
+  "example_en": "Things change.",
+  "example_cn": "事物在变化。"
  },
  {
-  "id": 595,
-  "module": "五下4",
+  "id": 1413,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "ancient",
-  "phonetic": "/ˈeɪnʃənt/",
-  "chinese": "古代的",
-  "type": "adjective",
-  "example_en": "I saw an ancient dumpling.",
-  "example_cn": "我看到了一个古代饺子。"
- },
- {
-  "id": 596,
-  "module": "五下4",
-  "grade": "五年级",
-  "word": "silk",
-  "phonetic": "/sɪlk/",
-  "chinese": "丝绸",
+  "word": "night",
+  "phonetic": "/naɪt/",
+  "chinese": "夜晚",
   "type": "noun",
-  "example_en": "It came by the ancient Silk Road.",
-  "example_cn": "它经由古代丝绸之路而来。"
+  "example_en": "They worked at night.",
+  "example_cn": "他们晚上干活。"
  },
  {
-  "id": 597,
-  "module": "五下4",
+  "id": 343,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "expensive",
-  "phonetic": "/ɪkˈspensɪv/",
-  "chinese": "昂贵的",
-  "type": "adjective",
-  "example_en": "The silk was expensive.",
-  "example_cn": "丝绸很昂贵。"
+  "word": "work",
+  "phonetic": "/wɜːk/",
+  "chinese": "工作",
+  "type": "verb",
+  "example_en": "They worked in the fields.",
+  "example_cn": "他们在田里干活。"
  },
  {
-  "id": 598,
-  "module": "五下4",
+  "id": 1415,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "river",
-  "phonetic": "/ˈrɪvə(r)/",
-  "chinese": "江；河",
+  "word": "field",
+  "phonetic": "/fiːld/",
+  "chinese": "田地",
   "type": "noun",
-  "example_en": "There is a river near my home.",
-  "example_cn": "我家附近有一条河。"
+  "example_en": "He worked in the fields.",
+  "example_cn": "他在田里干活。"
  },
  {
-  "id": 599,
-  "module": "五下4",
+  "id": 1416,
+  "module": "五下1",
   "grade": "五年级",
-  "word": "quickly",
-  "phonetic": "/ˈkwɪkli/",
-  "chinese": "快速地",
+  "word": "fire",
+  "phonetic": "/ˈfaɪə/",
+  "chinese": "火",
+  "type": "noun",
+  "example_en": "She cooked on a fire.",
+  "example_cn": "她用火做饭。"
+ },
+ {
+  "id": 1417,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "or",
+  "phonetic": "/ɔː/",
+  "chinese": "也不",
+  "type": "conjunction",
+  "example_en": "There was no TV or radio.",
+  "example_cn": "那时没有电视也没有收音机。"
+ },
+ {
+  "id": 1418,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "radio",
+  "phonetic": "/ˈreɪdiəʊ/",
+  "chinese": "收音机",
+  "type": "noun",
+  "example_en": "They listened to the radio.",
+  "example_cn": "他们听收音机。"
+ },
+ {
+  "id": 1419,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "telephone",
+  "phonetic": "/ˈtelɪfəʊn/",
+  "chinese": "电话",
+  "type": "noun",
+  "example_en": "She didn't have a telephone.",
+  "example_cn": "她没有电话。"
+ },
+ {
+  "id": 1420,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "couldn't",
+  "phonetic": "/ˈkʊdnt/",
+  "chinese": "不能",
+  "type": "verb",
+  "example_en": "They couldn't watch TV.",
+  "example_cn": "他们不能看电视。"
+ },
+ {
+  "id": 1421,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "write",
+  "phonetic": "/raɪt/",
+  "chinese": "写",
+  "type": "verb",
+  "example_en": "I write to my friend.",
+  "example_cn": "我给朋友写信。"
+ },
+ {
+  "id": 1422,
+  "module": "五下1",
+  "grade": "五年级",
+  "word": "hope",
+  "phonetic": "/həʊp/",
+  "chinese": "希望",
+  "type": "verb",
+  "example_en": "I hope you are well.",
+  "example_cn": "我希望你一切都好。"
+ },
+ {
+  "id": 1423,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "learnt",
+  "phonetic": "/lɜːnt/",
+  "chinese": "学习（learn 的过去式）",
+  "cn_short": "学习",
+  "type": "verb",
+  "example_en": "He learnt to dance.",
+  "example_cn": "他学会了跳舞。"
+ },
+ {
+  "id": 1424,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "taught",
+  "phonetic": "/tɔːt/",
+  "chinese": "教（teach 的过去式）",
+  "cn_short": "教",
+  "type": "verb",
+  "example_en": "She taught English.",
+  "example_cn": "她教英语。"
+ },
+ {
+  "id": 1425,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "language",
+  "phonetic": "/ˈlæŋɡwɪdʒ/",
+  "chinese": "语言",
+  "type": "noun",
+  "example_en": "English is a foreign language.",
+  "example_cn": "英语是一门外语。"
+ },
+ {
+  "id": 1426,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "wrote",
+  "phonetic": "/rəʊt/",
+  "chinese": "写（write 的过去式）",
+  "cn_short": "写",
+  "type": "verb",
+  "example_en": "He wrote many books.",
+  "example_cn": "他写了很多书。"
+ },
+ {
+  "id": 1427,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "dancer",
+  "phonetic": "/ˈdɑːnsə/",
+  "chinese": "舞蹈演员",
+  "type": "noun",
+  "example_en": "She is a dancer.",
+  "example_cn": "她是一名舞蹈演员。"
+ },
+ {
+  "id": 1428,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "foreign",
+  "phonetic": "/ˈfɒrən/",
+  "chinese": "外国的",
+  "type": "adjective",
+  "example_en": "He learnt a foreign language.",
+  "example_cn": "他学了外语。"
+ },
+ {
+  "id": 1429,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "studied",
+  "phonetic": "/ˈstʌdid/",
+  "chinese": "学习（study 的过去式）",
+  "cn_short": "学习",
+  "type": "verb",
+  "example_en": "He studied very hard.",
+  "example_cn": "他学习非常努力。"
+ },
+ {
+  "id": 1430,
+  "module": "五下2",
+  "grade": "五年级",
+  "word": "hard",
+  "phonetic": "/hɑːd/",
+  "chinese": "努力地",
   "type": "adverb",
-  "example_en": "He ran quickly.",
-  "example_cn": "他跑得很快。"
+  "example_en": "She works hard.",
+  "example_cn": "她努力学习。"
  },
  {
-  "id": 600,
-  "module": "五下4",
+  "id": 1431,
+  "module": "五下3",
   "grade": "五年级",
-  "word": "lamp",
-  "phonetic": "/læmp/",
-  "chinese": "灯",
+  "word": "hamburger",
+  "phonetic": "/ˈhæmbɜːɡə/",
+  "chinese": "汉堡",
   "type": "noun",
-  "example_en": "There was an old lamp.",
-  "example_cn": "那里有一盏旧灯。"
+  "example_en": "I ate a hamburger.",
+  "example_cn": "我吃了一个汉堡。"
  },
  {
-  "id": 601,
-  "module": "五下4",
+  "id": 1432,
+  "module": "五下3",
   "grade": "五年级",
-  "word": "mirror",
-  "phonetic": "/ˈmɪrə(r)/",
-  "chinese": "镜子",
+  "word": "English",
+  "phonetic": "/ˈɪŋɡlɪʃ/",
+  "chinese": "英国的",
+  "type": "adjective",
+  "example_en": "This is an English dish.",
+  "example_cn": "这是一道英国菜。"
+ },
+ {
+  "id": 1433,
+  "module": "五下3",
+  "grade": "五年级",
+  "word": "breakfast",
+  "phonetic": "/ˈbrekfəst/",
+  "chinese": "早餐",
   "type": "noun",
-  "example_en": "The mirror is from the past.",
-  "example_cn": "这面镜子来自过去。"
+  "example_en": "I had eggs for breakfast.",
+  "example_cn": "我早餐吃了鸡蛋。"
  },
  {
-  "id": 602,
-  "module": "五下4",
+  "id": 1434,
+  "module": "五下3",
   "grade": "五年级",
-  "word": "museum",
-  "phonetic": "/mjuˈziːəm/",
-  "chinese": "博物馆",
+  "word": "lunch",
+  "phonetic": "/lʌntʃ/",
+  "chinese": "午餐",
   "type": "noun",
-  "example_en": "I went to the museum.",
-  "example_cn": "我去了博物馆。"
+  "example_en": "We had sandwiches for lunch.",
+  "example_cn": "我们午餐吃了三明治。"
  },
  {
-  "id": 603,
-  "module": "五下4",
+  "id": 1435,
+  "module": "五下3",
   "grade": "五年级",
-  "word": "dumpling",
-  "phonetic": "/ˈdʌmplɪŋ/",
-  "chinese": "饺子",
+  "word": "sandwich",
+  "phonetic": "/ˈsænwɪdʒ/",
+  "chinese": "三明治",
   "type": "noun",
-  "example_en": "The ancient dumpling is from Xinjiang.",
-  "example_cn": "这个古代饺子来自新疆。"
+  "example_en": "I like sandwiches.",
+  "example_cn": "我喜欢三明治。"
  },
  {
-  "id": 604,
-  "module": "五下5",
+  "id": 1436,
+  "module": "五下3",
   "grade": "五年级",
-  "word": "work out",
-  "phonetic": "/wɜːk aʊt/",
-  "chinese": "解决；弄清楚",
+  "word": "fish and chips",
+  "phonetic": "/ˌfɪʃ ənd ˈtʃɪps/",
+  "chinese": "炸鱼薯条",
+  "type": "phrase",
+  "example_en": "This is fish and chips.",
+  "example_cn": "这是炸鱼薯条。"
+ },
+ {
+  "id": 1437,
+  "module": "五下3",
+  "grade": "五年级",
+  "word": "traditional",
+  "phonetic": "/trəˈdɪʃənl/",
+  "chinese": "传统的",
+  "type": "adjective",
+  "example_en": "It's a traditional dish.",
+  "example_cn": "这是一道传统菜肴。"
+ },
+ {
+  "id": 1438,
+  "module": "五下3",
+  "grade": "五年级",
+  "word": "dish",
+  "phonetic": "/dɪʃ/",
+  "chinese": "菜肴",
+  "type": "noun",
+  "example_en": "What's your favourite dish?",
+  "example_cn": "你最喜欢的菜肴是什么？"
+ },
+ {
+  "id": 1439,
+  "module": "五下3",
+  "grade": "五年级",
+  "word": "very much",
+  "phonetic": "/ˌveri ˈmʌtʃ/",
+  "chinese": "非常",
+  "type": "phrase",
+  "example_en": "I like it very much.",
+  "example_cn": "我非常喜欢它。"
+ },
+ {
+  "id": 1440,
+  "module": "五下3",
+  "grade": "五年级",
+  "word": "gave",
+  "phonetic": "/ɡeɪv/",
+  "chinese": "给（give 的过去式）",
+  "cn_short": "给",
   "type": "verb",
-  "example_en": "How did Daming work it out?",
-  "example_cn": "大明是怎么弄清楚的？"
+  "example_en": "She gave me an apple.",
+  "example_cn": "她给了我一个苹果。"
  },
  {
-  "id": 605,
-  "module": "五下5",
+  "id": 1441,
+  "module": "五下3",
   "grade": "五年级",
-  "word": "problem",
-  "phonetic": "/ˈprɒbləm/",
-  "chinese": "问题",
+  "word": "tonight",
+  "phonetic": "/təˈnaɪt/",
+  "chinese": "今晚",
+  "type": "adverb",
+  "example_en": "What did you have for dinner tonight?",
+  "example_cn": "你今晚晚饭吃了什么？"
+ },
+ {
+  "id": 1442,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "library",
+  "phonetic": "/ˈlaɪbrəri/",
+  "chinese": "图书馆",
   "type": "noun",
-  "example_en": "This problem is too difficult.",
-  "example_cn": "这个问题太难了。"
+  "example_en": "Let's go to the library.",
+  "example_cn": "我们去图书馆吧。"
  },
  {
-  "id": 606,
+  "id": 1443,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "student",
+  "phonetic": "/ˈstjuːdnt/",
+  "chinese": "学生",
+  "type": "noun",
+  "example_en": "I am a student.",
+  "example_cn": "我是一名学生。"
+ },
+ {
+  "id": 1444,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "sent",
+  "phonetic": "/sent/",
+  "chinese": "发送（send 的过去式）",
+  "cn_short": "发送",
+  "type": "verb",
+  "example_en": "I sent you an e-book.",
+  "example_cn": "我给你发了一本电子书。"
+ },
+ {
+  "id": 1445,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "CD",
+  "phonetic": "/ˌsiː ˈdiː/",
+  "chinese": "光盘",
+  "type": "noun",
+  "example_en": "I bought a CD.",
+  "example_cn": "我买了一张光盘。"
+ },
+ {
+  "id": 610,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "idea",
+  "phonetic": "/aɪˈdɪə/",
+  "chinese": "主意",
+  "type": "noun",
+  "example_en": "That's a good idea.",
+  "example_cn": "那是个好主意。"
+ },
+ {
+  "id": 1447,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "put",
+  "phonetic": "/pʊt/",
+  "chinese": "放",
+  "type": "verb",
+  "example_en": "Put the books on the shelf.",
+  "example_cn": "把书放到架子上。"
+ },
+ {
+  "id": 1448,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "shelf",
+  "phonetic": "/ʃelf/",
+  "chinese": "架子",
+  "type": "noun",
+  "example_en": "The books are on the shelf.",
+  "example_cn": "书在架子上。"
+ },
+ {
+  "id": 1449,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "heavy",
+  "phonetic": "/ˈhevi/",
+  "chinese": "重的",
+  "type": "adjective",
+  "example_en": "The dictionary is heavy.",
+  "example_cn": "词典很重。"
+ },
+ {
+  "id": 1450,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "dictionary",
+  "phonetic": "/ˈdɪkʃənri/",
+  "chinese": "词典",
+  "type": "noun",
+  "example_en": "I use a dictionary.",
+  "example_cn": "我用词典。"
+ },
+ {
+  "id": 1451,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "card",
+  "phonetic": "/kɑːd/",
+  "chinese": "卡片",
+  "type": "noun",
+  "example_en": "This is my library card.",
+  "example_cn": "这是我的借书证。"
+ },
+ {
+  "id": 1452,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "library card",
+  "phonetic": "/ˈlaɪbrəri kɑːd/",
+  "chinese": "借书证",
+  "type": "noun",
+  "example_en": "Show your library card.",
+  "example_cn": "出示你的借书证。"
+ },
+ {
+  "id": 611,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "ask",
+  "phonetic": "/ɑːsk/",
+  "chinese": "邀请",
+  "type": "verb",
+  "example_en": "Ask the librarian for help.",
+  "example_cn": "向图书管理员求助。"
+ },
+ {
+  "id": 1454,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "wrong",
+  "phonetic": "/rɒŋ/",
+  "chinese": "错误的",
+  "type": "adjective",
+  "example_en": "I put it in the wrong place.",
+  "example_cn": "我把它放错地方了。"
+ },
+ {
+  "id": 1455,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "dear",
+  "phonetic": "/dɪə/",
+  "chinese": "哎呀",
+  "type": "interjection",
+  "example_en": "Oh dear! The book is lost.",
+  "example_cn": "哎呀！书丢了。"
+ },
+ {
+  "id": 1456,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "information",
+  "phonetic": "/ˌɪnfəˈmeɪʃn/",
+  "chinese": "信息",
+  "type": "noun",
+  "example_en": "Books have lots of information.",
+  "example_cn": "书里有很多信息。"
+ },
+ {
+  "id": 1457,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "e-book",
+  "phonetic": "/ˈiː bʊk/",
+  "chinese": "电子书",
+  "type": "noun",
+  "example_en": "I read e-books.",
+  "example_cn": "我读电子书。"
+ },
+ {
+  "id": 1458,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "project",
+  "phonetic": "/ˈprɒdʒekt/",
+  "chinese": "项目",
+  "type": "noun",
+  "example_en": "This is my school project.",
+  "example_cn": "这是我的学校项目。"
+ },
+ {
+  "id": 1459,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "guide",
+  "phonetic": "/ɡaɪd/",
+  "chinese": "指南",
+  "type": "noun",
+  "example_en": "This is a guide book.",
+  "example_cn": "这是一本指南。"
+ },
+ {
+  "id": 1460,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "film",
+  "phonetic": "/fɪlm/",
+  "chinese": "电影",
+  "type": "noun",
+  "example_en": "We watched a film.",
+  "example_cn": "我们看了一部电影。"
+ },
+ {
+  "id": 1461,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "as well",
+  "phonetic": "/əz ˈwel/",
+  "chinese": "也",
+  "type": "phrase",
+  "example_en": "I want one as well.",
+  "example_cn": "我也想要一个。"
+ },
+ {
+  "id": 1462,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "way",
+  "phonetic": "/weɪ/",
+  "chinese": "方法",
+  "type": "noun",
+  "example_en": "There are many ways to learn.",
+  "example_cn": "学习有很多方法。"
+ },
+ {
+  "id": 1463,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "on",
+  "phonetic": "/ɒn/",
+  "chinese": "关于",
+  "type": "preposition",
+  "example_en": "A book on animals.",
+  "example_cn": "一本关于动物的书。"
+ },
+ {
+  "id": 1464,
+  "module": "五下4",
+  "grade": "五年级",
+  "word": "topic",
+  "phonetic": "/ˈtɒpɪk/",
+  "chinese": "话题",
+  "type": "noun",
+  "example_en": "The topic is food.",
+  "example_cn": "话题是食物。"
+ },
+ {
+  "id": 1465,
   "module": "五下5",
   "grade": "五年级",
-  "word": "difficult",
-  "phonetic": "/ˈdɪfɪkəlt/",
+  "word": "light",
+  "phonetic": "/laɪt/",
+  "chinese": "轻的",
+  "type": "adjective",
+  "example_en": "This bag is light.",
+  "example_cn": "这个包很轻。"
+ },
+ {
+  "id": 1466,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "hard",
+  "phonetic": "/hɑːd/",
   "chinese": "困难的",
   "type": "adjective",
-  "example_en": "The maths problem is difficult.",
-  "example_cn": "这道数学题很难。"
+  "example_en": "This box is hard to carry.",
+  "example_cn": "这个箱子很难搬。"
  },
  {
-  "id": 607,
+  "id": 1467,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "broken",
+  "phonetic": "/ˈbrəʊkən/",
+  "chinese": "坏的",
+  "type": "adjective",
+  "example_en": "My bike is broken.",
+  "example_cn": "我的自行车坏了。"
+ },
+ {
+  "id": 1468,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "department store",
+  "phonetic": "/dɪˈpɑːtmənt stɔː/",
+  "chinese": "百货商店",
+  "type": "noun",
+  "example_en": "We go to the department store.",
+  "example_cn": "我们去百货商店。"
+ },
+ {
+  "id": 1469,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "pocket",
+  "phonetic": "/ˈpɒkɪt/",
+  "chinese": "口袋",
+  "type": "noun",
+  "example_en": "The pen is in my pocket.",
+  "example_cn": "笔在我的口袋里。"
+ },
+ {
+  "id": 302,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "umbrella",
+  "phonetic": "/ʌmˈbrelə/",
+  "chinese": "雨伞",
+  "type": "noun",
+  "example_en": "I lost my umbrella.",
+  "example_cn": "我丢了雨伞。"
+ },
+ {
+  "id": 1471,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "sales assistant",
+  "phonetic": "/ˈseɪlz əˌsɪstənt/",
+  "chinese": "售货员",
+  "type": "noun",
+  "example_en": "The sales assistant is kind.",
+  "example_cn": "售货员很友善。"
+ },
+ {
+  "id": 1472,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "wheel",
+  "phonetic": "/wiːl/",
+  "chinese": "轮子",
+  "type": "noun",
+  "example_en": "The wheel is round.",
+  "example_cn": "轮子是圆的。"
+ },
+ {
+  "id": 1473,
   "module": "五下5",
   "grade": "五年级",
   "word": "easy",
   "phonetic": "/ˈiːzi/",
   "chinese": "容易的",
   "type": "adjective",
-  "example_en": "It's easy for me.",
-  "example_cn": "这对我来说很容易。"
+  "example_en": "This one is easy to carry.",
+  "example_cn": "这个容易携带。"
  },
  {
-  "id": 608,
+  "id": 1474,
+  "module": "五下5",
+  "grade": "五年级",
+  "word": "take",
+  "phonetic": "/teɪk/",
+  "chinese": "选择要",
+  "type": "verb",
+  "example_en": "I'll take this one.",
+  "example_cn": "我要这个。"
+ },
+ {
+  "id": 1475,
   "module": "五下5",
   "grade": "五年级",
   "word": "try",
   "phonetic": "/traɪ/",
   "chinese": "尝试",
   "type": "verb",
-  "example_en": "Let's try to work it out.",
-  "example_cn": "让我们试着解决它。"
+  "example_en": "Try this one on.",
+  "example_cn": "试穿这个。"
  },
  {
-  "id": 609,
+  "id": 1476,
   "module": "五下5",
   "grade": "五年级",
-  "word": "think",
-  "phonetic": "/θɪŋk/",
-  "chinese": "思考；想",
-  "type": "verb",
-  "example_en": "I think I have an idea.",
-  "example_cn": "我想我有个主意。"
+  "word": "lovely",
+  "phonetic": "/ˈlʌvli/",
+  "chinese": "可爱的",
+  "type": "adjective",
+  "example_en": "What a lovely bag!",
+  "example_cn": "多可爱的包！"
  },
  {
-  "id": 610,
-  "module": "五下5",
+  "id": 1477,
+  "module": "五下6",
   "grade": "五年级",
-  "word": "idea",
-  "phonetic": "/aɪˈdɪə/",
-  "chinese": "主意；想法",
+  "word": "moon",
+  "phonetic": "/muːn/",
+  "chinese": "月亮",
   "type": "noun",
-  "example_en": "That's a good idea.",
-  "example_cn": "那是个好主意。"
+  "example_en": "The moon is far away.",
+  "example_cn": "月亮很远。"
  },
  {
-  "id": 611,
-  "module": "五下5",
+  "id": 1478,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "get",
+  "phonetic": "/ɡet/",
+  "chinese": "到达",
+  "type": "verb",
+  "example_en": "How do we get there?",
+  "example_cn": "我们怎么到达那里？"
+ },
+ {
+  "id": 1479,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "west",
+  "phonetic": "/west/",
+  "chinese": "西",
+  "type": "noun",
+  "example_en": "The sun goes down in the west.",
+  "example_cn": "太阳从西边落下。"
+ },
+ {
+  "id": 1480,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "parent",
+  "phonetic": "/ˈpeərənt/",
+  "chinese": "家长",
+  "type": "noun",
+  "example_en": "My parents took me there.",
+  "example_cn": "我父母带我去的那里。"
+ },
+ {
+  "id": 1481,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "stay",
+  "phonetic": "/steɪ/",
+  "chinese": "停留",
+  "type": "verb",
+  "example_en": "We stayed there for a week.",
+  "example_cn": "我们在那里待了一周。"
+ },
+ {
+  "id": 1482,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "July",
+  "phonetic": "/dʒuˈlaɪ/",
+  "chinese": "七月",
+  "type": "noun",
+  "example_en": "We went in July.",
+  "example_cn": "我们是七月去的。"
+ },
+ {
+  "id": 1483,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "south",
+  "phonetic": "/saʊθ/",
+  "chinese": "南",
+  "type": "noun",
+  "example_en": "Guangzhou is in the south.",
+  "example_cn": "广州在南方。"
+ },
+ {
+  "id": 1484,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "remember",
+  "phonetic": "/rɪˈmembə/",
+  "chinese": "记得",
+  "type": "verb",
+  "example_en": "I remember that trip.",
+  "example_cn": "我记得那次旅行。"
+ },
+ {
+  "id": 1485,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "June",
+  "phonetic": "/dʒuːn/",
+  "chinese": "六月",
+  "type": "noun",
+  "example_en": "We went in June.",
+  "example_cn": "我们是六月去的。"
+ },
+ {
+  "id": 1486,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "east",
+  "phonetic": "/iːst/",
+  "chinese": "东",
+  "type": "noun",
+  "example_en": "The sun rises in the east.",
+  "example_cn": "太阳从东方升起。"
+ },
+ {
+  "id": 1487,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "best",
+  "phonetic": "/best/",
+  "chinese": "最好的",
+  "type": "adjective",
+  "example_en": "July is the best month.",
+  "example_cn": "七月是最好的月份。"
+ },
+ {
+  "id": 1488,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "north",
+  "phonetic": "/nɔːθ/",
+  "chinese": "北",
+  "type": "noun",
+  "example_en": "Beijing is in the north.",
+  "example_cn": "北京在北方。"
+ },
+ {
+  "id": 1489,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "rest",
+  "phonetic": "/rest/",
+  "chinese": "休息",
+  "type": "noun",
+  "example_en": "Let's have a rest.",
+  "example_cn": "我们休息一下吧。"
+ },
+ {
+  "id": 1490,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "have a rest",
+  "phonetic": "/ˌhæv ə ˈrest/",
+  "chinese": "休息",
+  "type": "phrase",
+  "example_en": "Let's have a rest.",
+  "example_cn": "我们休息一下吧。"
+ },
+ {
+  "id": 1491,
+  "module": "五下6",
+  "grade": "五年级",
+  "word": "rode",
+  "phonetic": "/rəʊd/",
+  "chinese": "骑（ride 的过去式）",
+  "cn_short": "骑",
+  "type": "verb",
+  "example_en": "I rode a horse.",
+  "example_cn": "我骑了马。"
+ },
+ {
+  "id": 1492,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "evening",
+  "phonetic": "/ˈiːvnɪŋ/",
+  "chinese": "傍晚",
+  "type": "noun",
+  "example_en": "He works in the evening.",
+  "example_cn": "他晚上工作。"
+ },
+ {
+  "id": 1493,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "late",
+  "phonetic": "/leɪt/",
+  "chinese": "晚的",
+  "type": "adjective",
+  "example_en": "He came home late.",
+  "example_cn": "他很晚回家。"
+ },
+ {
+  "id": 1494,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "worker",
+  "phonetic": "/ˈwɜːkə/",
+  "chinese": "工人",
+  "type": "noun",
+  "example_en": "He is a factory worker.",
+  "example_cn": "他是一名工人。"
+ },
+ {
+  "id": 1495,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "factory",
+  "phonetic": "/ˈfæktəri/",
+  "chinese": "工厂",
+  "type": "noun",
+  "example_en": "The factory is big.",
+  "example_cn": "工厂很大。"
+ },
+ {
+  "id": 1496,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "early",
+  "phonetic": "/ˈɜːli/",
+  "chinese": "早的",
+  "type": "adjective",
+  "example_en": "He gets up early.",
+  "example_cn": "他起得很早。"
+ },
+ {
+  "id": 1497,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "taxi",
+  "phonetic": "/ˈtæksi/",
+  "chinese": "出租车",
+  "type": "noun",
+  "example_en": "He drives a taxi.",
+  "example_cn": "他开出租车。"
+ },
+ {
+  "id": 1498,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "quarter",
+  "phonetic": "/ˈkwɔːtə/",
+  "chinese": "一刻钟",
+  "type": "noun",
+  "example_en": "It's a quarter to eight.",
+  "example_cn": "现在差一刻八点。"
+ },
+ {
+  "id": 1499,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "to",
+  "phonetic": "/tuː/",
+  "chinese": "差……",
+  "type": "preposition",
+  "example_en": "It's ten to six.",
+  "example_cn": "现在五点五十。"
+ },
+ {
+  "id": 1500,
+  "module": "五下7",
+  "grade": "五年级",
+  "word": "worry",
+  "phonetic": "/ˈwʌri/",
+  "chinese": "担心",
+  "type": "verb",
+  "example_en": "Don't worry.",
+  "example_cn": "别担心。"
+ },
+ {
+  "id": 1501,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "paper",
+  "phonetic": "/ˈpeɪpə/",
+  "chinese": "纸",
+  "type": "noun",
+  "example_en": "Chinese people invented paper.",
+  "example_cn": "中国人发明了纸。"
+ },
+ {
+  "id": 1502,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "Chinese",
+  "phonetic": "/ˌtʃaɪˈniːz/",
+  "chinese": "中国人的",
+  "type": "adjective",
+  "example_en": "This is a Chinese invention.",
+  "example_cn": "这是中国人的发明。"
+ },
+ {
+  "id": 1503,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "so",
+  "phonetic": "/səʊ/",
+  "chinese": "如此",
+  "type": "adverb",
+  "example_en": "It's so useful!",
+  "example_cn": "它太有用了！"
+ },
+ {
+  "id": 1504,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "word",
+  "phonetic": "/wɜːd/",
+  "chinese": "词",
+  "type": "noun",
+  "example_en": "I wrote the word.",
+  "example_cn": "我写下了这个词。"
+ },
+ {
+  "id": 1505,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "drew",
+  "phonetic": "/druː/",
+  "chinese": "画（draw 的过去式）",
+  "cn_short": "画",
+  "type": "verb",
+  "example_en": "He drew a dragon.",
+  "example_cn": "他画了一条龙。"
+ },
+ {
+  "id": 1506,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "cut",
+  "phonetic": "/kʌt/",
+  "chinese": "剪",
+  "type": "verb",
+  "example_en": "I cut the paper.",
+  "example_cn": "我剪纸。"
+ },
+ {
+  "id": 1507,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "piece",
+  "phonetic": "/piːs/",
+  "chinese": "张",
+  "type": "noun",
+  "example_en": "I need a piece of paper.",
+  "example_cn": "我需要一张纸。"
+ },
+ {
+  "id": 1508,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "paint",
+  "phonetic": "/peɪnt/",
+  "chinese": "绘画",
+  "type": "verb",
+  "example_en": "We paint the kite.",
+  "example_cn": "我们给风筝上色。"
+ },
+ {
+  "id": 1509,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "put",
+  "phonetic": "/pʊt/",
+  "chinese": "放",
+  "type": "verb",
+  "example_en": "Put the sticks on it.",
+  "example_cn": "把木棍放上去。"
+ },
+ {
+  "id": 1510,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "stick",
+  "phonetic": "/stɪk/",
+  "chinese": "木棍",
+  "type": "noun",
+  "example_en": "I need two sticks.",
+  "example_cn": "我需要两根木棍。"
+ },
+ {
+  "id": 1511,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "tied",
+  "phonetic": "/taɪd/",
+  "chinese": "系上（tie 的过去式）",
+  "cn_short": "系上",
+  "type": "verb",
+  "example_en": "I tied the string.",
+  "example_cn": "我系上了线。"
+ },
+ {
+  "id": 1512,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "string",
+  "phonetic": "/strɪŋ/",
+  "chinese": "线",
+  "type": "noun",
+  "example_en": "The string is long.",
+  "example_cn": "线很长。"
+ },
+ {
+  "id": 1513,
+  "module": "五下8",
   "grade": "五年级",
   "word": "ask",
   "phonetic": "/ɑːsk/",
-  "chinese": "询问",
+  "chinese": "问",
   "type": "verb",
-  "example_en": "You should ask for help.",
-  "example_cn": "你应该寻求帮助。"
+  "example_en": "Ask me a question.",
+  "example_cn": "问我一个问题。"
  },
  {
-  "id": 612,
-  "module": "五下5",
+  "id": 1514,
+  "module": "五下8",
   "grade": "五年级",
-  "word": "answer",
-  "phonetic": "/ˈɑːnsə(r)/",
-  "chinese": "答案；回答",
-  "type": "noun/verb",
-  "example_en": "I know the answer.",
-  "example_cn": "我知道答案。"
- },
- {
-  "id": 613,
-  "module": "五下5",
-  "grade": "五年级",
-  "word": "clever",
-  "phonetic": "/ˈklevə(r)/",
-  "chinese": "聪明的",
-  "type": "adjective",
-  "example_en": "Daming is clever.",
-  "example_cn": "大明很聪明。"
- },
- {
-  "id": 614,
-  "module": "五下5",
-  "grade": "五年级",
-  "word": "patient",
-  "phonetic": "/ˈpeɪʃnt/",
-  "chinese": "有耐心的",
-  "type": "adjective",
-  "example_en": "Be patient and try again.",
-  "example_cn": "耐心点，再试一次。"
- },
- {
-  "id": 615,
-  "module": "五下5",
-  "grade": "五年级",
-  "word": "coin",
-  "phonetic": "/kɔɪn/",
-  "chinese": "硬币",
+  "word": "question",
+  "phonetic": "/ˈkwestʃən/",
+  "chinese": "问题",
   "type": "noun",
-  "example_en": "Daming lost his coins.",
-  "example_cn": "大明丢了硬币。"
+  "example_en": "I have a question.",
+  "example_cn": "我有一个问题。"
  },
  {
-  "id": 616,
-  "module": "五下5",
+  "id": 1515,
+  "module": "五下8",
   "grade": "五年级",
-  "word": "strange",
-  "phonetic": "/streɪndʒ/",
-  "chinese": "奇怪的",
-  "type": "adjective",
-  "example_en": "The lost things are strange.",
-  "example_cn": "这些丢失的东西很奇怪。"
+  "word": "forget",
+  "phonetic": "/fəˈɡet/",
+  "chinese": "忘记",
+  "type": "verb",
+  "example_en": "Don't forget your kite.",
+  "example_cn": "别忘了你的风筝。"
  },
  {
-  "id": 617,
-  "module": "五下5",
+  "id": 1516,
+  "module": "五下8",
   "grade": "五年级",
-  "word": "carefully",
-  "phonetic": "/ˈkeəfəli/",
-  "chinese": "仔细地",
+  "word": "bring",
+  "phonetic": "/brɪŋ/",
+  "chinese": "带来",
+  "type": "verb",
+  "example_en": "Bring it tomorrow.",
+  "example_cn": "明天把它带来。"
+ },
+ {
+  "id": 1517,
+  "module": "五下8",
+  "grade": "五年级",
+  "word": "soon",
+  "phonetic": "/suːn/",
+  "chinese": "不久",
   "type": "adverb",
-  "example_en": "Daming looked around carefully.",
-  "example_cn": "大明仔细地环顾四周。"
+  "example_en": "See you soon.",
+  "example_cn": "回头见。"
  },
  {
-  "id": 618,
-  "module": "五下5",
+  "id": 1518,
+  "module": "五下9",
   "grade": "五年级",
-  "word": "detective",
-  "phonetic": "/dɪˈtektɪv/",
-  "chinese": "侦探",
-  "type": "noun",
-  "example_en": "Sharp is a detective.",
-  "example_cn": "夏普是一名侦探。"
- },
- {
-  "id": 619,
-  "module": "五下5",
-  "grade": "五年级",
-  "word": "steal",
-  "phonetic": "/stiːl/",
-  "chinese": "偷；窃取",
+  "word": "laugh",
+  "phonetic": "/lɑːf/",
+  "chinese": "笑",
   "type": "verb",
-  "example_en": "The thief stole the jewel.",
-  "example_cn": "小偷偷走了珠宝。"
+  "example_en": "We laughed a lot.",
+  "example_cn": "我们笑了很久。"
  },
  {
-  "id": 620,
-  "module": "五下5",
+  "id": 1519,
+  "module": "五下9",
   "grade": "五年级",
-  "word": "shiny",
-  "phonetic": "/ˈʃaɪni/",
-  "chinese": "发亮的；有光泽的",
-  "type": "adjective",
-  "example_en": "They are all shiny things.",
-  "example_cn": "它们都是闪亮的东西。"
+  "word": "wore",
+  "phonetic": "/wɔː/",
+  "chinese": "穿（wear 的过去式）",
+  "cn_short": "穿",
+  "type": "verb",
+  "example_en": "The actor wore a funny hat.",
+  "example_cn": "演员戴了顶滑稽的帽子。"
  },
  {
-  "id": 621,
-  "module": "五下5",
+  "id": 1520,
+  "module": "五下9",
   "grade": "五年级",
-  "word": "ring",
-  "phonetic": "/rɪŋ/",
-  "chinese": "戒指",
+  "word": "letter",
+  "phonetic": "/ˈletə/",
+  "chinese": "信",
   "type": "noun",
-  "example_en": "Mum lost her ring.",
-  "example_cn": "妈妈丢了戒指。"
+  "example_en": "I read a letter.",
+  "example_cn": "我读了一封信。"
  },
  {
-  "id": 622,
-  "module": "五下6",
+  "id": 1521,
+  "module": "五下9",
   "grade": "五年级",
-  "word": "then",
-  "phonetic": "/ðen/",
-  "chinese": "那时",
+  "word": "theatre",
+  "phonetic": "/ˈθɪətə/",
+  "chinese": "剧院",
+  "type": "noun",
+  "example_en": "We went to the theatre.",
+  "example_cn": "我们去了剧院。"
+ },
+ {
+  "id": 1522,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "women",
+  "phonetic": "/ˈwɪmɪn/",
+  "chinese": "女性",
+  "type": "noun",
+  "example_en": "The women danced.",
+  "example_cn": "女性们在跳舞。"
+ },
+ {
+  "id": 1523,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "actor",
+  "phonetic": "/ˈæktə/",
+  "chinese": "演员",
+  "type": "noun",
+  "example_en": "He is an actor.",
+  "example_cn": "他是一名演员。"
+ },
+ {
+  "id": 1524,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "told",
+  "phonetic": "/təʊld/",
+  "chinese": "告诉（tell 的过去式）",
+  "cn_short": "告诉",
+  "type": "verb",
+  "example_en": "He told jokes.",
+  "example_cn": "他讲了笑话。"
+ },
+ {
+  "id": 1525,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "joke",
+  "phonetic": "/dʒəʊk/",
+  "chinese": "笑话",
+  "type": "noun",
+  "example_en": "The joke is funny.",
+  "example_cn": "笑话很好笑。"
+ },
+ {
+  "id": 1526,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "after",
+  "phonetic": "/ˈɑːftə/",
+  "chinese": "在……以后",
+  "type": "preposition",
+  "example_en": "We ate after the show.",
+  "example_cn": "演出后我们吃了饭。"
+ },
+ {
+  "id": 1527,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "show",
+  "phonetic": "/ʃəʊ/",
+  "chinese": "演出",
+  "type": "noun",
+  "example_en": "The show is funny.",
+  "example_cn": "演出很有趣。"
+ },
+ {
+  "id": 1528,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "restaurant",
+  "phonetic": "/ˈrestrɒnt/",
+  "chinese": "餐馆",
+  "type": "noun",
+  "example_en": "We ate at a restaurant.",
+  "example_cn": "我们在餐馆吃饭。"
+ },
+ {
+  "id": 569,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "read",
+  "phonetic": "/red/",
+  "chinese": "读（read 的过去式）",
+  "cn_short": "读",
+  "type": "verb",
+  "example_en": "I read a book last night.",
+  "example_cn": "我昨晚读了一本书。"
+ },
+ {
+  "id": 1530,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "at all",
+  "phonetic": "/ət ˈɔːl/",
+  "chinese": "一点都",
+  "type": "phrase",
+  "example_en": "I didn't like it at all.",
+  "example_cn": "我一点都不喜欢它。"
+ },
+ {
+  "id": 1531,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "in",
+  "phonetic": "/ɪn/",
+  "chinese": "在……之后",
+  "type": "preposition",
+  "example_en": "I'll come back in a week.",
+  "example_cn": "我一周后回来。"
+ },
+ {
+  "id": 1532,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "another",
+  "phonetic": "/əˈnʌðə/",
+  "chinese": "另一个",
+  "type": "adjective",
+  "example_en": "Tell another joke.",
+  "example_cn": "再讲一个笑话。"
+ },
+ {
+  "id": 1533,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "history",
+  "phonetic": "/ˈhɪstri/",
+  "chinese": "历史",
+  "type": "noun",
+  "example_en": "I like history.",
+  "example_cn": "我喜欢历史。"
+ },
+ {
+  "id": 1534,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "ask",
+  "phonetic": "/ɑːsk/",
+  "chinese": "问",
+  "type": "verb",
+  "example_en": "Ask questions.",
+  "example_cn": "问问题。"
+ },
+ {
+  "id": 1535,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "question",
+  "phonetic": "/ˈkwestʃən/",
+  "chinese": "问题",
+  "type": "noun",
+  "example_en": "Do you have questions?",
+  "example_cn": "你有问题吗？"
+ },
+ {
+  "id": 1536,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "forget",
+  "phonetic": "/fəˈɡet/",
+  "chinese": "忘记",
+  "type": "verb",
+  "example_en": "Don't forget me.",
+  "example_cn": "别忘了我。"
+ },
+ {
+  "id": 1537,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "bring",
+  "phonetic": "/brɪŋ/",
+  "chinese": "带来",
+  "type": "verb",
+  "example_en": "Bring your book.",
+  "example_cn": "把你的书带来。"
+ },
+ {
+  "id": 1538,
+  "module": "五下9",
+  "grade": "五年级",
+  "word": "soon",
+  "phonetic": "/suːn/",
+  "chinese": "不久",
   "type": "adverb",
-  "example_en": "Then, we lived in a small house.",
-  "example_cn": "那时，我们住在小房子里。"
+  "example_en": "See you soon.",
+  "example_cn": "回头见。"
  },
  {
-  "id": 623,
-  "module": "五下6",
+  "id": 1539,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "now",
-  "phonetic": "/naʊ/",
-  "chinese": "现在",
+  "word": "when",
+  "phonetic": "/wen/",
+  "chinese": "什么时候",
   "type": "adverb",
-  "example_en": "Now, we live in a big house.",
-  "example_cn": "现在，我们住在大房子里。"
+  "example_en": "When will you come back?",
+  "example_cn": "你什么时候回来？"
  },
  {
-  "id": 624,
-  "module": "五下6",
+  "id": 1540,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "change",
-  "phonetic": "/tʃeɪndʒ/",
-  "chinese": "变化",
-  "type": "verb/noun",
-  "example_en": "Things have changed a lot.",
-  "example_cn": "事情变化很大。"
+  "word": "end",
+  "phonetic": "/end/",
+  "chinese": "结束",
+  "type": "noun",
+  "example_en": "The end of the term is in July.",
+  "example_cn": "学期七月结束。"
  },
  {
-  "id": 625,
-  "module": "五下6",
+  "id": 1541,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "different",
-  "phonetic": "/ˈdɪfrənt/",
-  "chinese": "不同的",
+  "word": "nervous",
+  "phonetic": "/ˈnɜːvəs/",
+  "chinese": "紧张的",
   "type": "adjective",
-  "example_en": "It's different from before.",
-  "example_cn": "它和以前不同了。"
+  "example_en": "I feel nervous.",
+  "example_cn": "我感到紧张。"
  },
  {
-  "id": 626,
-  "module": "五下6",
+  "id": 1542,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "same",
-  "phonetic": "/seɪm/",
-  "chinese": "相同的",
+  "word": "all right",
+  "phonetic": "/ˌɔːl ˈraɪt/",
+  "chinese": "没事",
+  "type": "phrase",
+  "example_en": "Are you all right?",
+  "example_cn": "你没事吧？"
+ },
+ {
+  "id": 1543,
+  "module": "五下10",
+  "grade": "五年级",
+  "word": "airport",
+  "phonetic": "/ˈeəpɔːt/",
+  "chinese": "机场",
+  "type": "noun",
+  "example_en": "We go to the airport.",
+  "example_cn": "我们去机场。"
+ },
+ {
+  "id": 1544,
+  "module": "五下10",
+  "grade": "五年级",
+  "word": "ticket",
+  "phonetic": "/ˈtɪkɪt/",
+  "chinese": "票",
+  "type": "noun",
+  "example_en": "Here is my ticket.",
+  "example_cn": "这是我的票。"
+ },
+ {
+  "id": 1545,
+  "module": "五下10",
+  "grade": "五年级",
+  "word": "passport",
+  "phonetic": "/ˈpɑːspɔːt/",
+  "chinese": "护照",
+  "type": "noun",
+  "example_en": "Don't forget your passport.",
+  "example_cn": "别忘了护照。"
+ },
+ {
+  "id": 1546,
+  "module": "五下10",
+  "grade": "五年级",
+  "word": "safe",
+  "phonetic": "/seɪf/",
+  "chinese": "安全的",
   "type": "adjective",
-  "example_en": "They are the same.",
-  "example_cn": "它们是一样的。"
+  "example_en": "Have a safe trip.",
+  "example_cn": "祝你旅途平安。"
  },
  {
-  "id": 627,
-  "module": "五下6",
+  "id": 1547,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "live",
-  "phonetic": "/lɪv/",
-  "chinese": "居住；生活",
-  "type": "verb",
-  "example_en": "We lived in a small house then.",
-  "example_cn": "那时我们住在一所小房子里。"
- },
- {
-  "id": 628,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "work",
-  "phonetic": "/wɜːk/",
-  "chinese": "工作",
-  "type": "verb",
-  "example_en": "He worked in the city.",
-  "example_cn": "他在城里工作。"
- },
- {
-  "id": 629,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "study",
-  "phonetic": "/ˈstʌdi/",
-  "chinese": "学习",
-  "type": "verb",
-  "example_en": "They studied at a small school.",
-  "example_cn": "他们在小学校学习。"
- },
- {
-  "id": 630,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "travel",
-  "phonetic": "/ˈtrævl/",
-  "chinese": "旅行",
-  "type": "verb",
-  "example_en": "People travel by high-speed train now.",
-  "example_cn": "人们现在乘高铁旅行。"
- },
- {
-  "id": 631,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "phone",
-  "phonetic": "/fəʊn/",
-  "chinese": "电话",
+  "word": "pet",
+  "phonetic": "/pet/",
+  "chinese": "宠物",
   "type": "noun",
-  "example_en": "Back then there were no phones.",
-  "example_cn": "那时没有电话。"
+  "example_en": "I take my pet.",
+  "example_cn": "我带着我的宠物。"
  },
  {
-  "id": 632,
-  "module": "五下6",
+  "id": 1548,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "computer",
-  "phonetic": "/kəmˈpjuːtə(r)/",
-  "chinese": "电脑",
+  "word": "speak",
+  "phonetic": "/spiːk/",
+  "chinese": "说",
+  "type": "verb",
+  "example_en": "I speak English.",
+  "example_cn": "我说英语。"
+ },
+ {
+  "id": 1549,
+  "module": "五下10",
+  "grade": "五年级",
+  "word": "building",
+  "phonetic": "/ˈbɪldɪŋ/",
+  "chinese": "建筑物",
   "type": "noun",
-  "example_en": "Now we use computers.",
-  "example_cn": "现在我们使用电脑。"
+  "example_en": "The building is tall.",
+  "example_cn": "建筑物很高。"
  },
  {
-  "id": 633,
-  "module": "五下6",
+  "id": 1550,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "house",
-  "phonetic": "/haʊs/",
-  "chinese": "房子",
+  "word": "American",
+  "phonetic": "/əˈmerɪkən/",
+  "chinese": "美国人",
   "type": "noun",
-  "example_en": "Then, we lived in a small house.",
-  "example_cn": "那时，我们住在小房子里。"
+  "example_en": "He is an American.",
+  "example_cn": "他是美国人。"
  },
  {
-  "id": 634,
-  "module": "五下6",
+  "id": 1551,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "car",
-  "phonetic": "/kɑː(r)/",
-  "chinese": "汽车",
-  "type": "noun",
-  "example_en": "Back then there were no cars.",
-  "example_cn": "那时没有汽车。"
+  "word": "find out",
+  "phonetic": "/ˌfaɪnd ˈaʊt/",
+  "chinese": "发现",
+  "type": "phrase",
+  "example_en": "I want to find out more.",
+  "example_cn": "我想了解更多。"
  },
  {
-  "id": 635,
-  "module": "五下6",
+  "id": 1552,
+  "module": "五下10",
   "grade": "五年级",
-  "word": "high-speed",
-  "phonetic": "/ˌhaɪ ˈspiːd/",
-  "chinese": "高速的",
+  "word": "more",
+  "phonetic": "/mɔː/",
+  "chinese": "更多的",
   "type": "adjective",
-  "example_en": "We go by high-speed train.",
-  "example_cn": "我们乘高铁去。"
- },
- {
-  "id": 636,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "surprise",
-  "phonetic": "/səˈpraɪz/",
-  "chinese": "惊喜；意想不到的事",
-  "type": "noun",
-  "example_en": "What a big surprise!",
-  "example_cn": "真是个大惊喜！"
- },
- {
-  "id": 637,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "million",
-  "phonetic": "/ˈmɪljən/",
-  "chinese": "百万",
-  "type": "numeral",
-  "example_en": "There are over 10 million trees.",
-  "example_cn": "有一千多万棵树。"
- },
- {
-  "id": 638,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "climb",
-  "phonetic": "/klaɪm/",
-  "chinese": "攀登；爬",
-  "type": "verb",
-  "example_en": "He climbed the mountain.",
-  "example_cn": "他爬上了山。"
- },
- {
-  "id": 639,
-  "module": "五下6",
-  "grade": "五年级",
-  "word": "green",
-  "phonetic": "/ɡriːn/",
-  "chinese": "绿色的",
-  "type": "adjective",
-  "example_en": "The mountains became green.",
-  "example_cn": "山变绿了。"
+  "example_en": "Tell me more.",
+  "example_cn": "再告诉我一些。"
  }
 ]

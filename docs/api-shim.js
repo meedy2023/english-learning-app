@@ -61,7 +61,17 @@
       if (grade && w.grade !== grade) return;
       seen[w.module] = true;
     });
-    return Object.keys(seen).sort();
+    // 自然排序：同前缀按数字大小（保证 五下2 在 五下10 之前）
+    const nat = (s) => {
+      const m = s.match(/^(.*?)(\d+)$/);
+      return m ? [m[1], parseInt(m[2], 10)] : [s, -1];
+    };
+    return Object.keys(seen).sort((a, b) => {
+      const [pa, na] = nat(a);
+      const [pb, nb] = nat(b);
+      if (pa !== pb) return pa < pb ? -1 : 1;
+      return na - nb;
+    });
   }
 
   function wordsByModuleAndGrade(m, grade) {
