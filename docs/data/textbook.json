@@ -728,29 +728,69 @@
       "unit": "Unit 1 Animal friends",
       "content": [
        {
-        "role": "Ms Li",
-        "text": "Let's go to the zoo.",
-        "translation": "我们去动物园吧。"
-       },
-       {
-        "role": "Sam",
-        "text": "Look! What are they?",
-        "translation": "看！它们是什么？"
+        "role": "Tom",
+        "text": "Look at my picture!",
+        "translation": "看看我的画！"
        },
        {
         "role": "Amy",
-        "text": "They are pandas.",
-        "translation": "它们是熊猫。"
+        "text": "Are they tigers?",
+        "translation": "它们是老虎吗？"
        },
        {
-        "role": "Sam",
-        "text": "They are cute. Can they move?",
-        "translation": "它们真可爱。它们会动吗？"
+        "role": "Tom",
+        "text": "Yes!",
+        "translation": "是的！"
        },
        {
-        "role": "Ms Li",
-        "text": "Yes, they can.",
-        "translation": "是的，它们会。"
+        "role": "Amy",
+        "text": "But tigers are strong!",
+        "translation": "可是老虎很强壮啊！"
+       },
+       {
+        "role": "Amy",
+        "text": "What are they, Tom?",
+        "translation": "汤姆，它们是什么？"
+       },
+       {
+        "role": "Tom",
+        "text": "They're elephants.",
+        "translation": "它们是大象。"
+       },
+       {
+        "role": "Amy",
+        "text": "But elephants are big.",
+        "translation": "可是大象很大啊。"
+       },
+       {
+        "role": "Amy",
+        "text": "What are they?",
+        "translation": "它们是什么？"
+       },
+       {
+        "role": "Tom",
+        "text": "They're giraffes.",
+        "translation": "它们是长颈鹿。"
+       },
+       {
+        "role": "Amy",
+        "text": "Oh, Tom. Giraffes aren't short!",
+        "translation": "噢，汤姆。长颈鹿可不矮！"
+       },
+       {
+        "role": "Amy",
+        "text": "Are they pandas?",
+        "translation": "它们是大熊猫吗？"
+       },
+       {
+        "role": "Tom",
+        "text": "Yes! They're black and white!",
+        "translation": "是的！它们是黑白相间的！"
+       },
+       {
+        "role": "Amy",
+        "text": "Ha ha! That's not right. Let me help you.",
+        "translation": "哈哈！那不对。让我来帮你。"
        }
       ]
      },
@@ -758,14 +798,34 @@
       "unit": "Unit 1 Animal friends (Speed up)",
       "content": [
        {
-        "role": "Daming",
-        "text": "The giraffes are tall. The monkeys are brown. They are strong.",
-        "translation": "长颈鹿很高。猴子是棕色的。它们很强壮。"
+        "role": "Tippi",
+        "text": "Hi, I'm Tippi. Look! This is my book.",
+        "translation": "嗨，我是蒂皮。看！这是我的书。"
        },
        {
-        "role": "Lingling",
-        "text": "Look at the elephant! It's big. Look at the tiger! It's strong.",
-        "translation": "看那只大象！它很大。看那只老虎！它很强壮。"
+        "role": "Tippi",
+        "text": "This is Abu. He is an elephant. He is big and strong. I love him.",
+        "translation": "这是阿布。他是一头大象。他又大又强壮。我爱他。"
+       },
+       {
+        "role": "Tippi",
+        "text": "This is Leon. He is a chameleon. He is small.",
+        "translation": "这是利昂。他是一只变色龙。他很小。"
+       },
+       {
+        "role": "Tippi",
+        "text": "This is Linda. She is an ostrich. She is fast.",
+        "translation": "这是琳达。她是一只鸵鸟。她跑得很快。"
+       },
+       {
+        "role": "Tippi",
+        "text": "This is Mufasa. He is a little lion. He is cute.",
+        "translation": "这是木法沙。他是一只小狮子。他很可爱。"
+       },
+       {
+        "role": "Tippi",
+        "text": "They are my animal friends. I love them.",
+        "translation": "他们是我的动物朋友们。我爱他们。"
        }
       ]
      }
@@ -776,23 +836,48 @@
       "content": [
        {
         "role": "Ms Li",
-        "text": "Touch your head. Touch your face. Touch your nose.",
-        "translation": "摸摸你的头。摸摸你的脸。摸摸你的鼻子。"
+        "text": "Good work, children!",
+        "translation": "孩子们，干得好！"
        },
        {
-        "role": "Sam",
-        "text": "My head, my face, my nose.",
-        "translation": "我的头，我的脸，我的鼻子。"
+        "role": "Ms Li",
+        "text": "Let's make a snowman!",
+        "translation": "我们来堆个雪人吧！"
        },
        {
-        "role": "Amy",
-        "text": "Touch your ears. Touch your mouth. Touch your eyes.",
-        "translation": "摸摸你的耳朵。摸摸你的嘴巴。摸摸你的眼睛。"
+        "role": "Child",
+        "text": "Look! He has got a red mouth.",
+        "translation": "看！他有一张红色的嘴。"
        },
        {
-        "role": "Sam",
-        "text": "My ears, my mouth, my eyes.",
-        "translation": "我的耳朵，我的嘴巴，我的眼睛。"
+        "role": "Child",
+        "text": "Now, he has got a long nose.",
+        "translation": "现在，他有了一只长鼻子。"
+       },
+       {
+        "role": "Child",
+        "text": "Oh, he hasn't got eyes.",
+        "translation": "噢，他还没有眼睛。"
+       },
+       {
+        "role": "Child",
+        "text": "I've got two rocks!",
+        "translation": "我找到了两块石头！"
+       },
+       {
+        "role": "Child",
+        "text": "Now he has got two eyes.",
+        "translation": "现在他有两只眼睛了。"
+       },
+       {
+        "role": "Child",
+        "text": "He's got long arms and big hands!",
+        "translation": "他有了长长的胳膊和大大的手！"
+       },
+       {
+        "role": "Child",
+        "text": "Wow! You've got a cool snowman!",
+        "translation": "哇！你们有一个很酷的雪人！"
        }
       ]
      },
@@ -817,24 +902,59 @@
       "unit": "Unit 3 Yummy food",
       "content": [
        {
-        "role": "Mum",
-        "text": "What's your favourite food?",
-        "translation": "你最喜欢什么食物？"
+        "role": "Ms Li",
+        "text": "Welcome! Hello!",
+        "translation": "欢迎！你好！"
        },
        {
-        "role": "Sam",
-        "text": "I like noodles. They're yummy.",
-        "translation": "我喜欢面条。它们很好吃。"
+        "role": "Ms Li",
+        "text": "Let's make a salad together!",
+        "translation": "我们一起做沙拉吧！"
        },
        {
-        "role": "Mum",
-        "text": "What about you, Amy?",
-        "translation": "你呢，Amy？"
+        "role": "Child",
+        "text": "OK. I like tomatoes and oranges.",
+        "translation": "好的。我喜欢西红柿和橙子。"
        },
        {
-        "role": "Amy",
-        "text": "I like rice. It's yummy, too.",
-        "translation": "我喜欢米饭。它也很好吃。"
+        "role": "Child",
+        "text": "I like bananas.",
+        "translation": "我喜欢香蕉。"
+       },
+       {
+        "role": "Child",
+        "text": "I like beans.",
+        "translation": "我喜欢豆子。"
+       },
+       {
+        "role": "Child",
+        "text": "I don't like beans. I like cucumbers.",
+        "translation": "我不喜欢豆子。我喜欢黄瓜。"
+       },
+       {
+        "role": "Ms Li",
+        "text": "Then let's have cucumbers!",
+        "translation": "那我们就用黄瓜吧！"
+       },
+       {
+        "role": "Child",
+        "text": "What about Tom? He likes grapes.",
+        "translation": "汤姆呢？他喜欢葡萄。"
+       },
+       {
+        "role": "Ms Li",
+        "text": "Wow! It's a rainbow salad.",
+        "translation": "哇！这是一份彩虹沙拉。"
+       },
+       {
+        "role": "Ms Li",
+        "text": "Do you like it?",
+        "translation": "你们喜欢它吗？"
+       },
+       {
+        "role": "Child",
+        "text": "Yes, I do. It's beautiful!",
+        "translation": "是的，我喜欢。它很漂亮！"
        }
       ]
      },
@@ -842,14 +962,94 @@
       "unit": "Unit 3 Yummy food (Speed up)",
       "content": [
        {
-        "role": "Lingling",
-        "text": "I like meat. I don't like fish.",
-        "translation": "我喜欢肉。我不喜欢鱼。"
+        "role": "Taotao & Jiajia",
+        "text": "Hello, Grandma. Hello, Grandpa.",
+        "translation": "奶奶好，爷爷好。"
        },
        {
-        "role": "Daming",
-        "text": "I like vegetables. I don't like candy.",
-        "translation": "我喜欢蔬菜。我不喜欢糖果。"
+        "role": "Grandma",
+        "text": "Hello, Taotao and Jiajia. Time to get up, children.",
+        "translation": "涛涛、佳佳，你们好。孩子们，该起床了。"
+       },
+       {
+        "role": "Taotao",
+        "text": "But it's still early.",
+        "translation": "可是还早呢。"
+       },
+       {
+        "role": "Grandma",
+        "text": "Let's get ready for breakfast.",
+        "translation": "我们准备吃早餐吧。"
+       },
+       {
+        "role": "Grandma",
+        "text": "Do you like eggs?",
+        "translation": "你们喜欢鸡蛋吗？"
+       },
+       {
+        "role": "Taotao & Jiajia",
+        "text": "Yes, we do.",
+        "translation": "是的，我们喜欢。"
+       },
+       {
+        "role": "Grandma",
+        "text": "Now we've got eggs.",
+        "translation": "现在我们有鸡蛋了。"
+       },
+       {
+        "role": "Grandma",
+        "text": "Do you like tomatoes?",
+        "translation": "你们喜欢西红柿吗？"
+       },
+       {
+        "role": "Taotao & Jiajia",
+        "text": "Yes, we do.",
+        "translation": "是的，我们喜欢。"
+       },
+       {
+        "role": "Grandma",
+        "text": "Now we've got tomatoes.",
+        "translation": "现在我们有西红柿了。"
+       },
+       {
+        "role": "Grandpa",
+        "text": "Do you like corn?",
+        "translation": "你喜欢玉米吗？"
+       },
+       {
+        "role": "Jiajia",
+        "text": "Yes, I do.",
+        "translation": "是的，我喜欢。"
+       },
+       {
+        "role": "Grandpa",
+        "text": "Now we've got corn.",
+        "translation": "现在我们有玉米了。"
+       },
+       {
+        "role": "Grandpa",
+        "text": "Do you like apples?",
+        "translation": "你们喜欢苹果吗？"
+       },
+       {
+        "role": "Jiajia",
+        "text": "No, I don't. I like grapes.",
+        "translation": "不，我不喜欢。我喜欢葡萄。"
+       },
+       {
+        "role": "Grandpa",
+        "text": "OK. Let's get grapes.",
+        "translation": "好的。我们去摘葡萄吧。"
+       },
+       {
+        "role": "Taotao & Jiajia",
+        "text": "Thank you, Grandma and Grandpa.",
+        "translation": "谢谢奶奶，谢谢爷爷。"
+       },
+       {
+        "role": "Taotao & Jiajia",
+        "text": "Yummy!",
+        "translation": "真好吃！"
        }
       ]
      }
