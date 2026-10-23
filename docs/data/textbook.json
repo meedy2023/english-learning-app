@@ -515,12 +515,12 @@
         "translation": "那是我奶奶。"
        },
        {
-        "role": "Sam",
+        "role": "Daming",
         "text": "But who is that?",
         "translation": "可是那一位是谁？"
        },
        {
-        "role": "Daming",
+        "role": "Sam",
         "text": "That is my grandma!",
         "translation": "那是我奶奶！"
        },
@@ -849,6 +849,10 @@
         "translation": "对不起，娜娜。我们是你的身体部位。谁对你来说是最好的？"
        },
        {
+        "role": "Nana",
+        "text": "Well..."
+       },
+       {
         "role": "Ear",
         "text": "You've got two ears. We help you hear.",
         "translation": "你有两只耳朵。我们帮你听声音。"
@@ -890,7 +894,7 @@
        },
        {
         "role": "Nana",
-        "text": "Hey! Please stop! You are all important to me. You're a team.",
+        "text": "Hey! Please stop! You are all important to me. You are a team.",
         "translation": "嘿！请停下！你们对我来说都很重要。你们是一个团队。"
        },
        {
@@ -1036,7 +1040,7 @@
         "translation": "你喜欢玉米吗？"
        },
        {
-        "role": "Jiajia",
+        "role": "Taotao",
         "text": "Yes, I do.",
         "translation": "是的，我喜欢。"
        },
@@ -1051,7 +1055,7 @@
         "translation": "你们喜欢苹果吗？"
        },
        {
-        "role": "Jiajia",
+        "role": "Taotao",
         "text": "No, I don't. I like grapes.",
         "translation": "不，我不喜欢。我喜欢葡萄。"
        },
@@ -1067,7 +1071,7 @@
        },
        {
         "role": "Taotao & Jiajia",
-        "text": "Yummy!",
+        "text": "Yummy! Let's get ready for lunch together, too!",
         "translation": "真好吃！"
        }
       ]
@@ -1078,7 +1082,7 @@
       "unit": "Unit 4 What's your hobby?",
       "content": [
        {
-        "role": "Amy",
+        "role": "Lingling",
         "text": "What are these?",
         "translation": "这些是什么？"
        },
@@ -1088,7 +1092,7 @@
         "translation": "我家的照片。"
        },
        {
-        "role": "Amy",
+        "role": "Lingling",
         "text": "Who is this?",
         "translation": "这是谁？"
        },
@@ -1098,7 +1102,7 @@
         "translation": "那是我爸爸。他喜欢跑步。"
        },
        {
-        "role": "Amy",
+        "role": "Lingling",
         "text": "Who is this?",
         "translation": "这是谁？"
        },
@@ -1108,17 +1112,17 @@
         "translation": "那是我妈妈。她喜欢写作。"
        },
        {
-        "role": "Daming",
+        "role": "Lingling",
         "text": "They are your grandpa and grandma.",
         "translation": "他们是你的爷爷奶奶。"
        },
        {
-        "role": "Amy",
+        "role": "Daming",
         "text": "Yes, they like doing tai chi.",
         "translation": "是的，他们喜欢打太极。"
        },
        {
-        "role": "Amy",
+        "role": "Lingling",
         "text": "What do you like doing, Daming?",
         "translation": "大明，你喜欢做什么？"
        },
@@ -1262,22 +1266,22 @@
       "unit": "Unit 6 A great week",
       "content": [
        {
-        "role": "Daming",
-        "text": "Only two days! It's Wednesday.",
+        "role": "Lingling",
+        "text": "It's Wednesday. Only two days!",
         "translation": "只剩两天了！今天星期三。"
        },
        {
-        "role": "Lingling",
-        "text": "It's Thursday! Only one day!",
+        "role": "Daming",
+        "text": "It's Thursday. Only one day!",
         "translation": "明天星期四！只剩一天了！"
        },
        {
-        "role": "Amy",
-        "text": "You're happy! Why?",
+        "role": "Sam",
+        "text": "You're happy. Why?",
         "translation": "你们很开心！为什么？"
        },
        {
-        "role": "Daming",
+        "role": "Daming & Lingling",
         "text": "It's Friday! We have art on Friday. We love art.",
         "translation": "星期五了！我们周五有美术课。我们喜欢美术。"
        },
@@ -1287,17 +1291,17 @@
         "translation": "抱歉，同学们。李老师今天不舒服。"
        },
        {
-        "role": "Lingling",
+        "role": "Daming",
         "text": "Oh... No art today!",
         "translation": "哦……今天没有美术课！"
        },
        {
-        "role": "Sam",
+        "role": "Daming",
         "text": "Let's do something for Ms Li.",
         "translation": "我们为李老师做点什么吧。"
        },
        {
-        "role": "All",
+        "role": "Lingling",
         "text": "Good idea!",
         "translation": "好主意！"
        }
@@ -1374,7 +1378,7 @@
        },
        {
         "role": "Daming",
-        "text": "Can you run fast, Sam?",
+        "text": "Can you run fast?",
         "translation": "萨姆，你能跑得快吗？"
        },
        {
@@ -1384,7 +1388,7 @@
        },
        {
         "role": "Amy",
-        "text": "Can you play ping-pong, Lingling?",
+        "text": "Can you play ping-pong?",
         "translation": "玲玲，你会打乒乓球吗？"
        },
        {
@@ -1394,7 +1398,7 @@
        },
        {
         "role": "Lingling",
-        "text": "Can you swim, Daming?",
+        "text": "Can you swim?",
         "translation": "大明，你会游泳吗？"
        },
        {
@@ -3735,8 +3739,12 @@
        },
        {
         "role": "Mum",
-        "text": "Yes. Books made me happy. Now I can see the “horse library”. Oh, yes. It’s here!",
+        "text": "Yes. Books made me happy. Now I can see the “horse library”.",
         "translation": "喜欢。书带给我快乐。看，马背图书馆来啦！哇，真的来了！"
+       },
+       {
+        "role": "Boy",
+        "text": "Oh, yes. It's here!"
        },
        {
         "role": "Boy",
@@ -3750,38 +3758,51 @@
       "content": [
        {
         "role": "Student",
-        "text": "Book report: The Secret Garden. Title: The Secret Garden. Writer: Frances Hodgson Burnett.",
-        "translation": "读书报告：《秘密花园》。书名：《秘密花园》。作者：弗朗西斯·霍奇森·伯内特。"
+        "text": "Book report: The Secret Garden"
        },
        {
         "role": "Student",
-        "text": "Mary was a 10-year-old girl. She lost her parents and had to live with her uncle. But her uncle was often away. Her cousin Colin was ill in bed.",
-        "translation": "玛丽是一个十岁的女孩。她失去了父母，不得不和舅舅一起生活。但舅舅经常不在家，表哥科林卧病在床。"
+        "text": "Title: The Secret Garden"
        },
        {
         "role": "Student",
-        "text": "Mary didn't care about others and was often angry. She was unhappy in the new place.",
-        "translation": "玛丽不关心别人，经常发脾气，在新地方过得不开心。"
+        "text": "Writer: Frances Hodgson Burnett"
        },
        {
         "role": "Student",
-        "text": "One day she found an old garden. There she met a new friend. His name was Dickon. They worked together to bring the garden back to life.",
-        "translation": "有一天，她发现了一座老旧的花园。在那里她认识了新朋友迪肯。他们一起努力，让花园重焕生机。"
+        "text": "What happened in the book?"
        },
        {
         "role": "Student",
-        "text": "Mary slowly became friendly and kind. She also helped Colin to get well.",
-        "translation": "玛丽慢慢变得友善温和，她还帮助科林恢复了健康。"
+        "text": "Mary was a 10-year-old girl. She lost her parents and had to live with her uncle. But her uncle was often away. Her cousin Colin was ill in bed."
        },
        {
         "role": "Student",
-        "text": "Do you like this book? Yes, I do. I give the book 9 out of 10. It’s a great book about friends, love and nature.",
-        "translation": "你喜欢这本书吗？是的，我喜欢。我给这本书打 9 分（满分 10 分）。这是一本关于友谊、爱和大自然的好书。"
+        "text": "Mary didn't care about others and was often angry. She was unhappy in the new place."
        },
        {
         "role": "Student",
-        "text": "What is your favourite part of the book? I love the words about flowers and trees in the book. They are beautiful.",
-        "translation": "你最喜欢书中的哪个部分？我喜欢书中描写花草树木的段落，写得很美。"
+        "text": "One day she found an old garden. There she met a new friend. His name was Dickon. They worked together to bring the garden back to life."
+       },
+       {
+        "role": "Student",
+        "text": "Mary slowly became friendly and kind. She also helped Colin to get well."
+       },
+       {
+        "role": "Student",
+        "text": "Do you like this book? Why or why not?"
+       },
+       {
+        "role": "Student",
+        "text": "Yes, I do. I give the book 9 out of 10. It’s a great book about friends, love and nature."
+       },
+       {
+        "role": "Student",
+        "text": "What is your favourite part of the book?"
+       },
+       {
+        "role": "Student",
+        "text": "I love the words about flowers and trees in the book. They are beautiful."
        }
       ]
      }
