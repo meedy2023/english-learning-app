@@ -574,6 +574,7 @@
     .match-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .match-title { font-size: 16px; font-weight: 800; color: #3d3a86; }
     .match-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
+    .cl-meta { font-size: 12.5px; color: #6b7290; font-weight: 600; margin-bottom: 6px; line-height: 1.5; }
     .match-restart {
       flex: 0 0 auto;
       border: none;
@@ -1598,7 +1599,7 @@ const API = ".";
     '四下2': { module: 'Unit 2 How do you feel today', grade: '四年级下册' },
     '四下3': { module: "Unit 3 Everyone's got talent", grade: '四年级下册' },
     '四下4': { module: 'Unit 4 Plant life', grade: '四年级下册' },
-    '四下5': { module: 'Unit 5 School activities', grade: '四年级下册' },
+    '四下5': { module: 'Unit 5 School events', grade: '四年级下册' },
     '四下6': { module: 'Unit 6 Cool clothes', grade: '四年级下册' },
                     // 五年级
     '五上1': { module: "Unit 1 What's on your plate?", grade: '五年级上册' },
@@ -1614,6 +1615,12 @@ const API = ".";
     '五下5': { module: 'Unit 5 Work it out', grade: '五年级下册' },
     '五下6': { module: 'Unit 6 Then and now', grade: '五年级下册' },
   };
+
+  // 单元完整标题：年级 + 单元名（无映射时退回模块键）
+  function moduleLabel(key) {
+    const m = WORD_TO_LESSON[key];
+    return m ? (m.grade + ' · ' + m.module) : (key || '');
+  }
 
   async function showTextbookList() {
     // 智能跳转：如果当前在某个单词模块中，直接打开对应的课文模块
@@ -4101,7 +4108,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById('match-tip').style.display = 'block';
       document.getElementById('match-board').style.display = 'grid';
       document.getElementById('match-sub').textContent =
-        currentModule + ' · 每局 ' + this.PER_ROUND + ' 个单词 · 共 ' + currentWords.length + ' 个';
+        moduleLabel(currentModule) + ' · 每局 ' + this.PER_ROUND + ' 个单词 · 共 ' + currentWords.length + ' 个';
 
       this.renderBoard();
       this.updateHud();
@@ -4326,8 +4333,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
 
     const area = document.getElementById('choice-learn-area');
-    area.innerHTML = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
-      '<span style="font-size:13px;color:#999">' + currentModule + '</span>' +
+    area.innerHTML = '<div class="cl-meta">' + moduleLabel(currentModule) + ' · 总计 ' + cl_words.length + ' 个单词</div>' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
       '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden">' +
         '<div style="height:100%;background:linear-gradient(90deg,#4f9fff,#6c63ff);width:' + pct + '%;border-radius:3px;transition:width .3s"></div>' +
       '</div>' +
