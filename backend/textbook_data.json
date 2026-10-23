@@ -2429,38 +2429,28 @@
             "content": [
               {
                 "role": "Yangyang",
-                "text": "I'm Yangyang. Chenchen is my little brother.",
-                "translation": "我是阳阳，晨晨是我的弟弟。"
+                "text": "I'm Yangyang. This is my little brother Chenchen.",
+                "translation": "我是阳阳。这是我的小弟弟晨晨。"
               },
               {
                 "role": "Yangyang",
-                "text": "When Chenchen was a baby, he was small. He couldn't walk. He couldn't talk.",
-                "translation": "晨晨还是小宝宝的时候，他小小的，不会走路，也不会说话。"
+                "text": "I was four and Chenchen was ten months old. He cried a lot and I was not happy. But I still loved him.",
+                "translation": "我四岁的时候，晨晨十个月大。他经常哭，我不太开心。但我仍然爱他。"
               },
               {
                 "role": "Yangyang",
-                "text": "I helped him every day. I gave him his bottle. I read stories to him.",
-                "translation": "我每天照顾他，给他喂奶瓶，给他讲故事。"
+                "text": "I was six and Chenchen was three. He didn't listen to me and I was angry. But I still loved him.",
+                "translation": "我六岁的时候，晨晨三岁。他不听我的话，我很生气。但我仍然爱他。"
               },
               {
                 "role": "Yangyang",
-                "text": "Now Chenchen is three. He can walk and he can talk. He can even run fast!",
-                "translation": "现在晨晨三岁了，会走路，会说话，跑得还很快呢！"
-              },
-              {
-                "role": "Chenchen",
-                "text": "Big brother, let's play football!",
-                "translation": "哥哥，我们一起踢足球吧！"
+                "text": "I was eight and Chenchen was five. We could play football together. He was not a good player, but we were happy.",
+                "translation": "我八岁的时候，晨晨五岁。我们可以一起踢足球。他踢得不算好，但我们很开心。"
               },
               {
                 "role": "Yangyang",
-                "text": "We play together every day. We grow up together.",
-                "translation": "我们每天一起玩，一起长大。"
-              },
-              {
-                "role": "Yangyang",
-                "text": "I love my brother. Growing up with him is fun.",
-                "translation": "我爱我的弟弟，和他一起长大真快乐。"
+                "text": "I'm ten now and Chenchen is seven. We go to the same school and we help each other. It's great to grow up together!",
+                "translation": "我现在十岁，晨晨七岁。我们在同一所学校上学，互相帮助。一起长大真好！"
               }
             ]
           },
@@ -2469,43 +2459,43 @@
             "content": [
               {
                 "role": "Boy",
-                "text": "Last summer, I went to a seven-day summer camp.",
-                "translation": "去年夏天，我参加了为期七天的夏令营。"
+                "text": "The summer camp is over. The past seven days were hard but great.",
+                "translation": "夏令营结束了。过去的七天很辛苦，但是很棒。"
               },
               {
                 "role": "Boy",
-                "text": "It was very hot and the training was hard. I was tired and I missed my mum.",
-                "translation": "天气很热，训练也很辛苦。我很累，也很想妈妈。"
-              },
-              {
-                "role": "Teacher",
-                "text": "Don't give up! You can do it!",
-                "translation": "别放弃！你能做到！"
-              },
-              {
-                "role": "Friend",
-                "text": "Come on! Let's practise together.",
-                "translation": "加油！我们一起练。"
+                "text": "It was very hot and our training was hard. We walked and ran for hours.",
+                "translation": "天气很热，我们的训练很艰苦。我们走了好几个小时，也跑了好几个小时。"
               },
               {
                 "role": "Boy",
-                "text": "My teacher and friends helped me a lot. I didn't give up.",
-                "translation": "老师和朋友们帮了我很多，我没有放弃。"
+                "text": "I was very tired on the first day. But my teacher and friends were kind and helpful.",
+                "translation": "第一天我特别累。但是老师和同学们都很友善，乐于帮忙。"
               },
               {
                 "role": "Boy",
-                "text": "On the last day, we cooked dinner together. I made vegetable soup!",
-                "translation": "最后一天，我们一起做晚饭。我做了一份蔬菜汤！"
+                "text": "After the first day, I was much better.",
+                "translation": "第一天之后，我就好多了。"
               },
               {
                 "role": "Boy",
-                "text": "The soup was yummy. I was happy and proud.",
-                "translation": "汤很好喝，我既开心又自豪。"
+                "text": "We also did many other things. On the third day, we cooked lunch on our own.",
+                "translation": "我们还做了很多别的事情。第三天，我们自己做了午饭。"
               },
               {
                 "role": "Boy",
-                "text": "I grew up at the summer camp. I can do many things now!",
-                "translation": "在夏令营里我长大了，现在我会做很多事情了！"
+                "text": "We were not good at cooking, but we had a good time together.",
+                "translation": "我们并不擅长做饭，但是大家一起玩得很开心。"
+              },
+              {
+                "role": "Boy",
+                "text": "What was the best dish? It was my “tomatoes with sugar”!",
+                "translation": "最好吃的菜是什么？是我的“糖拌西红柿”！"
+              },
+              {
+                "role": "Boy",
+                "text": "After the camp, we felt great. It was the feeling of growing up.",
+                "translation": "夏令营结束后，我们感觉棒极了。这就是成长的感觉。"
               }
             ]
           }
@@ -2515,34 +2505,49 @@
             "unit": "Unit 2 You can make a difference (Start up)",
             "content": [
               {
-                "role": "Daming",
-                "text": "Yesterday my friends and I had a race. We ran up the small hill.",
-                "translation": "昨天我和朋友们比赛跑步，我们跑向小山顶。"
-              },
-              {
-                "role": "Daming",
-                "text": "I was fast, but I stopped. There was some litter on the grass.",
-                "translation": "我跑得很快，但我停了下来——草地上有一些垃圾。"
-              },
-              {
-                "role": "Daming",
-                "text": "That's not right. I picked up the litter and put it in the bin.",
-                "translation": "这样不对。我把垃圾捡起来，扔进了垃圾桶。"
+                "role": "Narrator",
+                "text": "The four friends went to a hill.",
+                "translation": "四个好朋友来到一座小山。"
               },
               {
                 "role": "Amy",
-                "text": "You were the last one to get to the top, Daming.",
-                "translation": "大明，你是最后一个到山顶的。"
+                "text": "Let’s see who gets to the top first! One, two, three. Run!",
+                "translation": "我们看看谁最先到达山顶！一、二、三，跑！"
+              },
+              {
+                "role": "Narrator",
+                "text": "They all hurried up to the top of the hill. At first, Daming was at the front. But then he slowed down. One by one, his friends went past him.",
+                "translation": "他们都急忙向山顶跑去。起初，大明跑在最前面。但后来他放慢了速度，朋友们一个接一个超过了他。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I win!",
+                "translation": "我赢啦！"
               },
               {
                 "role": "Sam",
-                "text": "But you picked up all the litter. You helped our beautiful hill.",
-                "translation": "但你把垃圾都捡干净了，你帮助了我们美丽的小山。"
+                "text": "But where's Daming?",
+                "translation": "可是大明在哪儿？"
               },
               {
-                "role": "Amy",
-                "text": "You are the real winner!",
-                "translation": "你才是真正的赢家！"
+                "role": "Narrator",
+                "text": "They waited and waited. At last, Daming came with a big bag.",
+                "translation": "他们等啊等。最后，大明拎着一个大袋子来了。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Where did you go?",
+                "translation": "你去哪里了？"
+              },
+              {
+                "role": "Daming",
+                "text": "I saw some rubbish on the way. I picked it up.",
+                "translation": "我在路上看到一些垃圾，就把它们捡起来了。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Daming, you're the real winner!",
+                "translation": "大明，你才是真正的赢家！"
               }
             ]
           },
@@ -2550,29 +2555,44 @@
             "unit": "Unit 2 You can make a difference (Speed up)",
             "content": [
               {
-                "role": "Amy",
-                "text": "Here are three little poems about helping people.",
-                "translation": "这里有三首关于帮助他人的小诗。"
+                "role": "Little dog",
+                "text": "The little dog we have is the cutest in the world. Small and playful, he's always by my side.",
+                "translation": "我们的小狗是世界上最可爱的。它小巧又顽皮，总是陪在我身边。"
               },
               {
-                "role": "Boy",
-                "text": "Little dog, little dog, you will be my eyes. I can be your friend, and we will be together.",
-                "translation": "小狗，小狗，你将成为我的眼睛。我可以做你的朋友，我们会一直在一起。"
+                "role": "Little dog",
+                "text": "“Play with me and love me. I want you with me always.”",
+                "translation": "“和我玩吧，爱我吧。我希望你永远陪着我。”"
               },
               {
-                "role": "Old man",
-                "text": "I am lonely. But the boy plays music with me. The music makes me happy.",
-                "translation": "我很孤独。但男孩和我一起奏乐，音乐让我快乐。"
+                "role": "Little dog",
+                "text": "But we can't have him for long. He'll be someone's eyes one day.",
+                "translation": "但我们不能长久地养着他。有一天，他会成为别人的眼睛。"
               },
               {
-                "role": "Girl",
-                "text": "New friend, new friend, don't be shy. Let's share my lunch. Let's be friends.",
-                "translation": "新朋友，新朋友，别害羞。我们一起分享午餐，做朋友吧。"
+                "role": "My new friend",
+                "text": "I made a new friend. He was eighty years old, and he had no family.",
+                "translation": "我交了一个新朋友。他八十岁了，没有家人。"
               },
               {
-                "role": "Amy",
-                "text": "Small acts can make a difference. Kindness makes everyone happy.",
-                "translation": "小小的善举也能带来改变，善意让每个人都快乐。"
+                "role": "My new friend",
+                "text": "He owned a ukulele. So I brought over my guitar. Together the two of us played.",
+                "translation": "他有一把尤克里里。于是我把我的吉他带了过去。我们两个人一起弹奏。"
+              },
+              {
+                "role": "My new friend",
+                "text": "We're not good enough for a show. But we didn't sound too bad at all.",
+                "translation": "我们弹得不够好，没法上台表演。但我们的琴声一点也不难听。"
+              },
+              {
+                "role": "Sandwich",
+                "text": "At lunchtime, I saw the new kid. She sat on her own. She had only the words of a book for her lunch.",
+                "translation": "午饭时，我看见了那个新来的同学。她独自坐着，午餐只有书里的文字。"
+              },
+              {
+                "role": "Sandwich",
+                "text": "I gave her half of my sandwich. And I had only half for me. But after I ate it, I felt full.",
+                "translation": "我把三明治的一半给了她，自己只留了一半。但吃完之后，我心里满满的。"
               }
             ]
           }
@@ -2583,38 +2603,53 @@
             "content": [
               {
                 "role": "Boy",
-                "text": "It's raining. Will the bookmobile come today?",
-                "translation": "下雨了，流动图书馆今天会来吗？"
-              },
-              {
-                "role": "Mum",
-                "text": "Don't worry. It comes every week.",
-                "translation": "别担心，它每周都会来。"
+                "text": "It's library day again! I'm excited! But it keeps raining and raining.",
+                "translation": "又是图书馆开放日啦！我很激动！可是雨一直下个不停。"
               },
               {
                 "role": "Boy",
-                "text": "I can't wait. I want new books!",
-                "translation": "我等不及了，我想看新书！"
+                "text": "Mum, will the “horse library” come today?",
+                "translation": "妈妈，“马背图书馆”今天还会来吗？"
               },
               {
                 "role": "Mum",
-                "text": "Long ago, there weren't any libraries on our grassland.",
-                "translation": "很久以前，我们的草原上没有图书馆。"
-              },
-              {
-                "role": "Mum",
-                "text": "People rode horses and took books to children. That was the \"horseback library\".",
-                "translation": "人们骑着马把书送给孩子们，那就是\"马背图书馆\"。"
+                "text": "Don’t worry. It comes every week, rain or sun.",
+                "translation": "别担心，它每周都会来，风雨无阻。"
               },
               {
                 "role": "Boy",
-                "text": "Look! It's here! The bookmobile is here!",
-                "translation": "看！它来了！流动图书馆来了！"
+                "text": "Did you also have library day in the past, Mum?",
+                "translation": "妈妈，你们以前也有图书馆开放日吗？"
               },
               {
                 "role": "Mum",
-                "text": "Rain can't stop the books. Let's go and choose some.",
-                "translation": "雨挡不住书。我们去挑几本吧。"
+                "text": "Yes, we did. But our library only came one time a month.",
+                "translation": "有的。但是以前图书馆一个月才来一次。"
+              },
+              {
+                "role": "Boy",
+                "text": "Were there many books?",
+                "translation": "那时候书多吗？"
+              },
+              {
+                "role": "Mum",
+                "text": "No, there weren't. It was a small library.",
+                "translation": "不多，那是一个小小的图书馆。"
+              },
+              {
+                "role": "Boy",
+                "text": "Did you like it?",
+                "translation": "您喜欢它吗？"
+              },
+              {
+                "role": "Mum",
+                "text": "Yes. Books made me happy. Now I can see the “horse library”. Oh, yes. It’s here!",
+                "translation": "喜欢。书带给我快乐。看，马背图书馆来啦！哇，真的来了！"
+              },
+              {
+                "role": "Boy",
+                "text": "I'm so happy. The library brings not only books but also hope.",
+                "translation": "我特别开心。这个图书馆带来的不只是书籍，还有希望。"
               }
             ]
           },
@@ -2622,34 +2657,39 @@
             "unit": "Unit 3 We love reading (Speed up)",
             "content": [
               {
-                "role": "Lily",
-                "text": "This is my book report. The book is The Secret Garden.",
-                "translation": "这是我的读书报告。书名是《秘密花园》。"
+                "role": "Student",
+                "text": "Book report: The Secret Garden. Title: The Secret Garden. Writer: Frances Hodgson Burnett.",
+                "translation": "读书报告：《秘密花园》。书名：《秘密花园》。作者：弗朗西斯·霍奇森·伯内特。"
               },
               {
-                "role": "Lily",
-                "text": "The writer is Frances Hodgson Burnett.",
-                "translation": "作者是弗朗西丝·霍奇森·伯内特。"
+                "role": "Student",
+                "text": "Mary was a 10-year-old girl. She lost her parents and had to live with her uncle. But her uncle was often away. Her cousin Colin was ill in bed.",
+                "translation": "玛丽是一个十岁的女孩。她失去了父母，不得不和舅舅一起生活。但舅舅经常不在家，表哥科林卧病在床。"
               },
               {
-                "role": "Lily",
-                "text": "Mary finds a secret garden in her uncle's big house.",
-                "translation": "玛丽在叔叔的大房子里发现了一座秘密花园。"
+                "role": "Student",
+                "text": "Mary didn't care about others and was often angry. She was unhappy in the new place.",
+                "translation": "玛丽不关心别人，经常发脾气，在新地方过得不开心。"
               },
               {
-                "role": "Lily",
-                "text": "She and her friends water the plants and take care of the garden.",
-                "translation": "她和朋友们给植物浇水，悉心照料花园。"
+                "role": "Student",
+                "text": "One day she found an old garden. There she met a new friend. His name was Dickon. They worked together to bring the garden back to life.",
+                "translation": "有一天，她发现了一座老旧的花园。在那里她认识了新朋友迪肯。他们一起努力，让花园重焕生机。"
               },
               {
-                "role": "Lily",
-                "text": "The garden becomes beautiful, and Mary becomes happy and kind.",
-                "translation": "花园变得美丽，玛丽也变得快乐又善良。"
+                "role": "Student",
+                "text": "Mary slowly became friendly and kind. She also helped Colin to get well.",
+                "translation": "玛丽慢慢变得友善温和，她还帮助科林恢复了健康。"
               },
               {
-                "role": "Lily",
-                "text": "My favourite part is when the garden opens. I love this book. Books can make us grow.",
-                "translation": "我最喜欢花园打开的那一段。我爱这本书，书能让我们成长。"
+                "role": "Student",
+                "text": "Do you like this book? Yes, I do. I give the book 9 out of 10. It’s a great book about friends, love and nature.",
+                "translation": "你喜欢这本书吗？是的，我喜欢。我给这本书打 9 分（满分 10 分）。这是一本关于友谊、爱和大自然的好书。"
+              },
+              {
+                "role": "Student",
+                "text": "What is your favourite part of the book? I love the words about flowers and trees in the book. They are beautiful.",
+                "translation": "你最喜欢书中的哪个部分？我喜欢书中描写花草树木的段落，写得很美。"
               }
             ]
           }
@@ -2659,34 +2699,34 @@
             "unit": "Unit 4 Back in time (Start up)",
             "content": [
               {
-                "role": "Xiaoxiao",
-                "text": "Today I visited the National Museum of China. What a surprise!",
-                "translation": "今天我参观了中国国家博物馆，真是个惊喜！"
+                "role": "Girl",
+                "text": "I went to the National Museum of China yesterday. I saw an ancient dumpling from Xinjiang! It looks just like dumplings today.",
+                "translation": "我昨天去了中国国家博物馆。我看到了一个来自新疆的古代饺子！它看起来就和今天的饺子一样。"
               },
               {
-                "role": "Xiaoxiao",
-                "text": "I saw dumplings in a glass case! They were from the Tang Dynasty.",
-                "translation": "我在玻璃展柜里看到了饺子！它们是唐代的。"
+                "role": "Girl",
+                "text": "What did ancient people put in it? No one knows for sure.",
+                "translation": "古代人在里面放了什么？没人确切知道。"
               },
               {
-                "role": "Xiaoxiao",
-                "text": "The dumplings were found in Xinjiang. They are more than 1,000 years old.",
-                "translation": "这些饺子出土于新疆，已经有一千多年历史了。"
+                "role": "Girl",
+                "text": "The dumpling is from the Tang Dynasty. What does this mean? People ate dumplings over 1,000 years ago!",
+                "translation": "这个饺子来自唐朝。这意味着什么呢？一千多年前人们就吃饺子了！"
               },
               {
-                "role": "Xiaoxiao",
-                "text": "They look like today's dumplings — same shape, with lovely little ears.",
-                "translation": "它们和今天的饺子很像——一样的形状，还有可爱的小花边。"
+                "role": "Girl",
+                "text": "But how did dumplings come to Xinjiang? At that time, Xinjiang was an important place in China.",
+                "translation": "但是饺子是怎么传到新疆的呢？当时，新疆是中国的一个重要地方。"
               },
               {
-                "role": "Xiaoxiao",
-                "text": "People long ago ate dumplings, too.",
-                "translation": "很久以前的人们也吃饺子呢。"
+                "role": "Girl",
+                "text": "People in central China went there by the ancient Silk Road. They brought dumplings to Xinjiang.",
+                "translation": "中原的人们沿着古丝绸之路去那里，把饺子带到了新疆。"
               },
               {
-                "role": "Xiaoxiao",
-                "text": "How clever our ancestors were! I'm proud of our history.",
-                "translation": "我们的祖先多么有智慧啊！我为我们的历史感到自豪。"
+                "role": "Girl",
+                "text": "People ate dumplings so long ago! How interesting!",
+                "translation": "那么久以前人们就吃饺子了！多么有趣啊！"
               }
             ]
           },
@@ -2695,33 +2735,23 @@
             "content": [
               {
                 "role": "Samuel Pepys",
-                "text": "2nd September 1666. I bought a new pocket watch and a pair of glasses today.",
-                "translation": "1666年9月2日。今天我买了一块新怀表和一副眼镜。"
+                "text": "Wednesday, 7 February. Watches are so expensive. Most people don’t have one. This morning, I bought my very first watch. From now on, I will always know the time!",
+                "translation": "2月7日，星期三。手表太贵了，大多数人都没有。今天早上，我买了我的第一块手表。从现在起，我随时都能知道时间了！"
               },
               {
                 "role": "Samuel Pepys",
-                "text": "At night, I saw a fire in a bakery on Pudding Lane.",
-                "translation": "夜里，我看到布丁巷的一家面包房着火了。"
+                "text": "Friday, 16 March. Yesterday, I bought a pair of glasses. I put them on, then I took a boat to work. And I could see all the ships on the River Thames! The river was busy.",
+                "translation": "3月16日，星期五。昨天我买了一副眼镜。我戴上它，然后乘船去上班。我能看到泰晤士河上的所有船只！这条河很繁忙。"
               },
               {
                 "role": "Samuel Pepys",
-                "text": "The fire grew bigger and bigger. It burned for four days!",
-                "translation": "火越烧越大，烧了整整四天！"
+                "text": "Sunday, 2 September. A great fire started in London this morning! The fire is now growing very quickly. People are pulling down houses in front of the fire to stop it. But it’s still moving very fast.",
+                "translation": "9月2日，星期日。今天早上伦敦发生了一场大火！火势现在蔓延得非常快。人们正在火头前面推倒房屋，想阻止火势。但它仍然蔓延得很快。"
               },
               {
                 "role": "Samuel Pepys",
-                "text": "Many houses fell down. People took their things and left the city.",
-                "translation": "许多房子倒了，人们带着自己的东西离开了城市。"
-              },
-              {
-                "role": "Samuel Pepys",
-                "text": "I wrote everything in my diary — the fire, the people and the city.",
-                "translation": "我把一切都写进了日记——大火、人们和这座城市。"
-              },
-              {
-                "role": "Samuel Pepys",
-                "text": "Now people can read my diary and learn about those days.",
-                "translation": "现在人们可以读我的日记，了解那个时代的生活。"
+                "text": "Monday, 3 September. I dug a hole in my garden. I put some cheese from Italy into it! It’s expensive. I hope it is safe from the fire.",
+                "translation": "9月3日，星期一。我在花园里挖了一个洞，把一些意大利奶酪放了进去！它很贵。我希望它能免受火灾。"
               }
             ]
           }
@@ -2731,44 +2761,99 @@
             "unit": "Unit 5 Work it out (Start up)",
             "content": [
               {
+                "role": "Narrator",
+                "text": "On Monday",
+                "translation": "星期一"
+              },
+              {
+                "role": "Daming",
+                "text": "What are you doing, Mum?",
+                "translation": "妈妈，您在做什么？"
+              },
+              {
                 "role": "Mum",
-                "text": "Oh no! I lost my ring. I put it on the table.",
-                "translation": "哦不！我的戒指丢了，我明明放在桌子上的。"
+                "text": "I'm looking for my ring. I can't find it.",
+                "translation": "我在找我的戒指。我找不到它了。"
+              },
+              {
+                "role": "Daming",
+                "text": "Where did you put it?",
+                "translation": "您把它放在哪里了？"
+              },
+              {
+                "role": "Mum",
+                "text": "I put it on the desk this morning.",
+                "translation": "我今天早上把它放在桌子上了。"
+              },
+              {
+                "role": "Narrator",
+                "text": "On Wednesday",
+                "translation": "星期三"
+              },
+              {
+                "role": "Daming",
+                "text": "Are you ready to go, Dad?",
+                "translation": "爸爸，您准备好出发了吗？"
               },
               {
                 "role": "Dad",
-                "text": "I lost my car keys, too. They were on the sofa.",
-                "translation": "我的车钥匙也不见了，它们刚才还在沙发上。"
+                "text": "No, I can't find my car key.",
+                "translation": "没有，我找不到我的车钥匙了。"
               },
               {
                 "role": "Daming",
-                "text": "My coins were in my schoolbag. Now they're gone!",
-                "translation": "我的硬币在书包里，现在也不见了！"
+                "text": "Where was it?",
+                "translation": "它原本在哪里？"
+              },
+              {
+                "role": "Dad",
+                "text": "It was on the desk.",
+                "translation": "它在桌子上。"
+              },
+              {
+                "role": "Narrator",
+                "text": "On Friday",
+                "translation": "星期五"
+              },
+              {
+                "role": "Dad",
+                "text": "Daming, are you OK?",
+                "translation": "大明，你还好吗？"
               },
               {
                 "role": "Daming",
-                "text": "Let me look around the house carefully.",
-                "translation": "让我仔细在房子里找一找。"
+                "text": "I can't find my coins. Did you see them?",
+                "translation": "我找不到我的硬币了。您看到它们了吗？"
+              },
+              {
+                "role": "Dad",
+                "text": "No, I didn't.",
+                "translation": "没有，我没看到。"
               },
               {
                 "role": "Daming",
-                "text": "Look! Feathers on the table, leaves on the sofa, and little bird tracks!",
-                "translation": "看！桌上有羽毛，沙发上有树叶，还有小小的鸟爪印！"
+                "text": "First, Mum's ring. Then, Dad's key. Now, my coins. What's going on?",
+                "translation": "先是妈妈的戒指，然后爸爸的钥匙，现在是我的硬币。这是怎么回事？"
               },
               {
                 "role": "Daming",
-                "text": "I worked it out. A bird took all the things!",
-                "translation": "我推理出来了——是一只鸟把东西全叼走了！"
+                "text": "I know. Come over here, everyone!",
+                "translation": "我知道了。大家到这儿来！"
+              },
+              {
+                "role": "Dad",
+                "text": "What for?",
+                "translation": "干什么？"
               },
               {
                 "role": "Daming",
-                "text": "Look, they're all in the tree outside. Here's your ring, Mum!",
-                "translation": "看，它们都在外面的树上。妈妈，这是你的戒指！"
+                "text": "Look! The lost things are all there.",
+                "translation": "看！丢失的东西都在那里。"
               },
               {
-                "role": "Mum",
-                "text": "Thank you, Daming! You worked it out!",
-                "translation": "谢谢你，大明！你把谜题解开啦！"
+                "role": "Mum & Dad",
+                "text": "Well done, Daming!",
+                "translation": "大明，你做得好！"
               }
             ]
           },
@@ -2776,39 +2861,44 @@
             "unit": "Unit 5 Work it out (Speed up)",
             "content": [
               {
+                "role": "Narrator",
+                "text": "Detective Sharp came to the prison. The police showed him a letter from Jim Burton.",
+                "translation": "夏普侦探来到监狱。警察给他看了一封吉姆·伯顿写的信。"
+              },
+              {
+                "role": "Police officer",
+                "text": "What did he do?",
+                "translation": "他做了什么？"
+              },
+              {
+                "role": "Police officer",
+                "text": "He stole many jewels. But we didn't find the jewels on him.",
+                "translation": "他偷了很多珠宝。但我们在他身上没有找到珠宝。"
+              },
+              {
                 "role": "Detective Sharp",
-                "text": "I'm Detective Sharp. The police caught Jim Burton, but they didn't find the jewels.",
-                "translation": "我是夏普侦探。警察抓住了小偷吉姆·伯顿，但没有找到珠宝。"
+                "text": "Let's see the letter.",
+                "translation": "让我们看看这封信。"
               },
               {
                 "role": "Jim",
-                "text": "You can't find them. Ha ha!",
-                "translation": "你们找不到的，哈哈！"
-              },
-              {
-                "role": "Detective Sharp",
-                "text": "Jim wrote a letter to his wife. Let me read it.",
-                "translation": "吉姆给妻子写了一封信，让我读一读。"
-              },
-              {
-                "role": "Detective Sharp",
-                "text": "\"Dear Rose, the weather is warm here. The flowers are tall. Meet me under them.\"",
-                "translation": "\"亲爱的罗丝，这里天气很暖和，花儿长得很高，到花儿下面来见我。\""
-              },
-              {
-                "role": "Detective Sharp",
-                "text": "Warm... tall flowers... The flowers are by the old wall in the park!",
-                "translation": "暖和……高高的花儿……是公园旧墙边的花丛！"
-              },
-              {
-                "role": "Detective Sharp",
-                "text": "The police dug under the flowers — and there were the jewels!",
-                "translation": "警察在花丛下挖了起来——珠宝就在那里！"
+                "text": "Dear Susan, I hope you’re happy after reading these sweet words!",
+                "translation": "亲爱的苏珊：我希望你读完这些甜言蜜语后能开心！"
               },
               {
                 "role": "Jim",
-                "text": "Oh no! You worked it out!",
-                "translation": "哦不！被你推理出来了！"
+                "text": "I miss you and our girls, my sweet. There is so much to say. You are all so sweet. Are you happy these days? Your eyes are bright and sweet. Jewels can’t be so shiny. You look sweet in your green dress! You always look so sweet! The girls look happy in our sweet garden. Love, Jim",
+                "translation": "我想你和我们的女儿们，我的宝贝。有太多话想说。你们都那么甜美。这些天你开心吗？你的眼睛明亮又甜美。珠宝都没这么闪亮。你穿绿色连衣裙看起来很甜美！你总是那么甜美！女儿们在我们甜蜜的花园里看起来很开心。爱你的，吉姆"
+              },
+              {
+                "role": "Detective Sharp",
+                "text": "There is something wrong with the letter. But I just don't know what it is.",
+                "translation": "这封信有点问题。但我就是不知道问题在哪儿。"
+              },
+              {
+                "role": "Detective Sharp",
+                "text": "Aha, I see! Don’t give the letter to his wife. We can get the jewels back now!",
+                "translation": "啊哈，我明白了！别把这封信交给他的妻子。我们现在就能把珠宝找回来！"
               }
             ]
           }
@@ -2819,33 +2909,33 @@
             "content": [
               {
                 "role": "David",
-                "text": "Dear Mum and Dad, Grandpa and I are travelling in China. It is amazing!",
-                "translation": "亲爱的爸爸妈妈，我和爷爷正在中国旅行，太精彩了！"
+                "text": "Dear Mum and Dad, It’s the second day in China for Grandpa and me. I had a good time yesterday.",
+                "translation": "亲爱的爸爸妈妈：我和爷爷来中国已经第二天了。昨天我玩得很开心。"
               },
               {
                 "role": "David",
-                "text": "We took the high-speed train from Beijing to Xi'an. It goes 350 kilometres an hour!",
-                "translation": "我们乘高铁从北京到西安，时速350公里！"
+                "text": "The high-speed train was a surprise! It was around 15 hours from Beijing to Xi’an about 30 years ago. Grandpa still remembers that. He had a long journey then.",
+                "translation": "高铁是一个惊喜！大约30年前，从北京到西安要花大约15个小时。爷爷还记得那件事，那时他有一段很长的旅程。"
               },
               {
                 "role": "David",
-                "text": "Grandpa says his first train was slow and noisy.",
-                "translation": "爷爷说他第一次坐的火车又慢又吵。"
+                "text": "But now it takes only a little over four hours. We left Beijing in the morning and got to Xi’an in time for lunch.",
+                "translation": "但现在只需要四个多小时。我们早上离开北京，赶上了西安的午饭。"
               },
               {
                 "role": "David",
-                "text": "The new train is fast and quiet. We got there in four hours.",
-                "translation": "新的高铁又快又安静，我们四个小时就到了。"
+                "text": "The “Chinese hamburger” tasted very good! Grandpa said, “It’s still the same taste!”",
+                "translation": "“中国汉堡”尝起来非常好！爷爷说：“味道还是一样的！”"
               },
               {
                 "role": "David",
-                "text": "In Xi'an, we ate lots of yummy food — noodles and Roujiamo.",
-                "translation": "在西安，我们吃了好多美食——面条和肉夹馍。"
+                "text": "Xi’an also surprised me. It was an old city in Grandpa’s photos. But now it’s very different.",
+                "translation": "西安也让我很惊讶。在爷爷的照片里，它是一座古老的城市。但现在它非常不同了。"
               },
               {
                 "role": "David",
-                "text": "China is changing so fast. I love this trip! See you soon. Love, David.",
-                "translation": "中国变化真快，我爱这次旅行！很快见。爱你们的大卫。"
+                "text": "We are going to Chengdu tomorrow, also by the high-speed train. I can’t wait! With love, David",
+                "translation": "我们明天还要坐高铁去成都。我等不及了！爱你们的，戴维"
               }
             ]
           },
@@ -2853,39 +2943,39 @@
             "unit": "Unit 6 Then and now (Speed up)",
             "content": [
               {
-                "role": "Teacher",
-                "text": "Let me tell you about Yang Shanzhou. He was a great man.",
-                "translation": "我给大家讲讲杨善洲爷爷，他是一位了不起的人。"
+                "role": "Narrator",
+                "text": "In the Daliang Mountains, tall green trees grow. Birds sing all around. But about 40 years ago, it was very different there.",
+                "translation": "在大亮山，高大的绿树生长着，鸟儿在四周歌唱。但大约40年前，那里完全不是这样。"
               },
               {
-                "role": "Teacher",
-                "text": "About 40 years ago, there weren't many trees or birds in the Daliang Mountains.",
-                "translation": "大约40年前，大亮山上没有多少树，也没有鸟。"
+                "role": "Narrator",
+                "text": "It changed because of Yang Shanzhou. In 1988, at the age of 61, he gave up a good life in the city.",
+                "translation": "这种变化是因为杨善洲。1988年，61岁的他放弃了城市里的美好生活。"
               },
               {
-                "role": "Teacher",
-                "text": "Yang Shanzhou gave up a good life in the city and moved to the mountains.",
-                "translation": "杨善洲爷爷放弃了城市里优越的生活，搬到了大亮山。"
+                "role": "Yang Shanzhou",
+                "text": "I want to do something for my hometown.",
+                "translation": "我想为我的家乡做点什么。"
               },
               {
-                "role": "Teacher",
-                "text": "He planted trees day after day, year after year.",
-                "translation": "他日复一日、年复一年地种树。"
+                "role": "Narrator",
+                "text": "He moved to the mountains and worked hard to make them green. Life was very hard, but he never gave up.",
+                "translation": "他搬到山里，努力让荒山变绿。生活很艰难，但他从未放弃。"
               },
               {
-                "role": "Teacher",
-                "text": "He worked there for 22 years. He even broke his left leg at the age of 72.",
-                "translation": "他在那里干了22年，72岁时还摔断了左腿。"
+                "role": "Narrator",
+                "text": "He broke his left leg at the age of 72. But he was back to work after only half a year.",
+                "translation": "他72岁时摔断了左腿。但仅仅半年后，他就回去工作了。"
               },
               {
-                "role": "Teacher",
-                "text": "After 22 years, the barren mountains became a green world with over 10 million trees.",
-                "translation": "22年后，荒山变成了绿色的世界，有了一千多万棵树。"
+                "role": "Narrator",
+                "text": "After 22 years, the Daliang Mountains became a green world, with over 10 million trees.",
+                "translation": "22年后，大亮山变成了一个绿色的世界，有一千多万棵树。"
               },
               {
-                "role": "Student",
-                "text": "I want to be like him and work hard to make the world better!",
-                "translation": "我想像他一样，努力让世界变得更美好！"
+                "role": "Narrator",
+                "text": "By planting trees, Yang Shanzhou also planted hope. His hard work gave people a brighter and greener life.",
+                "translation": "通过种树，杨善洲也种下了希望。他的辛勤付出给了人们更光明、更绿色的生活。"
               }
             ]
           }
