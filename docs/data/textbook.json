@@ -2486,39 +2486,89 @@
       "unit": "Unit 5 School events (Start up)",
       "content": [
        {
-        "role": "Daming",
-        "text": "These are my works for the Art Festival.",
-        "translation": "这些是我为艺术节准备的作品。"
+        "role": "Amy",
+        "text": "I love the Art Festival!",
+        "translation": "我喜欢艺术节！"
        },
        {
         "role": "Sam",
-        "text": "Look! That's a cow. There are horns on it.",
-        "translation": "看！那是一头牛。上面有角。"
+        "text": "Me too! There are so many things to see!",
+        "translation": "我也是！有好多东西可以看！"
        },
        {
-        "role": "Amy",
-        "text": "That's rain. Those are raindrops.",
-        "translation": "那是雨。那些是雨点。"
-       },
-       {
-        "role": "Amy",
-        "text": "Are you drawing?",
-        "translation": "你在画画吗？"
+        "role": "Sam",
+        "text": "Are you drawing, Daming?",
+        "translation": "大明，你在画画吗？"
        },
        {
         "role": "Daming",
         "text": "No, I'm writing Chinese words.",
-        "translation": "不，我在写汉字。"
+        "translation": "没有，我在写汉字。"
        },
        {
         "role": "Amy",
-        "text": "Are there more?",
-        "translation": "还有更多吗？"
+        "text": "What are they?",
+        "translation": "它们是什么字？"
+       },
+       {
+        "role": "Daming",
+        "text": "This is an animal. Look! There are horns.",
+        "translation": "这个字代表一种动物。你看！上面有角。"
+       },
+       {
+        "role": "Amy",
+        "text": "Is it a cow?",
+        "translation": "是“牛”吗？"
+       },
+       {
+        "role": "Daming",
+        "text": "Yes!",
+        "translation": "对！"
+       },
+       {
+        "role": "Amy",
+        "text": "There are small dots on it.",
+        "translation": "这个字上面有小小的点。"
+       },
+       {
+        "role": "Sam",
+        "text": "They look like raindrops. Is it rain?",
+        "translation": "它们看起来像雨滴。是“雨”字吗？"
+       },
+       {
+        "role": "Daming",
+        "text": "Well done!",
+        "translation": "答对啦！"
+       },
+       {
+        "role": "Sam",
+        "text": "Are there more? I want to learn Chinese writing.",
+        "translation": "还有别的字吗？我想学写汉字。"
        },
        {
         "role": "Daming",
         "text": "Yes, there are.",
-        "translation": "是的，有。"
+        "translation": "有的。"
+       },
+       {
+        "role": "Sam",
+        "text": "Can you teach us?",
+        "translation": "你能教我们吗？"
+       },
+       {
+        "role": "Daming",
+        "text": "Of course. Let's write together.",
+        "translation": "当然可以。我们一起写吧。"
+       },
+       {
+        "role": "Sam",
+        "text": "This is fun.",
+        "translation": "这太有意思了。"
+       },
+       {
+        "role": "Daming",
+        "text": "Chinese writing is an art!",
+        "translation": "汉字书写是一门艺术！"
        }
       ]
      },
@@ -2930,32 +2980,37 @@
        {
         "role": "Narrator",
         "text": "For Duoduo, Tutu is his best and only friend.",
-        "translation": "对多多来说，图图是他最好、也是唯一的朋友。"
+        "translation": "对多多来说，图图是他最好也是唯一的朋友。"
        },
        {
         "role": "Narrator",
         "text": "He wants to play with Tutu, but Tutu is playing with two other boys.",
-        "translation": "他想和图图一起玩，但图图正和另外两个男孩玩。"
+        "translation": "他想和图图一起玩，可图图正在和另外两个男孩玩。"
        },
        {
         "role": "Narrator",
         "text": "This makes Duoduo unhappy.",
-        "translation": "这让多多不开心。"
+        "translation": "这让多多很不开心。"
        },
        {
         "role": "Narrator",
         "text": "Tutu asks Duoduo to join them but Duoduo just walks away.",
-        "translation": "图图叫多多一起玩，但多多只是走开了。"
+        "translation": "图图邀请多多加入他们，但多多却走开了。"
        },
        {
         "role": "Narrator",
         "text": "After a week, Duoduo feels sad and he misses Tutu.",
-        "translation": "一周后，多多感到难过，他很想念图图。"
+        "translation": "一周过去了，多多感到难过，他很想念图图。"
        },
        {
-        "role": "Duoduo",
-        "text": "But Tutu may not miss me because he has new friends.",
-        "translation": "但是图图可能不想我，因为他有了新朋友。"
+        "role": "Narrator",
+        "text": "“But Tutu may not miss me because he has new friends,” Duoduo thinks.",
+        "translation": "“可图图也许不会想我，因为他有新朋友了，”多多心想。"
+       },
+       {
+        "role": "Narrator",
+        "text": "Just then, Tutu sits down next to him.",
+        "translation": "就在这时，图图在他身边坐了下来。"
        },
        {
         "role": "Tutu",
@@ -2969,18 +3024,28 @@
        },
        {
         "role": "Tutu",
-        "text": "Yes, I have new friends, but you're still my friend.",
-        "translation": "是的，我有新朋友，但你仍然是我的朋友。"
+        "text": "Why do you say that?",
+        "translation": "你为什么这么说呢？"
        },
        {
         "role": "Tutu",
-        "text": "Old friends and new friends are both very nice. Join us and they can be your friends, too.",
-        "translation": "老朋友和新朋友都很好。加入我们吧，他们也会成为你的朋友。"
+        "text": "Yes, I have new friends, but you're still my friend.",
+        "translation": "没错，我有了新朋友，但你仍然是我的朋友。"
+       },
+       {
+        "role": "Tutu",
+        "text": "Old friends and new friends are both very nice.",
+        "translation": "老朋友和新朋友都很好。"
+       },
+       {
+        "role": "Tutu",
+        "text": "Join us and they can be your friends, too.",
+        "translation": "加入我们吧，他们也能成为你的朋友。"
        },
        {
         "role": "Narrator",
         "text": "Now Duoduo has three best friends!",
-        "translation": "现在多多有了三个最好的朋友！"
+        "translation": "现在多多有三个最好的朋友啦！"
        }
       ]
      },
@@ -2990,17 +3055,22 @@
        {
         "role": "Mum Bird",
         "text": "You can't be friends with Dog because you're so different.",
-        "translation": "你不能和狗狗做朋友，因为你们太不一样了。"
+        "translation": "鸟妈妈：你不能和小狗做朋友，因为你们太不一样了。"
        },
        {
         "role": "Dad Dog",
         "text": "You can't be friends with Bird because you're so different.",
-        "translation": "你不能和小鸟做朋友，因为你们太不一样了。"
+        "translation": "狗爸爸：你不能和小鸟做朋友，因为你们太不一样了。"
        },
        {
         "role": "Bird",
-        "text": "Let's show them we aren't different. Then we can be friends.",
-        "translation": "让我们证明我们并没有不同。那样我们就能做朋友了。"
+        "text": "Let's show them we aren't different.",
+        "translation": "我们要证明给他们看，我们并没有那么不一样。"
+       },
+       {
+        "role": "Bird",
+        "text": "Then we can be friends.",
+        "translation": "这样我们就能做朋友了。"
        },
        {
         "role": "Dog",
@@ -3009,33 +3079,48 @@
        },
        {
         "role": "Bird",
-        "text": "I am small and you are big. I eat seeds and you eat meat. I fly and you run.",
-        "translation": "我小你大。我吃种子你吃肉。我飞你跑。"
+        "text": "I am small and you are big.",
+        "translation": "我个子小，你个子大。"
+       },
+       {
+        "role": "Bird",
+        "text": "I eat seeds and you eat meat.",
+        "translation": "我吃种子，你吃肉。"
+       },
+       {
+        "role": "Bird",
+        "text": "I fly and you run.",
+        "translation": "我会飞，你会跑。"
        },
        {
         "role": "Bird",
         "text": "Er, what do we share?",
-        "translation": "呃，我们有什么共同的？"
+        "translation": "呃……那我们有什么共同点呢？"
+       },
+       {
+        "role": "Rabbit",
+        "text": "Hey, why are you looking worried?",
+        "translation": "嘿，你们怎么看起来愁眉苦脸的？"
        },
        {
         "role": "Dog",
         "text": "We want to be friends but we can't. We are so different.",
-        "translation": "我们想成为朋友，但做不到。我们太不一样了。"
+        "translation": "我们想做朋友，可做不了。我们太不一样了。"
        },
        {
         "role": "Rabbit",
         "text": "But we are friends because we are happy together.",
-        "translation": "但我们能成为朋友，因为我们在一起很开心。"
+        "translation": "可我们就是朋友啊，因为我们在一起很开心呀。"
        },
        {
         "role": "Rabbit",
         "text": "Friends play together and friends share with each other. That's the key.",
-        "translation": "朋友一起玩耍，朋友互相分享。这才是关键。"
+        "translation": "朋友就是一起玩耍、互相分享。这才是关键。"
        },
        {
         "role": "Bird and Dog",
         "text": "Let's show this to our parents. Then we can be friends — the best friends!",
-        "translation": "让我们把这一点展示给我们的父母。那样我们就能成为朋友——最好的朋友！"
+        "translation": "我们把这个告诉爸爸妈妈吧。这样我们就能做朋友了——做最好的朋友！"
        }
       ]
      }
@@ -3138,23 +3223,23 @@
       "content": [
        {
         "role": "Daming",
-        "text": "What is Dad making?",
-        "translation": "爸爸在做什么？"
+        "text": "This robot is so cool!",
+        "translation": "这个机器人太酷了！"
        },
        {
         "role": "Dad",
-        "text": "I am making a robot. I still need some time to get it to work. It will help people a lot.",
-        "translation": "我在做一个机器人。我还需要一些时间让它运转起来。它会帮人们很多忙。"
+        "text": "I still need some time to get it to work. It will help people a lot.",
+        "translation": "我还需要一些时间让它正常工作。它会帮人们很多忙。"
        },
        {
         "role": "Daming",
         "text": "What will it do for people?",
-        "translation": "它会为人们做什么？"
+        "translation": "它会为人们做些什么？"
        },
        {
         "role": "Dad",
         "text": "A lot of things.",
-        "translation": "很多事。"
+        "translation": "很多事情。"
        },
        {
         "role": "Daming",
@@ -3163,18 +3248,18 @@
        },
        {
         "role": "Dad",
-        "text": "Yes, it will. We will have more free time.",
-        "translation": "是的，会的。我们会有更多空闲时间。"
+        "text": "Yes. We will have more free time.",
+        "translation": "会的。我们将会有更多空闲时间。"
        },
        {
         "role": "Daming",
         "text": "Great. Will it take care of pets?",
-        "translation": "太好了。它会照顾宠物吗？"
+        "translation": "太好了。它会照看宠物吗？"
        },
        {
         "role": "Dad",
-        "text": "Yes, it will. It will keep an eye on the pets all day.",
-        "translation": "是的，会的。它会整天照看宠物。"
+        "text": "Yes, it will keep an eye on the pets all day.",
+        "translation": "会的，它会整天照看宠物。"
        },
        {
         "role": "Daming",
@@ -3184,17 +3269,17 @@
        {
         "role": "Dad",
         "text": "Yes, it will know all kinds of games and sports.",
-        "translation": "会的，它懂各种游戏和运动。"
+        "translation": "会的，它会各种游戏和运动。"
        },
        {
         "role": "Daming",
         "text": "Then we'll have a lot of fun. Well... will it do my homework?",
-        "translation": "那我们会玩得很开心。嗯……它会做我的作业吗？"
+        "translation": "那我们会有很多乐趣。嗯……它会帮我做家庭作业吗？"
        },
        {
         "role": "Dad",
         "text": "No, it won't!",
-        "translation": "不，不会！"
+        "translation": "不会！"
        }
       ]
      },
@@ -3202,34 +3287,69 @@
       "unit": "Unit 5 Look into the future (Speed up)",
       "content": [
        {
-        "role": "Narrator",
-        "text": "Where will people live in the future?",
-        "translation": "未来人们会住在哪里？"
+        "role": "Glass balls",
+        "text": "This city will be under the sea.",
+        "translation": "这座城市将建在海底。"
        },
        {
-        "role": "Narrator",
-        "text": "People will live on the moon.",
-        "translation": "人们会住在月球上。"
+        "role": "Glass balls",
+        "text": "People will live in glass balls.",
+        "translation": "人们将住在玻璃球里。"
        },
        {
-        "role": "Narrator",
-        "text": "We will travel to Mars in 2080.",
-        "translation": "2080年我们会去火星旅行。"
+        "role": "Glass balls",
+        "text": "Sea animals will be all around the houses.",
+        "translation": "海洋动物会围绕在房子四周。"
        },
        {
-        "role": "Narrator",
-        "text": "The city will be under the sea.",
-        "translation": "城市会建在海底。"
+        "role": "Glass balls",
+        "text": "There will be special farms under the sea.",
+        "translation": "海底将会有特别的农场。"
        },
        {
-        "role": "Narrator",
-        "text": "The future of our city is bright.",
-        "translation": "我们城市的未来是光明的。"
+        "role": "Glass balls",
+        "text": "A special glass box will take people up to the land. It will go very fast!",
+        "translation": "一个特制的玻璃箱会把人们送到陆地上。它跑得非常快！"
        },
        {
-        "role": "Narrator",
-        "text": "We will use 3-D printing to make food.",
-        "translation": "我们会用3D打印来做食物。"
+        "role": "Glass balls",
+        "text": "Life under the sea will be clean, beautiful and interesting!",
+        "translation": "海底生活将会干净、美丽又有趣！"
+       },
+       {
+        "role": "Moon garden",
+        "text": "This city will be on the moon.",
+        "translation": "这座城市将建在月球上。"
+       },
+       {
+        "role": "Moon garden",
+        "text": "It will be a very different place then.",
+        "translation": "到那时，它会是一个完全不同的地方。"
+       },
+       {
+        "role": "Moon garden",
+        "text": "Plants there will grow very big.",
+        "translation": "那里的植物会长得非常大。"
+       },
+       {
+        "role": "Moon garden",
+        "text": "People will make houses under them.",
+        "translation": "人们会在它们下面建造房屋。"
+       },
+       {
+        "role": "Moon garden",
+        "text": "They won't need to worry about food at all.",
+        "translation": "他们完全不用担心食物。"
+       },
+       {
+        "role": "Moon garden",
+        "text": "People will put on special shoes to fly around.",
+        "translation": "人们会穿上特制的鞋子四处飞行。"
+       },
+       {
+        "role": "Moon garden",
+        "text": "They will celebrate the Mid-Autumn Festival right on the moon!",
+        "translation": "他们会就在月球上庆祝中秋节！"
        }
       ]
      }
@@ -3241,7 +3361,7 @@
        {
         "role": "Daming",
         "text": "The Mid-Autumn Festival is coming. Let's make mooncakes for the animals at the zoo!",
-        "translation": "中秋节要来了。我们给动物园的动物做月饼吧！"
+        "translation": "中秋节快到了。我们为动物园的动物们做月饼吧！"
        },
        {
         "role": "Sam, Amy and Lingling",
@@ -3250,18 +3370,18 @@
        },
        {
         "role": "Zookeeper",
-        "text": "Hello, children! What are you going to make?",
-        "translation": "孩子们，你们好！你们打算做什么？"
+        "text": "Hello, children! What mooncakes are you going to make?",
+        "translation": "孩子们好！你们打算做什么月饼？"
        },
        {
         "role": "Sam",
         "text": "I'm going to make meat mooncakes for the tigers.",
-        "translation": "我要给老虎做肉馅月饼。"
+        "translation": "我打算给老虎做肉馅月饼。"
        },
        {
         "role": "Lingling",
         "text": "I'm going to make bamboo mooncakes for the pandas.",
-        "translation": "我要给熊猫做竹子馅月饼。"
+        "translation": "我打算给熊猫做竹子月饼。"
        },
        {
         "role": "Sam",
@@ -3270,18 +3390,38 @@
        },
        {
         "role": "Amy",
-        "text": "I'm going to make carrot mooncakes for the rabbits.",
-        "translation": "我要给兔子做胡萝卜馅月饼。"
+        "text": "I'm going to make mooncakes for the giraffes. I'll use leaves and carrots.",
+        "translation": "我打算给长颈鹿做月饼。我会用树叶和胡萝卜。"
        },
        {
-        "role": "Amy",
-        "text": "Are you going to make flower mooncakes for the giraffes?",
-        "translation": "你要给长颈鹿做花馅月饼吗？"
+        "role": "Sam",
+        "text": "And Daming?",
+        "translation": "那大明呢？"
        },
        {
-        "role": "Lingling",
-        "text": "They won't eat meat mooncakes. They will be very big!",
-        "translation": "它们不吃肉馅月饼。月饼会很大的！"
+        "role": "Daming",
+        "text": "I want to make banana mooncakes for the elephants.",
+        "translation": "我想给大象做香蕉月饼。"
+       },
+       {
+        "role": "Sam",
+        "text": "They will be very big!",
+        "translation": "它们会非常大！"
+       },
+       {
+        "role": "Daming",
+        "text": "They love our mooncakes!",
+        "translation": "它们喜欢我们的月饼！"
+       },
+       {
+        "role": "Zookeeper",
+        "text": "Thank you, children! It's a happy Mid-Autumn Festival for the animals!",
+        "translation": "谢谢你们，孩子们！对动物们来说，这是一个快乐的中秋节！"
+       },
+       {
+        "role": "Zookeeper",
+        "text": "And Happy Mid-Autumn Festival to you, too!",
+        "translation": "也祝你们中秋节快乐！"
        }
       ]
      },
@@ -3289,34 +3429,79 @@
       "unit": "Unit 6 Enjoy the festivals (Speed up)",
       "content": [
        {
-        "role": "Narrator",
-        "text": "What do you do at the Spring Festival?",
-        "translation": "你在春节做什么？"
+        "role": "Barbapapa",
+        "text": "Christmas is coming!",
+        "translation": "圣诞节就要到了！"
        },
        {
-        "role": "Narrator",
-        "text": "We eat dumplings and visit our relatives.",
-        "translation": "我们吃饺子、走亲访友。"
+        "role": "Kids",
+        "text": "But Dad, we haven't got a Christmas tree.",
+        "translation": "可是爸爸，我们还没有圣诞树。"
        },
        {
-        "role": "Narrator",
-        "text": "What do you do at the Dragon Boat Festival?",
-        "translation": "你在端午节做什么？"
+        "role": "Barbapapa",
+        "text": "I'll go to the forest and get us a tree.",
+        "translation": "我要去森林里给我们找一棵树。"
        },
        {
-        "role": "Narrator",
-        "text": "People will have dragon boat races.",
-        "translation": "人们会举行龙舟比赛。"
+        "role": "Barbapapa",
+        "text": "This one is good.",
+        "translation": "这棵不错。"
        },
        {
-        "role": "Narrator",
-        "text": "What do you do at the Lantern Festival?",
-        "translation": "你在元宵节做什么？"
+        "role": "Forest animals",
+        "text": "Please don't cut down this tree. It's our home.",
+        "translation": "请不要砍倒这棵树。这是我们的家。"
        },
        {
-        "role": "Narrator",
-        "text": "We put up lanterns and watch the lion dance.",
-        "translation": "我们挂灯笼、看舞狮。"
+        "role": "Barbapapa",
+        "text": "This one is good, too.",
+        "translation": "这棵也不错。"
+       },
+       {
+        "role": "Bear",
+        "text": "Please don't.",
+        "translation": "请不要砍。"
+       },
+       {
+        "role": "Barbapapa",
+        "text": "Why? You don't live in a tree.",
+        "translation": "为什么？你们又不住在树上。"
+       },
+       {
+        "role": "Bear",
+        "text": "But I live in the forest. Animals here need these trees.",
+        "translation": "但我住在森林里。这里的动物需要这些树。"
+       },
+       {
+        "role": "Barbapapa",
+        "text": "I see. You're right.",
+        "translation": "我明白了。你说得对。"
+       },
+       {
+        "role": "Barbapapa",
+        "text": "What should I do? The children are waiting at home.",
+        "translation": "我该怎么办？孩子们在家里等着呢。"
+       },
+       {
+        "role": "Barbapapa",
+        "text": "Oh! I have an idea!",
+        "translation": "哦！我有个主意！"
+       },
+       {
+        "role": "Barbapapa",
+        "text": "Merry Christmas, everyone!",
+        "translation": "大家圣诞快乐！"
+       },
+       {
+        "role": "Kids",
+        "text": "Dad, the Christmas tree is great!",
+        "translation": "爸爸，这棵圣诞树太棒了！"
+       },
+       {
+        "role": "Kids",
+        "text": "No one will have a tree like this. We love it, Dad!",
+        "translation": "没有人会有这样的树。我们很喜欢它，爸爸！"
        }
       ]
      }
