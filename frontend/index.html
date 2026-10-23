@@ -631,7 +631,7 @@
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.3s ease;
-      animation: mcardIn 0.28s ease both;
+      animation: mcardIn 0.28s ease var(--d, 0ms) both;
     }
     .mcard.en {
       background: linear-gradient(150deg, #e8f1ff, #d8e5ff);
@@ -650,11 +650,18 @@
       transform: translateY(-2px) scale(1.03);
     }
     .mcard.gone {
-      background: linear-gradient(150deg, #e6fbf1, #d3f5e5) !important;
+      background: linear-gradient(150deg, #dcf9ec, #bff0dc) !important;
       color: #17a06f !important;
-      opacity: 0.55;
       pointer-events: none;
-      animation: mcardPop 0.42s ease both;
+      animation: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.4) rotate(6deg);
+      transition:
+        transform 0.34s cubic-bezier(0.4, 0, 0.3, 1),
+        opacity 0.34s ease,
+        box-shadow 0.34s ease,
+        visibility 0s linear 0.34s;
     }
     .mcard.gone::after {
       content: "✓";
@@ -666,11 +673,6 @@
     }
     .mcard.wrong { border-color: #ff8a8a; animation: mcardShake 0.4s ease; }
     @keyframes mcardIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
-    @keyframes mcardPop {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.09); }
-      100% { transform: scale(1); }
-    }
     @keyframes mcardShake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-5px); }
@@ -4135,7 +4137,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         el.dataset.type = c.type;
         el.dataset.word = c.word || '';
         el.textContent = c.type === 'en' ? capitalize(String(c.text)) : c.text;
-        el.style.animationDelay = (i * 16) + 'ms';
+        el.style.setProperty('--d', (i * 16) + 'ms');
         el.addEventListener('click', function () { self.onClick(el); });
         board.appendChild(el);
       });
@@ -4175,7 +4177,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.matched++;
       this.updateHud();
       var self = this;
-      if (this.matched >= this.total) setTimeout(function () { self.finish(); }, 360);
+      if (this.matched >= this.total) setTimeout(function () { self.finish(); }, 480);
     },
 
     onMiss(a, b) {
