@@ -4124,7 +4124,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var cards = [];
       this.words.forEach(function (w) {
         cards.push({ id: w.id, type: 'en', text: w.word, word: w.word });
-        cards.push({ id: w.id, type: 'cn', text: w.chinese, word: w.word });
+        cards.push({ id: w.id, type: 'cn', text: (w.cn_short || w.chinese), word: w.word });
       });
       var n = cards.length;
       board.style.gridTemplateColumns = 'repeat(' + (n <= 6 ? 2 : 4) + ', minmax(0, 1fr))';
