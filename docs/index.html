@@ -543,6 +543,162 @@
     body.big-font .word-item-word { font-size: 21px; }
     body.big-font .word-item-chinese { font-size: 17px; }
 
+    /* ========== 单元内 · 单词消消乐 ========== */
+    .tab-bar {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .tab-bar .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 9px 2px;
+      min-height: 42px;
+      font-size: 12.5px;
+      border-radius: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .tab-bar .btn .ico { font-size: 14px; line-height: 1; }
+
+    .match-card {
+      background: #fff;
+      border: 1px solid #e8ecff;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.10);
+    }
+    .match-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .match-title { font-size: 16px; font-weight: 800; color: #3d3a86; }
+    .match-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
+    .match-restart {
+      flex: 0 0 auto;
+      border: none;
+      background: #eef2ff;
+      color: #5a54e8;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 7px 12px;
+      min-height: 32px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .match-restart:active { transform: scale(0.95); }
+
+    .match-hud { display: flex; gap: 8px; margin-top: 12px; }
+    .match-stat {
+      flex: 1;
+      background: #f7f8ff;
+      border-radius: 12px;
+      padding: 7px 4px;
+      text-align: center;
+    }
+    .match-stat span { display: block; font-size: 10.5px; color: #9aa2ba; }
+    .match-stat b { display: block; font-size: 15px; color: #4a45b8; margin-top: 2px; }
+    .match-bar {
+      height: 6px;
+      background: #eef1fb;
+      border-radius: 99px;
+      overflow: hidden;
+      margin: 10px 0 12px;
+    }
+    .match-bar i {
+      display: block;
+      height: 100%;
+      width: 0;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #4f9fff, #6c63ff);
+      transition: width 0.35s ease;
+    }
+
+    .match-board { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .mcard {
+      position: relative;
+      min-height: clamp(62px, 17vw, 84px);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6px 4px;
+      font-weight: 800;
+      line-height: 1.2;
+      word-break: break-word;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.3s ease;
+      animation: mcardIn 0.28s ease both;
+    }
+    .mcard.en {
+      background: linear-gradient(150deg, #e8f1ff, #d8e5ff);
+      color: #274b8f;
+      font-size: clamp(11px, 3.2vw, 15px);
+    }
+    .mcard.cn {
+      background: linear-gradient(150deg, #fff3e0, #ffe6c7);
+      color: #8a5310;
+      font-size: clamp(11px, 3.2vw, 15px);
+    }
+    .mcard:active { transform: scale(0.96); }
+    .mcard.sel {
+      border-color: #6c63ff;
+      box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.18);
+      transform: translateY(-2px) scale(1.03);
+    }
+    .mcard.gone {
+      background: linear-gradient(150deg, #e6fbf1, #d3f5e5) !important;
+      color: #17a06f !important;
+      opacity: 0.55;
+      pointer-events: none;
+      animation: mcardPop 0.42s ease both;
+    }
+    .mcard.gone::after {
+      content: "✓";
+      position: absolute;
+      top: 3px;
+      right: 6px;
+      font-size: 10px;
+      opacity: 0.85;
+    }
+    .mcard.wrong { border-color: #ff8a8a; animation: mcardShake 0.4s ease; }
+    @keyframes mcardIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
+    @keyframes mcardPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.09); }
+      100% { transform: scale(1); }
+    }
+    @keyframes mcardShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      60% { transform: translateX(5px); }
+      85% { transform: translateX(-3px); }
+    }
+
+    .match-tip { text-align: center; font-size: 12px; color: #a4abc4; margin-top: 12px; }
+    .match-result { text-align: center; padding: 14px 6px 4px; }
+    .match-result .mr-emoji { font-size: 46px; line-height: 1.1; }
+    .match-result .mr-title { font-size: 19px; font-weight: 800; color: #3d3a86; margin-top: 6px; }
+    .match-result .mr-sub { font-size: 13px; color: #8a90a8; margin-top: 6px; }
+    .match-result .mr-btns { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .match-result .mr-btns .btn { width: 100%; }
+
+    @media (max-width: 430px) {
+      .tab-bar .btn {
+        flex-direction: column;
+        gap: 1px;
+        padding: 6px 1px;
+        font-size: 10.5px;
+        line-height: 1.25;
+      }
+      .tab-bar .btn .ico { font-size: 15px; }
+      .match-card { padding: 12px; }
+      .match-board { gap: 6px; }
+    }
+
   </style>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#6c63ff">
@@ -597,17 +753,6 @@
       <div id="review-entry-badge" style="background:#ff4d4f;color:white;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;white-space:nowrap">错词 0 个</div>
     </div>
     <div class="section-title">选择模块开始学习</div>
-    <!-- ======= 单词消消乐入口 ======= -->
-    <div id="game-entry" onclick="openWordGame()" style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#eef4ff,#f1eeff);border:1.5px solid #cfd9ff;border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer">
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font-size:26px">🎴</span>
-        <div>
-          <div style="font-size:15px;font-weight:700;color:#5a54e8">单词消消乐</div>
-          <div style="font-size:12px;color:#888;margin-top:2px">英文配中文，每局 8 对，把本单元单词全部消完</div>
-        </div>
-      </div>
-      <span style="font-size:20px;color:#6c63ff">→</span>
-    </div>
     <div class="tts-engine-bar" id="tts-engine-bar">
       <span class="tts-engine-label">🔊 发音引擎</span>
       <select id="tts-engine-select" onchange="setTtsEngine(this.value)" class="tts-select">
@@ -626,26 +771,58 @@
   <div id="view-learn" class="view">
     <button id="learn-back-home" class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
     <div class="section-title" id="learn-module-title">上册 Module 1</div>
-    <div id="quiz-toggle-bar" style="display:flex;gap:8px;margin-bottom:12px">
-      <button class="btn btn-sm tab-btn active" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
-      <button class="btn btn-sm tab-btn" data-tab="choice" style="flex:1" onclick="startChoiceLearn()">🎯 单词学习</button>
-      <button class="btn btn-sm tab-btn" data-tab="textbook" style="flex:1" onclick="showTextbookList()">📖 课文学习</button>
-      <button class="btn btn-sm tab-btn" data-tab="quiz" style="flex:1" onclick="startQuiz()">🏆 闯关测验</button>
+    <div id="quiz-toggle-bar" class="tab-bar">
+      <button class="btn btn-sm tab-btn active" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
     </div>
     <div class="word-list" id="word-list"></div>
     <div id="word-detail-area" style="display:none"></div>
     <!-- 选择题学习区 -->
     <div id="choice-learn-area" style="display:none"></div>
+
+    <!-- 单词消消乐（属于当前单元） -->
+    <div id="match-game-area" style="display:none">
+      <div class="match-card">
+        <div class="match-top">
+          <div>
+            <div class="match-title">🎴 单词消消乐</div>
+            <div class="match-sub" id="match-sub">本单元 · 每局 8 个单词</div>
+          </div>
+          <button class="match-restart" onclick="startWordMatch(true)">🔄 重开</button>
+        </div>
+        <div class="match-hud">
+          <div class="match-stat"><span>本局</span><b id="match-round">0/0</b></div>
+          <div class="match-stat"><span>本单元</span><b id="match-unit">0/0</b></div>
+          <div class="match-stat"><span>用时</span><b id="match-time">0:00</b></div>
+        </div>
+        <div class="match-bar"><i id="match-bar"></i></div>
+        <div class="match-board" id="match-board"></div>
+        <div class="match-tip" id="match-tip">先点一张英文卡，再点它对应的中文卡</div>
+        <div class="match-result" id="match-result" style="display:none">
+          <div class="mr-emoji" id="match-res-emoji">🎉</div>
+          <div class="mr-title" id="match-res-title">本单元完成！</div>
+          <div class="mr-sub" id="match-res-sub"></div>
+          <div class="mr-btns">
+            <button class="btn btn-primary" id="match-next" onclick="Match.nextRound()">继续下一局</button>
+            <button class="btn btn-secondary" onclick="showWordList()">返回单词表</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- ======= 测验 ======= -->
   <div id="view-quiz" class="view">
     <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
-    <div style="display:flex;gap:8px;margin-bottom:16px">
-      <button class="btn btn-sm tab-btn" data-tab="wordlist" style="flex:1" onclick="showWordList()">📋 单词表</button>
-      <button class="btn btn-sm tab-btn" data-tab="choice" style="flex:1" onclick="startChoiceLearn()">🎯 单词学习</button>
-      <button class="btn btn-sm tab-btn" data-tab="textbook" style="flex:1" onclick="showTextbookList()">📖 课文学习</button>
-      <button class="btn btn-sm tab-btn" data-tab="quiz" style="flex:1" onclick="startQuiz()">🏆 闯关测验</button>
+    <div class="tab-bar" style="margin-bottom:16px">
+      <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
+      <button class="btn btn-sm tab-btn active" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
     </div>
     <div class="quiz-card">
       <div class="quiz-prompt" id="quiz-prompt">这个单词的中文是什么意思？</div>
@@ -864,7 +1041,8 @@ const API = ".";
       quiz_perfect: 10,    // 测验满分
       lesson_open: 1,      // 打开课文
       lesson_record: 2,    // 课文跟读
-      lesson_full_read: 5  // 朗读全文
+      lesson_full_read: 5, // 朗读全文
+      match_clear: 3       // 消消乐消完整个单元
     },
 
     getData() {
@@ -980,7 +1158,8 @@ const API = ".";
         quiz_perfect: '测验满分',
         lesson_open: '打开课文',
         lesson_record: '课文跟读',
-        lesson_full_read: '朗读全文'
+        lesson_full_read: '朗读全文',
+        match_clear: '消消乐通关本单元'
       };
       return messages[action] || '';
     }
@@ -1115,7 +1294,7 @@ const API = ".";
 
     if (area) area.style.display = 'none';
     if (wordList) wordList.style.display = 'block';
-    if (quizBar) quizBar.style.display = 'flex';
+    if (quizBar) quizBar.style.display = '';
   }
 
   // ========== P4-③ 云同步：全量备份/恢复 ==========
@@ -1450,7 +1629,8 @@ const API = ".";
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
-    document.getElementById('quiz-toggle-bar').style.display = 'flex';
+    hideMatchGame();
+    document.getElementById('quiz-toggle-bar').style.display = '';
 
     const area = document.getElementById('word-list');
     area.style.display = 'block';
@@ -1489,6 +1669,7 @@ const API = ".";
     // 隐藏其他学习子视图，显示课文列表容器
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
+    hideMatchGame();
     const _wl = document.getElementById('word-list');
     if (_wl) _wl.style.display = 'block';
     const gradeLabel = grade || currentLessonGrade || "三年级上册";
@@ -3381,12 +3562,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     setActiveTab('wordlist');
     const _bh = document.getElementById("learn-back-home");
     if (_bh) _bh.style.display = "flex";
+    document.getElementById("learn-module-title").style.display = "block";
     // 隐藏所有学习子视图
     document.getElementById("word-detail-area").style.display = "none";
     document.getElementById("choice-learn-area").style.display = "none";
+    hideMatchGame();
     document.getElementById("view-quiz").classList.remove("active");
     document.getElementById("word-list").style.display = "block";
-    document.getElementById("quiz-toggle-bar").style.display = "flex";
+    document.getElementById("quiz-toggle-bar").style.display = "";
     const list = document.getElementById("word-list");
     list.innerHTML = "<div class='spinner'></div>";
     // 批量获取当前模块所有单词状态
@@ -3424,6 +3607,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ========== 单词详情 ==========
   function showWordDetail(w) {
     document.getElementById("word-list").style.display = "none";
+    document.getElementById("match-game-area").style.display = "none";
+    Match.stop();
     document.getElementById("quiz-toggle-bar").style.display = "none";
     const _bh = document.getElementById("learn-back-home");
     if (_bh) _bh.style.display = "flex";
@@ -3511,6 +3696,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (skipBtn) skipBtn.parentElement.style.display = "flex";
     document.getElementById("quiz-hint").style.display = "block";
     setActiveTab('quiz');
+    hideMatchGame();
     switchView("quiz");
     loadQuizQuestion();
   }
@@ -3840,6 +4026,242 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return a;
   }
 
+  // ========== 单元内 · 单词消消乐 ==========
+  // 数据直接复用当前单元已加载的 currentWords，进度按「用户 + 单元」独立存本地
+  const Match = {
+    PER_ROUND: 8,      // 每局单词数（卡片数 = 该值 × 2）
+    words: [],
+    cleared: [],       // 本单元已消除过的单词 id（跨局累积）
+    picked: [],
+    matched: 0,
+    total: 0,
+    moves: 0,
+    lock: false,
+    finished: false,
+    startAt: 0,
+    timer: null,
+
+    storeKey() { return 'match_cleared_' + USER_ID + '_' + currentModule; },
+
+    loadCleared() {
+      try {
+        var raw = localStorage.getItem(this.storeKey());
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) { return []; }
+    },
+
+    saveCleared() {
+      try { localStorage.setItem(this.storeKey(), JSON.stringify(this.cleared)); } catch (e) {}
+    },
+
+    clearedCount() {
+      var self = this;
+      return (currentWords || []).filter(function (w) { return self.cleared.indexOf(w.id) >= 0; }).length;
+    },
+
+    // 开始一局：fresh=true 表示清空本单元进度从头来
+    start(opts) {
+      opts = opts || {};
+      if (!currentModule || !currentWords || currentWords.length === 0) {
+        toast('请先选择一个模块');
+        switchView('home');
+        return;
+      }
+      this.cleared = opts.fresh ? [] : this.loadCleared();
+      this.saveCleared();
+
+      var rest = currentWords.filter(function (w) { return this.cleared.indexOf(w.id) < 0; }, this);
+      if (rest.length === 0) {          // 一轮已全部消完，自动开启新一轮
+        this.cleared = [];
+        this.saveCleared();
+        rest = currentWords.slice();
+      }
+
+      this.words = shuffle(rest.slice()).slice(0, Math.min(rest.length, this.PER_ROUND));
+      this.total = this.words.length;
+      this.matched = 0;
+      this.moves = 0;
+      this.picked = [];
+      this.lock = false;
+      this.finished = false;
+      this.startAt = Date.now();
+
+      switchView('learn');
+      setActiveTab('match');
+      document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
+      document.getElementById('learn-module-title').style.display = 'block';
+      document.getElementById('word-list').style.display = 'none';
+      document.getElementById('word-detail-area').style.display = 'none';
+      document.getElementById('choice-learn-area').style.display = 'none';
+      document.getElementById('quiz-toggle-bar').style.display = '';
+      document.getElementById('match-game-area').style.display = 'block';
+      document.getElementById('match-result').style.display = 'none';
+      document.getElementById('match-tip').style.display = 'block';
+      document.getElementById('match-board').style.display = 'grid';
+      document.getElementById('match-sub').textContent =
+        currentModule + ' · 每局 ' + this.PER_ROUND + ' 个单词 · 共 ' + currentWords.length + ' 个';
+
+      this.renderBoard();
+      this.updateHud();
+      this.startTimer();
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    nextRound() {
+      var allDone = this.clearedCount() >= (currentWords || []).length;
+      this.start({ fresh: allDone });
+    },
+
+    stop() {
+      this.stopTimer();
+    },
+
+    renderBoard() {
+      var board = document.getElementById('match-board');
+      board.innerHTML = '';
+      var cards = [];
+      this.words.forEach(function (w) {
+        cards.push({ id: w.id, type: 'en', text: w.word, word: w.word });
+        cards.push({ id: w.id, type: 'cn', text: w.chinese, word: w.word });
+      });
+      var n = cards.length;
+      board.style.gridTemplateColumns = 'repeat(' + (n <= 6 ? 2 : 4) + ', minmax(0, 1fr))';
+
+      var self = this;
+      shuffle(cards).forEach(function (c, i) {
+        var el = document.createElement('div');
+        el.className = 'mcard ' + c.type;
+        el.dataset.pid = c.id;
+        el.dataset.type = c.type;
+        el.dataset.word = c.word || '';
+        el.textContent = c.type === 'en' ? capitalize(String(c.text)) : c.text;
+        el.style.animationDelay = (i * 16) + 'ms';
+        el.addEventListener('click', function () { self.onClick(el); });
+        board.appendChild(el);
+      });
+    },
+
+    onClick(el) {
+      if (this.lock || this.finished) return;
+      if (el.classList.contains('gone')) return;
+      if (el.classList.contains('sel')) {         // 再点一次取消选中
+        el.classList.remove('sel');
+        this.picked = this.picked.filter(function (p) { return p !== el; });
+        return;
+      }
+      if (el.dataset.type === 'en') speakWord(el.dataset.word);
+      el.classList.add('sel');
+      this.picked.push(el);
+      if (this.picked.length < 2) return;
+
+      var a = this.picked[0];
+      var b = this.picked[1];
+      this.picked = [];
+      this.moves++;
+      var ok = a.dataset.pid === b.dataset.pid && a.dataset.type !== b.dataset.type;
+      if (ok) this.onMatch(a, b); else this.onMiss(a, b);
+    },
+
+    onMatch(a, b) {
+      a.classList.remove('sel');
+      b.classList.remove('sel');
+      a.classList.add('gone');
+      b.classList.add('gone');
+      var id = Number(a.dataset.pid);
+      if (this.cleared.indexOf(id) < 0) {
+        this.cleared.push(id);
+        this.saveCleared();
+      }
+      this.matched++;
+      this.updateHud();
+      var self = this;
+      if (this.matched >= this.total) setTimeout(function () { self.finish(); }, 360);
+    },
+
+    onMiss(a, b) {
+      this.lock = true;
+      a.classList.add('wrong');
+      b.classList.add('wrong');
+      var self = this;
+      setTimeout(function () {
+        a.classList.remove('sel', 'wrong');
+        b.classList.remove('sel', 'wrong');
+        self.lock = false;
+      }, 520);
+    },
+
+    updateHud() {
+      var total = (currentWords || []).length;
+      var cleared = this.clearedCount();
+      document.getElementById('match-round').textContent = this.matched + '/' + this.total;
+      document.getElementById('match-unit').textContent = cleared + '/' + total;
+      document.getElementById('match-bar').style.width = (total ? (cleared / total * 100) : 0) + '%';
+    },
+
+    startTimer() {
+      this.stopTimer();
+      this.tick();
+      var self = this;
+      this.timer = setInterval(function () { self.tick(); }, 1000);
+    },
+
+    stopTimer() {
+      if (this.timer) { clearInterval(this.timer); this.timer = null; }
+    },
+
+    tick() {
+      var el = document.getElementById('match-time');
+      if (!el) return;
+      el.textContent = matchClock(Math.max(0, Math.round((Date.now() - this.startAt) / 1000)));
+    },
+
+    finish() {
+      this.finished = true;
+      this.stopTimer();
+      var sec = Math.max(1, Math.round((Date.now() - this.startAt) / 1000));
+      var unitTotal = (currentWords || []).length;
+      var cleared = this.clearedCount();
+      var unitDone = cleared >= unitTotal;
+      var acc = Math.round(this.total / Math.max(this.moves, this.total) * 100);
+
+      document.getElementById('match-board').style.display = 'none';
+      document.getElementById('match-tip').style.display = 'none';
+      document.getElementById('match-result').style.display = 'block';
+      document.getElementById('match-res-emoji').textContent = unitDone ? '🎉' : '👍';
+      document.getElementById('match-res-title').textContent = unitDone ? '本单元完成！' : '本局完成！';
+
+      var sub = document.getElementById('match-res-sub');
+      var nextBtn = document.getElementById('match-next');
+      if (unitDone) {
+        sub.textContent = unitTotal + ' 个单词全部消除 · 用时 ' + matchClock(sec) + ' · 准确率 ' + acc + '%';
+        nextBtn.textContent = '重玩本单元';
+        var r = Points.earn('match_clear', 'match_' + currentModule);
+        if (r && r.success) showPointsToast(r.points, Points.getMessage('match_clear'));
+      } else {
+        sub.textContent = '本局 ' + this.total + ' 个单词已消完，本单元还剩 ' + (unitTotal - cleared) + ' 个，再来一局吧';
+        nextBtn.textContent = '继续下一局';
+      }
+    }
+  };
+
+  function matchClock(sec) {
+    var m = Math.floor(sec / 60);
+    var s = sec % 60;
+    return m + ':' + (s < 10 ? '0' + s : s);
+  }
+
+  // 进入单元内的消消乐（fresh=true 时重开本单元）
+  function startWordMatch(fresh) {
+    Match.start({ fresh: !!fresh });
+  }
+
+  // 切到其它学习子页时收起游戏，避免计时继续跑
+  function hideMatchGame() {
+    var area = document.getElementById('match-game-area');
+    if (area) area.style.display = 'none';
+    Match.stop();
+  }
+
   function startChoiceLearn() {
     if (!currentModule || currentWords.length === 0) {
       toast('请先选择一个模块');
@@ -3857,7 +4279,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     setActiveTab('choice');
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
-    document.getElementById('quiz-toggle-bar').style.display = 'flex';
+    document.getElementById('match-game-area').style.display = 'none';
+    Match.stop();
+    document.getElementById('quiz-toggle-bar').style.display = '';
     const area = document.getElementById('choice-learn-area');
     area.style.display = 'block';
     switchView('learn');
@@ -4069,11 +4493,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   // ========== 单词消消乐 ==========
-  function openWordGame() {
-    var g = currentGrade ? ('?grade=' + encodeURIComponent(currentGrade)) : '';
-    location.href = './game.html' + g;
-  }
-
   function backToHome() {
     switchView('home');
     loadModules();
