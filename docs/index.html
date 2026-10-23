@@ -597,6 +597,17 @@
       <div id="review-entry-badge" style="background:#ff4d4f;color:white;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;white-space:nowrap">错词 0 个</div>
     </div>
     <div class="section-title">选择模块开始学习</div>
+    <!-- ======= 单词消消乐入口 ======= -->
+    <div id="game-entry" onclick="openWordGame()" style="display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,#eef4ff,#f1eeff);border:1.5px solid #cfd9ff;border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:26px">🎴</span>
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#5a54e8">单词消消乐</div>
+          <div style="font-size:12px;color:#888;margin-top:2px">英文配中文，每局 8 对，把本单元单词全部消完</div>
+        </div>
+      </div>
+      <span style="font-size:20px;color:#6c63ff">→</span>
+    </div>
     <div class="tts-engine-bar" id="tts-engine-bar">
       <span class="tts-engine-label">🔊 发音引擎</span>
       <select id="tts-engine-select" onchange="setTtsEngine(this.value)" class="tts-select">
@@ -4057,6 +4068,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     showTextbookList();
   }
 
+  // ========== 单词消消乐 ==========
+  function openWordGame() {
+    var g = currentGrade ? ('?grade=' + encodeURIComponent(currentGrade)) : '';
+    location.href = './game.html' + g;
+  }
+
   function backToHome() {
     switchView('home');
     loadModules();
@@ -4904,8 +4921,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== 启动 ==========
   // 默认显示年级选择页
-  document.getElementById('grade-display').style.display = 'none';
-  loadGrades();
+  document.getElementById('grade-display').style.display = 'none';  loadGrades();
+
+  // 从「单词消消乐」等页面带 ?grade= 返回时，自动进入该年级首页
+  (function autoEnterGradeFromUrl() {
+    try {
+      var g = new URLSearchParams(location.search).get('grade');
+      if (g && ['三年级', '四年级', '五年级'].indexOf(g) >= 0) {
+        setTimeout(function () { openGrade(g); }, 80);
+      }
+    } catch (e) {}
+  })();
 
   // 初始化积分显示
   updatePointsDisplay();

@@ -1,8 +1,9 @@
 /* 英语学习小助手 Service Worker */
-const CACHE = 'english-app-v2';
+const CACHE = 'english-app-v3';
 const ASSETS = [
   './',
   './index.html',
+  './game.html',
   './api-shim.js',
   './manifest.json',
   './icons/icon-192.png',

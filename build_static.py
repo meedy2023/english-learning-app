@@ -78,6 +78,16 @@ def copy_phonics_audio():
         print("[WARN] 未找到 frontend/phonics/ 音素音频（先运行 gen_phonics_espeak.py）")
 
 
+def copy_game():
+    """复制「单词消消乐」页面到 docs/（数据直接读 data/words.json）"""
+    src = os.path.join(FRONTEND, "game.html")
+    if os.path.exists(src):
+        shutil.copy2(src, os.path.join(DOCS, "game.html"))
+        print("[OK] docs/game.html")
+    else:
+        print("[WARN] 未找到 frontend/game.html")
+
+
 def copy_pwa():
     """复制 PWA 资源（manifest/sw/icons）到 docs/"""
     for name in ["manifest.json", "sw.js"]:
@@ -134,6 +144,7 @@ if __name__ == "__main__":
     export_ket()
     export_phonics()
     build_index()
+    copy_game()
     copy_phonics_audio()
     copy_pwa()
     print("\n完成！静态版已生成在 docs/ 目录。")
