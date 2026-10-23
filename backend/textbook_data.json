@@ -885,14 +885,74 @@
             "unit": "Unit 2 Know your body (Speed up)",
             "content": [
               {
-                "role": "Lingling",
-                "text": "This is my arm. This is my hand. This is my leg. This is my foot.",
-                "translation": "这是我的胳膊。这是我的手。这是我的腿。这是我的脚。"
+                "role": "Ear",
+                "text": "I'm the best!",
+                "translation": "我是最棒的！"
               },
               {
-                "role": "Daming",
-                "text": "Wave your arms. Clap your hands. Stamp your foot.",
-                "translation": "挥挥你的胳膊。拍拍你的手。跺跺你的脚。"
+                "role": "Eye",
+                "text": "No, I'm the best!",
+                "translation": "不，我才是最棒的！"
+              },
+              {
+                "role": "Nana",
+                "text": "Hello, who is there?",
+                "translation": "你好，谁在那儿？"
+              },
+              {
+                "role": "Nose",
+                "text": "Sorry, Nana. We are your body parts. Who is the best for you?",
+                "translation": "对不起，娜娜。我们是你的身体部位。谁对你来说是最好的？"
+              },
+              {
+                "role": "Ear",
+                "text": "You've got two ears. We help you hear.",
+                "translation": "你有两只耳朵。我们帮你听声音。"
+              },
+              {
+                "role": "Eye",
+                "text": "You've got two eyes. We help you see.",
+                "translation": "你有两只眼睛。我们帮你看东西。"
+              },
+              {
+                "role": "Nose",
+                "text": "I help you smell.",
+                "translation": "我帮你闻气味。"
+              },
+              {
+                "role": "Mouth",
+                "text": "I help you talk and eat.",
+                "translation": "我帮你说话和吃东西。"
+              },
+              {
+                "role": "Hand",
+                "text": "And me...",
+                "translation": "还有我……"
+              },
+              {
+                "role": "Foot",
+                "text": "And me...",
+                "translation": "还有我……"
+              },
+              {
+                "role": "Arm",
+                "text": "And me...",
+                "translation": "还有我……"
+              },
+              {
+                "role": "Leg",
+                "text": "And me...",
+                "translation": "还有我……"
+              },
+              {
+                "role": "Nana",
+                "text": "Hey! Please stop! You are all important to me. You're a team.",
+                "translation": "嘿！请停下！你们对我来说都很重要。你们是一个团队。"
+              },
+              {
+                "role": "Body parts",
+                "text": "You're right! Let's work together for Nana!",
+                "translation": "你说得对！咱们为了娜娜一起协作吧！"
               }
             ]
           }
@@ -1059,24 +1119,54 @@
             "unit": "Unit 4 What's your hobby?",
             "content": [
               {
-                "role": "Ms Li",
-                "text": "What's your hobby?",
-                "translation": "你的爱好是什么？"
-              },
-              {
-                "role": "Sam",
-                "text": "I like reading. I like reading books.",
-                "translation": "我喜欢阅读。我喜欢读书。"
-              },
-              {
                 "role": "Amy",
-                "text": "I like singing. I like singing songs.",
-                "translation": "我喜欢唱歌。我喜欢唱歌。"
+                "text": "What are these?",
+                "translation": "这些是什么？"
               },
               {
                 "role": "Daming",
-                "text": "I like drawing. I like drawing pictures.",
-                "translation": "我喜欢画画。我喜欢画图画。"
+                "text": "Photos of my family.",
+                "translation": "我家的照片。"
+              },
+              {
+                "role": "Amy",
+                "text": "Who is this?",
+                "translation": "这是谁？"
+              },
+              {
+                "role": "Daming",
+                "text": "That's my dad. He likes running.",
+                "translation": "那是我爸爸。他喜欢跑步。"
+              },
+              {
+                "role": "Amy",
+                "text": "Who is this?",
+                "translation": "这是谁？"
+              },
+              {
+                "role": "Daming",
+                "text": "That's my mum. She likes writing.",
+                "translation": "那是我妈妈。她喜欢写作。"
+              },
+              {
+                "role": "Daming",
+                "text": "They are your grandpa and grandma.",
+                "translation": "他们是你的爷爷奶奶。"
+              },
+              {
+                "role": "Amy",
+                "text": "Yes, they like doing tai chi.",
+                "translation": "是的，他们喜欢打太极。"
+              },
+              {
+                "role": "Amy",
+                "text": "What do you like doing, Daming?",
+                "translation": "大明，你喜欢做什么？"
+              },
+              {
+                "role": "Daming",
+                "text": "I like taking photos!",
+                "translation": "我喜欢拍照！"
               }
             ]
           },
@@ -1084,14 +1174,49 @@
             "unit": "Unit 4 What's your hobby? (Speed up)",
             "content": [
               {
-                "role": "Lingling",
-                "text": "I like dancing. I like dancing to music.",
-                "translation": "我喜欢跳舞。我喜欢跟着音乐跳舞。"
+                "role": "Narrator",
+                "text": "This is Fabre. He likes learning about animals and plants.",
+                "translation": "这是法布尔。他喜欢研究动植物。"
               },
               {
-                "role": "Amy",
-                "text": "I like playing. I like playing games.",
-                "translation": "我喜欢玩。我喜欢玩游戏。"
+                "role": "Narrator",
+                "text": "He likes asking questions. Why? When? What? How many? How? Where?",
+                "translation": "他喜欢提问。为什么？什么时候？是什么？有多少？怎么样？在哪里？"
+              },
+              {
+                "role": "Narrator",
+                "text": "He likes watching insects.",
+                "translation": "他喜欢观察昆虫。"
+              },
+              {
+                "role": "Narrator",
+                "text": "One day he goes up a tree to study a mantis. He stays there and watches for a long time.",
+                "translation": "有一天，他爬上树去研究一只螳螂。他待在那里观察了很久。"
+              },
+              {
+                "role": "Man",
+                "text": "Hey! You! Why are you up there?",
+                "translation": "嘿！你！为什么在树上？"
+              },
+              {
+                "role": "Fabre",
+                "text": "I'm here to watch this mantis!",
+                "translation": "我来这里观察这只螳螂！"
+              },
+              {
+                "role": "Man",
+                "text": "Why?",
+                "translation": "为什么？"
+              },
+              {
+                "role": "Fabre",
+                "text": "It's so interesting!",
+                "translation": "它太有趣了！"
+              },
+              {
+                "role": "Narrator",
+                "text": "Fabre grows up. He writes many books about insects. People like reading them!",
+                "translation": "法布尔长大后，写了许多关于昆虫的书。人们喜欢读他的书！"
               }
             ]
           }
@@ -1101,19 +1226,44 @@
             "unit": "Unit 5 What time is it?",
             "content": [
               {
-                "role": "Mum",
-                "text": "What time is it?",
-                "translation": "几点了？"
+                "role": "Amy",
+                "text": "It's half past six. It's time to get up.",
+                "translation": "六点半了。该起床了。"
               },
               {
                 "role": "Sam",
-                "text": "It's seven o'clock. It's time to get up.",
-                "translation": "七点了。该起床了。"
+                "text": "Urgh… Not now.",
+                "translation": "呃……现在不行。"
+              },
+              {
+                "role": "Amy",
+                "text": "Come on, Sam! It's time for school!",
+                "translation": "快点，萨姆！该上学了！"
+              },
+              {
+                "role": "Sam",
+                "text": "Not now.",
+                "translation": "现在不行。"
               },
               {
                 "role": "Mum",
-                "text": "It's eight o'clock. It's time for school.",
-                "translation": "八点了。该上学了。"
+                "text": "It's time to do your homework, Sam.",
+                "translation": "该做作业了，萨姆。"
+              },
+              {
+                "role": "Sam",
+                "text": "What time is it? It's only six o'clock. Not now.",
+                "translation": "现在几点了？才六点。现在不行。"
+              },
+              {
+                "role": "Mum",
+                "text": "It's nine o'clock. Time to go to bed, Sam.",
+                "translation": "九点了。该睡觉了，萨姆。"
+              },
+              {
+                "role": "Sam",
+                "text": "Not now!",
+                "translation": "现在不行！"
               }
             ]
           },
@@ -1121,14 +1271,29 @@
             "unit": "Unit 5 What time is it? (Speed up)",
             "content": [
               {
-                "role": "Daming",
-                "text": "It's twelve o'clock. It's time for lunch.",
-                "translation": "十二点了。该吃午饭了。"
+                "role": "Narrator",
+                "text": "It's six o'clock in the morning. Yuanyuan gets up. Her mum is at work.",
+                "translation": "早上六点。媛媛起床。她的妈妈在上班。"
               },
               {
-                "role": "Amy",
-                "text": "It's nine o'clock. It's time for bed.",
-                "translation": "九点了。该睡觉了。"
+                "role": "Narrator",
+                "text": "It's seven o'clock in the morning. Yuanyuan goes to school. Her mum goes home.",
+                "translation": "早上七点。媛媛去上学。她的妈妈回家。"
+              },
+              {
+                "role": "Narrator",
+                "text": "It's half past eight in the morning. Yuanyuan has classes at school. Her mum goes to bed.",
+                "translation": "早上八点半。媛媛在学校上课。她的妈妈去睡觉。"
+              },
+              {
+                "role": "Narrator",
+                "text": "It's five o'clock in the afternoon. Yuanyuan goes home. Her mum goes to work.",
+                "translation": "下午五点。媛媛回家。她的妈妈去上班。"
+              },
+              {
+                "role": "Narrator",
+                "text": "It's nine o'clock in the evening. Yuanyuan goes to bed. Her mum is at work.",
+                "translation": "晚上九点。媛媛去睡觉。她的妈妈在上班。"
               }
             ]
           }
@@ -1138,19 +1303,44 @@
             "unit": "Unit 6 A great week",
             "content": [
               {
-                "role": "Ms Li",
-                "text": "What day is it today?",
-                "translation": "今天星期几？"
+                "role": "Daming",
+                "text": "Only two days! It's Wednesday.",
+                "translation": "只剩两天了！今天星期三。"
               },
               {
-                "role": "Sam",
-                "text": "It's Monday. I go to school on Mondays.",
-                "translation": "今天星期一。我星期一去上学。"
+                "role": "Lingling",
+                "text": "It's Thursday! Only one day!",
+                "translation": "明天星期四！只剩一天了！"
               },
               {
                 "role": "Amy",
-                "text": "It's Saturday. I play football on Saturdays.",
-                "translation": "今天星期六。我星期六踢足球。"
+                "text": "You're happy! Why?",
+                "translation": "你们很开心！为什么？"
+              },
+              {
+                "role": "Daming",
+                "text": "It's Friday! We have art on Friday. We love art.",
+                "translation": "星期五了！我们周五有美术课。我们喜欢美术。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Sorry, everyone. Ms Li is not well today.",
+                "translation": "抱歉，同学们。李老师今天不舒服。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Oh... No art today!",
+                "translation": "哦……今天没有美术课！"
+              },
+              {
+                "role": "Sam",
+                "text": "Let's do something for Ms Li.",
+                "translation": "我们为李老师做点什么吧。"
+              },
+              {
+                "role": "All",
+                "text": "Good idea!",
+                "translation": "好主意！"
               }
             ]
           },
@@ -1158,14 +1348,49 @@
             "unit": "Unit 6 A great week (Speed up)",
             "content": [
               {
-                "role": "Daming",
-                "text": "I go to the park on Sundays.",
-                "translation": "我星期天去公园。"
+                "role": "Wenwen",
+                "text": "It's Monday. Let's go and visit our old friends this Sunday!",
+                "translation": "星期一。我们这周日去拜访老朋友吧！"
               },
               {
-                "role": "Lingling",
-                "text": "I read books on Fridays.",
-                "translation": "我星期五读书。"
+                "role": "Dad",
+                "text": "Great!",
+                "translation": "好！"
+              },
+              {
+                "role": "Wenwen",
+                "text": "It's Tuesday. I want to make some bookmarks for Grandma Guo. She likes reading.",
+                "translation": "星期二。我想给郭奶奶做些书签。她喜欢读书。"
+              },
+              {
+                "role": "Wenwen",
+                "text": "It's Wednesday. I want to make a stick for Grandpa Liu.",
+                "translation": "星期三。我想给刘爷爷做一根拐杖。"
+              },
+              {
+                "role": "Wenwen",
+                "text": "It's Thursday. What about a painting for Grandma Zhang?",
+                "translation": "星期四。给张奶奶画幅画怎么样？"
+              },
+              {
+                "role": "Wenwen",
+                "text": "It's Friday. Dad, I want some tea. It's for Grandpa Ma.",
+                "translation": "星期五。爸爸，我想要些茶。给马爷爷的。"
+              },
+              {
+                "role": "Wenwen",
+                "text": "It's Saturday. Mum, I want some flowers for Granny Ning.",
+                "translation": "星期六。妈妈，我想要些花送给宁奶奶。"
+              },
+              {
+                "role": "Mum",
+                "text": "Sure.",
+                "translation": "当然可以。"
+              },
+              {
+                "role": "Old friends",
+                "text": "It's Sunday. Thank you so much, Wenwen!",
+                "translation": "星期日。太谢谢你了，文文！"
               }
             ]
           }
@@ -1303,27 +1528,62 @@
             ]
           },
           {
-            "unit": "Unit 2 Helping at home (Song)",
+            "unit": "Unit 2 Helping at home (Speed up)",
             "content": [
               {
-                "role": "Song",
-                "text": "Phew! So much work! Let's work together.",
-                "translation": "唷！好多活儿啊！让我们一起干吧。"
+                "role": "Wenwen",
+                "text": "I'm Yao Qinwen. This is my family. My dad is ill. My grandma is old. My mum is busy. I must help!",
+                "translation": "我是姚沁文。这是我的家人。我爸爸生病了，奶奶年纪大了，妈妈很忙。我必须帮忙！"
               },
               {
-                "role": "Song",
-                "text": "Wash the dishes. Feed the dog. Make the beds. Wash the clothes.",
-                "translation": "洗碗。喂狗。铺床。洗衣服。"
+                "role": "Wenwen",
+                "text": "I take care of Dad.",
+                "translation": "我照顾爸爸。"
               },
               {
-                "role": "Song",
-                "text": "Sweep the floor. Take out the rubbish.",
-                "translation": "扫地。倒垃圾。"
+                "role": "Wenwen",
+                "text": "Can I make the bed for you, Dad?",
+                "translation": "爸爸，我可以帮你铺床吗？"
               },
               {
-                "role": "Song",
-                "text": "Everyone, well done! Chores can be fun!",
-                "translation": "大家干得好！家务也可以很有趣！"
+                "role": "Dad",
+                "text": "Thank you, Wenwen.",
+                "translation": "谢谢你，文文。"
+              },
+              {
+                "role": "Wenwen",
+                "text": "I take care of Grandma.",
+                "translation": "我照顾奶奶。"
+              },
+              {
+                "role": "Grandma",
+                "text": "Wenwen, can you help clean the room?",
+                "translation": "文文，你能帮忙打扫房间吗？"
+              },
+              {
+                "role": "Wenwen",
+                "text": "Sometimes Mum feels tired. I take care of her, too.",
+                "translation": "妈妈有时候很累。我也照顾她。"
+              },
+              {
+                "role": "Wenwen",
+                "text": "May I help you wash the dishes, Mum?",
+                "translation": "妈妈，我可以帮你洗碗吗？"
+              },
+              {
+                "role": "Mum",
+                "text": "Thank you, my dear.",
+                "translation": "谢谢你，亲爱的。"
+              },
+              {
+                "role": "Narrator",
+                "text": "Wenwen is so helpful. She is the sunshine of our family.",
+                "translation": "文文真能干。她是家里的阳光。"
+              },
+              {
+                "role": "Wenwen",
+                "text": "I'm happy to warm up my family!",
+                "translation": "我很开心能给家人带来温暖！"
               }
             ]
           }
@@ -1370,42 +1630,122 @@
             ]
           },
           {
-            "unit": "Unit 3 What's the weather like? (Song)",
+            "unit": "Unit 3 What's the weather like? (Speed up)",
             "content": [
               {
-                "role": "Song",
-                "text": "The sun comes up... It's sunny.",
-                "translation": "太阳升起来了……天晴了。"
+                "role": "Narrator",
+                "text": "Liu Fei is a teacher at a children's home in Sanya.",
+                "translation": "刘菲是三亚一家儿童福利院的老师。"
               },
               {
-                "role": "Song",
-                "text": "The clouds go by... It's cloudy.",
-                "translation": "云飘过去了……天阴了。"
+                "role": "Girl",
+                "text": "What is snow like?",
+                "translation": "雪是什么样的？"
               },
               {
-                "role": "Song",
-                "text": "The wind blows around... It's windy.",
-                "translation": "风吹来吹去……起风了。"
+                "role": "Boy",
+                "text": "Does it taste like ice cream?",
+                "translation": "它吃起来像冰淇淋吗？"
               },
               {
-                "role": "Song",
-                "text": "The rain comes down... It's rainy.",
-                "translation": "雨落下来了……下雨了。"
+                "role": "Narrator",
+                "text": "Liu Fei calls her friend Lin Jia in Harbin.",
+                "translation": "刘菲给她在哈尔滨的朋友林佳打电话。"
               },
               {
-                "role": "Song",
-                "text": "The snow dances around... It's snowy.",
-                "translation": "雪飞舞着……下雪了。"
+                "role": "Liu Fei",
+                "text": "Hey, what's the weather like there today?",
+                "translation": "嘿，你那里今天天气怎么样？"
               },
               {
-                "role": "Song",
-                "text": "In any weather, we have fun. Hot, cold, cool or warm. Enjoy them all!",
-                "translation": "无论什么天气，我们都开心。热、冷、凉、暖，全都享受！"
+                "role": "Lin Jia",
+                "text": "It's snowy and cold.",
+                "translation": "下雪，很冷。"
+              },
+              {
+                "role": "Liu Fei",
+                "text": "The children here want to see real snow. But it's hot in Sanya. It never snows.",
+                "translation": "这里的孩子们想看真正的雪。但是三亚很热，从来不下雪。"
+              },
+              {
+                "role": "Narrator",
+                "text": "Two days later, Liu Fei gets a big surprise.",
+                "translation": "两天后，刘菲收到一个大惊喜。"
+              },
+              {
+                "role": "Lin Jia",
+                "text": "Liu Fei, here is some snow for the children. I hope they like it! Love, Lin Jia",
+                "translation": "刘菲，这里有一些雪送给孩子们。希望他们喜欢！林佳"
+              },
+              {
+                "role": "Narrator",
+                "text": "Liu Fei takes the snow to the children's home.",
+                "translation": "刘菲把雪带到儿童福利院。"
+              },
+              {
+                "role": "Liu Fei",
+                "text": "Look! Real snow!",
+                "translation": "看！真的雪！"
+              },
+              {
+                "role": "Girl",
+                "text": "It's cool!",
+                "translation": "太酷了！"
+              },
+              {
+                "role": "Boy",
+                "text": "Hooray!",
+                "translation": "万岁！"
               }
             ]
           }
         ],
         "Unit 4 Wonderful seasons": [
+          {
+            "unit": "Unit 4 Wonderful seasons (Start up)",
+            "content": [
+              {
+                "role": "Ms Smart",
+                "text": "What's your favourite season, friends?",
+                "translation": "孩子们，你们最喜欢哪个季节？"
+              },
+              {
+                "role": "Daming",
+                "text": "I like winter best. I can play in the snow.",
+                "translation": "我最喜欢冬天。我可以在雪里玩。"
+              },
+              {
+                "role": "Amy",
+                "text": "I don't like winter. It's cold. I like spring and autumn. They are beautiful.",
+                "translation": "我不喜欢冬天。冬天很冷。我喜欢春天和秋天。它们很美。"
+              },
+              {
+                "role": "Sam",
+                "text": "I like summer best. I can eat ice cream. What about you, Lingling?",
+                "translation": "我最喜欢夏天。我可以吃冰淇淋。玲玲，你呢？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I like summer best, too.",
+                "translation": "我也最喜欢夏天。"
+              },
+              {
+                "role": "Sam",
+                "text": "Why do you also like summer?",
+                "translation": "你为什么也喜欢夏天？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Because my birthday is in summer!",
+                "translation": "因为我的生日在夏天！"
+              },
+              {
+                "role": "Sam",
+                "text": "Ha ha!",
+                "translation": "哈哈！"
+              }
+            ]
+          },
           {
             "unit": "Unit 4 Wonderful seasons (Speed up)",
             "content": [
@@ -1514,37 +1854,42 @@
             ]
           },
           {
-            "unit": "Unit 5 Let's go! (Song)",
+            "unit": "Unit 5 Let's go! (Speed up)",
             "content": [
               {
-                "role": "Song",
-                "text": "We can go by bus, going up and down.",
-                "translation": "我们可以坐公交车，上上下下。"
+                "role": "Jingjing",
+                "text": "Hello, I'm Jingjing. This is my friend Sihai. We live in Sichuan.",
+                "translation": "你好，我是晶晶。这是我的朋友四海。我们住在四川。"
               },
               {
-                "role": "Song",
-                "text": "We can go by car, to get around.",
-                "translation": "我们可以坐汽车，四处逛逛。"
+                "role": "Jingjing",
+                "text": "It's time to go to Qatar! But how do we get there? It's far away.",
+                "translation": "该去卡塔尔了！但是我们怎么去呢？那里很远。"
               },
               {
-                "role": "Song",
-                "text": "We can go by train, from city to town.",
-                "translation": "我们可以坐火车，从城市到小镇。"
+                "role": "Jingjing",
+                "text": "Look! The truck is here. Let's go! Goodbye, everyone!",
+                "translation": "看！卡车来了。我们走吧！再见，大家！"
               },
               {
-                "role": "Song",
-                "text": "We can go by ship, across the sea.",
-                "translation": "我们可以坐大船，横跨大海。"
+                "role": "Jingjing",
+                "text": "Now we are on a plane in the sky. Goodbye, China!",
+                "translation": "现在我们在天上的飞机里。再见，中国！"
               },
               {
-                "role": "Song",
-                "text": "We can go by plane, high up in the sky.",
-                "translation": "我们可以坐飞机，高高飞在天上。"
+                "role": "Jingjing",
+                "text": "What a long way! Here we are! Hello, Qatar! We go to our new home by truck.",
+                "translation": "好远的路啊！我们到了！你好，卡塔尔！我们坐卡车去我们的新家。"
               },
               {
-                "role": "Song",
-                "text": "We can go to different places, near and far.",
-                "translation": "我们可以去不同的地方，或近或远。"
+                "role": "Jingjing",
+                "text": "It's our new home. It's big. We've got a lot of bamboo here. It comes from China by plane!",
+                "translation": "这是我们的新家。它很大。我们这里有很多竹子。它们是从中国空运来的！"
+              },
+              {
+                "role": "Jingjing",
+                "text": "Many people come to see us. We've got a lot of new friends! We are happy!",
+                "translation": "很多人来看我们。我们交了很多新朋友！我们很开心！"
               }
             ]
           }
@@ -1591,27 +1936,62 @@
             ]
           },
           {
-            "unit": "Unit 6 Find your way (Song)",
+            "unit": "Unit 6 Find your way (Speed up)",
             "content": [
               {
-                "role": "Song",
-                "text": "The wheels on the bus go round and round.",
-                "translation": "公交车的轮子转啊转。"
+                "role": "Narrator",
+                "text": "Yanyan can't see. She goes to school with her mum's help every day.",
+                "translation": "燕燕看不见。她每天在妈妈的帮助下上学。"
               },
               {
-                "role": "Song",
-                "text": "Turn left and go straight on. Ding! Ding! Ding! Here's the library.",
-                "translation": "左转再直走。叮！叮！叮！这里是图书馆。"
+                "role": "Yanyan",
+                "text": "Mum, I'm 11 now. I want to go to school on my own!",
+                "translation": "妈妈，我现在 11 岁了。我想自己去上学！"
               },
               {
-                "role": "Song",
-                "text": "The wheels on the bus go round and round.",
-                "translation": "公交车的轮子转啊转。"
+                "role": "Mum",
+                "text": "Remember, go straight on, walk 50 steps... 48, 49, 50! Great! Cross the road. Turn left. The school is on your right.",
+                "translation": "记住，一直往前走，走 50 步……48、49、50！太好了！过马路，向左转。学校在你的右边。"
               },
               {
-                "role": "Song",
-                "text": "Turn right and go straight on. Ding! Ding! Ding! Here's the sports centre.",
-                "translation": "右转再直走。叮！叮！叮！这里是体育中心。"
+                "role": "Yanyan",
+                "text": "Mum, let me go to school on my own today!",
+                "translation": "妈妈，今天让我自己去上学吧！"
+              },
+              {
+                "role": "Mum",
+                "text": "Are you sure?",
+                "translation": "你确定吗？"
+              },
+              {
+                "role": "Yanyan",
+                "text": "Yes, I can do it.",
+                "translation": "是的，我能做到。"
+              },
+              {
+                "role": "Yanyan",
+                "text": "One, two, three...",
+                "translation": "一、二、三……"
+              },
+              {
+                "role": "Mum",
+                "text": "Be careful, my girl!",
+                "translation": "小心点，我的孩子！"
+              },
+              {
+                "role": "Yanyan",
+                "text": "Go straight on... 48, 49, 50! OK. Cross the road and turn left.",
+                "translation": "一直往前走……48、49、50！好。过马路，向左转。"
+              },
+              {
+                "role": "Yanyan",
+                "text": "I'm at school now, Mum!",
+                "translation": "妈妈，我到学校了！"
+              },
+              {
+                "role": "Mum",
+                "text": "Well done, Yanyan!",
+                "translation": "干得好，燕燕！"
               }
             ]
           }
@@ -1678,39 +2058,39 @@
             "unit": "Unit 1 People at work (Speed up)",
             "content": [
               {
-                "role": "Narrator",
-                "text": "At night, many people are still working.",
-                "translation": "夜晚，很多人还在工作。"
+                "role": "Boy",
+                "text": "Oh, a night owl!",
+                "translation": "哦，一只夜猫子！"
               },
               {
-                "role": "Narrator",
-                "text": "The bus driver drives the bus.",
-                "translation": "公交车司机开着公交车。"
+                "role": "Night owl",
+                "text": "Yes, I come out at night. But many people are \"night owls\", too. Do you know that?",
+                "translation": "是的，我晚上出来。但很多人也是“夜猫子”，你知道吗？"
               },
               {
-                "role": "Narrator",
-                "text": "The taxi driver drives the taxi.",
-                "translation": "出租车司机开着出租车。"
+                "role": "Night owl",
+                "text": "Bus drivers and taxi drivers work at night. They take people home.",
+                "translation": "公交车司机和出租车司机上夜班。他们送人们回家。"
               },
               {
-                "role": "Narrator",
-                "text": "The police officer keeps us safe.",
-                "translation": "警察保护我们的安全。"
+                "role": "Night owl",
+                "text": "Police officers and firemen work at night, too. They keep the city safe.",
+                "translation": "警察和消防员也在夜间工作。他们守护着城市的安全。"
               },
               {
-                "role": "Narrator",
-                "text": "The doctor helps sick people.",
-                "translation": "医生帮助病人。"
+                "role": "Night owl",
+                "text": "Doctors and nurses are busy at night. They help people.",
+                "translation": "医生和护士晚上很忙。他们帮助别人。"
               },
               {
-                "role": "Narrator",
-                "text": "The nurse looks after patients.",
-                "translation": "护士照顾病人。"
+                "role": "Night owl",
+                "text": "So many people work at night. They brighten the night for others.",
+                "translation": "这么多人在夜间工作。他们为别人照亮了夜晚。"
               },
               {
-                "role": "Narrator",
-                "text": "They are night owls.",
-                "translation": "他们是夜猫子。"
+                "role": "Night owl",
+                "text": "I work at night, too. Time to go!",
+                "translation": "我也在夜间工作。该走了！"
               }
             ]
           }
@@ -1771,38 +2151,63 @@
             "content": [
               {
                 "role": "Narrator",
-                "text": "Jay gets a ship model for his birthday.",
-                "translation": "杰伊生日收到一个船模型。"
+                "text": "Jay gets a new ship model for his birthday. He is very surprised and happy.",
+                "translation": "杰伊生日收到一艘新的船模型。他又惊又喜。"
+              },
+              {
+                "role": "Jay",
+                "text": "It's the new ship model! Thank you!",
+                "translation": "是新船模型！谢谢！"
+              },
+              {
+                "role": "Mum",
+                "text": "It's nine o'clock. Time for bed, Jay.",
+                "translation": "九点了。该睡觉了，杰伊。"
+              },
+              {
+                "role": "Jay",
+                "text": "I'm making the ship.",
+                "translation": "我在做船。"
+              },
+              {
+                "role": "Mum",
+                "text": "You can make it tomorrow.",
+                "translation": "你可以明天再做。"
               },
               {
                 "role": "Narrator",
-                "text": "Jay is surprised and happy.",
-                "translation": "杰伊又惊又喜。"
+                "text": "Bang!",
+                "translation": "砰！"
               },
               {
-                "role": "Narrator",
-                "text": "Ray breaks the model.",
-                "translation": "雷弄坏了模型。"
+                "role": "Jay",
+                "text": "Ray! My ship!",
+                "translation": "雷！我的船！"
+              },
+              {
+                "role": "Ray",
+                "text": "Jay, I am...",
+                "translation": "杰伊，我……"
               },
               {
                 "role": "Narrator",
                 "text": "Jay is angry. He is shouting at Ray.",
-                "translation": "杰伊很生气。他在对雷大喊。"
+                "translation": "杰伊很生气。他对雷大喊。"
               },
               {
                 "role": "Narrator",
                 "text": "Jay runs back to his room. He is sad.",
-                "translation": "杰伊跑回房间。他很难过。"
+                "translation": "杰伊跑回自己的房间。他很难过。"
+              },
+              {
+                "role": "Ray",
+                "text": "I'm sorry.",
+                "translation": "对不起。"
               },
               {
                 "role": "Narrator",
-                "text": "They say sorry and make the model together.",
-                "translation": "他们互相道歉，一起重做模型。"
-              },
-              {
-                "role": "Narrator",
-                "text": "They are happy again.",
-                "translation": "他们又开心了。"
+                "text": "Jay says sorry, too. They make the ship together. They are happy now.",
+                "translation": "杰伊也说了对不起。他们一起重做船。现在他们很开心。"
               }
             ]
           }
@@ -1812,11 +2217,6 @@
             "unit": "Unit 3 Everyone's got talent (Start up)",
             "content": [
               {
-                "role": "Narrator",
-                "text": "It's the school dance show. Lingling is in it.",
-                "translation": "这是学校舞蹈比赛。玲玲参加了。"
-              },
-              {
                 "role": "Amy",
                 "text": "What are you looking at?",
                 "translation": "你在看什么？"
@@ -1824,7 +2224,7 @@
               {
                 "role": "Lingling",
                 "text": "I'm looking at their clothes.",
-                "translation": "我在看他们的衣服。"
+                "translation": "我在看她们的衣服。"
               },
               {
                 "role": "Amy",
@@ -1834,12 +2234,12 @@
               {
                 "role": "Lingling",
                 "text": "Yes. Everyone's wearing beautiful clothes. But I'm not. I can't win.",
-                "translation": "是的。每个人都穿着漂亮的衣服。但我没有。我赢不了。"
+                "translation": "是的。每个人都穿着漂亮的衣服，可我没有。我赢不了。"
               },
               {
                 "role": "Amy",
                 "text": "Don't worry about your clothes. Just go and dance.",
-                "translation": "别担心你的衣服。去跳舞吧。"
+                "translation": "别担心你的衣服。去跳舞就好。"
               },
               {
                 "role": "Lingling",
@@ -1847,14 +2247,29 @@
                 "translation": "好的。"
               },
               {
-                "role": "Narrator",
-                "text": "Lingling is dancing well.",
-                "translation": "玲玲跳得很好。"
+                "role": "Friend",
+                "text": "You can do this, Lingling!",
+                "translation": "你能行的，玲玲！"
+              },
+              {
+                "role": "Lingling",
+                "text": "Thanks!",
+                "translation": "谢谢！"
               },
               {
                 "role": "Narrator",
-                "text": "The best dancer is... Lingling! Hooray!",
-                "translation": "最佳舞者是……玲玲！万岁！"
+                "text": "She's dancing well.",
+                "translation": "她跳得很好。"
+              },
+              {
+                "role": "Host",
+                "text": "The best dancer is... Lingling!",
+                "translation": "最佳舞者是……玲玲！"
+              },
+              {
+                "role": "All",
+                "text": "Hooray!",
+                "translation": "万岁！"
               }
             ]
           },
@@ -1862,39 +2277,74 @@
             "unit": "Unit 3 Everyone's got talent (Speed up)",
             "content": [
               {
-                "role": "Narrator",
-                "text": "Little Chicken is sad. He is not good at anything.",
-                "translation": "小鸡很难过。他什么都不擅长。"
+                "role": "Bird",
+                "text": "Look at me!",
+                "translation": "看我！"
               },
               {
                 "role": "Little Chicken",
-                "text": "Bird, can you teach me to fly?",
-                "translation": "小鸟，你能教我飞吗？"
+                "text": "She's flying so well! Oh, Bird, please teach me to fly.",
+                "translation": "她飞得真好！小鸟，请教我飞吧。"
               },
               {
                 "role": "Little Chicken",
-                "text": "Oh, Duck, please teach me to swim.",
-                "translation": "哦，鸭子，请教我游泳。"
+                "text": "Oh, no. I'm not good at flying.",
+                "translation": "哦，不行。我不擅长飞。"
               },
               {
-                "role": "Narrator",
-                "text": "Little Chicken can't fly or swim.",
-                "translation": "小鸡不会飞也不会游。"
-              },
-              {
-                "role": "Narrator",
-                "text": "One day, he sings. Everyone loves his song.",
-                "translation": "有一天，他唱歌。大家都喜欢他的歌。"
+                "role": "Dog",
+                "text": "Look at me!",
+                "translation": "看我！"
               },
               {
                 "role": "Little Chicken",
-                "text": "Hard work makes me shine!",
-                "translation": "努力使我闪闪发光！"
+                "text": "He's running so well. Oh, Dog, please teach me to run.",
+                "translation": "他跑得真快。小狗，请教我跑吧。"
+              },
+              {
+                "role": "Little Chicken",
+                "text": "Oh, no. I'm not good at running.",
+                "translation": "哦，不行。我不擅长跑。"
+              },
+              {
+                "role": "Duck",
+                "text": "Look at me!",
+                "translation": "看我！"
+              },
+              {
+                "role": "Little Chicken",
+                "text": "He's swimming so well! Oh, Duck, please teach me to swim.",
+                "translation": "他游得真好！鸭子，请教我游泳吧。"
+              },
+              {
+                "role": "Little Chicken",
+                "text": "Oh, no. I'm not good at swimming.",
+                "translation": "哦，不行。我不擅长游泳。"
+              },
+              {
+                "role": "Mother Hen",
+                "text": "Why are you crying, my boy?",
+                "translation": "孩子，你为什么哭？"
+              },
+              {
+                "role": "Little Chicken",
+                "text": "Cock-a-doodle-doo. I'm not good at anything.",
+                "translation": "喔喔喔。我什么都不擅长。"
+              },
+              {
+                "role": "Mother Hen",
+                "text": "Don't worry. Let me teach you to sing.",
+                "translation": "别担心。我来教你唱歌。"
               },
               {
                 "role": "Narrator",
-                "text": "Everyone's got talent!",
-                "translation": "每个人都有才能！"
+                "text": "Listen! Little Chicken is singing. He sings so well!",
+                "translation": "听！小鸡在唱歌。他唱得真好！"
+              },
+              {
+                "role": "Mother Hen",
+                "text": "See? That's your talent.",
+                "translation": "看吧？这就是你的才能。"
               }
             ]
           }
@@ -1905,13 +2355,23 @@
             "content": [
               {
                 "role": "Sam",
-                "text": "We're making a small garden for the class!",
-                "translation": "我们在为班级建一个小花园！"
+                "text": "What are you doing?",
+                "translation": "你们在做什么？"
               },
               {
                 "role": "Lingling",
                 "text": "We're digging.",
                 "translation": "我们在挖土。"
+              },
+              {
+                "role": "Sam",
+                "text": "For what?",
+                "translation": "做什么用？"
+              },
+              {
+                "role": "Lingling",
+                "text": "We're making a small garden for the class!",
+                "translation": "我们在为班级建一个小花园！"
               },
               {
                 "role": "Daming",
@@ -1934,24 +2394,29 @@
                 "translation": "我有葵花籽。"
               },
               {
-                "role": "Daming",
+                "role": "Narrator",
+                "text": "Two weeks later.",
+                "translation": "两周后。"
+              },
+              {
+                "role": "Amy",
                 "text": "Are your seeds growing?",
-                "translation": "你的种子在发芽吗？"
+                "translation": "你们的种子发芽了吗？"
               },
               {
                 "role": "Lingling",
                 "text": "Yes, they are. Look!",
-                "translation": "是的，看！"
+                "translation": "是的，发芽了。看！"
               },
               {
-                "role": "Amy",
+                "role": "Daming",
                 "text": "Are your seeds growing, Sam?",
-                "translation": "萨姆，你的种子在发芽吗？"
+                "translation": "萨姆，你的种子发芽了吗？"
               },
               {
                 "role": "Sam",
-                "text": "No, they aren't. Why aren't my seeds growing?",
-                "translation": "不，没有。为什么我的种子不发芽？"
+                "text": "Why aren't my seeds growing?",
+                "translation": "为什么我的种子不发芽？"
               },
               {
                 "role": "Amy",
@@ -1966,7 +2431,7 @@
               {
                 "role": "Amy",
                 "text": "Because your seeds are from a snack bag.",
-                "translation": "因为你的种子来自零食袋。"
+                "translation": "因为你的种子是从零食袋里来的。"
               },
               {
                 "role": "Sam",
@@ -1979,29 +2444,39 @@
             "unit": "Unit 4 Plant life (Speed up)",
             "content": [
               {
-                "role": "Narrator",
-                "text": "This is Huahua's grandpa. He is a scientist.",
-                "translation": "这是花花的爷爷。他是一位科学家。"
+                "role": "Huahua",
+                "text": "I'm Huahua. This is my grandpa. He's a scientist.",
+                "translation": "我是花花。这是我的爷爷。他是一位科学家。"
+              },
+              {
+                "role": "Huahua",
+                "text": "I like staying with Grandpa. He's reading and I'm sleeping.",
+                "translation": "我喜欢和爷爷待在一起。他看书，我睡觉。"
+              },
+              {
+                "role": "Huahua",
+                "text": "Grandpa often works in the fields. I like playing with the rice plants there.",
+                "translation": "爷爷经常在田里工作。我喜欢在那儿和水稻玩。"
+              },
+              {
+                "role": "Huahua",
+                "text": "Look, Grandpa! I've got a mouse!",
+                "translation": "看，爷爷！我抓到一只老鼠！"
+              },
+              {
+                "role": "Huahua",
+                "text": "Grandpa works hard. Sometimes I work, too!",
+                "translation": "爷爷工作很努力。有时我也工作！"
               },
               {
                 "role": "Narrator",
-                "text": "Grandpa often works in the fields.",
-                "translation": "爷爷经常在田里工作。"
+                "text": "Grandpa has two dreams. He wants to grow tall rice plants, with big grains. He can sit under them. He also wants to feed the world with his rice.",
+                "translation": "爷爷有两个梦想。他想种出高大、谷粒饱满的水稻，能在稻下乘凉。他还想用自己的水稻养活全世界。"
               },
               {
-                "role": "Grandpa",
-                "text": "I want to grow tall rice plants.",
-                "translation": "我想种高大的水稻。"
-              },
-              {
-                "role": "Narrator",
-                "text": "Grandpa works hard day and night.",
-                "translation": "爷爷夜以继日地努力工作。"
-              },
-              {
-                "role": "Narrator",
-                "text": "I think his dreams will come true.",
-                "translation": "我想他的梦想会实现。"
+                "role": "Huahua",
+                "text": "I miss Grandpa. I think his dreams will come true!",
+                "translation": "我想念爷爷。我相信他的梦想会实现！"
               }
             ]
           }
@@ -2053,12 +2528,7 @@
               {
                 "role": "Narrator",
                 "text": "Weiwei and Lanlan are on a field trip.",
-                "translation": "薇薇和兰兰在户外研学。"
-              },
-              {
-                "role": "Narrator",
-                "text": "They find a baby bird falls off the tree.",
-                "translation": "他们发现一只小鸟从树上掉下来。"
+                "translation": "薇薇和兰兰在参加户外研学。"
               },
               {
                 "role": "Lanlan",
@@ -2067,23 +2537,38 @@
               },
               {
                 "role": "Weiwei",
-                "text": "Can we help it?",
-                "translation": "我们能帮助它吗？"
+                "text": "It falls off the tree. Can we help it?",
+                "translation": "它从树上掉下来了。我们能帮它吗？"
               },
               {
                 "role": "Lanlan",
-                "text": "Yes, we can. Let's call the forest keeper.",
-                "translation": "是的，我们能。我们打电话给护林员吧。"
+                "text": "Yes, we can. Let's call the forest keeper!",
+                "translation": "能。我们给护林员打电话吧！"
               },
               {
                 "role": "Narrator",
-                "text": "The forest keeper comes and helps the bird.",
-                "translation": "护林员来帮助小鸟。"
+                "text": "The forest keeper comes.",
+                "translation": "护林员来了。"
+              },
+              {
+                "role": "Forest keeper",
+                "text": "The baby bird is home. Thank you, children.",
+                "translation": "小鸟回家了。谢谢你们，孩子们。"
+              },
+              {
+                "role": "Lanlan",
+                "text": "Hey, look! The mother bird is back.",
+                "translation": "嘿，看！鸟妈妈回来了。"
+              },
+              {
+                "role": "Weiwei",
+                "text": "How lovely! They are a happy family!",
+                "translation": "真可爱！它们是幸福的一家！"
               },
               {
                 "role": "Narrator",
-                "text": "The bird is safe now.",
-                "translation": "小鸟现在安全了。"
+                "text": "This is a very special field trip for us!",
+                "translation": "这对我们来说是一次很特别的研学！"
               }
             ]
           }
@@ -2103,39 +2588,49 @@
                 "translation": "我最喜欢的蓝色连衣裙！"
               },
               {
-                "role": "Lingling",
-                "text": "What are you doing, Mum?",
-                "translation": "妈妈，你在干什么？"
+                "role": "Mum",
+                "text": "Oh, that dress is nice!",
+                "translation": "哦，那条裙子真好看！"
               },
               {
                 "role": "Mum",
-                "text": "I'm looking for your blue dress.",
-                "translation": "我在找你的蓝裙子。"
+                "text": "What are you doing, Lingling?",
+                "translation": "玲玲，你在做什么？"
               },
               {
                 "role": "Lingling",
-                "text": "It's too small! I'm sad.",
-                "translation": "它太小了！我很难过。"
+                "text": "I'm looking for my blue dress.",
+                "translation": "我在找我的蓝色连衣裙。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Oh, it's small for me now.",
+                "translation": "哦，它现在太小了。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Mum, are you cutting up my dress?",
+                "translation": "妈妈，你在剪我的裙子吗？"
               },
               {
                 "role": "Mum",
-                "text": "I have an idea.",
-                "translation": "我有个主意。"
+                "text": "Don't worry. I have an idea.",
+                "translation": "别担心。我有个主意。"
               },
               {
                 "role": "Narrator",
-                "text": "Mum cuts up the dress and makes new clothes.",
-                "translation": "妈妈剪开裙子做新衣服。"
+                "text": "The next day.",
+                "translation": "第二天。"
+              },
+              {
+                "role": "Mum",
+                "text": "Lingling, you're not wearing that blue dress.",
+                "translation": "玲玲，你没穿那条蓝色连衣裙。"
               },
               {
                 "role": "Lingling",
-                "text": "I'm wearing it at the party!",
-                "translation": "我在聚会上穿上它了！"
-              },
-              {
-                "role": "Lingling",
-                "text": "I'm happy now!",
-                "translation": "我现在很开心！"
+                "text": "Yes, I'm wearing it!",
+                "translation": "我穿着呢！"
               }
             ]
           },
@@ -2144,23 +2639,63 @@
             "content": [
               {
                 "role": "Narrator",
-                "text": "Police officers wear blue shirts.",
-                "translation": "警察穿蓝衬衫。"
+                "text": "Tom makes clothes for animals. He's busy every day!",
+                "translation": "汤姆为动物们做衣服。他每天都很忙！"
+              },
+              {
+                "role": "Giraffe",
+                "text": "We need clothes for a Christmas party!",
+                "translation": "我们需要圣诞聚会的衣服！"
+              },
+              {
+                "role": "Tom",
+                "text": "OK!",
+                "translation": "好的！"
               },
               {
                 "role": "Narrator",
-                "text": "Doctors and nurses wear white robes.",
-                "translation": "医生和护士穿白袍。"
+                "text": "Lovely dresses and hats! Nice shirts!",
+                "translation": "好看的裙子和帽子！漂亮的衬衫！"
+              },
+              {
+                "role": "Frog",
+                "text": "My family want colourful shirts!",
+                "translation": "我的家人想要色彩鲜艳的衬衫！"
+              },
+              {
+                "role": "Frog",
+                "text": "I have eight brothers and sisters. We all look the same! Dad gets our names wrong. Can you help?",
+                "translation": "我有八个兄弟姐妹。我们长得都一样！爸爸总是叫错我们的名字。你能帮忙吗？"
+              },
+              {
+                "role": "Tom",
+                "text": "No problem!",
+                "translation": "没问题！"
               },
               {
                 "role": "Narrator",
-                "text": "Firemen wear orange uniforms.",
-                "translation": "消防员穿橙色制服。"
+                "text": "Now we're wearing T-shirts with our names.",
+                "translation": "现在我们穿着印着自己名字的 T 恤。"
+              },
+              {
+                "role": "Frog",
+                "text": "Clever idea!",
+                "translation": "真是聪明的主意！"
               },
               {
                 "role": "Narrator",
-                "text": "Students wear school uniforms.",
-                "translation": "学生穿校服。"
+                "text": "Here comes Mr Bird. He wants something special.",
+                "translation": "小鸟先生来了。他想要点特别的东西。"
+              },
+              {
+                "role": "Tom",
+                "text": "A birthday present for Ms Whale? Let me think.",
+                "translation": "给鲸鱼女士的生日礼物？让我想想。"
+              },
+              {
+                "role": "Narrator",
+                "text": "The next day, Tom asks all the animals to come and help.",
+                "translation": "第二天，汤姆请所有动物来帮忙。"
               }
             ]
           }
@@ -2174,14 +2709,14 @@
             "unit": "Unit 1 What's on your plate? (Start up)",
             "content": [
               {
-                "role": "Tom",
+                "role": "Amy and Sam",
                 "text": "Wow! There is so much food.",
                 "translation": "哇！有这么多食物。"
               },
               {
                 "role": "Dad",
                 "text": "What do you want to eat?",
-                "translation": "你想吃什么？"
+                "translation": "你们想吃什么？"
               },
               {
                 "role": "Amy",
@@ -2189,7 +2724,7 @@
                 "translation": "我想要汤面、沙拉和牛肉。"
               },
               {
-                "role": "Tom",
+                "role": "Sam",
                 "text": "I want chicken and beef.",
                 "translation": "我想要鸡肉和牛肉。"
               },
@@ -2199,7 +2734,7 @@
                 "translation": "我还想要一个苹果和牛奶！"
               },
               {
-                "role": "Tom",
+                "role": "Sam",
                 "text": "I like cake and cola.",
                 "translation": "我喜欢蛋糕和可乐。"
               },
@@ -2210,11 +2745,11 @@
               },
               {
                 "role": "Dad",
-                "text": "Tom, look at your plate. You should have some vegetables.",
+                "text": "Sam, look at your plate. You should have some vegetables.",
                 "translation": "萨姆，看看你的盘子。你应该吃点蔬菜。"
               },
               {
-                "role": "Tom",
+                "role": "Sam",
                 "text": "OK. Let me go and get some.",
                 "translation": "好的，我去拿一些。"
               },
@@ -2224,13 +2759,13 @@
                 "translation": "你现在拿了什么蔬菜？"
               },
               {
-                "role": "Tom",
+                "role": "Sam",
                 "text": "Potatoes, a lot of potatoes.",
                 "translation": "土豆，很多土豆。"
               },
               {
-                "role": "Dad",
-                "text": "Oh, Tom!!! Those are chips!",
+                "role": "Dad and Amy",
+                "text": "Oh, Sam!!! Those are chips!",
                 "translation": "哦，萨姆！！！那些是薯条！"
               }
             ]
@@ -2239,59 +2774,34 @@
             "unit": "Unit 1 What's on your plate? (Speed up)",
             "content": [
               {
-                "role": "Narrator",
-                "text": "A letter from your stomach.",
-                "translation": "一封来自你胃的信。"
+                "role": "Stomach",
+                "text": "Dear Sally, That's enough! This is a bad day for me again!",
+                "translation": "亲爱的萨莉，够了！今天对我来说又是糟糕的一天！"
               },
               {
                 "role": "Stomach",
-                "text": "Every morning, you need a good breakfast.",
-                "translation": "每天早上，你都需要一顿丰盛的早餐。"
+                "text": "Every morning, you need a good breakfast. Let's have bread, milk, eggs, fruit and vegetables. Just a few biscuits are not enough! I often feel hungry all morning.",
+                "translation": "每天早上，你都需要一顿丰盛的早餐。让我们吃些面包、牛奶、鸡蛋、水果和蔬菜吧。只吃几块饼干是不够的！我经常整个上午都觉得饿。"
               },
               {
                 "role": "Stomach",
-                "text": "Just a few biscuits are not enough!",
-                "translation": "只吃几块饼干是不够的！"
+                "text": "Then you often eat too much for lunch. You have a lot of meat, but no vegetables and no fruit. I get too heavy. This makes you sleepy in the afternoon.",
+                "translation": "然后你午饭又经常吃得太多。你吃很多肉，却没有蔬菜和水果。我变得太沉重了。这让你下午犯困。"
               },
               {
                 "role": "Stomach",
-                "text": "I often feel hungry all morning.",
-                "translation": "我整个上午经常觉得饿。"
+                "text": "And you always eat dinner too fast so you can go and play. You should eat slowly. I have to work hard for a long time after dinner. I'm so tired.",
+                "translation": "而且你晚餐总是吃得太快，好去玩。你应该慢慢吃。晚饭后我不得不辛苦工作很长时间。我太累了。"
               },
               {
                 "role": "Stomach",
-                "text": "Then you usually eat too much for lunch.",
-                "translation": "然后你午餐通常吃得太多。"
+                "text": "Sally, please make some changes. Help me stay healthy. Then you are healthy, too.",
+                "translation": "萨莉，请做些改变。帮我保持健康，这样你也会健康。"
               },
               {
                 "role": "Stomach",
-                "text": "You often have a lot of meat, but no vegetables and no fruit.",
-                "translation": "你经常吃很多肉，但不吃蔬菜和水果。"
-              },
-              {
-                "role": "Stomach",
-                "text": "This makes you sleepy in the afternoon.",
-                "translation": "这会让你下午犯困。"
-              },
-              {
-                "role": "Stomach",
-                "text": "And you always eat dinner too quickly so you can go and play.",
-                "translation": "而且你总是为了去玩而吃得太快。"
-              },
-              {
-                "role": "Stomach",
-                "text": "I have to work hard for a long time after dinner.",
-                "translation": "晚饭后我得长时间辛苦工作。"
-              },
-              {
-                "role": "Stomach",
-                "text": "Sally, please change your bad eating habits.",
-                "translation": "萨莉，请改掉你的坏习惯。"
-              },
-              {
-                "role": "Stomach",
-                "text": "Help me stay healthy. Then you are healthy, too.",
-                "translation": "帮我保持健康，这样你也会健康。"
+                "text": "With love, Your stomach",
+                "translation": "爱你的，你的胃"
               }
             ]
           }
@@ -2381,39 +2891,34 @@
             "unit": "Unit 2 A green life (Speed up)",
             "content": [
               {
-                "role": "Narrator",
+                "role": "Students",
                 "text": "Dear all,",
-                "translation": "亲爱的大家："
+                "translation": "亲爱的同学们："
               },
               {
-                "role": "Narrator",
-                "text": "Winter is coming, so we made these houses for birds.",
-                "translation": "冬天要来了，所以我们为鸟儿做了这些房子。"
+                "role": "Students",
+                "text": "Each of us has a box of milk every day at school. We use over 150,000 milk boxes every year! But many of us just throw them away.",
+                "translation": "在学校，我们每人每天都会喝一盒牛奶。每年我们要用掉超过 15 万个牛奶盒！但很多人直接把它们扔掉了。"
               },
               {
-                "role": "Narrator",
-                "text": "They keep the birds safe and warm.",
-                "translation": "它们让鸟儿安全又温暖。"
+                "role": "Students",
+                "text": "Milk boxes have three parts: paper, plastic and metal. Each part can turn into something new, like newspapers, bottles and cans.",
+                "translation": "牛奶盒有三个部分：纸、塑料和金属。每一部分都能变成新东西，比如报纸、瓶子和罐子。"
               },
               {
-                "role": "Narrator",
-                "text": "Please don't take them away. Let's be kind to the birds.",
-                "translation": "请不要把它们拿走。让我们善待鸟儿。"
+                "role": "Students",
+                "text": "It is easy to recycle a milk box in just three steps: 1. Open the milk box and wash it with water. 2. Make it flat. 3. Put it into a recycling box.",
+                "translation": "回收一个牛奶盒很简单，只需三步：1. 拆开牛奶盒，用水洗净。2. 把它压平。3. 放进回收箱。"
               },
               {
-                "role": "Narrator",
-                "text": "We're making more houses because lots of birds need a home.",
-                "translation": "我们正在做更多房子，因为很多鸟儿需要家。"
+                "role": "Students",
+                "text": "Now the milk box moves to a new beginning! Let's start now for a green world!",
+                "translation": "现在这个牛奶盒走向新的开始！让我们为了绿色的世界立刻行动！"
               },
               {
-                "role": "Narrator",
-                "text": "Don't throw cans, boxes, bottles or old clothes away. Give them to us.",
-                "translation": "不要把罐子、盒子、瓶子或旧衣服扔掉。把它们给我们吧。"
-              },
-              {
-                "role": "Narrator",
-                "text": "It can help a lot! Thank you so much!",
-                "translation": "这能帮上大忙！非常感谢你们！"
+                "role": "Students",
+                "text": "Students from Class 502",
+                "translation": "502 班全体同学"
               }
             ]
           }
@@ -2595,39 +3100,34 @@
             "unit": "Unit 4 A better me (Speed up)",
             "content": [
               {
-                "role": "Narrator",
-                "text": "Ben makes a four-week plan to get better.",
-                "translation": "本制定了一个为期四周的计划来让自己变得更好。"
+                "role": "Lu Xun",
+                "text": "My mornings are always busy. My father is ill, but my family has little money. So before school, I have to sell things. With the money, I go to buy medicine for my father.",
+                "translation": "我的早晨总是很忙。爸爸病了，家里钱很少。所以上学前我得去卖东西。用这些钱，我去给爸爸买药。"
+              },
+              {
+                "role": "Lu Xun",
+                "text": "It's a long way, and sometimes there are a lot of people. This morning, there are too many people. I'm worried.",
+                "translation": "路很远，有时人很多。今天早上人太多，我很着急。"
+              },
+              {
+                "role": "Lu Xun",
+                "text": "I hurry to school, but I'm still late. I run into the classroom and my teacher is there. He is unhappy with me.",
+                "translation": "我赶快去学校，可还是迟到了。我跑进教室，老师在。他对我很不满意。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Don't be late again.",
+                "translation": "别再迟到了。"
+              },
+              {
+                "role": "Lu Xun",
+                "text": "I feel sad. I sit at my desk and cut a word into it. I'm not going to be late again.",
+                "translation": "我很难过。我坐在书桌前，在桌面上刻了一个字。我再也不会迟到了。"
               },
               {
                 "role": "Narrator",
-                "text": "Week 1: He's going to eat healthily.",
-                "translation": "第一周：他打算吃得健康。"
-              },
-              {
-                "role": "Narrator",
-                "text": "Week 2: He's going to do more exercise.",
-                "translation": "第二周：他打算做更多运动。"
-              },
-              {
-                "role": "Narrator",
-                "text": "Week 3: He's going to tidy his room by himself.",
-                "translation": "第三周：他打算自己整理房间。"
-              },
-              {
-                "role": "Narrator",
-                "text": "Week 4: He's going to read more books.",
-                "translation": "第四周：他打算读更多书。"
-              },
-              {
-                "role": "Narrator",
-                "text": "After a month, Ben finishes all the tasks. He feels good, so he decides to continue.",
-                "translation": "一个月后，本完成了所有任务。他感觉很好，所以决定继续。"
-              },
-              {
-                "role": "Narrator",
-                "text": "He's going to start a new four-week plan.",
-                "translation": "他打算开始一个新的四周计划。"
+                "text": "The boy is Lu Xun. The word is \"早\".",
+                "translation": "这个男孩就是鲁迅。他刻的字是“早”。"
               }
             ]
           }
