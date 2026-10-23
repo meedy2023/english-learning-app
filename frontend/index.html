@@ -821,6 +821,8 @@
   <!-- ======= 测验 ======= -->
   <div id="view-quiz" class="view">
     <button class="btn btn-secondary" onclick="switchView('home')" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回首页</button>
+    <div class="section-title" id="quiz-module-title" style="display:none">模块</div>
+    <div class="cl-meta" id="quiz-meta" style="display:none"></div>
     <div class="tab-bar" style="margin-bottom:16px">
       <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
       <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
@@ -1617,10 +1619,21 @@ const API = ".";
     '五下6': { module: 'Unit 6 Then and now', grade: '五年级下册' },
   };
 
-  // 单元完整标题：年级 + 单元名（无映射时退回模块键）
+  // 单元显示名：「模块键 + 单元名」，如 五上1 What's on your plate?
   function moduleLabel(key) {
     const m = WORD_TO_LESSON[key];
-    return m ? (m.grade + ' · ' + m.module) : (key || '');
+    if (!m) return key || '';
+    const short = (m.module || '').replace(/^Unit\s*\d+\s*/, '').trim() || m.module;
+    return key + ' ' + short;
+  }
+
+  // 由课文模块名 + 学期反查单词模块键（五上1 之类）
+  function wordModuleKey(lessonModule, grade) {
+    for (const k in WORD_TO_LESSON) {
+      const m = WORD_TO_LESSON[k];
+      if (m.module === lessonModule && (!grade || m.grade === grade)) return k;
+    }
+    return null;
   }
 
   async function showTextbookList() {
@@ -1685,7 +1698,7 @@ const API = ".";
     const gradeLabel = grade || currentLessonGrade || "三年级上册";
     currentLessonModule = moduleName;
     currentLessonGrade = grade || currentLessonGrade || '三年级上册';
-    document.getElementById('topbar-title').textContent = '📖 ' + currentLessonGrade + ' - ' + moduleName;
+    document.getElementById('topbar-title').textContent = '📖 ' + (wordModuleKey(moduleName, currentLessonGrade) ? moduleLabel(wordModuleKey(moduleName, currentLessonGrade)) : moduleName);
     // 联动更新右上角的年级提示：提取'几年级'部分，例如"三年级上册"→"三年级"
     const gradeMatch = (grade || currentLessonGrade || '').match(/^[^-]+?年级/);
     const gradeDisplay = document.getElementById('grade-display');
@@ -1711,6 +1724,10 @@ const API = ".";
       title.className = 'section-title';
       title.textContent = '选择单元';
       area.appendChild(title);
+      const _meta = document.createElement('div');
+      _meta.className = 'cl-meta';
+      _meta.innerHTML = '<span class="keep">总计 ' + currentLessonData.length + ' 篇课文</span>';
+      area.appendChild(_meta);
       
       for (const unit of currentLessonData) {
         const unitCard = document.createElement('div');
@@ -3560,7 +3577,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try {
       const data = await apiGET(`/api/words?module=${encodeURIComponent(module)}`);
       currentWords = data.words;
-      document.getElementById("learn-module-title").textContent = "📖 " + module;
+      document.getElementById("learn-module-title").textContent = "📖 " + moduleLabel(module);
       switchView("learn");
       showWordList();
     } catch (e) { toast("加载失败: " + e.message); }
@@ -3587,7 +3604,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try {
       wordStatuses = await apiGET(`/api/word-status/${USER_ID}?module=${encodeURIComponent(currentModule)}`);
     } catch(e) { wordStatuses = {}; }
-    list.innerHTML = '<div class="cl-meta">' + moduleLabel(currentModule) + ' · <span class="keep">总计 ' + currentWords.length + ' 个单词</span></div>';
+    list.innerHTML = '<div class="cl-meta"><span class="keep">总计 ' + currentWords.length + ' 个单词</span></div>';
     for (const w of currentWords) {
       const status = wordStatuses[w.id] || "new";
       const item = document.createElement("div");
@@ -3707,6 +3724,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById("quiz-hint").style.display = "block";
     setActiveTab('quiz');
     hideMatchGame();
+    const _qt = document.getElementById('quiz-module-title');
+    const _qm = document.getElementById('quiz-meta');
+    if (_qt) { _qt.textContent = '📖 ' + moduleLabel(currentModule); _qt.style.display = 'block'; }
+    if (_qm) { _qm.innerHTML = '<span class="keep">总计 ' + currentWords.length + ' 个单词</span>'; _qm.style.display = 'block'; }
     switchView("quiz");
     loadQuizQuestion();
   }
@@ -4109,7 +4130,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById('match-tip').style.display = 'block';
       document.getElementById('match-board').style.display = 'grid';
       document.getElementById('match-sub').textContent =
-        moduleLabel(currentModule) + ' · 每局 ' + this.PER_ROUND + ' 个单词 · 共 ' + currentWords.length + ' 个';
+        '总计 ' + currentWords.length + ' 个单词 · 每局 ' + this.PER_ROUND + ' 个';
 
       this.renderBoard();
       this.updateHud();
@@ -4334,7 +4355,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
 
     const area = document.getElementById('choice-learn-area');
-    area.innerHTML = '<div class="cl-meta">' + moduleLabel(currentModule) + ' · <span class="keep">总计 ' + cl_words.length + ' 个单词</span></div>' +
+    area.innerHTML = '<div class="cl-meta"><span class="keep">总计 ' + cl_words.length + ' 个单词</span></div>' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
       '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden">' +
         '<div style="height:100%;background:linear-gradient(90deg,#4f9fff,#6c63ff);width:' + pct + '%;border-radius:3px;transition:width .3s"></div>' +
