@@ -835,49 +835,49 @@
       "unit": "Unit 2 Know your body",
       "content": [
        {
-        "role": "Ms Li",
-        "text": "Good work, children!",
-        "translation": "孩子们，干得好！"
-       },
-       {
-        "role": "Ms Li",
+        "role": "Amy",
         "text": "Let's make a snowman!",
         "translation": "我们来堆个雪人吧！"
        },
        {
-        "role": "Child",
+        "role": "Father",
+        "text": "Good work, children!",
+        "translation": "干得好，孩子们！"
+       },
+       {
+        "role": "Tom",
         "text": "Look! He has got a red mouth.",
-        "translation": "看！他有一张红色的嘴。"
+        "translation": "看！他有一张红色的嘴巴。"
        },
        {
-        "role": "Child",
+        "role": "Tom",
         "text": "Now, he has got a long nose.",
-        "translation": "现在，他有了一只长鼻子。"
+        "translation": "现在，他有一个长鼻子。"
        },
        {
-        "role": "Child",
+        "role": "Amy",
         "text": "Oh, he hasn't got eyes.",
-        "translation": "噢，他还没有眼睛。"
+        "translation": "哦，他还没有眼睛。"
        },
        {
-        "role": "Child",
+        "role": "Sam",
         "text": "I've got two rocks!",
-        "translation": "我找到了两块石头！"
+        "translation": "我有两块石头！"
        },
        {
-        "role": "Child",
+        "role": "Tom",
         "text": "Now he has got two eyes.",
         "translation": "现在他有两只眼睛了。"
        },
        {
-        "role": "Child",
+        "role": "Tom",
         "text": "He's got long arms and big hands!",
-        "translation": "他有了长长的胳膊和大大的手！"
+        "translation": "他有长长的胳膊和大大的手！"
        },
        {
-        "role": "Child",
+        "role": "Mother",
         "text": "Wow! You've got a cool snowman!",
-        "translation": "哇！你们有一个很酷的雪人！"
+        "translation": "哇！你们堆了一个好酷的雪人！"
        }
       ]
      },
@@ -962,57 +962,72 @@
       "unit": "Unit 3 Yummy food",
       "content": [
        {
-        "role": "Ms Li",
-        "text": "Welcome! Hello!",
-        "translation": "欢迎！你好！"
+        "role": "Daming and Lingling",
+        "text": "Hello!",
+        "translation": "你们好！"
        },
        {
-        "role": "Ms Li",
+        "role": "Sam and Amy",
+        "text": "Welcome!",
+        "translation": "欢迎！"
+       },
+       {
+        "role": "Amy",
         "text": "Let's make a salad together!",
         "translation": "我们一起做沙拉吧！"
        },
        {
-        "role": "Child",
-        "text": "OK. I like tomatoes and oranges.",
-        "translation": "好的。我喜欢西红柿和橙子。"
+        "role": "Daming and Lingling",
+        "text": "OK!",
+        "translation": "好的！"
        },
        {
-        "role": "Child",
+        "role": "Sam",
+        "text": "I like tomatoes and oranges.",
+        "translation": "我喜欢西红柿和橙子。"
+       },
+       {
+        "role": "Amy",
         "text": "I like bananas.",
         "translation": "我喜欢香蕉。"
        },
        {
-        "role": "Child",
+        "role": "Lingling",
         "text": "I like beans.",
         "translation": "我喜欢豆子。"
        },
        {
-        "role": "Child",
+        "role": "Daming",
         "text": "I don't like beans. I like cucumbers.",
         "translation": "我不喜欢豆子。我喜欢黄瓜。"
        },
        {
-        "role": "Ms Li",
+        "role": "Lingling",
         "text": "Then let's have cucumbers!",
-        "translation": "那我们就用黄瓜吧！"
+        "translation": "那我们就吃黄瓜吧！"
        },
        {
-        "role": "Child",
-        "text": "What about Tom? He likes grapes.",
-        "translation": "汤姆呢？他喜欢葡萄。"
+        "role": "Daming",
+        "text": "What about Tom?",
+        "translation": "汤姆呢？"
        },
        {
-        "role": "Ms Li",
+        "role": "Amy",
+        "text": "He likes grapes.",
+        "translation": "他喜欢葡萄。"
+       },
+       {
+        "role": "Tom",
         "text": "Wow! It's a rainbow salad.",
         "translation": "哇！这是一份彩虹沙拉。"
        },
        {
-        "role": "Ms Li",
+        "role": "Daming and Sam",
         "text": "Do you like it?",
-        "translation": "你们喜欢它吗？"
+        "translation": "你们喜欢吗？"
        },
        {
-        "role": "Child",
+        "role": "Tom",
         "text": "Yes, I do. It's beautiful!",
         "translation": "是的，我喜欢。它很漂亮！"
        }
@@ -1459,24 +1474,59 @@
       "unit": "Unit 1 I love sports (Speed up)",
       "content": [
        {
-        "role": "Narrator",
-        "text": "This is Terry Fox. He lost one leg because of cancer.",
-        "translation": "这是特里·福克斯。他因为癌症失去了一条腿。"
-       },
-       {
-        "role": "Narrator",
-        "text": "He ran across Canada to get money for the people with cancer.",
-        "translation": "他跑遍加拿大为癌症患者筹钱。"
+        "role": "Terry",
+        "text": "I'm Terry Fox. I like running and playing basketball.",
+        "translation": "我是特里·福克斯。我喜欢跑步和打篮球。"
        },
        {
         "role": "Terry",
-        "text": "It's OK to fail. Don't give up!",
-        "translation": "失败没关系。不要放弃！"
+        "text": "But I lose one leg because of cancer.",
+        "translation": "但因为癌症，我失去了一条腿。"
        },
        {
         "role": "Terry",
-        "text": "Never stop! Work hard and try your best!",
-        "translation": "永不停止！努力工作，尽你最大的努力！"
+        "text": "Can I help other people with cancer?",
+        "translation": "我能帮助其他癌症患者吗？"
+       },
+       {
+        "role": "Terry",
+        "text": "I know! I can run across Canada. And I can get money for people!",
+        "translation": "我想到了！我可以跑步穿越加拿大，还能为人们筹集善款！"
+       },
+       {
+        "role": "Terry",
+        "text": "It's hard for me. Many kind people help me.",
+        "translation": "这对我来说很难。许多善良的人帮助我。"
+       },
+       {
+        "role": "Terry",
+        "text": "Yes, I can do it!",
+        "translation": "是的，我能做到！"
+       },
+       {
+        "role": "Woman",
+        "text": "Come on, Terry! You can do it!",
+        "translation": "加油，特里！你能做到！"
+       },
+       {
+        "role": "Terry",
+        "text": "I keep running for five months.",
+        "translation": "我坚持跑了五个月。"
+       },
+       {
+        "role": "Terry",
+        "text": "But I'm very ill. I can't run anymore.",
+        "translation": "但我病得很重。我再也跑不动了。"
+       },
+       {
+        "role": "Terry",
+        "text": "Now many people do the Terry Fox Run every year.",
+        "translation": "现在每年都有很多人参加特里·福克斯长跑。"
+       },
+       {
+        "role": "Woman",
+        "text": "Let's remember Terry with a run.",
+        "translation": "让我们用长跑纪念特里。"
        }
       ]
      }
