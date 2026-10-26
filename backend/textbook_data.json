@@ -65,35 +65,43 @@
             "content": [
               {
                 "role": "Teacher",
-                "text": "Welcome!"
+                "text": "Welcome!",
+                "translation": "欢迎！"
               },
               {
                 "role": "Sam",
-                "text": "Hi, everyone! I'm Sam. I'm nine."
+                "text": "Hi, everyone! I'm Sam. I'm nine.",
+                "translation": "大家好！我是萨姆。我九岁了。"
               },
               {
                 "role": "Sam",
-                "text": "She's Amy. She's nine, too."
+                "text": "She's Amy. She's nine, too.",
+                "translation": "她是埃米。她也九岁了。"
               },
               {
                 "role": "Amy",
-                "text": "We're from the UK. We're twins!"
+                "text": "We're from the UK. We're twins!",
+                "translation": "我们来自英国。我们是双胞胎！"
               },
               {
                 "role": "Daming & Lingling",
-                "text": "Wow!"
+                "text": "Wow!",
+                "translation": "哇！"
               },
               {
                 "role": "Lingling",
-                "text": "Hi, Sam. Hi, Amy. I'm Lingling. He's Daming. Come and play!"
+                "text": "Hi, Sam. Hi, Amy. I'm Lingling. He's Daming. Come and play!",
+                "translation": "你好，萨姆。你好，埃米。我是玲玲。他是大明。过来一起玩吧！"
               },
               {
                 "role": "Sam & Amy",
-                "text": "Good!"
+                "text": "Good!",
+                "translation": "好的！"
               },
               {
                 "role": "Everyone",
-                "text": "We are friends!"
+                "text": "We are friends!",
+                "translation": "我们是朋友！"
               }
             ]
           },
@@ -102,39 +110,48 @@
             "content": [
               {
                 "role": "Ben",
-                "text": "Oh, no!"
+                "text": "Oh, no!",
+                "translation": "哦，不！"
               },
               {
                 "role": "David & Mia",
-                "text": "Let's help."
+                "text": "Let's help.",
+                "translation": "我们来帮忙吧。"
               },
               {
                 "role": "David",
-                "text": "Here you are."
+                "text": "Here you are.",
+                "translation": "给你。"
               },
               {
                 "role": "Ben",
-                "text": "Thank you."
+                "text": "Thank you.",
+                "translation": "谢谢。"
               },
               {
                 "role": "Mia",
-                "text": "Hi, I'm Mia. He's David."
+                "text": "Hi, I'm Mia. He's David.",
+                "translation": "你好，我是米娅。他是戴维。"
               },
               {
                 "role": "David",
-                "text": "We're nine."
+                "text": "We're nine.",
+                "translation": "我们九岁了。"
               },
               {
                 "role": "Ben",
-                "text": "Hi, I'm Ben. I'm nine, too. Let's play together!"
+                "text": "Hi, I'm Ben. I'm nine, too. Let's play together!",
+                "translation": "你好，我是本。我也九岁了。我们一起玩吧！"
               },
               {
                 "role": "David & Mia",
-                "text": "OK!"
+                "text": "OK!",
+                "translation": "好的！"
               },
               {
                 "role": "Ben",
-                "text": "Great!"
+                "text": "Great!",
+                "translation": "太好了！"
               }
             ]
           }
@@ -145,51 +162,63 @@
             "content": [
               {
                 "role": "Tom",
-                "text": "Amy! What's this?"
+                "text": "Amy! What's this?",
+                "translation": "埃米！这是什么？"
               },
               {
                 "role": "Amy",
-                "text": "It's my schoolbag."
+                "text": "It's my schoolbag.",
+                "translation": "这是我的书包。"
               },
               {
                 "role": "Tom",
-                "text": "What's this?"
+                "text": "What's this?",
+                "translation": "这是什么？"
               },
               {
                 "role": "Amy",
-                "text": "It's a book."
+                "text": "It's a book.",
+                "translation": "这是一本书。"
               },
               {
                 "role": "Tom",
-                "text": "What's this?"
+                "text": "What's this?",
+                "translation": "这是什么？"
               },
               {
                 "role": "Amy",
-                "text": "It's a pen."
+                "text": "It's a pen.",
+                "translation": "这是一支钢笔。"
               },
               {
                 "role": "Tom",
-                "text": "Is it a pen, too?"
+                "text": "Is it a pen, too?",
+                "translation": "它也是一支钢笔吗？"
               },
               {
                 "role": "Amy",
-                "text": "No, it isn't. It's a pencil."
+                "text": "No, it isn't. It's a pencil.",
+                "translation": "不，它不是。它是一支铅笔。"
               },
               {
                 "role": "Tom",
-                "text": "What's this?"
+                "text": "What's this?",
+                "translation": "这是什么？"
               },
               {
                 "role": "Amy",
-                "text": "It's a ruler."
+                "text": "It's a ruler.",
+                "translation": "这是一把尺子。"
               },
               {
                 "role": "Amy",
-                "text": "What's that, Tom?"
+                "text": "What's that, Tom?",
+                "translation": "那是什么，汤姆？"
               },
               {
                 "role": "Tom",
-                "text": "It's you, Amy!"
+                "text": "It's you, Amy!",
+                "translation": "是你呀，埃米！"
               }
             ]
           },
@@ -198,59 +227,73 @@
             "content": [
               {
                 "role": "Ms Olivia",
-                "text": "Bye, kids."
+                "text": "Bye, kids.",
+                "translation": "再见，孩子们。"
               },
               {
                 "role": "Kids",
-                "text": "Bye, Ms Olivia."
+                "text": "Bye, Ms Olivia.",
+                "translation": "再见，奥利维娅老师。"
               },
               {
                 "role": "Ms Olivia",
-                "text": "What's this?"
+                "text": "What's this?",
+                "translation": "这是什么？"
               },
               {
                 "role": "Sam",
-                "text": "Oh, it's a pen."
+                "text": "Oh, it's a pen.",
+                "translation": "哦，这是一支钢笔。"
               },
               {
                 "role": "Ms Olivia",
-                "text": "What's this? It's a ruler."
+                "text": "What's this? It's a ruler.",
+                "translation": "这是什么？这是一把尺子。"
               },
               {
                 "role": "Ms Olivia",
-                "text": "What's that?"
+                "text": "What's that?",
+                "translation": "那是什么？"
               },
               {
                 "role": "Sam",
-                "text": "It's an eraser."
+                "text": "It's an eraser.",
+                "translation": "这是一块橡皮。"
               },
               {
                 "role": "Ms Olivia",
-                "text": "Is this your pen, Yoyo?"
+                "text": "Is this your pen, Yoyo?",
+                "translation": "这是你的钢笔吗，悠悠？"
               },
               {
                 "role": "Yoyo",
-                "text": "Yes, it is. Thank you."
+                "text": "Yes, it is. Thank you.",
+                "translation": "是的，它是。谢谢。"
               },
               {
                 "role": "Ms Olivia",
-                "text": "Is this your ruler, Lulu?"
+                "text": "Is this your ruler, Lulu?",
+                "translation": "这是你的尺子吗，露露？"
               },
               {
                 "role": "Lulu",
-                "text": "No, it isn't."
+                "text": "No, it isn't.",
+                "translation": "不，它不是。"
               },
               {
                 "role": "Zuzu",
-                "text": "It's my ruler."
+                "text": "It's my ruler.",
+                "translation": "这是我的尺子。"
               },
               {
                 "role": "Coco",
-                "text": "It's my eraser."
+                "text": "It's my eraser.",
+                "translation": "这是我的橡皮。"
               },
               {
                 "role": "Ms Olivia",
-                "text": "Take care of your school things!"
+                "text": "Take care of your school things!",
+                "translation": "保管好你的学习用品！"
               }
             ]
           }
@@ -261,55 +304,68 @@
             "content": [
               {
                 "role": "Daming",
-                "text": "I want a balloon!"
+                "text": "I want a balloon!",
+                "translation": "我想要一个气球！"
               },
               {
                 "role": "Dad",
-                "text": "What colour is it? Can you guess?"
+                "text": "What colour is it? Can you guess?",
+                "translation": "它是什么颜色的？你能猜一猜吗？"
               },
               {
                 "role": "Daming",
-                "text": "It's blue!"
+                "text": "It's blue!",
+                "translation": "它是蓝色的！"
               },
               {
                 "role": "Dad",
-                "text": "Yes! Here you are."
+                "text": "Yes! Here you are.",
+                "translation": "是的！给你。"
               },
               {
                 "role": "Bobo",
-                "text": "I want a balloon, too."
+                "text": "I want a balloon, too.",
+                "translation": "我也想要一个气球。"
               },
               {
                 "role": "Dad",
-                "text": "What colour is it?"
+                "text": "What colour is it?",
+                "translation": "它是什么颜色的？"
               },
               {
                 "role": "Bobo",
-                "text": "It's red!"
+                "text": "It's red!",
+                "translation": "它是红色的！"
               },
               {
                 "role": "Dad",
-                "text": "Yes! You are right!"
+                "text": "Yes! You are right!",
+                "translation": "是的！你猜对了！"
               },
               {
                 "role": "Bobo",
-                "text": "It's yellow!"
+                "text": "It's yellow!",
+                "translation": "它是黄色的！"
               },
               {
                 "role": "Bobo",
-                "text": "It's pink!"
+                "text": "It's pink!",
+                "translation": "它是粉色的！"
               },
               {
                 "role": "Bobo",
-                "text": "It's purple!"
+                "text": "It's purple!",
+                "translation": "它是紫色的！"
               },
               {
                 "role": "Bobo",
-                "text": "It's orange!"
+                "text": "It's orange!",
+                "translation": "它是橙色的！"
               },
               {
                 "role": "Daming",
-                "text": "Bobo! Come back!"
+                "text": "Bobo! Come back!",
+                "translation": "波波！快回来！"
               }
             ]
           },
@@ -390,47 +446,58 @@
             "content": [
               {
                 "role": "Amy",
-                "text": "Wow! What is it?"
+                "text": "Wow! What is it?",
+                "translation": "哇！它是什么？"
               },
               {
                 "role": "Daming",
-                "text": "This is a Chinese knot."
+                "text": "This is a Chinese knot.",
+                "translation": "这是一个中国结。"
               },
               {
                 "role": "Sam",
-                "text": "It's beautiful!"
+                "text": "It's beautiful!",
+                "translation": "它真漂亮！"
               },
               {
                 "role": "Daming",
-                "text": "Guess! How many ropes?"
+                "text": "Guess! How many ropes?",
+                "translation": "猜一猜！有多少根绳？"
               },
               {
                 "role": "Sam",
-                "text": "Six?"
+                "text": "Six?",
+                "translation": "六根吗？"
               },
               {
                 "role": "Amy",
-                "text": "Twelve?"
+                "text": "Twelve?",
+                "translation": "十二根吗？"
               },
               {
                 "role": "Daming",
-                "text": "Ha ha, no."
+                "text": "Ha ha, no.",
+                "translation": "哈哈，不对。"
               },
               {
                 "role": "Daming",
-                "text": "Look! Only one rope!"
+                "text": "Look! Only one rope!",
+                "translation": "看！只有一根绳！"
               },
               {
                 "role": "Amy",
-                "text": "That's amazing! How do you make it?"
+                "text": "That's amazing! How do you make it?",
+                "translation": "太神奇了！你是怎么做成的？"
               },
               {
                 "role": "Daming",
-                "text": "Let me show you."
+                "text": "Let me show you.",
+                "translation": "让我做给你看。"
               },
               {
                 "role": "Amy & Sam",
-                "text": "OK. That's great!"
+                "text": "OK. That's great!",
+                "translation": "好的。太棒了！"
               }
             ]
           },
@@ -527,7 +594,7 @@
               {
                 "role": "Daming",
                 "text": "Oh, this is my grandma.",
-                "translation": "哦，这是（近处的）我奶奶。"
+                "translation": "哦，这是我的奶奶。"
               }
             ]
           },
@@ -628,39 +695,48 @@
             "content": [
               {
                 "role": "Mouse 1",
-                "text": "This is my home. A bedroom and a living room."
+                "text": "This is my home. A bedroom and a living room.",
+                "translation": "这是我的家。一间卧室和一个客厅。"
               },
               {
                 "role": "Mouse 2",
-                "text": "This is my home. A bedroom, a living room and a kitchen."
+                "text": "This is my home. A bedroom, a living room and a kitchen.",
+                "translation": "这是我的家。一间卧室、一个客厅和一间厨房。"
               },
               {
                 "role": "Mouse 1",
-                "text": "Who are you? You are in my bedroom!"
+                "text": "Who are you? You are in my bedroom!",
+                "translation": "你是谁？你在我的卧室里！"
               },
               {
                 "role": "Mouse 2",
-                "text": "No, you're in my living room!"
+                "text": "No, you're in my living room!",
+                "translation": "不，你在我的客厅里！"
               },
               {
                 "role": "Both",
-                "text": "Oh, no! Help!"
+                "text": "Oh, no! Help!",
+                "translation": "哦，不！救命！"
               },
               {
                 "role": "Both",
-                "text": "No home for us now!"
+                "text": "No home for us now!",
+                "translation": "现在我们没有家了！"
               },
               {
                 "role": "Mouse 2",
-                "text": "Look at the apple!"
+                "text": "Look at the apple!",
+                "translation": "看那个苹果！"
               },
               {
                 "role": "Mouse 1",
-                "text": "Let's make a new home there... and share it!"
+                "text": "Let's make a new home there... and share it!",
+                "translation": "我们在那里建个新家吧……一起分享它！"
               },
               {
                 "role": "Both",
-                "text": "This is our sweet home!"
+                "text": "This is our sweet home!",
+                "translation": "这就是我们温馨的家！"
               }
             ]
           }
@@ -850,7 +926,8 @@
               },
               {
                 "role": "Nana",
-                "text": "Well..."
+                "text": "Well...",
+                "translation": "嗯……"
               },
               {
                 "role": "Ear",
@@ -1072,7 +1149,7 @@
               {
                 "role": "Taotao & Jiajia",
                 "text": "Yummy! Let's get ready for lunch together, too!",
-                "translation": "真好吃！"
+                "translation": "真好吃！我们也一起准备午餐吧！"
               }
             ]
           }
@@ -1268,12 +1345,12 @@
               {
                 "role": "Lingling",
                 "text": "It's Wednesday. Only two days!",
-                "translation": "只剩两天了！今天星期三。"
+                "translation": "今天是星期三。只剩两天了！"
               },
               {
                 "role": "Daming",
                 "text": "It's Thursday. Only one day!",
-                "translation": "明天星期四！只剩一天了！"
+                "translation": "今天是星期四。只剩一天了！"
               },
               {
                 "role": "Sam",
@@ -1379,7 +1456,7 @@
               {
                 "role": "Daming",
                 "text": "Can you run fast?",
-                "translation": "萨姆，你能跑得快吗？"
+                "translation": "你能跑得快吗？"
               },
               {
                 "role": "Sam",
@@ -1389,7 +1466,7 @@
               {
                 "role": "Amy",
                 "text": "Can you play ping-pong?",
-                "translation": "玲玲，你会打乒乓球吗？"
+                "translation": "你会打乒乓球吗？"
               },
               {
                 "role": "Lingling",
@@ -1399,7 +1476,7 @@
               {
                 "role": "Lingling",
                 "text": "Can you swim?",
-                "translation": "大明，你会游泳吗？"
+                "translation": "你会游泳吗？"
               },
               {
                 "role": "Daming",
@@ -1485,47 +1562,58 @@
             "content": [
               {
                 "role": "Sam",
-                "text": "Dad, may I play outside?"
+                "text": "Dad, may I play outside?",
+                "translation": "爸爸，我可以出去玩吗？"
               },
               {
                 "role": "Dad",
-                "text": "Yes. But can you tidy your room first?"
+                "text": "Yes. But can you tidy your room first?",
+                "translation": "可以。但是你能先整理一下你的房间吗？"
               },
               {
                 "role": "Sam",
-                "text": "OK. That's easy."
+                "text": "OK. That's easy.",
+                "translation": "好的。那很容易。"
               },
               {
                 "role": "Sam",
-                "text": "Bobby, can you help me clean the floor?"
+                "text": "Bobby, can you help me clean the floor?",
+                "translation": "博比，你能帮我擦地板吗？"
               },
               {
                 "role": "Bobby",
-                "text": "Woof! Woof!"
+                "text": "Woof! Woof!",
+                "translation": "汪！汪！"
               },
               {
                 "role": "Sam",
-                "text": "Go, Bobby! Good job!"
+                "text": "Go, Bobby! Good job!",
+                "translation": "加油，博比！干得好！"
               },
               {
                 "role": "Sam",
-                "text": "Bobby, stop! Look! It's so dirty now!"
+                "text": "Bobby, stop! Look! It's so dirty now!",
+                "translation": "博比，停下！看！现在太脏了！"
               },
               {
                 "role": "Bobby",
-                "text": "Woof! Woof!"
+                "text": "Woof! Woof!",
+                "translation": "汪！汪！"
               },
               {
                 "role": "Dad",
-                "text": "Sam, are you still busy?"
+                "text": "Sam, are you still busy?",
+                "translation": "萨姆，你还在忙吗？"
               },
               {
                 "role": "Sam",
-                "text": "Yes, Dad. I need to clean the floor, the desk and the wall."
+                "text": "Yes, Dad. I need to clean the floor, the desk and the wall.",
+                "translation": "是的，爸爸。我需要擦地板、桌子和墙。"
               },
               {
                 "role": "Bobby",
-                "text": "Woof! Woof!"
+                "text": "Woof! Woof!",
+                "translation": "汪！汪！"
               }
             ]
           },
@@ -1534,51 +1622,63 @@
             "content": [
               {
                 "role": "Wenwen",
-                "text": "I'm Yao Qinwen. This is my family. My dad is ill. My grandma is old. My mum is busy. I must help!"
+                "text": "I'm Yao Qinwen. This is my family. My dad is ill. My grandma is old. My mum is busy. I must help!",
+                "translation": "我是姚勤文。这是我的家庭。我爸爸生病了。我奶奶年纪大了。我妈妈很忙。我必须帮忙！"
               },
               {
                 "role": "Wenwen",
-                "text": "I take care of Dad."
+                "text": "I take care of Dad.",
+                "translation": "我照顾爸爸。"
               },
               {
                 "role": "Wenwen",
-                "text": "Can I make the bed for you, Dad?"
+                "text": "Can I make the bed for you, Dad?",
+                "translation": "爸爸，我能帮你整理床铺吗？"
               },
               {
                 "role": "Dad",
-                "text": "Thank you, Wenwen."
+                "text": "Thank you, Wenwen.",
+                "translation": "谢谢你，文文。"
               },
               {
                 "role": "Wenwen",
-                "text": "I take care of Grandma."
+                "text": "I take care of Grandma.",
+                "translation": "我照顾奶奶。"
               },
               {
                 "role": "Grandma",
-                "text": "Wenwen, can you help clean the room?"
+                "text": "Wenwen, can you help clean the room?",
+                "translation": "文文，你能帮忙打扫房间吗？"
               },
               {
                 "role": "Wenwen",
-                "text": "Sure!"
+                "text": "Sure!",
+                "translation": "当然可以！"
               },
               {
                 "role": "Wenwen",
-                "text": "Sometimes Mum feels tired. I take care of her, too."
+                "text": "Sometimes Mum feels tired. I take care of her, too.",
+                "translation": "有时妈妈觉得累。我也照顾她。"
               },
               {
                 "role": "Wenwen",
-                "text": "May I help you wash the dishes, Mum?"
+                "text": "May I help you wash the dishes, Mum?",
+                "translation": "妈妈，我可以帮你洗碗吗？"
               },
               {
                 "role": "Mum",
-                "text": "Thank you, my dear!"
+                "text": "Thank you, my dear!",
+                "translation": "谢谢你，亲爱的！"
               },
               {
                 "role": "Narrator",
-                "text": "Wenwen is so helpful. She is the sunshine of our family."
+                "text": "Wenwen is so helpful. She is the sunshine of our family.",
+                "translation": "文文很乐于帮忙。她是我们家的阳光。"
               },
               {
                 "role": "Wenwen",
-                "text": "I'm happy to warm up my family!"
+                "text": "I'm happy to warm up my family!",
+                "translation": "我很高兴能温暖我的家人！"
               }
             ]
           }
@@ -1589,39 +1689,48 @@
             "content": [
               {
                 "role": "Amy",
-                "text": "What's the weather like?"
+                "text": "What's the weather like?",
+                "translation": "天气怎么样？"
               },
               {
                 "role": "Daming",
-                "text": "It's sunny and warm. We can go out to play."
+                "text": "It's sunny and warm. We can go out to play.",
+                "translation": "天气晴朗又暖和。我们可以出去玩。"
               },
               {
                 "role": "Lingling",
-                "text": "Oh, it's cool!"
+                "text": "Oh, it's cool!",
+                "translation": "哦，真凉爽！"
               },
               {
                 "role": "Sam",
-                "text": "It's windy and cloudy. Let's go home!"
+                "text": "It's windy and cloudy. Let's go home!",
+                "translation": "刮风又阴天。我们回家吧！"
               },
               {
                 "role": "Daming",
-                "text": "Oh! It's rainy now. Let's run!"
+                "text": "Oh! It's rainy now. Let's run!",
+                "translation": "哦！现在下雨了。我们快跑吧！"
               },
               {
                 "role": "Amy",
-                "text": "Look! I've got a good idea."
+                "text": "Look! I've got a good idea.",
+                "translation": "看！我有一个好主意。"
               },
               {
                 "role": "Sam",
-                "text": "Our umbrellas are great!"
+                "text": "Our umbrellas are great!",
+                "translation": "我们的雨伞太棒了！"
               },
               {
                 "role": "Daming",
-                "text": "Look! Let's go and help!"
+                "text": "Look! Let's go and help!",
+                "translation": "看！我们去帮忙吧！"
               },
               {
                 "role": "Old man",
-                "text": "Thank you."
+                "text": "Thank you.",
+                "translation": "谢谢你们。"
               }
             ]
           },
@@ -1630,63 +1739,78 @@
             "content": [
               {
                 "role": "Narrator",
-                "text": "Liu Fei is a teacher at a children's home in Sanya."
+                "text": "Liu Fei is a teacher at a children's home in Sanya.",
+                "translation": "刘菲是三亚一家儿童之家的老师。"
               },
               {
                 "role": "Girl",
-                "text": "What is snow like?"
+                "text": "What is snow like?",
+                "translation": "雪是什么样的？"
               },
               {
                 "role": "Boy",
-                "text": "Does it taste like ice cream?"
+                "text": "Does it taste like ice cream?",
+                "translation": "它尝起来像冰淇淋吗？"
               },
               {
                 "role": "Narrator",
-                "text": "Liu Fei calls her friend Lin Jia in Harbin."
+                "text": "Liu Fei calls her friend Lin Jia in Harbin.",
+                "translation": "刘菲给在哈尔滨的朋友林佳打电话。"
               },
               {
                 "role": "Liu Fei",
-                "text": "Hey, what's the weather like there today?"
+                "text": "Hey, what's the weather like there today?",
+                "translation": "嗨，今天那里的天气怎么样？"
               },
               {
                 "role": "Lin Jia",
-                "text": "It's snowy and cold."
+                "text": "It's snowy and cold.",
+                "translation": "下雪了，很冷。"
               },
               {
                 "role": "Liu Fei",
-                "text": "The children here want to see real snow. But it's hot in Sanya. It never snows."
+                "text": "The children here want to see real snow. But it's hot in Sanya. It never snows.",
+                "translation": "这里的孩子们想看看真正的雪。但是三亚很热，从不下雪。"
               },
               {
                 "role": "Narrator",
-                "text": "Two days later, Liu Fei gets a big surprise."
+                "text": "Two days later, Liu Fei gets a big surprise.",
+                "translation": "两天后，刘菲收到了一个大惊喜。"
               },
               {
                 "role": "Lin Jia",
-                "text": "Liu Fei, here is some snow for the children. I hope they like it! Love, Lin Jia"
+                "text": "Liu Fei, here is some snow for the children. I hope they like it! Love, Lin Jia",
+                "translation": "刘菲，这是给孩子们的一些雪。希望他们喜欢！爱你的林佳"
               },
               {
                 "role": "Narrator",
-                "text": "Liu Fei takes the snow to the children's home."
+                "text": "Liu Fei takes the snow to the children's home.",
+                "translation": "刘菲把雪带到了儿童之家。"
               },
               {
                 "role": "Liu Fei",
-                "text": "Look! Real snow!"
+                "text": "Look! Real snow!",
+                "translation": "看！真正的雪！"
               },
               {
                 "role": "Girl",
-                "text": "It's cool!"
+                "text": "It's cool!",
+                "translation": "太酷了！"
               },
               {
                 "role": "Boy",
-                "text": "Hooray!"
+                "text": "Hooray!",
+                "translation": "万岁！"
               },
               {
                 "role": "Children",
-                "text": "Ms Lin Jia, Thank you!"
+                "text": "Ms Lin Jia, Thank you!",
+                "translation": "林佳女士，谢谢您！"
               },
               {
                 "role": "Children",
-                "text": "We love our snowy day!"
+                "text": "We love our snowy day!",
+                "translation": "我们喜欢我们的下雪天！"
               }
             ]
           }
@@ -1891,39 +2015,48 @@
             "content": [
               {
                 "role": "Daming",
-                "text": "My cat Susu goes out every morning! Where does she go?"
+                "text": "My cat Susu goes out every morning! Where does she go?",
+                "translation": "我的猫苏苏每天早上都出去！她去哪儿了？"
               },
               {
                 "role": "Amy",
-                "text": "I don't know! Let's find out tomorrow."
+                "text": "I don't know! Let's find out tomorrow.",
+                "translation": "我不知道！我们明天去弄清楚吧。"
               },
               {
                 "role": "Daming",
-                "text": "Susu goes straight on to the museum. She turns left there."
+                "text": "Susu goes straight on to the museum. She turns left there.",
+                "translation": "苏苏一直走到博物馆。她在那里向左转。"
               },
               {
                 "role": "Amy",
-                "text": "At the hospital, she turns right."
+                "text": "At the hospital, she turns right.",
+                "translation": "在医院那里，她向右转。"
               },
               {
                 "role": "Daming",
-                "text": "Then Susu stops. Let's go there!"
+                "text": "Then Susu stops. Let's go there!",
+                "translation": "然后苏苏停下了。我们去那里吧！"
               },
               {
                 "role": "Amy",
-                "text": "Go straight on to the museum. Then turn left."
+                "text": "Go straight on to the museum. Then turn left.",
+                "translation": "一直走到博物馆。然后向左转。"
               },
               {
                 "role": "Daming",
-                "text": "Turn right at the hospital."
+                "text": "Turn right at the hospital.",
+                "translation": "在医院那里向右转。"
               },
               {
                 "role": "Amy",
-                "text": "Susu, here you are!"
+                "text": "Susu, here you are!",
+                "translation": "苏苏，你在这儿啊！"
               },
               {
                 "role": "Woman",
-                "text": "Your cat visits me every day. She's my good friend!"
+                "text": "Your cat visits me every day. She's my good friend!",
+                "translation": "你的猫每天都来看我。她是我的好朋友！"
               }
             ]
           },
@@ -2143,71 +2276,88 @@
             "content": [
               {
                 "role": "Narrator",
-                "text": "Jay gets a new ship model for his birthday. He is very surprised and happy."
+                "text": "Jay gets a new ship model for his birthday. He is very surprised and happy.",
+                "translation": "杰伊生日时收到了一艘新船模型。他非常惊喜，很开心。"
               },
               {
                 "role": "Family",
-                "text": "Happy birthday, Jay!"
+                "text": "Happy birthday, Jay!",
+                "translation": "生日快乐，杰伊！"
               },
               {
                 "role": "Family",
-                "text": "This is for you."
+                "text": "This is for you.",
+                "translation": "这是给你的。"
               },
               {
                 "role": "Jay",
-                "text": "Thank you! It's the new ship model!"
+                "text": "Thank you! It's the new ship model!",
+                "translation": "谢谢！是新的船模型！"
               },
               {
                 "role": "Mum",
-                "text": "It's nine o'clock. Time for bed, Jay."
+                "text": "It's nine o'clock. Time for bed, Jay.",
+                "translation": "九点了。该睡觉了，杰伊。"
               },
               {
                 "role": "Jay",
-                "text": "I'm making the ship."
+                "text": "I'm making the ship.",
+                "translation": "我正在做船。"
               },
               {
                 "role": "Mum",
-                "text": "You can make it tomorrow."
+                "text": "You can make it tomorrow.",
+                "translation": "你可以明天再做。"
               },
               {
                 "role": "Narrator",
-                "text": "Bang!"
+                "text": "Bang!",
+                "translation": "砰！"
               },
               {
                 "role": "Jay",
-                "text": "Ray! My ship!"
+                "text": "Ray! My ship!",
+                "translation": "雷！我的船！"
               },
               {
                 "role": "Ray",
-                "text": "Jay, I'm..."
+                "text": "Jay, I'm...",
+                "translation": "杰伊，我……"
               },
               {
                 "role": "Narrator",
-                "text": "Jay is angry. He is shouting at Ray."
+                "text": "Jay is angry. He is shouting at Ray.",
+                "translation": "杰伊很生气。他在对雷大喊。"
               },
               {
                 "role": "Narrator",
-                "text": "Jay runs back to his room. He is sad."
+                "text": "Jay runs back to his room. He is sad.",
+                "translation": "杰伊跑回自己的房间。他很伤心。"
               },
               {
                 "role": "Jay",
-                "text": "Ray, I'm sorry. I shouldn't shout at you."
+                "text": "Ray, I'm sorry. I shouldn't shout at you.",
+                "translation": "雷，对不起。我不该对你大喊。"
               },
               {
                 "role": "Ray",
-                "text": "Jay, I'm so sorry about your ship."
+                "text": "Jay, I'm so sorry about your ship.",
+                "translation": "杰伊，关于你的船我非常抱歉。"
               },
               {
                 "role": "Jay",
-                "text": "Let's make it again together!"
+                "text": "Let's make it again together!",
+                "translation": "我们一起重新做一个吧！"
               },
               {
                 "role": "Narrator",
-                "text": "Jay and Ray are happy now."
+                "text": "Jay and Ray are happy now.",
+                "translation": "杰伊和雷现在很开心。"
               },
               {
                 "role": "Narrator",
-                "text": "The next day"
+                "text": "The next day",
+                "translation": "第二天"
               }
             ]
           }
@@ -2577,63 +2727,78 @@
             "content": [
               {
                 "role": "Teacher",
-                "text": "For the field trip, let's have a nature hunt! Try to find the plants and animals!"
+                "text": "For the field trip, let's have a nature hunt! Try to find the plants and animals!",
+                "translation": "这次实地考察，我们来一次自然探索吧！试着找一找植物和动物！"
               },
               {
                 "role": "Weiwei",
-                "text": "Look, Lanlan, there's a tree with red leaves!"
+                "text": "Look, Lanlan, there's a tree with red leaves!",
+                "translation": "看，兰兰，有一棵长着红叶子的树！"
               },
               {
                 "role": "Lanlan",
-                "text": "Yes, and there are some pink flowers."
+                "text": "Yes, and there are some pink flowers.",
+                "translation": "是的，还有一些粉色的花。"
               },
               {
                 "role": "Weiwei",
-                "text": "Are there any birds?"
+                "text": "Are there any birds?",
+                "translation": "有鸟吗？"
               },
               {
                 "role": "Lanlan",
-                "text": "No... Oh! Yes, there is a bird. A baby bird."
+                "text": "No... Oh! Yes, there is a bird. A baby bird.",
+                "translation": "没有……哦！有的，有一只鸟。一只小鸟宝宝。"
               },
               {
                 "role": "Weiwei",
-                "text": "It falls off the tree."
+                "text": "It falls off the tree.",
+                "translation": "它从树上掉下来了。"
               },
               {
                 "role": "Lanlan",
-                "text": "Look, Weiwei, there are two baby birds in the tree."
+                "text": "Look, Weiwei, there are two baby birds in the tree.",
+                "translation": "看，伟伟，树上有两只小鸟宝宝。"
               },
               {
                 "role": "Weiwei",
-                "text": "Yes. Let's find the teacher."
+                "text": "Yes. Let's find the teacher.",
+                "translation": "是的。我们去找老师吧。"
               },
               {
                 "role": "Lanlan",
-                "text": "Can we help it?"
+                "text": "Can we help it?",
+                "translation": "我们能帮帮它吗？"
               },
               {
                 "role": "Weiwei",
-                "text": "Let's call the forest keeper!"
+                "text": "Let's call the forest keeper!",
+                "translation": "我们给森林管理员打电话吧！"
               },
               {
                 "role": "Narrator",
-                "text": "The forest keeper comes."
+                "text": "The forest keeper comes.",
+                "translation": "森林管理员来了。"
               },
               {
                 "role": "Forest keeper",
-                "text": "The baby bird is home. Thank you, children."
+                "text": "The baby bird is home. Thank you, children.",
+                "translation": "小鸟宝宝回家了。谢谢你们，孩子们。"
               },
               {
                 "role": "Lanlan",
-                "text": "Hey, look! The mother bird is back."
+                "text": "Hey, look! The mother bird is back.",
+                "translation": "嘿，看！鸟妈妈回来了。"
               },
               {
                 "role": "Weiwei",
-                "text": "How lovely! They are a happy family!"
+                "text": "How lovely! They are a happy family!",
+                "translation": "多可爱啊！它们是幸福的一家！"
               },
               {
                 "role": "Narrator",
-                "text": "This is a very special field trip for us!"
+                "text": "This is a very special field trip for us!",
+                "translation": "对我们来说，这是一次非常特别的实地考察！"
               }
             ]
           }
@@ -2704,59 +2869,73 @@
             "content": [
               {
                 "role": "Narrator",
-                "text": "Tom makes clothes for animals. He's busy every day!"
+                "text": "Tom makes clothes for animals. He's busy every day!",
+                "translation": "汤姆为动物们做衣服。他每天都很忙！"
               },
               {
                 "role": "Silkworm",
-                "text": "We need clothes for a Christmas party!"
+                "text": "We need clothes for a Christmas party!",
+                "translation": "我们需要参加圣诞派对的衣服！"
               },
               {
                 "role": "Tom",
-                "text": "OK!"
+                "text": "OK!",
+                "translation": "好的！"
               },
               {
                 "role": "Narrator",
-                "text": "Lovely dresses and hats!"
+                "text": "Lovely dresses and hats!",
+                "translation": "漂亮的连衣裙和帽子！"
               },
               {
                 "role": "Giraffe",
-                "text": "My family want colourful shirts!"
+                "text": "My family want colourful shirts!",
+                "translation": "我们一家想要彩色的衬衫！"
               },
               {
                 "role": "Tom",
-                "text": "OK!"
+                "text": "OK!",
+                "translation": "好的！"
               },
               {
                 "role": "Narrator",
-                "text": "Nice shirts!"
+                "text": "Nice shirts!",
+                "translation": "漂亮的衬衫！"
               },
               {
                 "role": "Frog",
-                "text": "I have eight brothers and sisters. We all look the same! Dad gets our names wrong. Can you help?"
+                "text": "I have eight brothers and sisters. We all look the same! Dad gets our names wrong. Can you help?",
+                "translation": "我有八个兄弟姐妹。我们长得都一样！爸爸会叫错我们的名字。你能帮忙吗？"
               },
               {
                 "role": "Tom",
-                "text": "No problem!"
+                "text": "No problem!",
+                "translation": "没问题！"
               },
               {
                 "role": "Narrator",
-                "text": "Now we're wearing T-shirts with our names."
+                "text": "Now we're wearing T-shirts with our names.",
+                "translation": "现在我们穿着写着自己名字的T恤衫。"
               },
               {
                 "role": "Frog",
-                "text": "Clever idea!"
+                "text": "Clever idea!",
+                "translation": "好主意！"
               },
               {
                 "role": "Narrator",
-                "text": "Here comes Mr Bird. He wants something special."
+                "text": "Here comes Mr Bird. He wants something special.",
+                "translation": "鸟先生来了。他想要点特别的东西。"
               },
               {
                 "role": "Tom",
-                "text": "A birthday present for Ms Whale? Let me think."
+                "text": "A birthday present for Ms Whale? Let me think.",
+                "translation": "给鲸鱼女士的生日礼物？让我想想。"
               },
               {
                 "role": "Narrator",
-                "text": "The next day, Tom asks all the animals to come and help. What are they making?"
+                "text": "The next day, Tom asks all the animals to come and help. What are they making?",
+                "translation": "第二天，汤姆请所有的动物来帮忙。他们在做什么呢？"
               }
             ]
           }
@@ -2874,7 +3053,7 @@
               {
                 "role": "Mum",
                 "text": "The dress is too small for you.",
-                "translation": "艾米，这条裙子对你来说太小了。"
+                "translation": "这条裙子对你来说太小了。"
               },
               {
                 "role": "Amy",
@@ -3066,12 +3245,12 @@
               {
                 "role": "Mum Bird",
                 "text": "You can't be friends with Dog because you're so different.",
-                "translation": "鸟妈妈：你不能和小狗做朋友，因为你们太不一样了。"
+                "translation": "你不能和小狗做朋友，因为你们太不一样了。"
               },
               {
                 "role": "Dad Dog",
                 "text": "You can't be friends with Bird because you're so different.",
-                "translation": "狗爸爸：你不能和小鸟做朋友，因为你们太不一样了。"
+                "translation": "你不能和小鸟做朋友，因为你们太不一样了。"
               },
               {
                 "role": "Bird",
@@ -3740,11 +3919,12 @@
               {
                 "role": "Mum",
                 "text": "Yes. Books made me happy. Now I can see the “horse library”.",
-                "translation": "喜欢。书带给我快乐。看，马背图书馆来啦！哇，真的来了！"
+                "translation": "喜欢。书带给我快乐。现在我能看见“马背图书馆”了。"
               },
               {
                 "role": "Boy",
-                "text": "Oh, yes. It's here!"
+                "text": "Oh, yes. It's here!",
+                "translation": "哦，是的。它在这里！"
               },
               {
                 "role": "Boy",
@@ -3758,51 +3938,63 @@
             "content": [
               {
                 "role": "Student",
-                "text": "Book report: The Secret Garden"
+                "text": "Book report: The Secret Garden",
+                "translation": "读书报告：《秘密花园》"
               },
               {
                 "role": "Student",
-                "text": "Title: The Secret Garden"
+                "text": "Title: The Secret Garden",
+                "translation": "书名：《秘密花园》"
               },
               {
                 "role": "Student",
-                "text": "Writer: Frances Hodgson Burnett"
+                "text": "Writer: Frances Hodgson Burnett",
+                "translation": "作者：弗朗西丝·霍奇森·伯内特"
               },
               {
                 "role": "Student",
-                "text": "What happened in the book?"
+                "text": "What happened in the book?",
+                "translation": "书中发生了什么？"
               },
               {
                 "role": "Student",
-                "text": "Mary was a 10-year-old girl. She lost her parents and had to live with her uncle. But her uncle was often away. Her cousin Colin was ill in bed."
+                "text": "Mary was a 10-year-old girl. She lost her parents and had to live with her uncle. But her uncle was often away. Her cousin Colin was ill in bed.",
+                "translation": "玛丽是一个10岁的女孩。她失去了父母，不得不和叔叔一起生活。但叔叔经常不在家。她的表弟科林卧病在床。"
               },
               {
                 "role": "Student",
-                "text": "Mary didn't care about others and was often angry. She was unhappy in the new place."
+                "text": "Mary didn't care about others and was often angry. She was unhappy in the new place.",
+                "translation": "玛丽不关心别人，还经常生气。她在这个新地方过得很不快乐。"
               },
               {
                 "role": "Student",
-                "text": "One day she found an old garden. There she met a new friend. His name was Dickon. They worked together to bring the garden back to life."
+                "text": "One day she found an old garden. There she met a new friend. His name was Dickon. They worked together to bring the garden back to life.",
+                "translation": "有一天她发现了一座古老的花园。在那里她认识了一个新朋友，他叫迪肯。他们一起努力，让花园恢复了生机。"
               },
               {
                 "role": "Student",
-                "text": "Mary slowly became friendly and kind. She also helped Colin to get well."
+                "text": "Mary slowly became friendly and kind. She also helped Colin to get well.",
+                "translation": "玛丽渐渐变得友好而善良。她还帮助科林恢复了健康。"
               },
               {
                 "role": "Student",
-                "text": "Do you like this book? Why or why not?"
+                "text": "Do you like this book? Why or why not?",
+                "translation": "你喜欢这本书吗？为什么喜欢或不喜欢？"
               },
               {
                 "role": "Student",
-                "text": "Yes, I do. I give the book 9 out of 10. It’s a great book about friends, love and nature."
+                "text": "Yes, I do. I give the book 9 out of 10. It’s a great book about friends, love and nature.",
+                "translation": "是的，我喜欢。我给这本书打9分（满分10分）。这是一本关于友谊、爱和自然的好书。"
               },
               {
                 "role": "Student",
-                "text": "What is your favourite part of the book?"
+                "text": "What is your favourite part of the book?",
+                "translation": "你最喜欢这本书的哪个部分？"
               },
               {
                 "role": "Student",
-                "text": "I love the words about flowers and trees in the book. They are beautiful."
+                "text": "I love the words about flowers and trees in the book. They are beautiful.",
+                "translation": "我喜欢书中描写花草树木的文字。它们很美。"
               }
             ]
           }
