@@ -317,6 +317,20 @@
       margin-bottom: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
+    /* ========== 设置页 ========== */
+    .settings-group-title { font-size:13px;font-weight:700;color:#8a8fb5;margin:20px 0 8px 2px;letter-spacing:.5px }
+    .settings-card { background:white;border-radius:16px;padding:2px 16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,0.05) }
+    .settings-row { display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid #f2f2f7 }
+    .settings-row:last-child { border-bottom:none }
+    .settings-row-title { font-size:15px;font-weight:600;color:#333 }
+    .settings-row-sub { font-size:12px;color:#999;margin-top:3px;line-height:1.5 }
+    .settings-row-ctl { display:flex;align-items:center;gap:8px;flex-shrink:0 }
+    .settings-select { font-size:13px;padding:7px 10px;border-radius:10px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:180px }
+    .settings-mini-btn { font-size:13px;padding:7px 12px;border-radius:10px;background:#6c63ff;color:#fff;font-weight:600;cursor:pointer;white-space:nowrap }
+    .settings-switch { font-size:13px;padding:7px 14px;border-radius:999px;border:1px solid #e0e6ff;background:#f5f7ff;color:#6c63ff;font-weight:600;cursor:pointer;white-space:nowrap }
+    .settings-switch.on { background:#6c63ff;border-color:#6c63ff;color:#fff }
+    .settings-actions { display:flex;gap:10px;padding:14px 0 }
+    .settings-actions .btn { flex:1 }
     .report-total {
       font-size: 48px;
       font-weight: 800;
@@ -722,6 +736,7 @@
   <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
       <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
       <span id="grade-display" style="display:none">三年级</span>
+      <span id="settings-btn" onclick="openSettings()" title="设置" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">⚙️</span>
     </div>
 </div>
 
@@ -926,52 +941,139 @@
     <!-- 全局年级小计 -->
     <div id="report-all-grades-summary"></div>
 
-    <!-- 设置 -->
+    <!-- 设置入口 -->
     <div class="section-title" style="margin-top:24px;border-top:1px solid #eee;padding-top:16px">⚙️ 设置</div>
-    <div class="report-card" style="padding:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f0f0f0">
-        <div>
-          <div style="font-size:15px;font-weight:600;color:#333">🔍 大字模式</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">放大显示文字，方便阅读</div>
-        </div>
-        <span id="bigfont-toggle" onclick="toggleBigFont()" title="大字模式" style="cursor:pointer;font-size:14px;padding:8px 16px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">切换</span>
+    <div class="report-card" onclick="openSettings()" style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer">
+      <div style="min-width:0">
+        <div style="font-size:15px;font-weight:600;color:#333">⚙️ 前往设置</div>
+        <div style="font-size:12px;color:#999;margin-top:3px">发音与朗读、显示、数据备份</div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0">
-        <div>
-          <div style="font-size:15px;font-weight:600;color:#333">🔊 语音引导</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">操作时自动朗读提示</div>
-        </div>
-        <span id="voice-guide-toggle" onclick="toggleVoiceGuide()" title="语音引导" style="cursor:pointer;font-size:14px;padding:8px 16px;border-radius:10px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500">切换</span>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
+      <span style="color:#6c63ff;font-size:18px;flex-shrink:0">→</span>
+    </div>
+  </div>
+
+  <!-- ======= 设置 ======= -->
+  <div id="view-settings" class="view">
+    <button class="btn btn-secondary" onclick="closeSettings()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:12px"><span style="font-size:16px">←</span> 返回</button>
+
+    <div class="settings-group-title">🔊 发音与朗读</div>
+    <div class="settings-card">
+      <div class="settings-row">
         <div style="min-width:0">
-          <div style="font-size:15px;font-weight:600;color:#333">🐢 朗读速度</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">默认慢速，贴近教材录音语速</div>
+          <div class="settings-row-title">📡 发音引擎</div>
+          <div class="settings-row-sub">自动（无音时切网络）/ 系统 / 网络</div>
+          <div style="font-size:12px;color:#6c63ff;margin-top:4px" id="settings-tts-engine-hint"></div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-          <select id="speech-rate-select" onchange="setSpeechRate(this.value)" style="font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:170px"></select>
-          <span onclick="previewSpeechRate()" style="cursor:pointer;font-size:13px;padding:6px 10px;border-radius:8px;background:#6c63ff;color:white;font-weight:500;white-space:nowrap">试听</span>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
-        <div style="min-width:0">
-          <div style="font-size:15px;font-weight:600;color:#333">🗣️ 英文发音</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">女声/男声/儿童音</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-          <select id="en-voice-select" onchange="setEnVoice(this.value)" style="font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:170px"></select>
-          <span onclick="previewEnVoice()" style="cursor:pointer;font-size:13px;padding:6px 10px;border-radius:8px;background:#6c63ff;color:white;font-weight:500;white-space:nowrap">试听</span>
+        <div class="settings-row-ctl">
+          <select id="settings-tts-engine-select" class="settings-select" onchange="setTtsEngine(this.value)">
+            <option value="auto">自动（推荐）</option>
+            <option value="system">系统发音</option>
+            <option value="network">网络发音</option>
+          </select>
         </div>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0">
+      <div class="settings-row">
         <div style="min-width:0">
-          <div style="font-size:15px;font-weight:600;color:#333">🗣️ 中文发音</div>
-          <div style="font-size:12px;color:#999;margin-top:2px">男声/女声/儿童声</div>
+          <div class="settings-row-title">🐢 朗读速度</div>
+          <div class="settings-row-sub">默认慢速，贴近教材录音语速</div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-          <select id="zh-voice-select" onchange="setZhVoice(this.value)" style="font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:170px"></select>
-          <span onclick="previewZhVoice()" style="cursor:pointer;font-size:13px;padding:6px 10px;border-radius:8px;background:#6c63ff;color:white;font-weight:500;white-space:nowrap">试听</span>
+        <div class="settings-row-ctl">
+          <select id="speech-rate-select" class="settings-select" onchange="setSpeechRate(this.value)"></select>
+          <span class="settings-mini-btn" onclick="previewSpeechRate()">试听</span>
         </div>
+      </div>
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">🗣️ 英文发音</div>
+          <div class="settings-row-sub">女声 / 男声 / 儿童音</div>
+        </div>
+        <div class="settings-row-ctl">
+          <select id="en-voice-select" class="settings-select" onchange="setEnVoice(this.value)"></select>
+          <span class="settings-mini-btn" onclick="previewEnVoice()">试听</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">🗣️ 中文发音</div>
+          <div class="settings-row-sub">男声 / 女声 / 儿童声</div>
+        </div>
+        <div class="settings-row-ctl">
+          <select id="zh-voice-select" class="settings-select" onchange="setZhVoice(this.value)"></select>
+          <span class="settings-mini-btn" onclick="previewZhVoice()">试听</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">🔔 语音引导</div>
+          <div class="settings-row-sub">切换页面时自动朗读提示</div>
+        </div>
+        <span id="voice-guide-toggle" class="settings-switch" onclick="toggleVoiceGuide()">已关闭</span>
+      </div>
+    </div>
+
+    <div class="settings-group-title">👀 显示</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">🔍 大字模式</div>
+          <div class="settings-row-sub">整体放大页面文字，方便阅读</div>
+        </div>
+        <span id="bigfont-toggle" class="settings-switch" onclick="toggleBigFont()">已关闭</span>
+      </div>
+    </div>
+
+    <div class="settings-group-title">📚 学习</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">🎒 当前年级</div>
+          <div class="settings-row-sub" id="settings-grade-text">未选择</div>
+        </div>
+        <div class="settings-row-ctl">
+          <span class="settings-mini-btn" onclick="backToGrade()">切换年级</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-group-title">💾 数据备份</div>
+    <div class="settings-card">
+      <div class="settings-row" style="display:block">
+        <div class="settings-row-title">☁️ 全部数据</div>
+        <div class="settings-row-sub" style="margin-bottom:10px">把积分、学习进度、错词本、设置等打包成一个文件；换设备后用「恢复」一键还原。</div>
+        <div class="settings-actions" style="padding-top:0;padding-bottom:4px">
+          <button class="btn btn-primary" onclick="exportAllData()" style="background:#52c41a;border:none;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px"><span>📦</span> 备份</button>
+          <button class="btn btn-secondary" onclick="importAllData()" style="background:#f6ffed;border:1px solid #b7eb8f;color:#52c41a;display:flex;align-items:center;justify-content:center;gap:6px"><span>🔄</span> 恢复</button>
+        </div>
+      </div>
+      <div class="settings-row" style="display:block">
+        <div class="settings-row-title">🏆 积分数据</div>
+        <div class="settings-row-sub" style="margin-bottom:10px">单独导出 / 导入积分记录。</div>
+        <div class="settings-actions" style="padding-top:0;padding-bottom:4px">
+          <button class="btn btn-secondary" onclick="exportPoints()" style="background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px"><span>📤</span> 导出积分</button>
+          <button class="btn btn-secondary" onclick="importPoints()" style="background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px"><span>📥</span> 导入积分</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-group-title">ℹ️ 关于</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">📖 教材版本</div>
+          <div class="settings-row-sub">外研社（三起）三年级～五年级，2024 新版</div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">📱 应用版本</div>
+          <div class="settings-row-sub" id="settings-version">v30</div>
+        </div>
+        <div class="settings-row-ctl">
+          <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
+        </div>
+      </div>
+      <div class="settings-row" style="display:block">
+        <div class="settings-row-sub" style="margin-top:0">学习数据保存在本机浏览器中，清除浏览器数据会重置，建议定期备份。</div>
       </div>
     </div>
   </div>
@@ -1555,11 +1657,15 @@ const API = ".";
     currentView = name;
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读" };
+    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
-    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz" || name === "phonics") ? "none" : "inline";
+    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz" || name === "phonics" || name === "settings") ? "none" : "inline";
+    // 年级选择页不显示右上角设置入口
+    var _sb = document.getElementById("settings-btn");
+    if (_sb) _sb.style.display = (name === "grade") ? "none" : "inline-flex";
+    if (name === "settings") refreshSettingsInfo();
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
     if (name === "phonics") loadPhonics();
@@ -3088,13 +3194,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function setTtsEngine(v) {
     ttsEngine = v;
     localStorage.setItem('tts_engine', v);
-    const sel = document.getElementById('tts-engine-select');
-    if (sel) sel.value = v;
-    const hint = document.getElementById('tts-engine-hint');
-    if (hint) {
-      const map = { auto: '自动（无音时切网络）', system: '系统发音', network: '网络发音' };
-      hint.textContent = '当前：' + (map[v] || v);
-    }
+    const map = { auto: '自动（无音时切网络）', system: '系统发音', network: '网络发音' };
+    ['tts-engine-select', 'settings-tts-engine-select'].forEach(function(id) {
+      const sel = document.getElementById(id);
+      if (sel) sel.value = v;
+    });
+    ['tts-engine-hint', 'settings-tts-engine-hint'].forEach(function(id) {
+      const hint = document.getElementById(id);
+      if (hint) hint.textContent = '当前：' + (map[v] || v);
+    });
   }
   setTtsEngine(ttsEngine);
 
@@ -3181,7 +3289,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (bigFontOn) document.body.classList.add('big-font');
     else document.body.classList.remove('big-font');
     const el = document.getElementById('bigfont-toggle');
-    if (el) el.style.background = bigFontOn ? 'rgba(255,255,255,0.4)' : 'transparent';
+    if (el) {
+      el.textContent = bigFontOn ? '已开启' : '已关闭';
+      if (bigFontOn) el.classList.add('on'); else el.classList.remove('on');
+    }
   }
   function toggleVoiceGuide() {
     voiceGuideOn = !voiceGuideOn;
@@ -3192,9 +3303,36 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function applyVoiceGuide() {
     const el = document.getElementById('voice-guide-toggle');
     if (el) {
-      el.style.background = voiceGuideOn ? 'rgba(255,255,255,0.4)' : 'transparent';
-      el.textContent = voiceGuideOn ? '🔊' : '🔇';
+      el.textContent = voiceGuideOn ? '已开启' : '已关闭';
+      if (voiceGuideOn) el.classList.add('on'); else el.classList.remove('on');
     }
+  }
+
+  // ========== 设置页 ==========
+  let settingsReturnView = 'home';
+  function openSettings() {
+    if (currentView && currentView !== 'settings') settingsReturnView = currentView;
+    switchView('settings');
+  }
+  function closeSettings() {
+    switchView(settingsReturnView || 'home');
+  }
+  function refreshSettingsInfo() {
+    const g = document.getElementById('settings-grade-text');
+    if (g) g.textContent = currentGrade ? currentGrade : '未选择';
+    const sel = document.getElementById('settings-tts-engine-select');
+    if (sel) sel.value = ttsEngine;
+    applyBigFont();
+    applyVoiceGuide();
+  }
+  function clearAppCache() {
+    try {
+      if (window.caches && caches.keys) {
+        caches.keys().then(function(keys) { keys.forEach(function(k) { caches.delete(k); }); });
+      }
+    } catch (e) {}
+    if (window.speakChinese && voiceGuideOn) speakChinese('缓存已清除，正在重新加载');
+    setTimeout(function() { location.reload(); }, 400);
   }
   function guideSpeak(text) {
     if (!voiceGuideOn || !text) return;
@@ -5459,7 +5597,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== 启动 ==========
   // 默认显示年级选择页
-  document.getElementById('grade-display').style.display = 'none';  loadGrades();
+  document.getElementById('grade-display').style.display = 'none';
+  var _sb0 = document.getElementById('settings-btn');
+  if (_sb0) _sb0.style.display = 'none';
+  loadGrades();
 
   // 从「单词消消乐」等页面带 ?grade= 返回时，自动进入该年级首页
   (function autoEnterGradeFromUrl() {
