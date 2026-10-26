@@ -1680,7 +1680,7 @@ const API = ".";
         const gradeLabel = m.grade ? ` <span style="font-size:11px;color:#888;font-weight:normal">(${m.grade})</span>` : '';
         card.innerHTML = `
           <div class="module-name">${m.module}${gradeLabel}</div>
-          <div class="module-count">${m.unit_count} 个单元</div>
+          <div class="module-count">${m.unit_count} 篇</div>
         `;
         // 模块点击时带上学年级+学期参数（grade_label = 年级+学期，如 '三年级上册'）
         card.onclick = () => openLessonModule(m.module, m.grade_label || m.grade);
@@ -1731,7 +1731,7 @@ const API = ".";
       // 单元列表
       const title = document.createElement('div');
       title.className = 'section-title';
-      title.textContent = '选择单元';
+      title.textContent = '选择篇';
       area.appendChild(title);
       const _meta = document.createElement('div');
       _meta.className = 'cl-meta';
@@ -1814,7 +1814,7 @@ const API = ".";
     
     area.innerHTML = `
       <button id="lesson-back-units" class="btn btn-secondary" onclick="backToLessonUnits()" style="position:sticky;top:156px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
-        <span style="font-size:16px">←</span> 返回单元列表
+        <span style="font-size:16px">←</span> 返回篇列表
       </button>
       
       <div class="word-detail-card" style="text-align:left">
@@ -1830,10 +1830,10 @@ const API = ".";
         </button>
         <div style="display:flex;gap:8px;margin-top:12px">
           <button class="btn btn-secondary" id="lesson-prev-unit-btn" style="flex:1;padding:10px;font-size:14px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500;display:none">
-            ← 上一单元
+            ← 上一篇
           </button>
           <button class="btn btn-primary" id="lesson-next-unit-btn" style="flex:1;padding:10px;font-size:14px;background:linear-gradient(135deg,#52c41a,#73d13d);color:white;border:none;font-weight:500;display:none">
-            下一单元 →
+            下一篇 →
           </button>
         </div>
       </div>
