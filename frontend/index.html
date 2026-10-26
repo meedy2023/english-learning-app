@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v41</div>
+          <div class="settings-row-sub" id="settings-version">v42</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1317,6 +1317,8 @@ const API = ".";
 
   // 进入积分页前，记录学习子视图（单词消消乐 / 选择题）的显示状态，返回时原样恢复
   let _pointsPrevSub = null;
+  // 积分面板是否正在显示：显示期间切回学习视图不应重绘学习子层级
+  let _pointsPanelActive = false;
   // 进入积分页前的所在视图（home/learn/ket/report/quiz 等），返回时切回
   let _pointsPrevView = null;
 
@@ -1329,6 +1331,7 @@ const API = ".";
     if (!_pointsPrevView) _pointsPrevView = currentView;
     // 切换到学习视图并显示积分详情
     switchView('learn');
+    _pointsPanelActive = true;
 
     const area = document.getElementById('word-detail-area');
     if (!area) {
@@ -1473,7 +1476,6 @@ const API = ".";
 
     // 恢复进入积分页前的子视图（单词消消乐 / 选择题 / 单词表）
     if (_pointsPrevSub) {
-      if (wordList) wordList.style.display = _pointsPrevSub.wordList || 'block';
       if (quizBar) quizBar.style.display = _pointsPrevSub.quizBar || '';
       const matchArea = document.getElementById('match-game-area');
       const choiceArea = document.getElementById('choice-learn-area');
@@ -1492,10 +1494,10 @@ const API = ".";
         }
       }
       _pointsPrevSub = null;
-    } else {
-      if (wordList) wordList.style.display = 'block';
-      if (quizBar) quizBar.style.display = '';
     }
+    // 回到学习视图时，恢复进入积分页前的子层级（课文列表 / 课文详情 / 单词详情 / 单词表）
+    _pointsPanelActive = false;
+    if (_returnToLearn) restoreLearnView();
   }
 
   // ========== P4-③ 云同步：全量备份/恢复 ==========
@@ -1708,6 +1710,48 @@ const API = ".";
   let currentLessonData = null;
   let currentLessonGrade = '三年级上册';
 
+  // 学习视图当前子层级：从设置页 / 积分页返回时据此恢复
+  // 'lesson-modules' 课文模块总列表 | 'lesson-units' 某模块的篇列表 | 'lesson-detail' 课文详情
+  // 'words' 单词列表 | 'word-detail' 单词详情
+  let learnMode = null;
+  // 子层级的重建函数（课文详情 / 单词详情的容器会被积分面板覆盖，返回时需重绘）
+  let learnRestoreFn = null;
+
+  // 从设置页 / 积分页返回学习视图时，恢复进入前的子层级
+  function restoreLearnView() {
+    // 积分面板显示期间不要重绘学习子层级（否则从积分页进设置再返回会被顶掉）
+    if (_pointsPanelActive) return;
+    var _wl = document.getElementById('word-list');
+    var _wda = document.getElementById('word-detail-area');
+    // 详情层级：重新渲染（内容被积分面板覆盖过）
+    if (learnRestoreFn) {
+      var fn = learnRestoreFn;
+      learnRestoreFn = null;
+      fn();
+      return;
+    }
+    if (learnMode === 'lesson-units' && currentLessonModule) {
+      openLessonModule(currentLessonModule, currentLessonGrade);
+      return;
+    }
+    if (learnMode === 'lesson-modules') {
+      showTextbookList(true);
+      return;
+    }
+    // 消消乐 / 选择题层级：保持原样，不切回单词表
+    var matchArea = document.getElementById('match-game-area');
+    var choiceArea = document.getElementById('choice-learn-area');
+    var subVisible = (matchArea && matchArea.style.display && matchArea.style.display !== 'none') ||
+                     (choiceArea && choiceArea.style.display && choiceArea.style.display !== 'none');
+    if (subVisible) {
+      if (_wda) _wda.style.display = 'none';
+      return;
+    }
+    // 单词列表等默认层级：容器内容未被覆盖，只需恢复显示
+    if (_wl) _wl.style.display = 'block';
+    if (_wda) _wda.style.display = 'none';
+  }
+
   // ========== 工具函数 ==========
   function toast(msg) {
     const t = document.getElementById("toast");
@@ -1760,8 +1804,8 @@ const API = ".";
       loadModules();
     }
     if (name === "grade") loadGrades();
-    // 学习页无数据时显示提示
-    if (name === "learn" && (!currentWords || currentWords.length === 0)) {
+    // 学习页无数据时显示提示（课文学习模式的内容由 openLessonModule 自行渲染，不可覆盖）
+    if (name === "learn" && learnMode !== 'lesson-units' && learnMode !== 'lesson-modules' && (!currentWords || currentWords.length === 0)) {
       document.getElementById("word-list").innerHTML = `<div class="empty-state"><div class="empty-state-icon">📖</div><div>请先选择一个模块</div><button class="btn btn-primary" style="margin-top:16px" onclick="backToHome()">去首页选择</button></div>`;
       document.getElementById("quiz-toggle-bar").style.display = "none";
       document.getElementById("learn-module-title").style.display = "none";
@@ -1775,6 +1819,8 @@ const API = ".";
         else el.classList.remove('active');
       }
     });
+    // 从其他视图（设置页 / 积分页等）切回学习视图时，恢复进入前的子层级
+    if (name === "learn") restoreLearnView();
   }
 
   function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -1844,9 +1890,9 @@ const API = ".";
     return null;
   }
 
-  async function showTextbookList() {
+  async function showTextbookList(forceModules) {
     // 智能跳转：如果当前在某个单词模块中，直接打开对应的课文模块
-    if (currentModule && WORD_TO_LESSON[currentModule]) {
+    if (!forceModules && currentModule && WORD_TO_LESSON[currentModule]) {
       const mapping = WORD_TO_LESSON[currentModule];
       // 直接进入对应模块的单元列表（带上学期参数）
       setActiveTab('textbook');
@@ -1855,6 +1901,8 @@ const API = ".";
     }
 
     // 否则显示所有课文模块列表
+    learnMode = 'lesson-modules';
+    learnRestoreFn = null;
     switchView('learn');
     setActiveTab('textbook');
     hideLearnModuleTitle();
@@ -1895,6 +1943,8 @@ const API = ".";
   }
 
   async function openLessonModule(moduleName, grade) {
+    learnMode = 'lesson-units';
+    learnRestoreFn = null;
     switchView('learn');
     const quizBar = document.getElementById('quiz-toggle-bar');
     if (quizBar) quizBar.style.display = ''; // 恢复CSS的grid布局，内联flex会把5个tab挤在一起
@@ -1955,15 +2005,19 @@ const API = ".";
     }
   }
 
-  function showLessonDetail(unit) {
+  function showLessonDetail(unit, skipReward) {
     document.getElementById('word-list').style.display = 'none';
+    learnMode = 'lesson-detail';
+    learnRestoreFn = function () { showLessonDetail(unit, true); };
 
-    // 获得积分：打开课文
-    const lessonId = unit.unit || 'lesson_' + Date.now();
-    const result = Points.earn('lesson_open', lessonId);
-    if (result.success) {
-      showPointsToast(result.points, Points.getMessage('lesson_open'));
-      updatePointsDisplay();
+    if (!skipReward) {
+      // 获得积分：打开课文
+      const lessonId = unit.unit || 'lesson_' + Date.now();
+      const result = Points.earn('lesson_open', lessonId);
+      if (result.success) {
+        showPointsToast(result.points, Points.getMessage('lesson_open'));
+        updatePointsDisplay();
+      }
     }
 
     // P4-② 记录「继续上次学习」（课文）
@@ -2105,6 +2159,8 @@ const API = ".";
 
   function backToLessonUnits() {
     if (typeof stopLessonReading === 'function') stopLessonReading();
+    learnMode = 'lesson-units';
+    learnRestoreFn = null;
     var _lbh = document.getElementById('learn-back-home');
     if (_lbh) _lbh.style.top = '84px';
     document.getElementById('word-detail-area').style.display = 'none';
@@ -3892,6 +3948,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ========== 模块：加载单词列表 ==========
   async function openModule(module) {
     currentModule = module;
+    learnMode = 'words';
+    learnRestoreFn = null;
     localStorage.setItem('last_study_' + USER_ID, JSON.stringify({ type: 'word', title: module, module: module }));
     try {
       const data = await apiGET(`/api/words?module=${encodeURIComponent(module)}`);
@@ -3903,6 +3961,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   async function showWordList() {
+    learnMode = 'words';
+    learnRestoreFn = null;
     // 确保在学习视图
     switchView("learn");
     setActiveTab('wordlist');
@@ -3953,7 +4013,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   // ========== 单词详情 ==========
-  function showWordDetail(w) {
+  function showWordDetail(w, skipReward) {
+    learnMode = 'word-detail';
+    learnRestoreFn = function () { showWordDetail(w, true); };
     document.getElementById("word-list").style.display = "none";
     document.getElementById("match-game-area").style.display = "none";
     Match.stop();
@@ -3964,7 +4026,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     area.style.display = "block";
 
     // 获得积分：查看新单词
-    const result = Points.earn('word_view', 'word_' + w.id);
+    const result = skipReward ? { success: false } : Points.earn('word_view', 'word_' + w.id);
     if (result.success) {
       showPointsToast(result.points, Points.getMessage('word_view'));
       updatePointsDisplay();
