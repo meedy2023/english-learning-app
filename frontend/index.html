@@ -1529,6 +1529,12 @@ const API = ".";
     });
   }
 
+  // 课文学习视图下顶栏已显示模块名，隐藏正文残留的紫色模块标题，避免重复
+  function hideLearnModuleTitle() {
+    var _lmt = document.getElementById('learn-module-title');
+    if (_lmt) _lmt.style.display = 'none';
+  }
+
   function switchView(name) {
     // 学习页面内点击学习导航，不重复切换
     if (name === 'learn' && currentView === 'learn') return;
@@ -1650,6 +1656,7 @@ const API = ".";
     // 否则显示所有课文模块列表
     switchView('learn');
     setActiveTab('textbook');
+    hideLearnModuleTitle();
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
@@ -1700,6 +1707,7 @@ const API = ".";
     currentLessonModule = moduleName;
     currentLessonGrade = grade || currentLessonGrade || '三年级上册';
     document.getElementById('topbar-title').textContent = '📖 ' + (wordModuleKey(moduleName, currentLessonGrade) ? moduleLabel(wordModuleKey(moduleName, currentLessonGrade)) : moduleName);
+    hideLearnModuleTitle();
     // 联动更新右上角的年级提示：提取'几年级'部分，例如"三年级上册"→"三年级"
     const gradeMatch = (grade || currentLessonGrade || '').match(/^[^-]+?年级/);
     const gradeDisplay = document.getElementById('grade-display');
@@ -1771,6 +1779,7 @@ const API = ".";
     if (_lbh) _lbh.style.top = _sticky;
     
     document.getElementById('topbar-title').textContent = '📖 ' + unit.unit;
+    hideLearnModuleTitle();
     
     // 构建对话内容
     let dialogueHTML = '';
@@ -3596,6 +3605,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 确保在学习视图
     switchView("learn");
     setActiveTab('wordlist');
+    // 恢复顶栏标题（从课文学习/单词学习等子视图返回时可能被改写）
+    document.getElementById('topbar-title').textContent = '📖 单词学习';
     const _bh = document.getElementById("learn-back-home");
     if (_bh) _bh.style.display = "flex";
     document.getElementById("learn-module-title").style.display = "block";
