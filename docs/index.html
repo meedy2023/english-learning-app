@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v35</div>
+          <div class="settings-row-sub" id="settings-version">v36</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1334,14 +1334,18 @@ const API = ".";
     area.style.display = 'block';
     const wordList = document.getElementById('word-list');
     const quizBar = document.getElementById('quiz-toggle-bar');
-    // 先记录进入前的子视图状态（单词消消乐 / 选择题 / 单词表），返回时原样恢复
+    // 先记录进入前的子视图状态（单词消消乐 / 选择题 / 单词表 / 返回首页吸顶按钮），返回时原样恢复
     const matchArea = document.getElementById('match-game-area');
     const choiceArea = document.getElementById('choice-learn-area');
+    const backHome = document.getElementById('learn-back-home');
+    const moduleTitle = document.getElementById('learn-module-title');
     _pointsPrevSub = {
       match: matchArea ? matchArea.style.display : '',
       choice: choiceArea ? choiceArea.style.display : '',
       wordList: wordList ? wordList.style.display : '',
-      quizBar: quizBar ? quizBar.style.display : ''
+      quizBar: quizBar ? quizBar.style.display : '',
+      backHome: backHome ? backHome.style.display : '',
+      moduleTitle: moduleTitle ? moduleTitle.style.display : ''
     };
     if (wordList) wordList.style.display = 'none';
     if (quizBar) quizBar.style.display = 'none';
@@ -1349,6 +1353,10 @@ const API = ".";
     if (matchArea) matchArea.style.display = 'none';
     if (choiceArea) choiceArea.style.display = 'none';
     if (typeof Match !== 'undefined' && Match.stopTimer) Match.stopTimer();
+    // 积分页自带「← 返回」吸顶按钮，隐藏学习视图的「← 返回首页」，否则下拉时两个吸顶按钮在同一位置重叠
+    if (backHome) backHome.style.display = 'none';
+    // 同步隐藏模块标题，避免学习视图内容泄漏到积分页
+    if (moduleTitle) moduleTitle.style.display = 'none';
     // 学习视图内 switchView('learn') 会直接 return，需手动修正顶栏标题
     document.getElementById('topbar-title').textContent = '🏆 积分详情';
 
@@ -1439,6 +1447,17 @@ const API = ".";
     const quizBar = document.getElementById('quiz-toggle-bar');
 
     if (area) area.style.display = 'none';
+
+    // 恢复学习视图的「← 返回首页」按钮（进入积分页时被隐藏）
+    const backHome = document.getElementById('learn-back-home');
+    if (backHome) {
+      backHome.style.display = (_pointsPrevSub && _pointsPrevSub.backHome) ? _pointsPrevSub.backHome : 'flex';
+    }
+    // 恢复模块标题
+    const moduleTitle = document.getElementById('learn-module-title');
+    if (moduleTitle) {
+      moduleTitle.style.display = (_pointsPrevSub && _pointsPrevSub.moduleTitle) ? _pointsPrevSub.moduleTitle : 'block';
+    }
 
     // 恢复进入积分页前的子视图（单词消消乐 / 选择题 / 单词表）
     if (_pointsPrevSub) {
