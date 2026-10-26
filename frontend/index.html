@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v37</div>
+          <div class="settings-row-sub" id="settings-version">v38</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1726,7 +1726,8 @@ const API = ".";
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
-    document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz" || name === "phonics" || name === "settings" || name === "learn" || name === "quiz") ? "none" : "inline";
+    // 顶栏年级标签已按需求全局移除（仅保留元素供文本更新，不再显示）
+    document.getElementById("grade-display").style.display = "none";
     // 年级选择页不显示右上角设置入口
     var _sb = document.getElementById("settings-btn");
     // 设置齿轮固定在顶栏右上角，所有页面均可点击进入设置
@@ -3776,7 +3777,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     currentGrade = grade;
     const gradeDisplay2 = document.getElementById('grade-display');
     if (gradeDisplay2) gradeDisplay2.textContent = grade;
-    document.getElementById('grade-display').style.display = 'inline';
+    // 顶栏不再显示年级标签，仅更新文本备用
     switchView('home');
     loadModules();
   }
