@@ -752,6 +752,11 @@
 
   <!-- ======= 首页：模块列表 ======= -->
   <div id="view-home" class="view">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button type="button" onclick="openSettings()" style="display:flex;align-items:center;gap:6px;padding:9px 18px;font-size:14px;font-weight:600;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;box-shadow:0 3px 14px rgba(79,159,255,.22);cursor:pointer">
+        <span style="font-size:16px">⚙️</span> 设置
+      </button>
+    </div>
     <div id="continue-entry" onclick="continueStudy()" style="display:none;align-items:center;justify-content:space-between;background:#eef2ff;border:1.5px solid #c3cfff;border-radius:14px;padding:14px 16px;margin-bottom:14px;cursor:pointer">
       <div style="display:flex;align-items:center;gap:10px">
         <span style="font-size:26px">▶️</span>
@@ -1066,7 +1071,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v30</div>
+          <div class="settings-row-sub" id="settings-version">v31</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1664,7 +1669,8 @@ const API = ".";
     document.getElementById("grade-display").style.display = (name === "grade" || name === "report" || name === "ket" || name === "review" || name === "ket-quiz" || name === "phonics" || name === "settings") ? "none" : "inline";
     // 年级选择页不显示右上角设置入口
     var _sb = document.getElementById("settings-btn");
-    if (_sb) _sb.style.display = (name === "grade") ? "none" : "inline-flex";
+    // 首页用内容区右上角的「设置」按钮，顶栏齿轮在其他页面（年级选择页除外）提供快捷入口
+    if (_sb) _sb.style.display = (name === "grade" || name === "home") ? "none" : "inline-flex";
     if (name === "settings") refreshSettingsInfo();
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
