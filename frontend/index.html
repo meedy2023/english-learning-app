@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v39</div>
+          <div class="settings-row-sub" id="settings-version">v40</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1325,6 +1325,7 @@ const API = ".";
     const data = Points.getData();
 
     // 记录来源视图（重复打开时不覆盖，保证仍能回到最初的页面）
+    // 说明：在设置页里点积分时来源就是设置页，返回一步回到设置，再返回才是设置之前的页面
     if (!_pointsPrevView) _pointsPrevView = currentView;
     // 切换到学习视图并显示积分详情
     switchView('learn');
@@ -3392,12 +3393,24 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== 设置页 ==========
   let settingsReturnView = 'home';
+  // 进入设置前的页面上下文：记录顶层视图 + 顶栏标题（子页面如课文详情/单词详情/积分页会被 switchView 重置为默认标题）
+  let settingsReturnTitle = null;
   function openSettings() {
-    if (currentView && currentView !== 'settings') settingsReturnView = currentView;
+    if (currentView && currentView !== 'settings') {
+      settingsReturnView = currentView;
+      const _t = document.getElementById('topbar-title');
+      settingsReturnTitle = _t ? _t.textContent : null;
+    }
     switchView('settings');
+    refreshSettingsInfo();
   }
   function closeSettings() {
     switchView(settingsReturnView || 'home');
+    // 站内子页面（课文详情 / 单词详情 / 积分页等）返回时，恢复进入设置前的准确标题
+    if (settingsReturnTitle) {
+      document.getElementById('topbar-title').textContent = settingsReturnTitle;
+      settingsReturnTitle = null;
+    }
   }
   function refreshSettingsInfo() {
     const g = document.getElementById('settings-grade-text');
