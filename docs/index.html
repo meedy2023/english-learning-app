@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v40</div>
+          <div class="settings-row-sub" id="settings-version">v41</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5091,13 +5091,26 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     loadPhonics();
   }
 
+  // 重新加载拼读列表后，按当前所处层级恢复可见区域：
+  // 停在某个分组的课时列表里时，从设置/积分返回后仍应看到该分组（原来会把两侧都隐藏，导致空白页）
+  function restorePhonicsView() {
+    const groupList = document.getElementById('phonics-group-list');
+    const lessonArea = document.getElementById('phonics-lesson-area');
+    if (phonicsCurrentGroup && lessonArea) {
+      if (groupList) groupList.style.display = 'none';
+      lessonArea.style.display = 'block';
+    } else {
+      if (lessonArea) lessonArea.style.display = 'none';
+      if (groupList) groupList.style.display = '';
+    }
+  }
+
   async function loadPhonics() {
     try {
       const data = await apiGET('/api/phonics');
       phonicsGroups = data.groups || [];
       const container = document.getElementById('phonics-group-list');
-      const lessonArea = document.getElementById('phonics-lesson-area');
-      if (lessonArea) lessonArea.style.display = 'none';
+      if (!container) return;
       container.innerHTML = '';
       if (phonicsGroups.length === 0) {
         container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">暂无自然拼读内容</div>';
@@ -5116,8 +5129,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         card.onclick = function() { openPhonicsGroup(g.id); };
         container.appendChild(card);
       });
+      restorePhonicsView();
     } catch (e) {
       document.getElementById('phonics-group-list').innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载失败，请稍后重试</div>';
+      restorePhonicsView();
     }
   }
 
@@ -5217,9 +5232,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         });
       }
 
-      // 显示分类列表，隐藏内容区
-      container.style.display = 'grid';
-      document.getElementById('ket-content-area').style.display = 'none';
+      // 按当前所处层级恢复显示（从设置/积分返回时保持原层级，不再被踢回分类首页）
+      restoreKetView();
 
     } catch (e) {
       console.error('加载 KET 分类失败:', e);
@@ -5281,6 +5295,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let ketCurrentItems = []; // 当前显示的数据
   let ketCurrentType = ''; // 当前类型
   let ketCurrentCategory = ''; // 当前分类
+
+  // 重新加载 KET 分类后，按当前所处层级恢复可见区域
+  function restoreKetView() {
+    const catList = document.getElementById('ket-category-list');
+    const contentArea = document.getElementById('ket-content-area');
+    if (ketCurrentCategory && contentArea) {
+      if (catList) catList.style.display = 'none';
+      contentArea.style.display = 'block';
+    } else {
+      if (catList) catList.style.display = 'grid';
+      if (contentArea) contentArea.style.display = 'none';
+    }
+  }
 
   // ========== KET 测验状态（词汇/句型/语法 通用） ==========
   let ketQuizShape = 'word'; // word | sentence | grammar
@@ -5489,6 +5516,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function backToKetCategories() {
+    ketCurrentCategory = '';
     document.getElementById('ket-category-list').style.display = 'grid';
     document.getElementById('ket-content-area').style.display = 'none';
     const qe = document.getElementById('ket-quiz-entry');
