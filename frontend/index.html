@@ -28,8 +28,9 @@
       top: 0;
       z-index: 100;
     }
-    .topbar h1 { font-size: 20px; font-weight: 700; }
-    .topbar-right { font-size: 13px; opacity: 0.9; }
+    .topbar h1 { font-size: 20px; font-weight: 700; flex: 1 1 auto; min-width: 0; margin-right: 12px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .topbar-right { font-size: 13px; opacity: 0.9; flex-shrink: 0; white-space: nowrap; }
+    #grade-display { white-space: nowrap; }
   .tts-engine-bar { display:flex; align-items:center; gap:8px; margin:6px 0 14px; flex-wrap:wrap; }
   .tts-engine-label { font-size:13px; color:#555; }
   .tts-select { font-size:13px; padding:4px 8px; border-radius:8px; border:1px solid #e0e6ff; background:#f5f7ff; color:#333; }
@@ -1764,8 +1765,10 @@ const API = ".";
     const area = document.getElementById('word-detail-area');
     area.style.display = 'block';
     // 课文详情页：单独调大「返回首页」吸顶距离，避免与顶栏过近
+    var _tb = document.querySelector('.topbar');
+    var _sticky = ((_tb ? _tb.offsetHeight : 66) + 8) + 'px';
     var _lbh = document.getElementById('learn-back-home');
-    if (_lbh) _lbh.style.top = '100px';
+    if (_lbh) _lbh.style.top = _sticky;
     
     document.getElementById('topbar-title').textContent = '📖 ' + unit.unit;
     
@@ -1801,7 +1804,7 @@ const API = ".";
     });
     
     area.innerHTML = `
-      <button class="btn btn-secondary" onclick="backToLessonUnits()" style="position:sticky;top:156px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
+      <button id="lesson-back-units" class="btn btn-secondary" onclick="backToLessonUnits()" style="position:sticky;top:156px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;background:#ffffff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:600;box-shadow:0 3px 14px rgba(79,159,255,.22);margin-bottom:16px">
         <span style="font-size:16px">←</span> 返回单元列表
       </button>
       
@@ -1836,6 +1839,12 @@ const API = ".";
         </div>
       </div>
     `;
+
+    // 吸顶按钮随顶栏实际高度自适应（长标题折行时顶栏会变高）
+    var _tb2 = document.querySelector('.topbar');
+    var _tbH = _tb2 ? _tb2.offsetHeight : 66;
+    var _bb = document.getElementById('lesson-back-units');
+    if (_bb) _bb.style.top = (_tbH + 60) + 'px';
 
     // 绑定整篇朗读按钮
     var fullSpeakBtn = document.getElementById("lesson-full-speak-btn");
