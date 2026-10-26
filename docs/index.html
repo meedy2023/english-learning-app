@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v42</div>
+          <div class="settings-row-sub" id="settings-version">v43</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1750,6 +1750,35 @@ const API = ".";
     // 单词列表等默认层级：容器内容未被覆盖，只需恢复显示
     if (_wl) _wl.style.display = 'block';
     if (_wda) _wda.style.display = 'none';
+  }
+
+  // 恢复消消乐页面（从设置页 / 积分页返回时调用；保持粘性以便反复进出）
+  function restoreMatchView() {
+    learnMode = 'match';
+    learnRestoreFn = restoreMatchView;
+    var el = function (id, v) { var e = document.getElementById(id); if (e) e.style.display = v; };
+    el('word-list', 'none');
+    el('word-detail-area', 'none');
+    el('choice-learn-area', 'none');
+    el('match-game-area', 'block');
+    el('learn-module-title', 'block');
+    el('quiz-toggle-bar', '');
+    document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
+    // 一局尚未结束时恢复计时；已到结算页则保持结算状态
+    if (typeof Match !== 'undefined' && Match.startTimer && !Match.finished) Match.startTimer();
+  }
+
+  // 恢复选择题学习页面
+  function restoreChoiceView() {
+    learnMode = 'choice';
+    learnRestoreFn = restoreChoiceView;
+    var el = function (id, v) { var e = document.getElementById(id); if (e) e.style.display = v; };
+    el('word-list', 'none');
+    el('word-detail-area', 'none');
+    el('match-game-area', 'none');
+    el('choice-learn-area', 'block');
+    el('quiz-toggle-bar', '');
+    document.getElementById('topbar-title').textContent = '🎯 开始学习';
   }
 
   // ========== 工具函数 ==========
@@ -3457,6 +3486,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const _t = document.getElementById('topbar-title');
       settingsReturnTitle = _t ? _t.textContent : null;
     }
+    // 消消乐进行中先进设置：暂停计时，返回时由 restoreMatchView 恢复
+    if (learnMode === 'match' && typeof Match !== 'undefined' && Match.stopTimer && !Match.finished) Match.stopTimer();
     switchView('settings');
     refreshSettingsInfo();
   }
@@ -4478,6 +4509,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       opts = opts || {};
       if (!currentModule || !currentWords || currentWords.length === 0) {
         toast('请先选择一个模块');
+        learnMode = null;
+        learnRestoreFn = null;
         switchView('home');
         return;
       }
@@ -4666,6 +4699,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 进入单元内的消消乐（fresh=true 时重开本单元）
   function startWordMatch(fresh) {
+    learnMode = 'match';
+    learnRestoreFn = restoreMatchView;
     Match.start({ fresh: !!fresh });
   }
 
@@ -4682,6 +4717,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       switchView('home');
       return;
     }
+    learnMode = 'choice';
+    learnRestoreFn = restoreChoiceView;
     cl_words = [...currentWords];
     cl_idx = 0;
     cl_correct = 0;
