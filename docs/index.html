@@ -1075,7 +1075,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v38</div>
+          <div class="settings-row-sub" id="settings-version">v39</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1317,11 +1317,15 @@ const API = ".";
 
   // 进入积分页前，记录学习子视图（单词消消乐 / 选择题）的显示状态，返回时原样恢复
   let _pointsPrevSub = null;
+  // 进入积分页前的所在视图（home/learn/ket/report/quiz 等），返回时切回
+  let _pointsPrevView = null;
 
   // 显示积分详情（弹窗）
   function showPointsDetail() {
     const data = Points.getData();
 
+    // 记录来源视图（重复打开时不覆盖，保证仍能回到最初的页面）
+    if (!_pointsPrevView) _pointsPrevView = currentView;
     // 切换到学习视图并显示积分详情
     switchView('learn');
 
@@ -1448,6 +1452,13 @@ const API = ".";
 
     if (area) area.style.display = 'none';
 
+    // 回到进入积分页前的视图（从 KET/报告/测验等页面进入时，学习视图是空的，必须切回）
+    const _returnToLearn = !_pointsPrevView || _pointsPrevView === 'learn';
+    if (_pointsPrevView && _pointsPrevView !== 'learn') {
+      switchView(_pointsPrevView);
+    }
+    _pointsPrevView = null;
+
     // 恢复学习视图的「← 返回首页」按钮（进入积分页时被隐藏）
     const backHome = document.getElementById('learn-back-home');
     if (backHome) {
@@ -1470,9 +1481,14 @@ const API = ".";
       if (_pointsPrevSub.match && _pointsPrevSub.match !== 'none' &&
           typeof Match !== 'undefined' && Match.startTimer) {
         Match.startTimer();
-        document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
-      } else {
-        document.getElementById('topbar-title').textContent = '📖 单词学习';
+      }
+      // 仅当停留在学习视图时才需要手动修正顶栏标题；切回其他视图时标题由 switchView 设置
+      if (_returnToLearn) {
+        if (_pointsPrevSub.match && _pointsPrevSub.match !== 'none') {
+          document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
+        } else {
+          document.getElementById('topbar-title').textContent = '📖 单词学习';
+        }
       }
       _pointsPrevSub = null;
     } else {
