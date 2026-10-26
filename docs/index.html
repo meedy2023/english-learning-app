@@ -1696,7 +1696,7 @@ const API = ".";
   async function openLessonModule(moduleName, grade) {
     switchView('learn');
     const quizBar = document.getElementById('quiz-toggle-bar');
-    if (quizBar) quizBar.style.display = 'flex';
+    if (quizBar) quizBar.style.display = ''; // 恢复CSS的grid布局，内联flex会把5个tab挤在一起
     // 隐藏其他学习子视图，显示课文列表容器
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
