@@ -945,6 +945,16 @@
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
         <div style="min-width:0">
+          <div style="font-size:15px;font-weight:600;color:#333">🐢 朗读速度</div>
+          <div style="font-size:12px;color:#999;margin-top:2px">默认慢速，贴近教材录音语速</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+          <select id="speech-rate-select" onchange="setSpeechRate(this.value)" style="font-size:13px;padding:6px 8px;border-radius:8px;border:1px solid #e0e6ff;background:#f5f7ff;color:#333;max-width:170px"></select>
+          <span onclick="previewSpeechRate()" style="cursor:pointer;font-size:13px;padding:6px 10px;border-radius:8px;background:#6c63ff;color:white;font-weight:500;white-space:nowrap">试听</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f0f0f0">
+        <div style="min-width:0">
           <div style="font-size:15px;font-weight:600;color:#333">🗣️ 英文发音</div>
           <div style="font-size:12px;color:#999;margin-top:2px">女声/男声/儿童音</div>
         </div>
@@ -1859,6 +1869,7 @@ const API = ".";
     var fullSpeakBtn = document.getElementById("lesson-full-speak-btn");
     if (fullSpeakBtn) {
       fullSpeakBtn.onclick = function() {
+        if (fullSpeakBtn.dataset.reading === '1') { stopLessonReading(); return; }
         speakAllLessonLines(unit.content);
       };
     }
@@ -1904,6 +1915,7 @@ const API = ".";
   }
 
   function backToLessonUnits() {
+    if (typeof stopLessonReading === 'function') stopLessonReading();
     var _lbh = document.getElementById('learn-back-home');
     if (_lbh) _lbh.style.top = '84px';
     document.getElementById('word-detail-area').style.display = 'none';
@@ -2071,7 +2083,7 @@ const API = ".";
         try {
           ws.send(JSON.stringify({
             common: { app_id: this.APP_ID },
-            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: vp.vcn, tte: 'UTF8', speed: vp.speed, volume: 50, pitch: vp.pitch },
+            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: vp.vcn, tte: 'UTF8', speed: Math.max(0, Math.min(100, Math.round(vp.speed * speechRate))), volume: 50, pitch: vp.pitch },
             data: { status: 2, text: this._b64(new TextEncoder().encode(text)) }
           }));
         } catch (e) { onError && onError(e); }
@@ -2663,35 +2675,55 @@ const API = ".";
     });
   }
 
+  let _lessonReadSeq = 0;
+  function setLessonReadingState(on) {
+    const b = document.getElementById('lesson-full-speak-btn');
+    if (!b) return;
+    b.dataset.reading = on ? '1' : '0';
+    b.textContent = on ? '⏹ 停止朗读' : '🔊 朗读整篇课文';
+  }
+  function stopLessonReading() {
+    _lessonReadSeq++;
+    setLessonReadingState(false);
+    stopAllAudio();
+  }
+
   function speakAllLessonLines(content) {
     if (!content || content.length === 0) {
       toast('没有可朗读的内容');
       return;
     }
 
-    // callback 链驱动：等上一句播完再播下一句
+    // callback 链驱动：等上一句播完、停顿一下再播下一句（停顿时长随语速配置）
+    const seq = ++_lessonReadSeq;
     let idx = 0;
     let total = content.length;
     let done = 0;
 
     const speakNext = () => {
+      if (seq !== _lessonReadSeq) return;
       if (idx >= total) return;
       const line = content[idx++];
       TTS.speak(line.text, 'en-US', function() {
+        if (seq !== _lessonReadSeq) return;
         done++;
         if (done === total) {
+          setLessonReadingState(false);
           const result = Points.earn('lesson_full_read');
           if (result.success) {
             showPointsToast(result.points, Points.getMessage('lesson_full_read'));
             updatePointsDisplay();
           }
         } else {
-          speakNext();
+          setTimeout(function() {
+            if (seq === _lessonReadSeq) speakNext();
+          }, lessonLineGap());
         }
       });
     };
 
     toast('开始朗读整篇课文...');
+    setLessonReadingState(true);
     speakNext();
   }
 
@@ -2723,6 +2755,20 @@ const API = ".";
     xiaofeng: { vcn: 'xiaofeng', pitch: 50, speed: 50 },
     aisBABYXu: { vcn: 'aisBABYXu', pitch: 55, speed: 50 }
   };
+
+  // ---- 朗读速度（面向小学生，默认慢速）----
+  // 参考：课文平均 7.5 词/句，常规 TTS 约 160 词/分钟（偏快）；
+  // 教材配套录音一般 90~120 词/分钟，故默认 0.75（约 120 词/分钟）
+  let speechRate = parseFloat(localStorage.getItem('speech_rate') || '0.75');
+  if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.75;
+  const SPEECH_RATE_OPTIONS = [
+    { value: '0.6', label: '很慢 · 初学跟读' },
+    { value: '0.75', label: '慢速 · 推荐' },
+    { value: '1', label: '正常' },
+    { value: '1.2', label: '稍快' }
+  ];
+  // 整篇朗读时句子之间的停顿（越慢停顿越长，给孩子反应时间）
+  function lessonLineGap() { return Math.round(450 / speechRate); }
 
   function escapeXml(s) {
     return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -2763,11 +2809,12 @@ const API = ".";
             .replace(/! /g, "<break time='220ms'/>! ")
             .replace(/\? /g, "<break time='220ms'/>? ");
         }
+        const ratePct = Math.round((speechRate - 1) * 100);
         const xmlLang = lang === 'zh-CN' ? 'zh-CN' : 'en-GB';
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
           + "<mstts:express-as style='" + style + "' styledegree='1.0'>"
-          + "<prosody rate='-20%' pitch='0%'>" + spoken + "</prosody>"
+          + "<prosody rate='" + ratePct + "%' pitch='0%'>" + spoken + "</prosody>"
           + "</mstts:express-as></voice></speak>";
         const header = "X-RequestId:" + uuid + "\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:" + ts + "Z\r\n\r\n";
         ws.send(header + ssml);
@@ -2856,7 +2903,7 @@ function playAudioBlob(blob, onEnd) {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'zh-CN' ? 'zh-CN' : (enVoice.startsWith('en-US') ? 'en-US' : 'en-GB');
-        u.rate = lang === 'en-US' ? 0.85 : 0.95;
+        u.rate = (lang === 'en-US' ? 0.85 : 0.95) * speechRate;
         if (lang === 'en-US') u.pitch = 1.2;
         const prefix = lang === 'zh-CN' ? 'zh' : 'en';
         const v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
@@ -3098,6 +3145,27 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
   initVoiceSelects();
+
+  // ========== 朗读速度设置 ==========
+  function setSpeechRate(v) {
+    speechRate = parseFloat(v);
+    if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.75;
+    localStorage.setItem('speech_rate', String(speechRate));
+    const sel = document.getElementById('speech-rate-select');
+    if (sel) sel.value = String(speechRate);
+  }
+  function initSpeechRateSelect() {
+    const sel = document.getElementById('speech-rate-select');
+    if (!sel) return;
+    sel.innerHTML = SPEECH_RATE_OPTIONS.map(function(o) {
+      return '<option value="' + o.value + '"' + (parseFloat(o.value) === speechRate ? ' selected' : '') + '>' + o.label + '</option>';
+    }).join('');
+  }
+  function previewSpeechRate() {
+    stopAllAudio();
+    TTS.speak('Hello! How are you today?', 'en-US');
+  }
+  initSpeechRateSelect();
 
   // ========== P3 优化：大字模式 + 语音引导 ==========
   let bigFontOn = localStorage.getItem('big_font') === '1';
