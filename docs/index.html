@@ -620,7 +620,7 @@
     /* ========== 单元内 · 单词消消乐 ========== */
     .tab-bar {
       display: grid;
-      grid-template-columns: repeat(5, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 6px;
       margin-bottom: 12px;
     }
@@ -648,6 +648,83 @@
     .match-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .match-title { font-size: 16px; font-weight: 800; color: #3d3a86; }
     .match-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
+    /* ---- 单词拼写重组 ---- */
+    .spell-card {
+      background: #fff;
+      border: 1px solid #e8ecff;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.10);
+    }
+    .spell-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .spell-title { font-size: 16px; font-weight: 800; color: #3d3a86; }
+    .spell-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
+    .spell-bar { height: 6px; background: #eef0fb; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+    .spell-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #4f9fff, #6c63ff); border-radius: 3px; transition: width .3s; }
+    .spell-prompt {
+      margin-top: 14px;
+      text-align: center;
+      background: linear-gradient(135deg, #f4f7ff, #eef2ff);
+      border: 1px dashed #c9d4ff;
+      border-radius: 14px;
+      padding: 12px 10px;
+    }
+    .spell-prompt .sp-cn { font-size: 17px; font-weight: 700; color: #3d3a86; }
+    .spell-prompt .sp-ph { font-size: 12.5px; color: #98a0b8; margin-top: 4px; }
+    .spell-slots { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 14px; }
+    .spell-slot {
+      width: 40px; height: 46px;
+      border-radius: 10px;
+      border: 2px dashed #cfd7ff;
+      background: #fbfcff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: #3d3a86;
+      cursor: pointer; user-select: none;
+      transition: transform .12s, border-color .15s, background .15s;
+    }
+    .spell-slot.filled { border-style: solid; border-color: #b9c6ff; background: #fff; }
+    .spell-slot.filled:active { transform: scale(0.94); }
+    .spell-slot.ok { border-color: #52c41a; background: #f6ffed; color: #389e0d; }
+    .spell-slot.bad { border-color: #ff7875; background: #fff1f0; color: #cf1322; animation: sp-shake .32s; }
+    .spell-slot.hint { border-color: #ffd666; background: #fffbe6; }
+    @keyframes sp-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    .spell-label { text-align: center; font-size: 12px; color: #a4abc4; margin-top: 8px; }
+    .spell-pool { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 10px; min-height: 46px; }
+    .spell-tile {
+      min-width: 40px; height: 46px; padding: 0 8px;
+      border-radius: 10px; border: none;
+      background: linear-gradient(135deg, #4f9fff, #6c63ff);
+      color: #fff; font-size: 20px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; user-select: none;
+      box-shadow: 0 3px 8px rgba(108, 99, 255, 0.28);
+      transition: transform .12s;
+    }
+    .spell-tile:active { transform: scale(0.92); }
+    .spell-tile.used { visibility: hidden; pointer-events: none; }
+    .spell-fb {
+      margin-top: 12px; text-align: center; padding: 12px; border-radius: 12px;
+      font-size: 15px; font-weight: 600; line-height: 1.5;
+    }
+    .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; }
+    .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; }
+    .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; }
+    .spell-acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; margin-top: 12px; }
+    .spell-act {
+      border: none; border-radius: 12px; padding: 10px 6px; font-size: 12.5px; font-weight: 600;
+      background: #eef2ff; color: #5a54e8; cursor: pointer; min-height: 42px;
+    }
+    .spell-act:active { transform: scale(0.96); }
+    .spell-nav { display: flex; gap: 8px; margin-top: 12px; }
+    .spell-nav .btn { flex: 1; padding: 11px 8px; font-size: 14px; }
+    .spell-done { text-align: center; padding: 18px 10px; }
+    .spell-done .sd-emoji { font-size: 46px; }
+    .spell-done .sd-title { font-size: 17px; font-weight: 800; color: #3d3a86; margin-top: 6px; }
+    .spell-done .sd-sub { font-size: 13px; color: #7a829a; margin-top: 6px; line-height: 1.6; }
     .cl-meta { font-size: 12.5px; color: #6b7290; font-weight: 600; margin-bottom: 6px; line-height: 1.5; }
     .cl-meta .keep { white-space: nowrap; }
     .match-restart {
@@ -856,6 +933,7 @@
       <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
       <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
       <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
     </div>
     <div class="word-list" id="word-list"></div>
     <div id="word-detail-area" style="display:none"></div>
@@ -891,6 +969,9 @@
         </div>
       </div>
     </div>
+
+    <!-- 单词拼写重组（属于当前单元） -->
+    <div id="spell-game-area" style="display:none"></div>
   </div>
 
   <!-- ======= 测验 ======= -->
@@ -904,6 +985,7 @@
       <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
       <button class="btn btn-sm tab-btn active" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
       <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
     </div>
     <div class="quiz-card">
       <div class="quiz-prompt" id="quiz-prompt">这个单词的中文是什么意思？</div>
@@ -1210,7 +1292,9 @@ const API = ".";
       lesson_open: 1,      // 打开课文
       lesson_record: 2,    // 课文跟读
       lesson_full_read: 5, // 朗读全文
-      match_clear: 3       // 消消乐消完整个单元
+      match_clear: 3,       // 消消乐消完整个单元
+      spell_correct: 2,     // 拼对一个单词
+      spell_unit_clear: 5   // 拼写完整个单元
     },
 
     getData() {
@@ -1327,7 +1411,9 @@ const API = ".";
         lesson_open: '打开课文',
         lesson_record: '课文跟读',
         lesson_full_read: '朗读全文',
-        match_clear: '消消乐通关本单元'
+        match_clear: '消消乐通关本单元',
+        spell_correct: '拼写正确',
+        spell_unit_clear: '拼写通关本单元'
       };
       return messages[action] || '';
     }
@@ -1385,11 +1471,13 @@ const API = ".";
     // 先记录进入前的子视图状态（单词消消乐 / 选择题 / 单词表 / 返回首页吸顶按钮），返回时原样恢复
     const matchArea = document.getElementById('match-game-area');
     const choiceArea = document.getElementById('choice-learn-area');
+    const spellArea = document.getElementById('spell-game-area');
     const backHome = document.getElementById('learn-back-home');
     const moduleTitle = document.getElementById('learn-module-title');
     _pointsPrevSub = {
       match: matchArea ? matchArea.style.display : '',
       choice: choiceArea ? choiceArea.style.display : '',
+      spell: spellArea ? spellArea.style.display : '',
       wordList: wordList ? wordList.style.display : '',
       quizBar: quizBar ? quizBar.style.display : '',
       backHome: backHome ? backHome.style.display : '',
@@ -1400,6 +1488,7 @@ const API = ".";
     // 隐藏单词消消乐、选择题等子视图，避免它们的界面残留在积分页里
     if (matchArea) matchArea.style.display = 'none';
     if (choiceArea) choiceArea.style.display = 'none';
+    if (spellArea) spellArea.style.display = 'none';
     if (typeof Match !== 'undefined' && Match.stopTimer) Match.stopTimer();
     // 积分页自带「← 返回」吸顶按钮，隐藏学习视图的「← 返回首页」，否则下拉时两个吸顶按钮在同一位置重叠
     if (backHome) backHome.style.display = 'none';
@@ -1521,6 +1610,8 @@ const API = ".";
       const choiceArea = document.getElementById('choice-learn-area');
       if (matchArea) matchArea.style.display = _pointsPrevSub.match || 'none';
       if (choiceArea) choiceArea.style.display = _pointsPrevSub.choice || 'none';
+      const spellArea = document.getElementById('spell-game-area');
+      if (spellArea) spellArea.style.display = _pointsPrevSub.spell || 'none';
       if (_pointsPrevSub.match && _pointsPrevSub.match !== 'none' &&
           typeof Match !== 'undefined' && Match.startTimer) {
         Match.startTimer();
@@ -1529,6 +1620,8 @@ const API = ".";
       if (_returnToLearn) {
         if (_pointsPrevSub.match && _pointsPrevSub.match !== 'none') {
           document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
+        } else if (_pointsPrevSub.spell && _pointsPrevSub.spell !== 'none') {
+          document.getElementById('topbar-title').textContent = '🔤 单词拼写';
         } else {
           document.getElementById('topbar-title').textContent = '📖 单词学习';
         }
@@ -1778,11 +1871,13 @@ const API = ".";
       showTextbookList(true);
       return;
     }
-    // 消消乐 / 选择题层级：保持原样，不切回单词表
+    // 消消乐 / 选择题 / 拼写层级：保持原样，不切回单词表
     var matchArea = document.getElementById('match-game-area');
     var choiceArea = document.getElementById('choice-learn-area');
+    var spellArea = document.getElementById('spell-game-area');
     var subVisible = (matchArea && matchArea.style.display && matchArea.style.display !== 'none') ||
-                     (choiceArea && choiceArea.style.display && choiceArea.style.display !== 'none');
+                     (choiceArea && choiceArea.style.display && choiceArea.style.display !== 'none') ||
+                     (spellArea && spellArea.style.display && spellArea.style.display !== 'none');
     if (subVisible) {
       if (_wda) _wda.style.display = 'none';
       return;
@@ -1819,6 +1914,21 @@ const API = ".";
     el('choice-learn-area', 'block');
     el('quiz-toggle-bar', '');
     document.getElementById('topbar-title').textContent = '🎯 开始学习';
+  }
+
+  // 恢复单词拼写页面
+  function restoreSpellView() {
+    learnMode = 'spell';
+    learnRestoreFn = restoreSpellView;
+    var el = function (id, v) { var e = document.getElementById(id); if (e) e.style.display = v; };
+    el('word-list', 'none');
+    el('word-detail-area', 'none');
+    el('choice-learn-area', 'none');
+    el('match-game-area', 'none');
+    el('spell-game-area', 'block');
+    el('learn-module-title', 'block');
+    el('quiz-toggle-bar', '');
+    document.getElementById('topbar-title').textContent = '🔤 单词拼写';
   }
 
   // ========== 工具函数 ==========
@@ -1979,6 +2089,8 @@ const API = ".";
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
     hideMatchGame();
+    var _spa = document.getElementById('spell-game-area');
+    if (_spa) _spa.style.display = 'none';
     document.getElementById('quiz-toggle-bar').style.display = '';
 
     const area = document.getElementById('word-list');
@@ -2021,6 +2133,8 @@ const API = ".";
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('choice-learn-area').style.display = 'none';
     hideMatchGame();
+    var _spa = document.getElementById('spell-game-area');
+    if (_spa) _spa.style.display = 'none';
     const _wl = document.getElementById('word-list');
     if (_wl) _wl.style.display = 'block';
     const gradeLabel = grade || currentLessonGrade || "三年级上册";
@@ -4496,6 +4610,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById("word-detail-area").style.display = "none";
     document.getElementById("choice-learn-area").style.display = "none";
     hideMatchGame();
+    var _spa = document.getElementById('spell-game-area');
+    if (_spa) _spa.style.display = 'none';
     document.getElementById("view-quiz").classList.remove("active");
     document.getElementById("word-list").style.display = "block";
     document.getElementById("quiz-toggle-bar").style.display = "";
@@ -4628,6 +4744,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById("quiz-hint").style.display = "block";
     setActiveTab('quiz');
     hideMatchGame();
+    var _spa = document.getElementById('spell-game-area');
+    if (_spa) _spa.style.display = 'none';
     const _qt = document.getElementById('quiz-module-title');
     const _qm = document.getElementById('quiz-meta');
     if (_qt) { _qt.textContent = '📖 ' + moduleLabel(currentModule); _qt.style.display = 'block'; }
@@ -5030,6 +5148,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById('word-list').style.display = 'none';
       document.getElementById('word-detail-area').style.display = 'none';
       document.getElementById('choice-learn-area').style.display = 'none';
+      document.getElementById('spell-game-area').style.display = 'none';
       document.getElementById('quiz-toggle-bar').style.display = '';
       document.getElementById('match-game-area').style.display = 'block';
       document.getElementById('match-result').style.display = 'none';
@@ -5222,6 +5341,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('match-game-area').style.display = 'none';
     Match.stop();
+    document.getElementById('spell-game-area').style.display = 'none';
     document.getElementById('quiz-toggle-bar').style.display = '';
     const area = document.getElementById('choice-learn-area');
     area.style.display = 'block';
@@ -5431,6 +5551,332 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     switchView('home');
   // 直接跳转到课文模块列表
     showTextbookList();
+  }
+
+  // ========== 单词拼写重组（每个单元都能玩） ==========
+  // 玩法：给出本单元某个单词的中文与打乱的字母块，用户点击字母按顺序拼出原单词，
+  //      填满自动判定对错并反馈、发积分；可重新打乱 / 重置 / 查看答案 / 上一个 / 下一个
+  const Spell = {
+    pool: [],      // 本单元可拼写的单词
+    idx: 0,
+    tiles: [],     // [{id, ch, used}] 打乱后的字母块
+    slots: [],     // [{ch, tileId}] 已填字母槽
+    solved: {},    // 本轮拼对的单词 id
+    locked: false, // 判定为正确后锁定（不再接受修改）
+    fb: null,      // {type:'ok'|'bad'|'info', html:''}
+    badFlash: false,
+
+    // 只有纯字母、长度合适的英文单词才适合做拼写题
+    usableWords() {
+      return (currentWords || []).filter(function (w) {
+        const s = String(w.word || '').trim();
+        return /^[A-Za-z]{2,12}$/.test(s);
+      });
+    },
+
+    progressKey() {
+      return 'spell_idx_' + USER_ID + '_' + (currentModule || '');
+    },
+
+    start(fresh) {
+      if (!currentModule || !currentWords || currentWords.length === 0) {
+        toast('请先选择一个模块');
+        learnMode = null;
+        learnRestoreFn = null;
+        switchView('home');
+        return;
+      }
+      if (typeof Match !== 'undefined' && Match.stop) Match.stop();
+      this.pool = this.usableWords();
+      this.solved = {};
+      this.fb = null;
+      this.badFlash = false;
+      // 记住上一次玩到第几个单词（换单元后从头开始）
+      if (!fresh) {
+        const saved = parseInt(localStorage.getItem(this.progressKey()) || '0', 10);
+        this.idx = (saved > 0 && saved < this.pool.length) ? saved : 0;
+      } else {
+        this.idx = 0;
+      }
+
+      learnMode = 'spell';
+      learnRestoreFn = restoreSpellView;
+      switchView('learn');
+      setActiveTab('spell');
+      document.getElementById('topbar-title').textContent = '🔤 单词拼写';
+      document.getElementById('learn-module-title').style.display = 'block';
+      document.getElementById('word-list').style.display = 'none';
+      document.getElementById('word-detail-area').style.display = 'none';
+      document.getElementById('choice-learn-area').style.display = 'none';
+      document.getElementById('match-game-area').style.display = 'none';
+      document.getElementById('quiz-toggle-bar').style.display = '';
+      document.getElementById('spell-game-area').style.display = 'block';
+
+      if (this.pool.length === 0) {
+        document.getElementById('spell-game-area').innerHTML =
+          '<div class="spell-card"><div class="empty-state"><div class="empty-state-icon">🔤</div>' +
+          '<div>本单元暂无可拼写的单词</div>' +
+          '<button class="btn btn-primary" style="margin-top:16px" onclick="showWordList()">返回单词表</button></div></div>';
+        return;
+      }
+      this.load(false);
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    // 载入当前单词：拆成字母块并打乱（保证打乱结果不等于原单词）
+    load(shuffleRandom) {
+      const w = this.pool[this.idx];
+      if (!w) { this.finish(); return; }
+      const letters = String(w.word).toLowerCase().split('');
+      const order = shuffle(letters.map(function (ch, i) { return i; }));
+      let seq = order.map(function (i) { return letters[i]; }).join('');
+      const target = letters.join('');
+      // 全随机可能刚好拼出正确顺序，重排几次避免“一进来就是答案”
+      for (let t = 0; t < 8 && seq === target && target.length > 1; t++) {
+        const o2 = shuffle(letters.map(function (ch, i) { return i; }));
+        seq = o2.map(function (i) { return letters[i]; }).join('');
+      }
+      const self = this;
+      this.tiles = seq.split('').map(function (ch, i) {
+        return { id: 't' + i + '_' + ch + '_' + i, ch: ch, used: false };
+      });
+      this.slots = letters.map(function () { return { ch: null, tileId: null }; });
+      this.locked = false;
+      this.badFlash = false;
+      this.fb = null;
+      localStorage.setItem(this.progressKey(), String(this.idx));
+      this.render();
+    },
+
+    current() { return this.pool[this.idx]; },
+
+    // 点击字母块 → 放进第一个空格子
+    pickTile(tileId) {
+      if (this.locked) return;
+      const t = this.tiles.filter(function (x) { return x.id === tileId && !x.used; })[0];
+      if (!t) return;
+      const slot = this.slots.filter(function (s) { return s.ch === null; })[0];
+      if (!slot) return;
+      slot.ch = t.ch;
+      slot.tileId = t.id;
+      t.used = true;
+      this.fb = null;
+      this.badFlash = false;
+      this.render();
+      if (this.slots.every(function (s) { return s.ch !== null; })) this.check();
+    },
+
+    // 点击已填的格子 → 字母退回原位
+    pickSlot(i) {
+      if (this.locked) return;
+      const s = this.slots[i];
+      if (!s || s.ch === null) return;
+      const t = this.tiles.filter(function (x) { return x.id === s.tileId; })[0];
+      if (t) t.used = false;
+      s.ch = null;
+      s.tileId = null;
+      this.fb = null;
+      this.badFlash = false;
+      this.render();
+    },
+
+    check() {
+      const w = this.current();
+      if (!w) return;
+      const answer = String(w.word).toLowerCase();
+      const input = this.slots.map(function (s) { return s.ch; }).join('').toLowerCase();
+      if (input === answer) this.correct(w);
+      else this.wrong(input, answer);
+    },
+
+    correct(w) {
+      this.locked = true;
+      this.badFlash = false;
+      this.solved[w.id] = true;
+      const self = this;
+      this.fb = {
+        type: 'ok',
+        html: '🎉 拼写正确！<b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '')
+      };
+      this.render(true);
+      try { speakWord(w.word); } catch (e) {}
+      let earned = 0;
+      const res = Points.earn('spell_correct', 'spell_' + w.id + '_' + String(w.word).toLowerCase());
+      if (res.success) {
+        earned = res.points;
+        showPointsToast(res.points, Points.getMessage('spell_correct'));
+        updatePointsDisplay();
+      } else {
+        this.fb.html += '<div style="font-size:13px;color:#7a829a;margin-top:4px">（这个单词已经拿过积分啦）</div>';
+        this.render(true);
+      }
+      // 本单元全部拼完 → 额外奖励
+      const solvedCount = Object.keys(this.solved).length;
+      if (solvedCount >= this.pool.length) {
+        const bonus = Points.earn('spell_unit_clear', 'spell_unit_' + currentModule + '_' + this.pool.length);
+        if (bonus.success) {
+          showPointsToast(bonus.points, Points.getMessage('spell_unit_clear'));
+          updatePointsDisplay();
+        }
+      }
+    },
+
+    wrong(input, answer) {
+      this.badFlash = true;
+      this.fb = {
+        type: 'bad',
+        html: '❌ 你拼的是 <b>' + input + '</b>，还差一点，再试一次！'
+      };
+      this.render();
+      const self = this;
+      setTimeout(function () {
+        if (self.fb && self.fb.type === 'bad') {
+          self.badFlash = false;
+          self.render();
+        }
+      }, 500);
+    },
+
+    reshuffle() {
+      if (this.locked) { this.next(); return; }
+      const w = this.current();
+      this.load(true);
+      this.fb = { type: 'info', html: '🔀 已重新打乱，再拼一次！' };
+      this.render();
+    },
+
+    reset() {
+      if (this.locked) { this.locked = false; }
+      this.slots.forEach(function (s) { s.ch = null; s.tileId = null; });
+      this.tiles.forEach(function (t) { t.used = false; });
+      this.fb = null;
+      this.badFlash = false;
+      this.render();
+    },
+
+    reveal() {
+      const w = this.current();
+      if (!w) return;
+      const letters = String(w.word).toLowerCase().split('');
+      // 用字母块按顺序填满格子（不参与积分 judging）
+      const self = this;
+      const pool = this.tiles.slice();
+      this.slots = letters.map(function (ch) {
+        const t = pool.filter(function (x) { return !x.used && x.ch === ch; })[0];
+        if (t) { t.used = true; return { ch: ch, tileId: t.id }; }
+        return { ch: ch, tileId: null };
+      });
+      this.fb = {
+        type: 'info',
+        html: '👀 正确答案是 <b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '') +
+              '<div style="font-size:13px;color:#a08107;margin-top:4px">点「重置拼写」自己再拼一遍</div>'
+      };
+      this.badFlash = false;
+      this.render();
+      try { speakWord(w.word); } catch (e) {}
+    },
+
+    prev() {
+      if (this.idx <= 0) { toast('已经是第一个单词了'); return; }
+      this.idx--;
+      this.load(true);
+    },
+
+    next() {
+      if (this.idx >= this.pool.length - 1) { this.finish(); return; }
+      this.idx++;
+      this.load(true);
+    },
+
+    skip() {
+      this.next();
+    },
+
+    finish() {
+      const total = this.pool.length;
+      const done = Object.keys(this.solved).length;
+      document.getElementById('spell-game-area').innerHTML =
+        '<div class="spell-card"><div class="spell-done">' +
+        '<div class="sd-emoji">' + (done >= total ? '🎉' : '👏') + '</div>' +
+        '<div class="sd-title">' + (done >= total ? '本单元全部拼完啦！' : '本单元单词已全部过一遍') + '</div>' +
+        '<div class="sd-sub">本单元共 ' + total + ' 个单词，本轮拼对 ' + done + ' 个<br>可以换下一个单元，也再练一轮</div>' +
+        '<div class="spell-nav" style="max-width:320px;margin:16px auto 0">' +
+        '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个单词</button>' +
+        '<button class="btn btn-primary" onclick="Spell.start(true)">🔄 再拼一轮</button>' +
+        '</div>' +
+        '<button class="btn btn-secondary nav-back-btn" style="margin-top:10px;width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">📋</span> 返回单词表</button>' +
+        '</div></div>';
+    },
+
+    speak() {
+      const w = this.current();
+      if (w) speakWord(w.word);
+    },
+
+    render(solved) {
+      const area = document.getElementById('spell-game-area');
+      if (!area) return;
+      const w = this.current();
+      if (!w) { this.finish(); return; }
+      const esc = function (s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
+      const pct = Math.round((this.idx / this.pool.length) * 100);
+      let slotsHtml = '';
+      const self = this;
+      this.slots.forEach(function (s, i) {
+        let cls = 'spell-slot';
+        if (s.ch) cls += ' filled';
+        if (solved) cls += ' ok';
+        if (self.badFlash) cls += ' bad';
+        slotsHtml += '<div class="' + cls + '" onclick="Spell.pickSlot(' + i + ')" data-slot="' + i + '">' +
+                     (s.ch ? String(s.ch).toUpperCase() : '') + '</div>';
+      });
+      let tilesHtml = '';
+      this.tiles.forEach(function (t) {
+        tilesHtml += '<button class="spell-tile' + (t.used ? ' used' : '') + '" id="' + t.id + '" ' +
+                     'onclick="Spell.pickTile(\'' + t.id + '\')" ' + (t.used ? 'disabled' : '') + '>' +
+                     String(t.ch).toUpperCase() + '</button>';
+      });
+      const fbHtml = this.fb
+        ? '<div class="spell-fb ' + this.fb.type + '">' + this.fb.html + '</div>'
+        : '';
+      const dots = this.tiles.length;
+      area.innerHTML =
+        '<div class="spell-card">' +
+          '<div class="spell-top">' +
+            '<div>' +
+              '<div class="spell-title">🔤 单词拼写</div>' +
+              '<div class="spell-sub">本单元 ' + this.pool.length + ' 个单词 · 已拼对 ' + Object.keys(this.solved).length + ' 个</div>' +
+            '</div>' +
+            '<div style="font-size:13px;font-weight:700;color:#6c63ff;white-space:nowrap">第 ' + (this.idx + 1) + '/' + this.pool.length + '</div>' +
+          '</div>' +
+          '<div class="spell-bar"><i style="width:' + pct + '%"></i></div>' +
+          '<div class="spell-prompt">' +
+            '<div class="sp-cn">' + esc(w.chinese) + '</div>' +
+            '<div class="sp-ph">共 ' + dots + ' 个字母' + (w.phonetic ? ' · ' + esc(w.phonetic) : '') + '</div>' +
+            '<button class="speak-btn" style="margin-top:8px" onclick="Spell.speak()">🔊 听发音</button>' +
+          '</div>' +
+          '<div class="spell-slots">' + slotsHtml + '</div>' +
+          '<div class="spell-label">点上面的格子可以把字母退回来</div>' +
+          '<div class="spell-pool">' + tilesHtml + '</div>' +
+          fbHtml +
+          '<div class="spell-acts">' +
+            '<button class="spell-act" onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
+            '<button class="spell-act" onclick="Spell.reset()">↺ 重置拼写</button>' +
+            '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
+            '<button class="spell-act" onclick="Spell.skip()">⏭ 跳过</button>' +
+          '</div>' +
+          '<div class="spell-nav">' +
+            '<button class="btn btn-secondary" style="' + (this.idx > 0 ? '' : 'opacity:.45;') + '" onclick="Spell.prev()">← 上一个</button>' +
+            '<button class="btn btn-primary" id="spell-next-btn" onclick="Spell.next()">' +
+              (this.idx >= this.pool.length - 1 ? '🎉 完成本单元' : '下一个 →') +
+            '</button>' +
+          '</div>' +
+        '</div>';
+    }
+  };
+
+  function startSpell(fresh) {
+    Spell.start(fresh === true);
   }
 
   // ========== 单词消消乐 ==========
