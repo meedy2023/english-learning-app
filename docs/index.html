@@ -2104,11 +2104,7 @@ const API = ".";
     hideLearnModuleTitle();
     
     // 构建对话内容（按词拆成 span：整篇朗读时可跟随高亮，点击某句可跳转朗读）
-    function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-    function buildWordsHtml(text) {
-      return String(text).split(/\s+/).filter(w => w.length > 0)
-        .map(w => '<span class="lr-w">' + escapeHtml(w) + '</span>').join(' ');
-    }
+    function escapeHtml(s) { return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
     let dialogueHTML = '';
     unit.content.forEach((line, idx) => {
       const roleColor = getRoleColor(line.role);
@@ -2116,7 +2112,7 @@ const API = ".";
       dialogueHTML += `
         <div class="ra-line-item lr-line" id="${lineId}" data-idx="${idx}" style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid ${roleColor}">
           <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}</div>
-          <div id="${lineId}-text" class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${buildWordsHtml(line.text)}</div>
+          <div id="${lineId}-text" class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${lrWordsHtml(line.text)}</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggle(document.getElementById('${lineId}-text'), '${escapeForJS(line.text)}', ${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
@@ -3026,9 +3022,15 @@ const API = ".";
     LessonReader.stop();
   }
 
-  // ========== 课文整篇朗读：进度同步播放器 ==========
+  // ========== 课文 / KET 短文 整篇朗读：进度同步播放器 ==========
   // 功能：句倒计时高亮（已读淡出 / 当前句紫色 / 未读原样），词级跟随（按播放进度推算），
   //      播放 · 暂停 · 继续 · 重播 · 点句跳转，读完给积分
+  // 公共：把一句英文拆成 <span class="lr-w"> 供词级高亮
+  function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+  function lrWordsHtml(text) {
+    return String(text).split(/\s+/).filter(w => w.length > 0)
+      .map(w => '<span class="lr-w">' + escapeHtml(w) + '</span>').join(' ');
+  }
   const LessonReader = {
     lines: [],        // [{item, words:[{el, chars}], text, total}]
     idx: -1,
@@ -3039,12 +3041,21 @@ const API = ".";
     startAt: 0,       // 当前句开始时间（系统语音用）
     estMs: 2000,      // 当前句估算时长（系统语音无 currentTime 时用）
     paused: false,
-
+    ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
+    // 取 UI 元素：优先本次绑定的 urls，回落到课文页默认 id
+    UI(key, defId) {
+      const id = (this.ui && this.ui[key]) || defId;
+      return id ? document.getElementById(id) : null;
+    },
     // 采集页面上的句子与词节点
-    bind(content) {
+    // content: [{text|en}...]；ui: KET 等页面的控制条元素 id
+    bind(content, ui) {
       this.stop(true);
+      this.ui = ui || null;
       this.lines = [];
-      const items = document.querySelectorAll('.lr-line');
+      const scopeId = (ui && ui.scope) || null;
+      const scope = scopeId ? (document.getElementById(scopeId) || document) : document;
+      const items = scope.querySelectorAll('.lr-line');
       items.forEach((item, i) => {
         const wordEls = Array.prototype.slice.call(item.querySelectorAll('.lr-w'));
         let acc = 0;
@@ -3054,12 +3065,18 @@ const API = ".";
           acc += len;
           return w;
         });
+        const src = content && content[i];
         this.lines.push({
           item: item,
-          text: (content && content[i] && content[i].text) || '',
+          text: (src && (src.text || src.en)) || '',
           words: words,
           total: acc
         });
+      });
+      // 同一时刻只允许一个控制条可见（课文 / KET 各自一套）
+      const dockId = (ui && ui.dock) || 'lesson-reader-dock';
+      document.querySelectorAll('.lr-dock').forEach((d) => {
+        d.style.display = (d.id === dockId) ? '' : 'none';
       });
       this.updateUI();
     },
@@ -3267,12 +3284,13 @@ const API = ".";
     },
     // ---- 控制条 UI ----
     updateUI() {
-      const b = document.getElementById('lesson-full-speak-btn');
-      const rp = document.getElementById('lesson-replay-btn');
-      const pg = document.getElementById('lesson-read-progress');
-      const bar = document.getElementById('lesson-read-bar');
+      const b = this.UI('main', 'lesson-full-speak-btn');
+      const rp = this.UI('replay', 'lesson-replay-btn');
+      const pg = this.UI('progress', 'lesson-read-progress');
+      const bar = this.UI('bar', 'lesson-read-bar');
       const total = this.lines.length;
-      let txt = '🔊 朗读整篇课文';
+      const idleTxt = (this.ui && this.ui.label) || '🔊 朗读整篇课文';
+      let txt = idleTxt;
       if (this.state === 'playing') txt = '⏸ 暂停';
       else if (this.state === 'paused') txt = '▶️ 继续';
       if (b) { b.textContent = txt; b.dataset.reading = (this.state === 'playing' || this.state === 'paused') ? '1' : '0'; }
@@ -3285,7 +3303,7 @@ const API = ".";
       if (bar) bar.style.display = showPg ? '' : 'none';
     },
     updateBar(p) {
-      const bar = document.getElementById('lesson-read-bar');
+      const bar = this.UI('bar', 'lesson-read-bar');
       if (!bar) return;
       const done = (this.idx >= 0 && this.lines.length)
         ? (this.idx + Math.max(0, Math.min(1, p))) / this.lines.length : 0;
@@ -3649,6 +3667,25 @@ function playAudioBlob(blob, onEnd) {
       });
       return handle;
     },
+    // 音标发音（自然拼读）：网络走 Edge SSML <phoneme>，本机模式读代表词；
+    // 发音人 / 语速 / 引擎全部沿用设置，和系统其它发音保持一致
+    speakPhoneme(ipaCore, fallbackText, lang, onEnd, silent) {
+      lang = lang || 'en-US';
+      const word = String(fallbackText || '').trim();
+      if (!this.useNetwork(lang) || !word) { this.speakSystem(word || ipaCore, lang, onEnd); return; }
+      const key = 'ipa|' + enVoice + '|' + speechRate + '|' + lang + '|' + ipaCore;
+      const cached = ttsCacheGet(key);
+      if (cached) { playAudioBlob(cached, onEnd); return; }
+      const self = this;
+      EdgeTTS.synthesize(word, lang, (blob) => {
+        TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, onEnd);
+      }, () => {
+        // Edge 读不了这个音标时：退回代表词（仍走设置里的语速/发音人）
+        TTS_NET.onFail();
+        if (!silent) TTS_NET.notifyFallback();
+        self.speakSystem(word, lang, onEnd);
+      }, enVoice, ipaCore);
+    },
     // 只合成、不播放（返回 blob 或 null）
     synthOnce(text, lang, cb) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
@@ -3765,38 +3802,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     TTS.speak(text, 'en-US');
   }
 
+  // 短文（KET）整篇朗读：与课文共用同一套播放器
   function speakAllReading() {
-    if (!readingContent || readingContent.length === 0) {
-      toast('没有可朗读的内容');
-      return;
-    }
-    let idx = 0;
-    let totalLines = readingContent.length;
-    let completed = 0;
-
-    const speakNext = () => {
-      if (idx >= totalLines) return;
-      const line = readingContent[idx];
-      idx++;
-      // 预合成下一句（同课文整篇朗读）
-      const _next = readingContent[idx];
-      if (_next && _next.en) TTS.prefetch(_next.en, 'en-US');
-      TTS.speak(line.en, 'en-US', function() {
-        completed++;
-        if (completed === totalLines) {
-          const result = Points.earn('lesson_full_read');
-          if (result.success) {
-            showPointsToast(result.points, Points.getMessage('lesson_full_read'));
-            updatePointsDisplay();
-          }
-        } else {
-          speakNext();
-        }
-      });
-    };
-
-    toast('开始朗读整篇短文...');
-    speakNext();
+    LessonReader.start(0);
   }
   function speakWord(word) {
     if (!word) { toast("没有可发音的内容"); return; }
@@ -5643,25 +5651,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let phonicsGroups = [];
   let phonicsCurrentGroup = null;
 
-  // 自然拼读发音：用 EdgeTTS SSML <phoneme> 直接读 IPA 音标（如 /æ/），非 IPA 兜底读代表词
+  // 自然拼读发音：统一走设置里的发音引擎 / 发音人 / 语速
+  //  网络模式：Edge SSML <phoneme alphabet="ipa"> 直接读音标，速度跟随设置
+  //  本机模式：读该音标的代表词（如 /æ/ -> cat），速度跟随设置
   function speakPhonicsSound(ipa, word) {
     let ph = (ipa || '').trim();
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
     if (isIpa) {
       const core = ph.slice(1, -1);
-      const url = 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav';
-      stopAllAudio();
-      const token = window._audioToken;
-      const audio = new Audio();
-      window._activeAudio = audio;
-      audio.src = url;
-      const finish = () => {
-        if (token !== window._audioToken) return;
-        if (window._activeAudio === audio) window._activeAudio = null;
-      };
-      audio.onended = () => finish();
-      audio.onerror = () => { toast('发音文件缺失'); finish(); };
-      audio.play().catch(() => { toast('音频播放失败'); finish(); });
+      TTS.speakPhoneme(core, word || '', 'en-US', function () {});
     } else {
       speakWord(word || '');
     }
@@ -5844,10 +5842,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       readingDiv.style.cssText = 'margin-top:24px;padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba';
 
       let linesHtml = reading.sentences.map((line, idx) => `
-        <div style="padding:10px 0;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px">
+        <div class="lr-line" data-idx="${idx}" style="padding:10px 12px;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px;border-radius:10px">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">${idx + 1}</span>
-            <span style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0">${esc(line.en)}</span>
+            <span class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">${lrWordsHtml(line.en)}</span>
             <button class="speak-btn" onclick="speakReadingLine('${esc(line.en)}')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggleKet(this, '${esc(line.en)}')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>
           </div>
@@ -5858,12 +5856,36 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       readingDiv.innerHTML = `
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
           <div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ${esc(reading.title || '')}</div>
-          <button class="speak-btn" onclick="speakAllReading()" style="padding:6px 16px;font-size:13px;background:#ffd666;color:#7a5c00;border:none;border-radius:8px;cursor:pointer">🔊 朗读全文</button>
+          <button class="speak-btn" onclick="LessonReader.toggle()" style="padding:6px 16px;font-size:13px;background:#ffd666;color:#7a5c00;border:none;border-radius:8px;cursor:pointer">🔊 朗读全文</button>
         </div>
         ${linesHtml}
+        <!-- 朗读控制条：与课文一致，固定悬浮在底部导航上方 -->
+        <div class="lr-dock" id="ket-reader-dock" style="display:none">
+          <div class="lr-ctrl">
+            <button class="lr-ctrl-btn lr-ctrl-main" id="ket-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>
+            <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>
+          </div>
+          <div class="lr-bar" id="ket-read-bar" style="display:none"><i></i></div>
+          <div class="lr-progress" id="ket-read-progress" style="display:none"></div>
+        </div>
       `;
 
       contentArea.insertBefore(readingDiv, listEl.nextSibling);
+
+      // 绑定朗读播放器（与课文完全相同的播放/暂停/继续/重播/跳句/高亮逻辑）
+      const mainBtn = document.getElementById('ket-full-speak-btn');
+      if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
+      const rpBtn = document.getElementById('ket-replay-btn');
+      if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
+      LessonReader.bind(reading.sentences, {
+        scope: 'ket-reading',
+        dock: 'ket-reader-dock',
+        main: 'ket-full-speak-btn',
+        replay: 'ket-replay-btn',
+        progress: 'ket-read-progress',
+        bar: 'ket-read-bar',
+        label: '🔊 朗读全文'
+      });
     } catch (e) {
       console.error('加载短文失败:', e);
     }
