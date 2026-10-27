@@ -1026,7 +1026,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">🐢 朗读速度</div>
-          <div class="settings-row-sub">默认慢速，贴近教材录音语速</div>
+          <div class="settings-row-sub">0.8 / 1.0 / 1.2 / 1.5 / 2.0 倍，切换即刻生效</div>
         </div>
         <div class="settings-row-ctl">
           <select id="speech-rate-select" class="settings-select" onchange="setSpeechRate(this.value)"></select>
@@ -3332,14 +3332,29 @@ const API = ".";
   // ---- 朗读速度（面向小学生，默认慢速）----
   // 参考：课文平均 7.5 词/句，常规 TTS 约 160 词/分钟（偏快）；
   // 教材配套录音一般 90~120 词/分钟，故默认 0.75（约 120 词/分钟）
-  let speechRate = parseFloat(localStorage.getItem('speech_rate') || '0.75');
-  if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.75;
+  let speechRate = parseFloat(localStorage.getItem('speech_rate') || '0.8');
+  if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.8;
   const SPEECH_RATE_OPTIONS = [
-    { value: '0.6', label: '很慢 · 初学跟读' },
-    { value: '0.75', label: '慢速 · 推荐' },
-    { value: '1', label: '正常' },
-    { value: '1.2', label: '稍快' }
+    { value: '0.8', label: '0.8倍 · 慢速推荐' },
+    { value: '1', label: '1.0倍 · 正常' },
+    { value: '1.2', label: '1.2倍 · 稍快' },
+    { value: '1.5', label: '1.5倍 · 快' },
+    { value: '2', label: '2.0倍 · 很快' }
   ];
+  const SPEECH_RATE_VALUES = SPEECH_RATE_OPTIONS.map(function (o) { return parseFloat(o.value); });
+  const SPEECH_RATE_DEFAULT = 0.8;
+  // 历史取值（如 0.75/0.6）不在新档位里时，吸附到最接近的一档，保证下拉与实际语速一致
+  function normalizeSpeechRate(v) {
+    const n = parseFloat(v);
+    if (!(n > 0.3 && n <= 2)) return SPEECH_RATE_DEFAULT;
+    return SPEECH_RATE_VALUES.reduce(function (a, b) {
+      return Math.abs(b - n) < Math.abs(a - n) ? b : a;
+    }, SPEECH_RATE_DEFAULT);
+  }
+  if (parseFloat(localStorage.getItem('speech_rate')) !== speechRate || SPEECH_RATE_VALUES.indexOf(speechRate) === -1) {
+    speechRate = normalizeSpeechRate(speechRate);
+    try { localStorage.setItem('speech_rate', String(speechRate)); } catch (e) {}
+  }
   // 整篇朗读时句子之间的停顿（越慢停顿越长，给孩子反应时间）
   function lessonLineGap() { return Math.round(450 / speechRate); }
 
@@ -3885,11 +3900,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== 朗读速度设置 ==========
   function setSpeechRate(v) {
-    speechRate = parseFloat(v);
-    if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.75;
-    localStorage.setItem('speech_rate', String(speechRate));
+    const before = speechRate;
+    speechRate = normalizeSpeechRate(v);
+    try { localStorage.setItem('speech_rate', String(speechRate)); } catch (e) {}
     const sel = document.getElementById('speech-rate-select');
     if (sel) sel.value = String(speechRate);
+    // 切换即时生效：整篇朗读进行中时，当前句按新语速重读
+    if (before !== speechRate) {
+      try {
+        if (typeof LessonReader !== 'undefined' && LessonReader && LessonReader.state === 'playing') {
+          LessonReader.playCurrent();
+        }
+      } catch (e) {}
+    }
   }
   function initSpeechRateSelect() {
     const sel = document.getElementById('speech-rate-select');
