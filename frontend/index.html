@@ -503,8 +503,23 @@
   .lr-w.lr-reading { background: #ffe58f; color: #5c3b00; box-shadow: 0 0 0 1px #ffd666; }
   /* 已经读过的单词（本句内） */
   .lr-w.lr-word-done { color: #8c8c8c; }
-  /* 朗读控制条 */
-  .lr-ctrl { display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+  /* 朗读控制条（固定悬浮在底部导航上方，滚动时始终可操作） */
+  .lr-dock {
+    position: fixed;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    left: 0; right: 0;
+    max-width: 456px;
+    margin: 0 auto;
+    z-index: 96;
+    padding: 10px 14px 12px;
+    background: rgba(255,255,255,.97);
+    border: 1px solid #e6ebff;
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(76,92,255,.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .lr-ctrl { display: flex; align-items: center; gap: 8px; }
   .lr-ctrl-btn { flex: 1; padding: 12px; font-size: 14px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; }
   .lr-ctrl-main { background: linear-gradient(135deg,#4f9fff,#6c63ff); color: #fff; }
   .lr-ctrl-sub { flex: 0 0 auto; padding: 12px 14px; background: #f5f7ff; border: 1px solid #e0e6ff; color: #6c63ff; }
@@ -2134,13 +2149,7 @@ const API = ".";
         <div style="line-height:1.8">
           ${dialogueHTML}
         </div>
-        <div class="lr-ctrl">
-          <button class="lr-ctrl-btn lr-ctrl-main" id="lesson-full-speak-btn" data-reading="0">🔊 朗读整篇课文</button>
-          <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-replay-btn" style="display:none">🔁 重播</button>
-        </div>
-        <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
-        <div class="lr-progress" id="lesson-read-progress" style="display:none"></div>
-        <div style="display:flex;gap:8px;margin-top:12px">
+        <div style="display:flex;gap:8px;margin-top:12px;margin-bottom:96px">
           <button class="btn btn-secondary" id="lesson-prev-unit-btn" style="flex:1;padding:10px;font-size:14px;background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff;font-weight:500;display:none">
             ← 上一篇
           </button>
@@ -2148,6 +2157,16 @@ const API = ".";
             下一篇 →
           </button>
         </div>
+      </div>
+
+      <!-- 朗读控制条：固定悬浮于底部导航上方，滚动到任何位置都可操作 -->
+      <div class="lr-dock" id="lesson-reader-dock">
+        <div class="lr-ctrl">
+          <button class="lr-ctrl-btn lr-ctrl-main" id="lesson-full-speak-btn" data-reading="0">🔊 朗读整篇课文</button>
+          <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-replay-btn" style="display:none">🔁 重播</button>
+        </div>
+        <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
+        <div class="lr-progress" id="lesson-read-progress" style="display:none"></div>
       </div>
       
       <div class="word-detail-card" style="margin-top:16px;text-align:left;background:#fffbf0;border:2px solid #ffe7ba">
