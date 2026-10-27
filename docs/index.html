@@ -684,13 +684,32 @@
     }
     .spell-slot.filled { border-style: solid; border-color: #b9c6ff; background: #fff; }
     .spell-slot.filled:active { transform: scale(0.94); }
-    .spell-slot.ok { border-color: #52c41a; background: #f6ffed; color: #389e0d; }
+    .spell-slot.ok {
+      border-color: #52c41a; background: #f6ffed; color: #389e0d;
+      animation: sp-pop .42s ease-out backwards;
+      animation-delay: calc(var(--i, 0) * 55ms);
+    }
     .spell-slot.bad { border-color: #ff7875; background: #fff1f0; color: #cf1322; animation: sp-shake .32s; }
     .spell-slot.hint { border-color: #ffd666; background: #fffbe6; }
     @keyframes sp-shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(-5px); }
       75% { transform: translateX(5px); }
+    }
+    /* 答对：格子依次弹跳 + 绿色光晕 */
+    @keyframes sp-pop {
+      0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0); }
+      45%  { transform: scale(1.22); box-shadow: 0 0 0 6px rgba(82, 196, 26, .28); }
+      100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(82, 196, 26, 0); }
+    }
+    /* 反馈条弹入 */
+    @keyframes fb-pop-in {
+      0%   { transform: scale(.94); opacity: 0; }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .spell-slot.ok, .spell-slot.bad { animation: none; }
+      .spell-fb { animation: none !important; }
     }
     .spell-label { text-align: center; font-size: 12px; color: #a4abc4; margin-top: 8px; }
     .spell-pool { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin-top: 10px; min-height: 46px; }
@@ -710,9 +729,9 @@
       margin-top: 12px; text-align: center; padding: 12px; border-radius: 12px;
       font-size: 15px; font-weight: 600; line-height: 1.5;
     }
-    .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; }
-    .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; }
-    .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; }
+    .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; animation: fb-pop-in .28s ease-out; }
+    .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; animation: fb-pop-in .28s ease-out; }
+    .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; animation: fb-pop-in .28s ease-out; }
     .spell-acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; margin-top: 12px; }
     .spell-act {
       border: none; border-radius: 12px; padding: 10px 6px; font-size: 12.5px; font-weight: 600;
@@ -5097,7 +5116,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       return this.cv;
     },
 
-    confetti() {
+    confetti(count) {
       try {
         if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         var cv = this._canvas();
@@ -5108,7 +5127,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         this.ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
         var self = this;
         this.parts = [];
-        for (var i = 0; i < 140; i++) {
+        var total = count || 140;
+        for (var i = 0; i < total; i++) {
           this.parts.push({
             x: W * (0.05 + Math.random() * 0.9),
             y: -20 - Math.random() * H * 0.3,
@@ -5181,7 +5201,41 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       } catch (e) {}
     },
 
-    play() { this.confetti(); this.chime(); }
+    play() { this.confetti(); this.chime(); },
+
+    // 通用发声：freqs 依次响，gap 为间隔秒
+    _tone(freqs, gap, type, peak, decay) {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        var ctx = this._ac || (this._ac = new AC());
+        if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
+        var now = ctx.currentTime + 0.01;
+        freqs.forEach(function (f, i) {
+          var t = now + i * gap;
+          var o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = type || 'triangle';
+          o.frequency.value = f;
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(peak, t + 0.015);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(t); o.stop(t + decay + 0.05);
+        });
+      } catch (e) {}
+    },
+
+    // 答对：撒花 + 清脆上行两音（G5 → C6）
+    correct() {
+      this.confetti(90);
+      this._tone([784, 1046.5], 0.1, 'triangle', 0.2, 0.26);
+    },
+
+    // 答错：低沉下行两音 + 轻微震动
+    wrong() {
+      this._tone([311, 233], 0.11, 'triangle', 0.17, 0.24);
+      try { if (navigator && navigator.vibrate) navigator.vibrate([26, 40, 26]); } catch (e) {}
+    }
   };
 
   // ========== 单元内 · 单词消消乐 ==========
@@ -5805,6 +5859,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         html: '🎉 拼写正确！<b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '')
       };
       this.render(true);
+      Celebrate.correct();          // 答对：撒花 + 提示音
       try { speakWord(w.word); } catch (e) {}
       let earned = 0;
       const res = Points.earn('spell_correct', 'spell_' + w.id + '_' + String(w.word).toLowerCase());
@@ -5834,6 +5889,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         html: '❌ 你拼的是 <b>' + input + '</b>，还差一点，再试一次！'
       };
       this.render();
+      Celebrate.wrong();            // 答错：提示音 + 震动
       const self = this;
       setTimeout(function () {
         if (self.fb && self.fb.type === 'bad') {
@@ -5933,7 +5989,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (s.ch) cls += ' filled';
         if (solved) cls += ' ok';
         if (self.badFlash) cls += ' bad';
-        slotsHtml += '<div class="' + cls + '" onclick="Spell.pickSlot(' + i + ')" data-slot="' + i + '">' +
+        slotsHtml += '<div class="' + cls + '" style="--i:' + i + '" onclick="Spell.pickSlot(' + i + ')" data-slot="' + i + '">' +
                      (s.ch ? String(s.ch).toUpperCase() : '') + '</div>';
       });
       let tilesHtml = '';
