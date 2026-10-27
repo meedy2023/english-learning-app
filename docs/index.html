@@ -2352,7 +2352,17 @@ const API = ".";
       const ws = new WebSocket(url);
       ws.binaryType = 'arraybuffer';
       const audioParts = [];
-      let finished = false;
+      let settled = false;
+      // 弱网保护：连上但迟迟没有音频数据时，不要让用户一直等
+      const timer = setTimeout(() => { fail(new Error('讯飞发音超时')); }, TTS_NET.timeoutMs);
+      const done = () => { clearTimeout(timer); settled = true; };
+      const fail = (e) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        try { ws.close(); } catch (x) {}
+        onError && onError(e);
+      };
       ws.onopen = () => {
         try {
           ws.send(JSON.stringify({
@@ -2365,7 +2375,7 @@ const API = ".";
       ws.onmessage = (ev) => {
         try {
           const msg = JSON.parse(ev.data);
-          if (msg.code !== 0) { try { ws.close(); } catch (e) {} onError && onError(new Error('code=' + msg.code + ' ' + (msg.message || ''))); return; }
+          if (msg.code !== 0) { fail(new Error('code=' + msg.code + ' ' + (msg.message || ''))); return; }
           if (msg.data && msg.data.audio) {
             const bin = atob(msg.data.audio);
             const bytes = new Uint8Array(bin.length);
@@ -2373,19 +2383,19 @@ const API = ".";
             audioParts.push(bytes);
           }
           if (msg.data && msg.data.status === 2) {
-            finished = true;
             if (audioParts.length > 0) {
+              done();
               const blob = new Blob(audioParts, { type: 'audio/mpeg' });
+              try { ws.close(); } catch (x) {}
               onAudio && onAudio(blob);
             } else {
-              onError && onError(new Error('无音频数据'));
+              fail(new Error('无音频数据'));
             }
-            try { ws.close(); } catch (e) {}
           }
-        } catch (e) { onError && onError(e); }
+        } catch (e) { fail(e); }
       };
-      ws.onerror = (e) => { onError && onError(e); };
-      ws.onclose = (e) => { if (!finished) onError && onError(new Error('连接关闭 code=' + e.code)); };
+      ws.onerror = () => { fail(new Error('讯飞连接失败')); };
+      ws.onclose = (e) => { fail(new Error('连接关闭 code=' + e.code)); };
       } catch (e) { onError && onError(e); }
       })();
     }
@@ -2978,6 +2988,9 @@ const API = ".";
       if (seq !== _lessonReadSeq) return;
       if (idx >= total) return;
       const line = content[idx++];
+      // 预合成下一句：当前这句在播的同时把下一句缓存好，弱网下也能连贯播下去
+      const _next = content[idx];
+      if (_next && _next.text) TTS.prefetch(_next.text, 'en-US');
       TTS.speak(line.text, 'en-US', function() {
         if (seq !== _lessonReadSeq) return;
         done++;
@@ -3058,6 +3071,15 @@ const API = ".";
       ws.binaryType = 'arraybuffer';
       const voice = voiceOverride || (lang === 'zh-CN' ? 'zh-CN-XiaoxiaoNeural' : 'en-GB-SoniaNeural');
       const chunks = [];
+      let settled = false;
+      const timer = setTimeout(() => { fail(new Error('网络发音超时')); }, TTS_NET.timeoutMs);
+      const fail = (e) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        try { ws.close(); } catch (x) {}
+        onError && onError(e);
+      };
       const uuid = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
         : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
             const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
@@ -3096,6 +3118,8 @@ const API = ".";
       ws.onmessage = (ev) => {
         if (typeof ev.data === 'string') {
           if (ev.data.indexOf('turn.end') !== -1) {
+            settled = true;
+            clearTimeout(timer);
             try {
               const blob = new Blob(chunks, { type: 'audio/mpeg' });
               onAudio && onAudio(blob);
@@ -3107,12 +3131,58 @@ const API = ".";
         const arr = new Uint8Array(ev.data);
         if (arr.length > 2) chunks.push(arr.slice(2));
       };
-      ws.onerror = (e) => { onError && onError(e); };
-      ws.onclose = (e) => {
-        if (chunks.length === 0) onError && onError(new Error('连接被关闭(voice可能无效) code=' + e.code));
-      };
+      ws.onerror = () => { fail(new Error('发音服务连接失败')); };
+      ws.onclose = (e) => { fail(new Error('连接被关闭(voice可能无效) code=' + e.code)); };
     }
   };
+
+  // ---- 弱网发音保护：超时 + 连续失败冷却 + 结果缓存 ----
+  // 网络不好时典型故障是「连不上 / 连上无数据」，WS 既不返回也不报错，用户只能干等。
+  // 这里统一加超时；连续失败后本次会话改用本机发音（离线可用），冷却结束后自动恢复网络。
+  const TTS_NET = {
+    timeoutMs: 7000,           // 单次网络合成超时
+    cooldownMs: 3 * 60 * 1000, // 连续失败后的冷却时长
+    failStreak: 0,
+    coolUntil: 0,
+    noteShown: false,
+    onFail() {
+      this.failStreak++;
+      if (this.failStreak >= 2) {
+        this.coolUntil = Date.now() + this.cooldownMs;
+        this.failStreak = 0;
+        this.noteShown = false;
+      }
+    },
+    onOk() { this.failStreak = 0; this.coolUntil = 0; this.noteShown = false; },
+    usable() {
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) return false;
+      return Date.now() >= this.coolUntil;
+    },
+    // 降级到本机发音时提示一次（同一段网络异常期内不反复打扰）
+    notifyFallback() {
+      if (this.noteShown) return;
+      this.noteShown = true;
+      toast('网络较慢，已自动改用本机发音');
+    }
+  };
+  // 网络恢复后立即解除冷却
+  window.addEventListener('online', () => { TTS_NET.onOk(); });
+
+  // ---- 合成结果缓存（文本+语言+发音人+语速 唯一键）----
+  // 同一单词反复听时只合成一次；断网状态下，之前听过的单词依然能立刻发声
+  const _ttsCache = new Map();
+  const TTS_CACHE_MAX = 200;
+  function ttsCacheKey(text, lang, voice) { return lang + '|' + (voice || '') + '|' + speechRate + '|' + text; }
+  function ttsCacheGet(k) {
+    if (!_ttsCache.has(k)) return null;
+    const v = _ttsCache.get(k);
+    _ttsCache.delete(k); _ttsCache.set(k, v); // LRU：命中后移到队尾
+    return v;
+  }
+  function ttsCacheSet(k, v) {
+    if (_ttsCache.size >= TTS_CACHE_MAX) { const first = _ttsCache.keys().next().value; _ttsCache.delete(first); }
+    _ttsCache.set(k, v);
+  }
 
   function stopAllAudio() {
     window._audioToken = (window._audioToken || 0) + 1;
@@ -3146,6 +3216,7 @@ function playAudioBlob(blob, onEnd) {
   const TTS = {
     _voices: [],
     _ready: false,
+    _seq: 0,
     init() {
       if (window.speechSynthesis) {
         const load = () => { this._voices = speechSynthesis.getVoices() || []; this._ready = true; };
@@ -3160,19 +3231,31 @@ function playAudioBlob(blob, onEnd) {
       return this._voices.some(v => v.lang && v.lang.toLowerCase().startsWith(prefix));
     },
     useNetwork(lang) {
-      if (ttsEngine === 'network') return true;
       if (ttsEngine === 'system') return false;
-      return true; // auto: 优先网络(讯飞国内直连)，确保设置里的发音类型真正生效
+      // auto / network 都先试网络（确保设置里的发音人生效）；网络不可用时由 speakNetwork 自动降级本机发音
+      return TTS_NET.usable();
     },
+    // 每次发音分配序号：迟到的网络结果（如超时后姗姗来迟的音频）不允许覆盖新的发音
     speak(text, lang, onEnd) {
       if (!text) { if (onEnd) onEnd(); return; }
       stopAllAudio();
       lang = lang || 'en-US';
-      if (this.useNetwork(lang)) this.speakNetwork(text, lang, onEnd);
-      else this.speakSystem(text, lang, onEnd);
+      const token = ++this._seq;
+      const G = (fn) => {
+        if (typeof fn !== 'function') return undefined;
+        return function () { if (token === TTS._seq) return fn.apply(null, arguments); };
+      };
+      if (this.useNetwork(lang)) this.speakNetwork(text, lang, G(onEnd), G);
+      else this.speakSystem(text, lang, G(onEnd), G);
     },
-    speakSystem(text, lang, onEnd) {
-      if (!window.speechSynthesis) { this.speakNetwork(text, lang, onEnd); return; }
+    speakSystem(text, lang, onEnd, G) {
+      const cb = G ? G(onEnd) : onEnd;
+      if (!window.speechSynthesis) {
+        toast('发音不可用：网络连不上，本机也没有语音引擎');
+        if (cb) cb();
+        return;
+      }
+      const _G = G || ((f) => f);
       try {
         speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(text);
@@ -3183,22 +3266,49 @@ function playAudioBlob(blob, onEnd) {
         const v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
                || speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(prefix));
         if (v) u.voice = v;
-        u.onend = () => { if (onEnd) onEnd(); };
-        u.onerror = () => { if (onEnd) onEnd(); };
+        u.onend = () => { if (cb) cb(); };
+        u.onerror = () => {
+          // 本机语音引擎出错（部分安卓机型缺 TTS 引擎）：网络可用时再试一次网络
+          if (TTS_NET.usable() && ttsEngine !== 'system') {
+            this.speakNetworkOnce(text, lang, cb, _G, true);
+          } else {
+            toast('本机语音引擎不可用，请到设置里切换发音引擎');
+            if (cb) cb();
+          }
+        };
         speechSynthesis.speak(u);
-      } catch (e) { this.speakNetwork(text, lang, onEnd); }
+      } catch (e) { if (cb) cb(); }
     },
-    speakNetwork(text, lang, onEnd) {
-      XFYunTTS.synth(text, lang,
-        (blob) => playAudioBlob(blob, onEnd),
-        (err) => {
-          console.warn('讯飞发音失败，兜底 EdgeTTS', err);
-          EdgeTTS.synthesize(text, lang,
-            (blob) => playAudioBlob(blob, onEnd),
-            (e2) => { console.warn('网络发音失败', e2); toast('网络发音失败，请检查网络或切换到系统发音'); if (onEnd) onEnd(); }
-          );
-        }
-      );
+    // 网络链路：讯飞 → Edge → 降级本机发音（silent=true 时不再提示，避免重复打扰）
+    speakNetworkOnce(text, lang, cb, G, silent) {
+      const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
+      const key = ttsCacheKey(text, lang, voice);
+      const cached = ttsCacheGet(key);
+      if (cached) { playAudioBlob(cached, cb); return; }
+      const okNode = G((blob) => { TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, cb); });
+      const toSystem = G(() => {
+        TTS_NET.onFail();
+        if (!silent) TTS_NET.notifyFallback();
+        TTS.speakSystem(text, lang, cb, G);
+      });
+      XFYunTTS.synth(text, lang, okNode, G(() => {
+        EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
+          console.warn('网络发音失败，降级本机发音', e2);
+          toSystem();
+        }));
+      }));
+    },
+    speakNetwork(text, lang, onEnd, G) { this.speakNetworkOnce(text, lang, onEnd, G, false); },
+    // 预合成（不播放）：整篇朗读时提前把下一句缓存好，弱网下也能连贯地播下去
+    prefetch(text, lang) {
+      if (!text || !this.useNetwork(lang)) return;
+      const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
+      const key = ttsCacheKey(text, lang, voice);
+      if (_ttsCache.has(key)) return;
+      const ok = (blob) => { TTS_NET.onOk(); ttsCacheSet(key, blob); };
+      XFYunTTS.synth(text, lang, ok, () => {
+        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); });
+      });
     }
   };
 
@@ -3307,6 +3417,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (idx >= totalLines) return;
       const line = readingContent[idx];
       idx++;
+      // 预合成下一句（同课文整篇朗读）
+      const _next = readingContent[idx];
+      if (_next && _next.en) TTS.prefetch(_next.en, 'en-US');
       TTS.speak(line.en, 'en-US', function() {
         completed++;
         if (completed === totalLines) {
