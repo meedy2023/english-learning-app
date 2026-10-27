@@ -526,9 +526,7 @@
   .lr-ctrl-btn:active { transform: scale(.97); }
   .lr-progress { margin-top: 8px; font-size: 12px; color: #888; text-align: center; }
   .lr-nav { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8ff; }
-  .lr-nav-btn { flex: 1; padding: 9px 8px; font-size: 13px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; min-height: 40px; display: flex; align-items: center; justify-content: center; }
-  .lr-nav-prev { background: #f5f7ff; border: 1px solid #e0e6ff; color: #6c63ff; }
-  .lr-nav-next { background: linear-gradient(135deg,#52c41a,#73d13d); color: #fff; }
+  .lr-nav-btn { flex: 1; padding: 9px 8px; font-size: 13px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; min-height: 40px; display: flex; align-items: center; justify-content: center; background: #eef2ff; border: 1px solid #c9d4ff; color: #4f46e5; }
   .lr-nav-btn:active { transform: scale(.97); }
   .lr-bar { height: 6px; background: #eef0f7; border-radius: 999px; overflow: hidden; margin-top: 8px; }
   .lr-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg,#4f9fff,#6c63ff); border-radius: 999px; transition: width .25s; }
@@ -2165,10 +2163,10 @@ const API = ".";
         <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
         <div class="lr-progress" id="lesson-read-progress" style="display:none"></div>
         <div class="lr-nav">
-          <button class="lr-nav-btn lr-nav-prev" id="lesson-prev-unit-btn" style="display:none">
+          <button class="lr-nav-btn" id="lesson-prev-unit-btn" style="display:none">
             ← 上一篇
           </button>
-          <button class="lr-nav-btn lr-nav-next" id="lesson-next-unit-btn" style="display:none">
+          <button class="lr-nav-btn" id="lesson-next-unit-btn" style="display:none">
             下一篇 →
           </button>
         </div>
