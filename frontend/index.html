@@ -732,12 +732,14 @@
     .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; animation: fb-pop-in .28s ease-out; }
     .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; animation: fb-pop-in .28s ease-out; }
     .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; animation: fb-pop-in .28s ease-out; }
-    .spell-acts { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; margin-top: 12px; }
+    .spell-acts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
     .spell-act {
-      border: none; border-radius: 12px; padding: 10px 6px; font-size: 12.5px; font-weight: 600;
+      border: none; border-radius: 12px; padding: 10px 3px; font-size: 12px; font-weight: 600;
       background: #eef2ff; color: #5a54e8; cursor: pointer; min-height: 42px;
+      white-space: nowrap; overflow: hidden;
     }
     .spell-act:active { transform: scale(0.96); }
+    .spell-act-del { background: #ffeeec; color: #cf1322; }
     .spell-nav { display: flex; gap: 8px; margin-top: 12px; }
     .spell-nav .btn { flex: 1; padding: 11px 8px; font-size: 14px; }
     .spell-done { text-align: center; padding: 18px 10px; }
@@ -5840,6 +5842,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.render();
     },
 
+    // 删除：退掉最后一个已填的字母（复用 pickSlot 的退回逻辑）
+    del() {
+      if (this.locked) { toast('已经拼对啦，点「下一个」继续'); return; }
+      let last = -1;
+      this.slots.forEach(function (s, i) { if (s.ch !== null) last = i; });
+      if (last < 0) { toast('还没有填入字母'); return; }
+      this.pickSlot(last);
+    },
+
     check() {
       const w = this.current();
       if (!w) return;
@@ -6018,10 +6029,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<button class="speak-btn" style="margin-top:8px" onclick="Spell.speak()">🔊 听发音</button>' +
           '</div>' +
           '<div class="spell-slots">' + slotsHtml + '</div>' +
-          '<div class="spell-label">点上面的格子可以把字母退回来</div>' +
+          '<div class="spell-label">点上面的格子可以把字母退回来，或用「⌫ 删除」退掉最后一个</div>' +
           '<div class="spell-pool">' + tilesHtml + '</div>' +
           fbHtml +
           '<div class="spell-acts">' +
+            '<button class="spell-act spell-act-del" onclick="Spell.del()">⌫ 删除</button>' +
             '<button class="spell-act" onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
             '<button class="spell-act" onclick="Spell.reset()">↺ 重置拼写</button>' +
             '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
