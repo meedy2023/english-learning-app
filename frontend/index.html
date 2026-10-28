@@ -732,14 +732,23 @@
     .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; animation: fb-pop-in .28s ease-out; }
     .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; animation: fb-pop-in .28s ease-out; }
     .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; animation: fb-pop-in .28s ease-out; }
-    .spell-acts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
+    .spell-acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
     .spell-act {
       border: none; border-radius: 12px; padding: 10px 3px; font-size: 12px; font-weight: 600;
       background: #eef2ff; color: #5a54e8; cursor: pointer; min-height: 42px;
       white-space: nowrap; overflow: hidden;
     }
     .spell-act:active { transform: scale(0.96); }
-    .spell-act-del { background: #ffeeec; color: #cf1322; }
+    /* 删除按钮：紧跟字母格子下方，便于拇指操作 */
+    .spell-tools { display: flex; justify-content: center; margin-top: 10px; }
+    .spell-del-btn {
+      border: none; border-radius: 999px; padding: 10px 26px;
+      font-size: 13.5px; font-weight: 700;
+      background: #ffeeec; color: #cf1322; cursor: pointer; min-height: 40px;
+      display: inline-flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(207, 19, 34, 0.12);
+    }
+    .spell-del-btn:active { transform: scale(0.95); }
     .spell-nav { display: flex; gap: 8px; margin-top: 12px; }
     .spell-nav .btn { flex: 1; padding: 11px 8px; font-size: 14px; }
     .spell-done { text-align: center; padding: 18px 10px; }
@@ -5942,7 +5951,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.fb = {
         type: 'info',
         html: '👀 正确答案是 <b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '') +
-              '<div style="font-size:13px;color:#a08107;margin-top:4px">点「重置拼写」自己再拼一遍</div>'
+              '<div style="font-size:13px;color:#a08107;margin-top:4px">点「🔀 重新打乱」换一组字母块，自己再拼一遍</div>'
       };
       this.badFlash = false;
       this.render();
@@ -6029,13 +6038,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<button class="speak-btn" style="margin-top:8px" onclick="Spell.speak()">🔊 听发音</button>' +
           '</div>' +
           '<div class="spell-slots">' + slotsHtml + '</div>' +
-          '<div class="spell-label">点上面的格子可以把字母退回来，或用「⌫ 删除」退掉最后一个</div>' +
-          '<div class="spell-pool">' + tilesHtml + '</div>' +
+          (this.locked
+            ? ''
+            : '<div class="spell-tools"><button class="spell-del-btn" onclick="Spell.del()">⌫ 删除</button></div>' +
+              '<div class="spell-label">点上面的格子可以把字母退回来，或用「⌫ 删除」退掉最后一个</div>' +
+              '<div class="spell-pool">' + tilesHtml + '</div>') +
           fbHtml +
           '<div class="spell-acts">' +
-            '<button class="spell-act spell-act-del" onclick="Spell.del()">⌫ 删除</button>' +
             '<button class="spell-act" onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
-            '<button class="spell-act" onclick="Spell.reset()">↺ 重置拼写</button>' +
             '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
             '<button class="spell-act" onclick="Spell.skip()">⏭ 跳过</button>' +
           '</div>' +
