@@ -739,6 +739,7 @@
       white-space: nowrap; overflow: hidden;
     }
     .spell-act:active { transform: scale(0.96); }
+    .spell-act:disabled { opacity: .45; cursor: default; transform: none; }
     /* 删除按钮：紧跟字母格子下方，便于拇指操作 */
     .spell-tools { display: flex; justify-content: center; margin-top: 10px; }
     .spell-del-btn {
@@ -5920,7 +5921,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     reshuffle() {
-      if (this.locked) { this.next(); return; }
+      if (this.locked) return;   // 已拼对：按钮置灰，这里兜底不做任何事（前进请用「下一个」）
       const w = this.current();
       this.load(true);
       this.fb = { type: 'info', html: '🔀 已重新打乱，再拼一次！' };
@@ -6045,7 +6046,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
               '<div class="spell-pool">' + tilesHtml + '</div>') +
           fbHtml +
           '<div class="spell-acts">' +
-            '<button class="spell-act" onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
+            '<button class="spell-act"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
             '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
             '<button class="spell-act" onclick="Spell.skip()">⏭ 跳过</button>' +
           '</div>' +
