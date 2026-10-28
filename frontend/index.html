@@ -979,11 +979,11 @@
             <div class="match-title">🎴 单词消消乐</div>
             <div class="match-sub" id="match-sub">本单元 · 每局 8 个单词</div>
           </div>
-          <button class="match-restart" onclick="startWordMatch(true)">🔄 重开</button>
+          <button class="match-restart" onclick="Match.restart()">🔄 重开</button>
         </div>
         <div class="match-hud">
           <div class="match-stat"><span>本局</span><b id="match-round">0/0</b></div>
-          <div class="match-stat"><span>本单元</span><b id="match-unit">0/0</b></div>
+          <div class="match-stat"><span id="match-unit-label">本单元</span><b id="match-unit">0/0</b></div>
           <div class="match-stat"><span>用时</span><b id="match-time">0:00</b></div>
         </div>
         <div class="match-bar"><i id="match-bar"></i></div>
@@ -995,7 +995,7 @@
           <div class="mr-sub" id="match-res-sub"></div>
           <div class="mr-btns">
             <button class="btn btn-primary" id="match-next" onclick="Match.nextRound()">继续下一局</button>
-            <button class="btn btn-secondary nav-back-btn" onclick="showWordList()" type="button" aria-label="返回单词表">返回单词表</button>
+            <button class="btn btn-secondary nav-back-btn" id="match-back-btn" onclick="Match.backOut()" type="button" aria-label="返回">返回单词表</button>
           </div>
         </div>
       </div>
@@ -1252,6 +1252,7 @@
       </button>
       <div id="ket-content-title" style="font-size:18px;font-weight:600;margin-bottom:16px"></div>
       <div id="ket-quiz-entry" style="display:none;margin-bottom:12px"></div>
+      <div id="ket-match-area" style="display:none"></div>
       <div id="ket-content-list"></div>
     </div>
   </div>
@@ -1282,6 +1283,8 @@
     <div id="phonics-lesson-area" style="display:none">
       <button class="btn btn-secondary nav-back-btn" onclick="backToPhonicsGroups()" style="position:sticky;top:84px;z-index:95;margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分组"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分组</button>
       <div id="phonics-lesson-title" style="font-size:18px;font-weight:700;margin-bottom:16px"></div>
+      <div id="phonics-match-entry" style="display:none;margin:-4px 0 12px"></div>
+      <div id="phonics-match-area" style="display:none"></div>
       <div id="phonics-lesson-list"></div>
     </div>
   </div>
@@ -1991,6 +1994,10 @@ const API = ".";
       if (_lbh) _lbh.style.top = '84px';
     }
     currentView = name;
+    // 离开 KET / 拼读页时收起其消消乐面板（计时也停掉）
+    try {
+      if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Match.exit();
+    } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
     const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
@@ -5265,7 +5272,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     startAt: 0,
     timer: null,
 
-    storeKey() { return 'match_cleared_' + USER_ID + '_' + currentModule; },
+    // 作用域：单元内消消乐 / KET 分类 / 拼读分组
+    // scope = { type:'unit'|'ket'|'phonics', words:[], key:'', mount:元素, unitLabel:'本单元' }
+    scope: null,
+    _home: null,
+
+    scopeWords() { return (this.scope && this.scope.words) || currentWords || []; },
+    scopeKey() { return (this.scope && this.scope.key) || currentModule; },
+    isUnit() { return !this.scope || this.scope.type === 'unit'; },
+    unitLabel() { return (this.scope && this.scope.unitLabel) || '本单元'; },
+
+    storeKey() { return 'match_cleared_' + USER_ID + '_' + this.scopeKey(); },
 
     loadCleared() {
       try {
@@ -5280,13 +5297,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     clearedCount() {
       var self = this;
-      return (currentWords || []).filter(function (w) { return self.cleared.indexOf(w.id) >= 0; }).length;
+      return this.scopeWords().filter(function (w) { return self.cleared.indexOf(w.id) >= 0; }).length;
     },
 
     // 开始一局：fresh=true 表示清空本单元进度从头来
     start(opts) {
       opts = opts || {};
-      if (!currentModule || !currentWords || currentWords.length === 0) {
+      var pool = this.scopeWords();
+      if (!this.scopeKey() || pool.length === 0) {
         toast('请先选择一个模块');
         learnMode = null;
         learnRestoreFn = null;
@@ -5296,11 +5314,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.cleared = opts.fresh ? [] : this.loadCleared();
       this.saveCleared();
 
-      var rest = currentWords.filter(function (w) { return this.cleared.indexOf(w.id) < 0; }, this);
+      var rest = pool.filter(function (w) { return this.cleared.indexOf(w.id) < 0; }, this);
       if (rest.length === 0) {          // 一轮已全部消完，自动开启新一轮
         this.cleared = [];
         this.saveCleared();
-        rest = currentWords.slice();
+        rest = pool.slice();
       }
 
       this.words = shuffle(rest.slice()).slice(0, Math.min(rest.length, this.PER_ROUND));
@@ -5312,21 +5330,37 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.finished = false;
       this.startAt = Date.now();
 
-      switchView('learn');
-      setActiveTab('match');
-      document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
-      document.getElementById('learn-module-title').style.display = 'block';
-      document.getElementById('word-list').style.display = 'none';
-      document.getElementById('word-detail-area').style.display = 'none';
-      document.getElementById('choice-learn-area').style.display = 'none';
-      document.getElementById('spell-game-area').style.display = 'none';
-      document.getElementById('quiz-toggle-bar').style.display = '';
-      document.getElementById('match-game-area').style.display = 'block';
+      var area = document.getElementById('match-game-area');
+      if (!this._home && area) this._home = area.parentNode;
+      if (this.isUnit()) {
+        // 单元内：切到学习页并高亮消消乐 tab
+        if (area && this._home && area.parentNode !== this._home) this._home.appendChild(area);
+        switchView('learn');
+        setActiveTab('match');
+        document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
+        document.getElementById('learn-module-title').style.display = 'block';
+        document.getElementById('word-list').style.display = 'none';
+        document.getElementById('word-detail-area').style.display = 'none';
+        document.getElementById('choice-learn-area').style.display = 'none';
+        document.getElementById('spell-game-area').style.display = 'none';
+        document.getElementById('quiz-toggle-bar').style.display = '';
+      } else {
+        // KET / 拼读：游戏面板挂到对应页面容器内
+        if (this.scope.mount && area) {
+          this.scope.mount.appendChild(area);
+          this.scope.mount.style.display = 'block';
+        }
+      }
+      area.style.display = 'block';
       document.getElementById('match-result').style.display = 'none';
       document.getElementById('match-tip').style.display = 'block';
       document.getElementById('match-board').style.display = 'grid';
       document.getElementById('match-sub').textContent =
-        '总计 ' + currentWords.length + ' 个单词 · 每局 ' + this.PER_ROUND + ' 个';
+        '总计 ' + pool.length + ' 个 · 每局 ' + this.PER_ROUND + ' 个';
+      var unitLabel = document.getElementById('match-unit-label');
+      if (unitLabel) unitLabel.textContent = this.unitLabel();
+      var backBtn = document.getElementById('match-back-btn');
+      if (backBtn) backBtn.textContent = this.isUnit() ? '返回单词表' : '退出消消乐';
 
       this.renderBoard();
       this.updateHud();
@@ -5335,8 +5369,53 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     nextRound() {
-      var allDone = this.clearedCount() >= (currentWords || []).length;
+      var allDone = this.clearedCount() >= this.scopeWords().length;
       this.start({ fresh: allDone });
+    },
+
+    // 重开当前作用域（单元 / KET / 拼读）
+    restart() {
+      this.start({ fresh: true });
+    },
+
+    // 退出（用于 KET / 拼读作用域）：收起面板、恢复被隐藏的列表、计时停掉
+    exit() {
+      this.stopTimer();
+      var area = document.getElementById('match-game-area');
+      if (area) {
+        area.style.display = 'none';
+        if (this._home && area.parentNode !== this._home) this._home.appendChild(area);
+      }
+      if (this.scope && this.scope.mount) this.scope.mount.style.display = 'none';
+      this.restoreSiblings();
+      this.scope = null;
+      this.words = [];
+      this.picked = [];
+      this.finished = false;
+      this.lock = false;
+    },
+
+    // 返回：单元内回单词表，其它作用域退出游戏
+    backOut() {
+      if (this.isUnit()) { showWordList(); return; }
+      this.exit();
+    },
+
+    hideSiblings(ids) {
+      this._hidden = [];
+      var self = this;
+      (ids || []).forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el && el.style.display !== 'none') {
+          self._hidden.push({ el: el, display: el.style.display });
+          el.style.display = 'none';
+        }
+      });
+    },
+
+    restoreSiblings() {
+      (this._hidden || []).forEach(function (h) { h.el.style.display = h.display; });
+      this._hidden = [];
     },
 
     stop() {
@@ -5418,7 +5497,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     updateHud() {
-      var total = (currentWords || []).length;
+      var total = this.scopeWords().length;
       var cleared = this.clearedCount();
       document.getElementById('match-round').textContent = this.matched + '/' + this.total;
       document.getElementById('match-unit').textContent = cleared + '/' + total;
@@ -5447,26 +5526,27 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.stopTimer();
       Celebrate.play();            // 本局完成：彩带动画 + 胜利音效
       var sec = Math.max(1, Math.round((Date.now() - this.startAt) / 1000));
-      var unitTotal = (currentWords || []).length;
+      var unitTotal = this.scopeWords().length;
       var cleared = this.clearedCount();
       var unitDone = cleared >= unitTotal;
       var acc = Math.round(this.total / Math.max(this.moves, this.total) * 100);
+      var label = this.unitLabel();
 
       document.getElementById('match-board').style.display = 'none';
       document.getElementById('match-tip').style.display = 'none';
       document.getElementById('match-result').style.display = 'block';
       document.getElementById('match-res-emoji').textContent = unitDone ? '🎉' : '👍';
-      document.getElementById('match-res-title').textContent = unitDone ? '本单元完成！' : '本局完成！';
+      document.getElementById('match-res-title').textContent = unitDone ? label + '完成！' : '本局完成！';
 
       var sub = document.getElementById('match-res-sub');
       var nextBtn = document.getElementById('match-next');
       if (unitDone) {
-        sub.textContent = unitTotal + ' 个单词全部消除 · 用时 ' + matchClock(sec) + ' · 准确率 ' + acc + '%';
-        nextBtn.textContent = '重玩本单元';
-        var r = Points.earn('match_clear', 'match_' + currentModule);
+        sub.textContent = unitTotal + ' 个全部消除 · 用时 ' + matchClock(sec) + ' · 准确率 ' + acc + '%';
+        nextBtn.textContent = '重玩' + label;
+        var r = Points.earn('match_clear', 'match_' + this.scopeKey());
         if (r && r.success) showPointsToast(r.points, Points.getMessage('match_clear'));
       } else {
-        sub.textContent = '本局 ' + this.total + ' 个单词已消完，本单元还剩 ' + (unitTotal - cleared) + ' 个，再来一局吧';
+        sub.textContent = '本局 ' + this.total + ' 个已消完，' + label + '还剩 ' + (unitTotal - cleared) + ' 个，再来一局吧';
         nextBtn.textContent = '继续下一局';
       }
     }
@@ -5490,6 +5570,67 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var area = document.getElementById('match-game-area');
     if (area) area.style.display = 'none';
     Match.stop();
+  }
+
+  // ---- 消消乐通用：把各种来源的词表统一成 {id, word, chinese} ----
+  function toMatchWords(list) {
+    return (list || []).map(function (w, i) {
+      return {
+        id: (w.id != null ? w.id : ('mw' + i + '_' + String(w.word || w.w || ''))),
+        word: String(w.word || w.w || '').trim(),
+        chinese: String(w.chinese || w.c || '').trim(),
+        cn_short: w.cn_short || ''
+      };
+    }).filter(function (x) { return x.word && x.chinese; });
+  }
+
+  // ---- KET 分类消消乐 ----
+  function startKetMatch() {
+    const words = toMatchWords(ketCurrentItems);
+    if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); return; }
+    Match.exit();
+    Match.scope = {
+      type: 'ket',
+      words: words,
+      key: 'ket_' + (ketCurrentCategory || ''),
+      mount: document.getElementById('ket-match-area'),
+      unitLabel: '本类'
+    };
+    Match.hideSiblings(['ket-content-list', 'ket-quiz-entry', 'ket-pagination']);
+    Match.start({});
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ---- 自然拼读分组消消乐 ----
+  function startPhonicsMatch() {
+    const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
+    if (words.length < 2) { toast('本组单词太少，玩不了消消乐'); return; }
+    Match.exit();
+    Match.scope = {
+      type: 'phonics',
+      words: words,
+      key: 'phonics_' + (phonicsCurrentGroup && phonicsCurrentGroup.id || ''),
+      mount: document.getElementById('phonics-match-area'),
+      unitLabel: '本组'
+    };
+    Match.hideSiblings(['phonics-lesson-list', 'phonics-match-entry']);
+    Match.start({});
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 拼读分组下所有课时里的代表词，去重后平铺
+  function phonicsGroupWords(group) {
+    const out = [];
+    const seen = {};
+    ((group && group.lessons) || []).forEach(function (lesson) {
+      (lesson.words || []).forEach(function (w) {
+        const key = String(w.w || '').toLowerCase();
+        if (!key || seen[key]) return;
+        seen[key] = 1;
+        out.push({ word: w.w, chinese: w.c });
+      });
+    });
+    return out;
   }
 
   function startChoiceLearn() {
@@ -6358,6 +6499,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const area = document.getElementById('phonics-lesson-area');
       area.style.display = 'block';
       document.getElementById('phonics-lesson-title').textContent = group.title;
+      // 本组单词消消乐入口（有词才显示）
+      const pme = document.getElementById('phonics-match-entry');
+      if (pme) {
+        const words = phonicsGroupWords(group);
+        if (words.length >= 2) {
+          pme.style.display = 'block';
+          pme.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startPhonicsMatch()">🎴 本组单词消消乐（' + words.length + ' 个）</button>';
+        } else {
+          pme.style.display = 'none';
+          pme.innerHTML = '';
+        }
+      }
+      Match.exit();   // 切换分组时收起上一局的消消乐面板
       const list = document.getElementById('phonics-lesson-list');
       list.innerHTML = '';
       group.lessons.forEach(lesson => {
@@ -6398,6 +6552,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function backToPhonicsGroups() {
     phonicsCurrentGroup = null;
+    Match.exit();                 // 返回分组时收起消消乐面板
     document.getElementById('phonics-group-list').style.display = '';
     document.getElementById('phonics-lesson-area').style.display = 'none';
   }
@@ -6693,8 +6848,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const qe = document.getElementById('ket-quiz-entry');
         if (qe) {
           qe.style.display = 'block';
-          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🎯 本类词汇测验</button>';
+          qe.innerHTML =
+            '<div style="display:flex;gap:8px">' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🎯 本类词汇测验</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
+            '</div>';
         }
+        // 离开分类时收起上一局的消消乐面板
+        Match.exit();
 
       } else if (type === '句型') {
         titleEl.textContent = '💬 ' + category;
@@ -6753,6 +6914,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function backToKetCategories() {
     ketCurrentCategory = '';
+    Match.exit();                 // 返回分类时收起消消乐面板
     document.getElementById('ket-category-list').style.display = 'grid';
     document.getElementById('ket-content-area').style.display = 'none';
     const qe = document.getElementById('ket-quiz-entry');
