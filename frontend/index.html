@@ -1253,6 +1253,7 @@
       <div id="ket-quiz-entry" style="display:none;margin-bottom:12px"></div>
       <div id="ket-match-area" style="display:none"></div>
       <div id="ket-content-list"></div>
+      <div id="ket-reading-area" style="display:none;margin-top:14px"></div>
     </div>
   </div>
 
@@ -1996,6 +1997,8 @@ const API = ".";
     // 离开 KET / 拼读页时收起其消消乐面板（计时也停掉）
     try {
       if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Match.exit();
+      // 离开 KET 页时收起独立的短文阅读（朗读也停掉）
+      if (name !== 'ket' && typeof closeKetReading === 'function') closeKetReading();
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
@@ -5576,6 +5579,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const words = toMatchWords(ketCurrentItems);
     if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); return; }
     Match.exit();
+    closeKetReading();               // 玩消消乐时不显示短文阅读
     Match.scope = {
       type: 'ket',
       words: words,
@@ -6598,6 +6602,127 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   
 
   
+  // ========== 短文阅读（逐句朗读/跟读）==========
+  let readingContent = null; // 当前短文的 sentences 数组
+
+  function speakReadingLine(text) {
+    if (!text) return;
+    TTS.speak(text, 'en-US');
+  }
+
+  // ========== KET 短文阅读（独立入口，点「📖 短文阅读」才展示） ==========
+  let ketReadingOpen = false;
+
+  async function renderKetReading(category) {
+    try {
+      const data = await apiGET('/api/ket/reading?category=' + encodeURIComponent(category));
+      const reading = data.reading;
+      const area = document.getElementById('ket-reading-area');
+      if (!area) return false;
+      if (!reading || !reading.sentences || reading.sentences.length === 0) return false;
+
+      readingContent = reading.sentences;
+
+      let linesHtml = reading.sentences.map((line, idx) => `
+        <div class="lr-line" data-idx="${idx}" style="padding:10px 12px;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px;border-radius:10px">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">${idx + 1}</span>
+            <span class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">${lrWordsHtml(line.en)}</span>
+            <button class="speak-btn" onclick="speakReadingLine('${esc(line.en)}')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
+            <button class="ra-btn" onclick="raToggleKet(this, '${esc(line.en)}')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>
+          </div>
+          <div style="font-size:13px;color:#999;padding-left:28px">${esc(line.zh)}</div>
+        </div>
+      `).join('');
+
+      area.innerHTML = `
+        <div style="padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+            <div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ${esc(reading.title || '')}</div>
+            <button class="speak-btn" onclick="LessonReader.toggle()" style="padding:6px 16px;font-size:13px;background:#ffd666;color:#7a5c00;border:none;border-radius:8px;cursor:pointer">🔊 朗读全文</button>
+          </div>
+          ${linesHtml}
+          <!-- 朗读控制条：与课文一致，固定悬浮在底部导航上方 -->
+          <div class="lr-dock" id="ket-reader-dock" style="display:none">
+            <div class="lr-ctrl">
+              <button class="lr-ctrl-btn lr-ctrl-main" id="ket-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>
+              <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>
+            </div>
+            <div class="lr-bar" id="ket-read-bar" style="display:none"><i></i></div>
+            <div class="lr-progress" id="ket-read-progress" style="display:none"></div>
+          </div>
+        </div>
+      `;
+
+      // 绑定朗读播放器（与课文完全相同的播放/暂停/继续/重播/跳句/高亮逻辑）
+      const mainBtn = document.getElementById('ket-full-speak-btn');
+      if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
+      const rpBtn = document.getElementById('ket-replay-btn');
+      if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
+      LessonReader.bind(reading.sentences, {
+        scope: 'ket-reading',
+        dock: 'ket-reader-dock',
+        main: 'ket-full-speak-btn',
+        replay: 'ket-replay-btn',
+        progress: 'ket-read-progress',
+        bar: 'ket-read-bar',
+        label: '🔊 朗读全文'
+      });
+      return true;
+    } catch (e) {
+      console.error('加载短文失败:', e);
+      return false;
+    }
+  }
+
+  // 「📖 短文阅读」开关：打开时收起词汇列表与分页，关闭时恢复
+  async function toggleKetReading() {
+    const area = document.getElementById('ket-reading-area');
+    const btn = document.getElementById('ket-reading-btn');
+    if (!area) return;
+
+    if (ketReadingOpen) { closeKetReading(); return; }
+
+    ketReadingOpen = true;
+    try { Match.exit(); } catch (e) {}
+    const ok = await renderKetReading(ketCurrentCategory);
+    if (!ok) {
+      ketReadingOpen = false;
+      toast('本分类暂无短文');
+      return;
+    }
+    area.style.display = 'block';
+    const list = document.getElementById('ket-content-list');
+    const pag = document.getElementById('ket-pagination');
+    if (list) list.style.display = 'none';
+    if (pag) pag.style.display = 'none';
+    if (btn) btn.textContent = '← 返回词汇列表';
+  }
+
+  function closeKetReading() {
+    try { LessonReader.stop(true); LessonReader.clearPaint(); } catch (e) {}
+    ketReadingOpen = false;
+    const area = document.getElementById('ket-reading-area');
+    if (area) { area.style.display = 'none'; area.innerHTML = ''; }
+    const list = document.getElementById('ket-content-list');
+    const pag = document.getElementById('ket-pagination');
+    if (list) list.style.display = '';
+    if (pag) pag.style.display = '';
+    const btn = document.getElementById('ket-reading-btn');
+    if (btn) btn.textContent = '📖 短文阅读';
+  }
+
+  // 该类有短文才显示入口按钮
+  async function refreshKetReadingEntry(category) {
+    const row = document.getElementById('ket-reading-entry');
+    if (!row) return;
+    row.style.display = 'none';
+    try {
+      const data = await apiGET('/api/ket/reading?category=' + encodeURIComponent(category));
+      if (data && data.reading && (data.reading.sentences || []).length > 0) row.style.display = 'block';
+    } catch (e) {}
+  }
+
   // ========== KET 分页功能 ==========
   let ketCurrentPage = 1;
   let ketItemsPerPage = 10; // 默认每页10项
@@ -6769,10 +6894,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<div style="display:flex;gap:8px">' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🎯 本类词汇测验</button>' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
+            '</div>' +
+            '<div id="ket-reading-entry" style="display:none;margin-top:8px">' +
+              '<button class="btn btn-primary" id="ket-reading-btn" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="toggleKetReading()">📖 短文阅读</button>' +
             '</div>';
+          refreshKetReadingEntry(category);
         }
-        // 离开分类时收起上一局的消消乐面板
+        // 切换分类/重开时收起上一局的消消乐面板与上一轮短文
         Match.exit();
+        closeKetReading();
 
       } else if (type === '句型') {
         titleEl.textContent = '💬 ' + category;
@@ -6832,6 +6962,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function backToKetCategories() {
     ketCurrentCategory = '';
     Match.exit();                 // 返回分类时收起消消乐面板
+    closeKetReading();            // 返回分类时收起短文阅读
     document.getElementById('ket-category-list').style.display = 'grid';
     document.getElementById('ket-content-area').style.display = 'none';
     const qe = document.getElementById('ket-quiz-entry');
