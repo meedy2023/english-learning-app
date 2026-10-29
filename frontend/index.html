@@ -6151,6 +6151,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 载入当前单词：清空输入，准备拼写
     load() {
+      if (this._advTimer) { clearTimeout(this._advTimer); this._advTimer = null; }
+      this._advPending = false;
       const w = this.pool[this.idx];
       if (!w) { this.finish(); return; }
       this.input = '';
@@ -6175,12 +6177,25 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     submit() {
       const w = this.current();
       if (!w) return;
-      if (this.locked) { toast('这一题已经拼对啦，点「下一个」继续'); return; }
+      if (this.locked) { toast('这一题已经拼对啦，马上进入下一题'); return; }
+      if (this._advPending) return;   // 已提交，等待自动进入下一题
       const val = String(this.input || '').trim().toLowerCase().replace(/\s+/g, '');
       const answer = String(w.word).trim().toLowerCase().replace(/\s+/g, '');
       if (!val) { toast('请输入英文单词'); return; }
       if (val === answer) this.correct(w);
       else this.wrong(w, String(this.input || '').trim(), String(w.word));
+    },
+
+    // 提交后自动进入下一题（卡片不放任何导航按钮）
+    scheduleNext(delay) {
+      const self = this;
+      if (this._advTimer) { clearTimeout(this._advTimer); }
+      this._advPending = true;
+      this._advTimer = setTimeout(function () {
+        self._advTimer = null;
+        self._advPending = false;
+        self.next();
+      }, delay);
     },
 
     correct(w) {
@@ -6214,17 +6229,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           updatePointsDisplay();
         }
       }
+      this.scheduleNext(1400);      // 答对：稍作停留后自动下一题
     },
 
     wrong(w, input, answer) {
       this.wrongCount++;
       this.badFlash = true;
       this.input = '';
+      this._advPending = true;      // 已提交，等待自动进入下一题（输入框置只读）
       this.fb = {
         type: 'bad',
-        html: '❌ 错误，正确答案是：<b style="font-size:17px">' + answer + '</b>' +
-              '<div style="font-size:12.5px;color:#a8071a;margin-top:4px">' +
-              (w.chinese ? escSpell(w.chinese) + ' · ' : '') + '点「下一个」继续，或再想想拼写</div>'
+        html: '不对哦，正确拼写是：<b style="font-size:17px">' + answer + '</b>'
       };
       this.render();
       Celebrate.wrong();            // 答错：提示音 + 震动
@@ -6234,6 +6249,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         self.badFlash = false;
         self.render();
       }, 500);
+      this.scheduleNext(2400);      // 答错：留出看清正确拼写的时间后自动下一题
     },
 
     prev() {
@@ -6278,14 +6294,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (!area) return;
       const w = this.current();
       if (!w) { this.finish(); return; }
-      const last = this.idx >= this.pool.length - 1;
       const fbHtml = this.fb
         ? '<div class="spell-fb ' + this.fb.type + '">' + this.fb.html + '</div>'
         : '';
-      let navHtml = '<div class="spell-nav">';
-      if (this.idx > 0) navHtml += '<button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button>';
-      if (!last) navHtml += '<button class="btn btn-primary" id="spell-next-btn" onclick="Spell.next()">下一个 →</button>';
-      navHtml += '</div>';
       area.innerHTML =
         '<div class="spell-card">' +
           '<div class="sp-caption">写出这个单词<span class="sp-prog">' + (this.idx + 1) + '/' + this.pool.length + '</span></div>' +
@@ -6297,17 +6308,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<input id="sp-input" class="spell-input' + (this.badFlash ? ' bad' : '') + (this.locked ? ' ok' : '') + '" ' +
               'type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ' +
               'placeholder="直接用键盘输入，回车提交" value="' + escSpell(this.input) + '" ' +
-              (this.locked ? 'readonly ' : '') +
+              (this.locked || this._advPending ? 'readonly ' : '') +
               'oninput="Spell.onInput(this.value)" ' +
               'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Spell.submit();}">' +
           '</div>' +
           fbHtml +
-          (last && this.locked
-            ? '<button class="btn btn-primary" style="width:100%;margin-top:14px" onclick="Spell.finish()">🎉 完成本单元</button>'
-            : '') +
-          navHtml +
         '</div>';
-      if (!this.locked) {
+      if (!this.locked && !this._advPending) {
         setTimeout(function () {
           const inp = document.getElementById('sp-input');
           if (inp) { try { inp.focus(); const n = inp.value.length; inp.setSelectionRange(n, n); } catch (e) {} }
