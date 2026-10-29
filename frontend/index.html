@@ -995,7 +995,7 @@
           <div class="mr-sub" id="match-res-sub"></div>
           <div class="mr-btns">
             <button class="btn btn-primary" id="match-next" onclick="Match.nextRound()">继续下一局</button>
-            <button class="btn btn-secondary nav-back-btn" id="match-back-btn" onclick="Match.backOut()" type="button" aria-label="返回">返回单词表</button>
+            <button class="btn btn-secondary nav-back-btn" id="match-back-btn" onclick="Match.backOut()" type="button" aria-label="返回单词表">返回单词表</button>
           </div>
         </div>
       </div>
@@ -1246,7 +1246,7 @@
       <!-- 分类列表由 JS 动态生成 -->
     </div>
     <div id="ket-content-area" style="display:none">
-      <button class="btn btn-secondary nav-back-btn" onclick="backToKetCategories()" style="position:sticky;top:84px;z-index:95;margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
+      <button class="btn btn-secondary nav-back-btn" onclick="backToKetCategories()" style="position:sticky;top:62px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
         <span class="nav-back-ico" aria-hidden="true">←</span> 返回分类
       </button>
       <div id="ket-content-title" style="font-size:18px;font-weight:600;margin-bottom:16px"></div>
@@ -1259,7 +1259,7 @@
 
 <!-- ======= KET 测验 ======= -->
 <div id="view-ket-quiz" class="view">
-  <button class="btn btn-secondary nav-back-btn" onclick="backToKetCategory()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回分类"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
+  <button class="btn btn-secondary nav-back-btn" onclick="backToKetCategory()" style="position:sticky;top:62px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回分类"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
   <div class="quiz-card">
     <div class="quiz-prompt" id="ket-quiz-prompt">这个单词的中文是？</div>
     <div class="quiz-word" id="ket-quiz-word">word</div>
@@ -1281,7 +1281,7 @@
   <div id="view-phonics" class="view">
     <div id="phonics-group-list" style="margin-top:8px"></div>
     <div id="phonics-lesson-area" style="display:none">
-      <button class="btn btn-secondary nav-back-btn" onclick="backToPhonicsGroups()" style="position:sticky;top:84px;z-index:95;margin-bottom:12px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分组"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分组</button>
+      <button class="btn btn-secondary nav-back-btn" onclick="backToPhonicsGroups()" style="position:sticky;top:62px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分组"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分组</button>
       <div id="phonics-lesson-title" style="font-size:18px;font-weight:700;margin-bottom:16px"></div>
       <div id="phonics-match-entry" style="display:none;margin:-4px 0 12px"></div>
       <div id="phonics-match-area" style="display:none"></div>
@@ -6119,7 +6119,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个单词</button>' +
         '<button class="btn btn-primary" onclick="Spell.start(true)">🔄 再拼一轮</button>' +
         '</div>' +
-        '<button class="btn btn-secondary nav-back-btn" style="margin-top:10px;width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">📋</span> 返回单词表</button>' +
+        '<button class="btn btn-secondary nav-back-btn" style="margin-top:10px;width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
         '</div></div>';
     },
 
