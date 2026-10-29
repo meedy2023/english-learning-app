@@ -1010,7 +1010,7 @@
 
 <!-- 顶部导航 -->
 <div class="topbar">
-  <h1 id="topbar-title">📚 单词学习</h1>
+  <h1 id="topbar-title">📚 英语学习</h1>
   <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
       <span id="settings-btn" onclick="openSettings()" title="设置" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">⚙️</span>
       <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
@@ -2135,7 +2135,7 @@ const API = ".";
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "英语学习助手", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
+    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
