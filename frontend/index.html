@@ -1786,7 +1786,7 @@ const API = ".";
         } else if (_pointsPrevSub.doodle && _pointsPrevSub.doodle !== 'none') {
           document.getElementById('topbar-title').textContent = '✍️ 单词随手拼';
         } else {
-          document.getElementById('topbar-title').textContent = '📖 单词学习';
+          document.getElementById('topbar-title').textContent = '📚 英语学习';
         }
       }
       _pointsPrevSub = null;
@@ -2135,7 +2135,7 @@ const API = ".";
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📖 单词学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
+    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
@@ -4850,7 +4850,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     switchView("learn");
     setActiveTab('wordlist');
     // 恢复顶栏标题（从课文学习/单词学习等子视图返回时可能被改写）
-    document.getElementById('topbar-title').textContent = '📖 单词学习';
+    document.getElementById('topbar-title').textContent = '📚 英语学习';
     const _bh = document.getElementById("learn-back-home");
     if (_bh) _bh.style.display = "flex";
     document.getElementById("learn-module-title").style.display = "block";
