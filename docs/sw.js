@@ -1,10 +1,12 @@
 /* 英语学习小助手 Service Worker */
-const CACHE = 'english-app-v73';
+const CACHE = 'english-app-v74';
 const ASSETS = [
   './',
   './index.html',
   './api-shim.js',
   './manifest.json',
+  './share.html',
+  './share-cover.png',
   './icons/icon-192.png',
   './icons/icon-512.png',
   './data/words.json',

@@ -80,7 +80,7 @@ def copy_phonics_audio():
 
 def copy_pwa():
     """复制 PWA 资源（manifest/sw/icons）到 docs/"""
-    for name in ["manifest.json", "sw.js"]:
+    for name in ["manifest.json", "sw.js", "share.html", "share-cover.png"]:
         src = os.path.join(FRONTEND, name)
         if os.path.exists(src):
             shutil.copy2(src, os.path.join(DOCS, name))

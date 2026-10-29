@@ -256,11 +256,16 @@
       if (api === "modules") {
         const grade = params.get("grade") || null;
         const mods = getModules(grade);
-        return json(mods.map((m) => ({
-          module: m,
-          grade: grade || DATA.words.find((w) => w.module === m)?.grade || "",
-          count: wordsByModuleAndGrade(m, grade || null).length,
-        })));
+        return json(mods.map((m) => {
+          const lesson = WORD_TO_LESSON[m];
+          return {
+            module: m,
+            lesson: lesson ? lesson[0] : m,
+            label: lesson ? lesson[1] : "",
+            grade: grade || DATA.words.find((w) => w.module === m)?.grade || "",
+            count: wordsByModuleAndGrade(m, grade || null).length,
+          };
+        }));
       }
 
       // ===== 课文系列 =====

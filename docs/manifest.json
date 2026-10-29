@@ -1,13 +1,18 @@
 {
+  "id": "./",
   "name": "英语学习小助手",
   "short_name": "英语学习",
-  "description": "外研社英语学习小助手（三年级~五年级）",
+  "description": "外研社小学英语学习小助手（三年级~五年级）",
+  "lang": "zh-CN",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#f0f4ff",
   "theme_color": "#6c63ff",
+  "categories": [
+    "education"
+  ],
   "icons": [
     {
       "src": "icons/icon-192.png",
@@ -20,6 +25,23 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "三年级",
+      "short_name": "三年级",
+      "url": "./index.html?grade=三年级"
+    },
+    {
+      "name": "四年级",
+      "short_name": "四年级",
+      "url": "./index.html?grade=四年级"
+    },
+    {
+      "name": "五年级",
+      "short_name": "五年级",
+      "url": "./index.html?grade=五年级"
     }
   ]
 }

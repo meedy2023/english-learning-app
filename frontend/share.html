@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>英语学习小助手 · 小学英语单词闯关</title>
+  <meta name="description" content="外研社小学英语三～五年级，1017 个单词、37 个单元。发音、测验、消消乐、拼写闯关，打开就能学，免费无需登录。">
+  <meta name="theme-color" content="#4f9fff">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="英语学习">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="英语学习小助手 · 小学英语单词闯关">
+  <meta property="og:description" content="外研社小学英语三～五年级，1017 个单词、37 个单元。发音、测验、消消乐、拼写闯关，打开就能学。">
+  <meta property="og:image" content="https://meedy2023.github.io/english-learning-app/share-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://meedy2023.github.io/english-learning-app/share.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="英语学习小助手 · 小学英语单词闯关">
+  <meta name="twitter:description" content="外研社小学英语三～五年级，1017 个单词、37 个单元，打开就能学。">
+  <meta name="twitter:image" content="https://meedy2023.github.io/english-learning-app/share-cover.png">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, #f7f9ff 42%, #ffffff 100%);
+      color: #2b3450;
+      min-height: 100vh;
+      padding: 18px 16px 44px;
+    }
+    .wrap { max-width: 480px; margin: 0 auto; }
+
+    .cover {
+      width: 100%;
+      display: block;
+      border-radius: 20px;
+      box-shadow: 0 14px 34px rgba(70, 96, 200, 0.20);
+    }
+
+    h1 {
+      font-size: 25px;
+      line-height: 1.32;
+      margin: 22px 2px 8px;
+      text-align: center;
+      letter-spacing: .3px;
+    }
+    .lead {
+      font-size: 14px;
+      color: #6d7690;
+      text-align: center;
+      line-height: 1.7;
+      padding: 0 6px;
+    }
+
+    .points {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+      justify-content: center;
+      gap: 8px 10px;
+      margin: 18px 0 4px;
+    }
+    .points .point { text-align: center; }
+    .point {
+      font-size: 12px;
+      color: #4f6bd8;
+      background: #eaf0ff;
+      border-radius: 999px;
+      padding: 5px 9px;
+    }
+
+    .cta {
+      display: block;
+      margin: 22px 0 10px;
+      padding: 16px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #4f9fff, #6c63ff);
+      box-shadow: 0 10px 24px rgba(79, 159, 255, 0.36);
+    }
+    .cta:active { transform: translateY(1px); }
+
+    .grades { display: flex; gap: 10px; margin-top: 12px; }
+    .grade {
+      flex: 1;
+      display: block;
+      padding: 13px 4px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 600;
+      color: #3d4a6b;
+      text-decoration: none;
+      background: #fff;
+      border: 1px solid #e3eaf9;
+      border-radius: 14px;
+    }
+    .grade span { display: block; font-size: 11.5px; font-weight: 400; color: #9aa3b8; margin-top: 3px; }
+
+    .card {
+      margin-top: 18px;
+      background: #fff;
+      border: 1px solid #eef1f8;
+      border-radius: 16px;
+      padding: 16px 18px;
+    }
+    .card h2 { font-size: 14.5px; margin-bottom: 10px; color: #4a5468; }
+    .card ol { margin-left: 18px; }
+    .card-link { display: block; text-decoration: none; color: inherit; }
+    .card-p { font-size: 13px; color: #6d7690; line-height: 1.8; }
+    .card li { font-size: 13px; color: #6d7690; line-height: 1.95; }
+    .card li b { color: #4f6bd8; font-weight: 600; }
+
+    .foot {
+      margin-top: 26px;
+      text-align: center;
+      font-size: 11.5px;
+      color: #b3bbcd;
+      line-height: 1.8;
+    }
+    .foot a { color: #9aa3b8; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="./index.html"><img class="cover" src="share-cover.png" alt="英语学习小助手封面"></a>
+
+    <h1>英语学习小助手</h1>
+    <p class="lead">外研社小学英语 · 三～五年级<br>1017 个单词，37 个单元，打开就能学</p>
+
+    <div class="points">
+      <span class="point">🔊 真人发音</span>
+      <span class="point">🎯 单词消消乐</span>
+      <span class="point">🔤 拼写闯关</span>
+      <span class="point">📈 学习报告</span>
+    </div>
+
+    <a class="cta" href="./index.html">开始学习 →</a>
+
+    <div class="grades">
+      <a class="grade" href="./index.html?grade=三年级">三年级<span>425 词</span></a>
+      <a class="grade" href="./index.html?grade=四年级">四年级<span>282 词</span></a>
+      <a class="grade" href="./index.html?grade=五年级">五年级<span>310 词</span></a>
+    </div>
+
+    <a class="card card-link" href="share-cover.png">
+      <h2>🖼 想要一张图直接发群里？</h2>
+      <p class="card-p">点这里打开分享卡片图，长按保存，就能直接发到微信群或朋友圈。</p>
+    </a>
+
+    <div class="card">
+      <h2>📲 添加到手机桌面，像 App 一样打开</h2>
+      <ol>
+        <li><b>iPhone</b>：用 Safari 打开，点底部「分享」→「添加到主屏幕」</li>
+        <li><b>安卓</b>：用浏览器打开，菜单里选「添加到主屏幕」或「安装应用」</li>
+        <li><b>电脑</b>：Chrome / Edge 地址栏右侧的「安装」图标</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>📚 怎么用</h2>
+      <ol>
+        <li>先选年级，再点一个单元进入单词表</li>
+        <li>点单词看详情、听发音，记住后标「已掌握」</li>
+        <li>用测验、消消乐、拼写把单词练熟</li>
+        <li>答错的词自动进「复习」，报告里看进度</li>
+      </ol>
+    </div>
+
+    <p class="foot">
+      免费使用 · 无需登录 · 学习记录只存在本机<br>
+      把这张页面分享给同学家长，点开即用
+    </p>
+  </div>
+</body>
+</html>

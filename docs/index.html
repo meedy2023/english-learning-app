@@ -5,6 +5,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>英语学习小助手</title>
+  <meta name="description" content="外研社小学英语三～五年级，1017 个单词、37 个单元。发音、测验、消消乐、拼写闯关，打开就能学，免费无需登录。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="英语学习小助手 · 小学英语单词闯关">
+  <meta property="og:description" content="外研社小学英语三～五年级，1017 个单词、37 个单元，打开就能学。">
+  <meta property="og:image" content="https://meedy2023.github.io/english-learning-app/share-cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://meedy2023.github.io/english-learning-app/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="英语学习小助手 · 小学英语单词闯关">
+  <meta name="twitter:image" content="https://meedy2023.github.io/english-learning-app/share-cover.png">
   <style>
     /* ========== 基础重置 ========== */
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -4765,8 +4776,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const card = document.createElement("div");
         card.className = "module-card";
         card.innerHTML = `
-          <div class="module-name">${m.module}</div>
-          <div class="module-count">${m.count} 个单词</div>
+          <div class="module-name">${m.lesson || m.module}</div>
+          <div class="module-count">${(m.label ? m.label + ' · ' : '') + m.count + ' 个单词'}</div>
           <div class="progress-bar">
             <div class="progress-fill" style="width:${pct}%"></div>
           </div>
