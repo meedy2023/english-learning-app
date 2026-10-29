@@ -756,6 +756,88 @@
     .spell-done .sd-emoji { font-size: 46px; }
     .spell-done .sd-title { font-size: 17px; font-weight: 800; color: #3d3a86; margin-top: 6px; }
     .spell-done .sd-sub { font-size: 13px; color: #7a829a; margin-top: 6px; line-height: 1.6; }
+    /* ---- 单词随手拼（看中文写英文，键盘 / 手写两种模式） ---- */
+    .do-card {
+      background: #fff; border: 1px solid #ffe6c7; border-radius: 18px;
+      padding: 14px; box-shadow: 0 6px 20px rgba(255, 159, 67, 0.12);
+    }
+    .do-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+    .do-title { font-size: 16px; font-weight: 800; color: #7a4b00; }
+    .do-sub { font-size: 12px; color: #a08a6a; margin-top: 3px; }
+    .do-bar { height: 6px; background: #fff2e0; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+    .do-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb347, #ff6b9d); border-radius: 3px; transition: width .3s; }
+    .do-prompt {
+      margin-top: 14px; text-align: center;
+      background: linear-gradient(135deg, #fff8ee, #fff1f6);
+      border: 1px dashed #ffd7a8; border-radius: 14px; padding: 14px 10px;
+    }
+    .do-cn { font-size: 24px; font-weight: 800; color: #7a4b00; line-height: 1.35; word-break: break-word; }
+    .do-hint { font-size: 12.5px; color: #a08a6a; margin-top: 6px; }
+    .do-modes { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
+    .do-mode {
+      flex: 1; max-width: 170px; padding: 9px 10px; border-radius: 999px;
+      border: 1.5px solid #ffe0b8; background: #fffaf3; color: #d4801a;
+      font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s;
+    }
+    .do-mode.on {
+      background: linear-gradient(135deg, #ffb347, #ff8a3d); color: #fff;
+      border-color: transparent; box-shadow: 0 4px 14px rgba(255, 145, 60, .3);
+    }
+    .do-input-wrap { margin-top: 14px; }
+    .do-input {
+      width: 100%; box-sizing: border-box; padding: 13px 14px;
+      font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-align: center;
+      border: 2px solid #ffe0b8; border-radius: 14px; outline: none;
+      color: #7a4b00; background: #fffdf8; transition: border-color .15s, box-shadow .15s;
+    }
+    .do-input:focus { border-color: #ffb347; box-shadow: 0 0 0 4px rgba(255, 179, 71, .18); }
+    .do-input.ok { border-color: #52c41a; background: #f6fff2; color: #227a12; }
+    .do-input.bad { border-color: #ff7875; background: #fff5f5; animation: do-shake .32s; }
+    @keyframes do-shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    .do-hand-wrap { margin-top: 14px; }
+    .do-canvas-box { position: relative; border: 2px dashed #ffd7a8; border-radius: 14px; background: #fffdf8; overflow: hidden; }
+    .do-canvas { display: block; width: 100%; height: 180px; touch-action: none; cursor: crosshair; }
+    .do-canvas-tip {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; color: #d8bb95; pointer-events: none;
+    }
+    .do-hand-tools { display: flex; gap: 7px; margin-top: 8px; }
+    .do-tool {
+      flex: 1; padding: 9px 6px; border-radius: 10px; border: 1px solid #ffe0b8;
+      background: #fffaf3; color: #d4801a; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .do-tool:active { transform: scale(.96); }
+    .do-fb {
+      margin-top: 12px; padding: 12px 14px; border-radius: 12px;
+      font-size: 14px; line-height: 1.6; animation: fb-pop-in .25s ease;
+    }
+    .do-fb.ok { background: #f2fff0; border: 1px solid #b7eb8f; color: #227a12; }
+    .do-fb.bad { background: #fff5f5; border: 1px solid #ffc7c7; color: #a8071a; }
+    .do-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #8a6100; }
+    .do-self { display: flex; gap: 8px; margin-top: 10px; }
+    .do-self .btn { flex: 1; padding: 10px 8px; font-size: 13.5px; }
+    .do-acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
+    .do-act {
+      padding: 10px 6px; border-radius: 10px; border: 1px solid #ffe0b8;
+      background: #fffaf3; color: #d4801a; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    }
+    .do-act:disabled { opacity: .45; }
+    .do-nav { display: flex; gap: 8px; margin-top: 12px; }
+    .do-nav .btn { flex: 1; padding: 11px 8px; font-size: 14px; }
+    .do-done { text-align: center; padding: 18px 10px; }
+    .do-done .dd-emoji { font-size: 46px; }
+    .do-done .dd-title { font-size: 17px; font-weight: 800; color: #7a4b00; margin-top: 6px; }
+    .do-done .dd-sub { font-size: 13px; color: #a08a6a; margin-top: 6px; line-height: 1.6; }
+    @media (prefers-reduced-motion: reduce) {
+      .do-input.bad { animation: none; }
+      .do-fb { animation: none; }
+    }
     .cl-meta { font-size: 12.5px; color: #6b7290; font-weight: 600; margin-bottom: 6px; line-height: 1.5; }
     .cl-meta .keep { white-space: nowrap; }
     .match-restart {
@@ -965,6 +1047,7 @@
       <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
       <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
       <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
     </div>
     <div class="word-list" id="word-list"></div>
     <div id="word-detail-area" style="display:none"></div>
@@ -1003,6 +1086,9 @@
 
     <!-- 单词拼写重组（属于当前单元） -->
     <div id="spell-game-area" style="display:none"></div>
+
+    <!-- 单词随手拼（属于当前单元） -->
+    <div id="doodle-game-area" style="display:none"></div>
   </div>
 
   <!-- ======= 测验 ======= -->
@@ -1017,6 +1103,7 @@
       <button class="btn btn-sm tab-btn active" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
       <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
       <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
     </div>
     <div class="quiz-card">
       <div class="quiz-prompt" id="quiz-prompt">这个单词的中文是什么意思？</div>
@@ -1252,6 +1339,7 @@
       <div id="ket-content-title" style="font-size:18px;font-weight:600;margin-bottom:16px"></div>
       <div id="ket-quiz-entry" style="display:none;margin-bottom:12px"></div>
       <div id="ket-match-area" style="display:none"></div>
+      <div id="ket-doodle-area" style="display:none"></div>
       <div id="ket-content-list"></div>
       <div id="ket-reading-area" style="display:none;margin-top:14px"></div>
     </div>
@@ -1285,6 +1373,7 @@
       <div id="phonics-lesson-title" style="font-size:18px;font-weight:700;margin-bottom:16px"></div>
       <div id="phonics-match-entry" style="display:none;margin:-4px 0 12px"></div>
       <div id="phonics-match-area" style="display:none"></div>
+      <div id="phonics-doodle-area" style="display:none"></div>
       <div id="phonics-lesson-list"></div>
     </div>
   </div>
@@ -1328,7 +1417,9 @@ const API = ".";
       lesson_full_read: 5, // 朗读全文
       match_clear: 3,       // 消消乐消完整个单元
       spell_correct: 2,     // 拼对一个单词
-      spell_unit_clear: 5   // 拼写完整个单元
+      spell_unit_clear: 5,  // 拼写完整个单元
+      doodle_correct: 2,    // 随手拼写对一个单词
+      doodle_clear: 6       // 随手拼过完一整套
     },
 
     getData() {
@@ -1447,7 +1538,9 @@ const API = ".";
         lesson_full_read: '朗读全文',
         match_clear: '消消乐通关本单元',
         spell_correct: '拼写正确',
-        spell_unit_clear: '拼写通关本单元'
+        spell_unit_clear: '拼写通关本单元',
+        doodle_correct: '随手拼正确',
+        doodle_clear: '随手拼通关本节'
       };
       return messages[action] || '';
     }
@@ -1506,12 +1599,14 @@ const API = ".";
     const matchArea = document.getElementById('match-game-area');
     const choiceArea = document.getElementById('choice-learn-area');
     const spellArea = document.getElementById('spell-game-area');
+    const doodleArea = document.getElementById('doodle-game-area');
     const backHome = document.getElementById('learn-back-home');
     const moduleTitle = document.getElementById('learn-module-title');
     _pointsPrevSub = {
       match: matchArea ? matchArea.style.display : '',
       choice: choiceArea ? choiceArea.style.display : '',
       spell: spellArea ? spellArea.style.display : '',
+      doodle: doodleArea ? doodleArea.style.display : '',
       wordList: wordList ? wordList.style.display : '',
       quizBar: quizBar ? quizBar.style.display : '',
       backHome: backHome ? backHome.style.display : '',
@@ -1523,6 +1618,7 @@ const API = ".";
     if (matchArea) matchArea.style.display = 'none';
     if (choiceArea) choiceArea.style.display = 'none';
     if (spellArea) spellArea.style.display = 'none';
+    if (doodleArea) doodleArea.style.display = 'none';
     if (typeof Match !== 'undefined' && Match.stopTimer) Match.stopTimer();
     // 积分页自带「← 返回」吸顶按钮，隐藏学习视图的「← 返回首页」，否则下拉时两个吸顶按钮在同一位置重叠
     if (backHome) backHome.style.display = 'none';
@@ -1646,6 +1742,8 @@ const API = ".";
       if (choiceArea) choiceArea.style.display = _pointsPrevSub.choice || 'none';
       const spellArea = document.getElementById('spell-game-area');
       if (spellArea) spellArea.style.display = _pointsPrevSub.spell || 'none';
+      const doodleArea = document.getElementById('doodle-game-area');
+      if (doodleArea) doodleArea.style.display = _pointsPrevSub.doodle || 'none';
       if (_pointsPrevSub.match && _pointsPrevSub.match !== 'none' &&
           typeof Match !== 'undefined' && Match.startTimer) {
         Match.startTimer();
@@ -1656,6 +1754,8 @@ const API = ".";
           document.getElementById('topbar-title').textContent = '🎴 单词消消乐';
         } else if (_pointsPrevSub.spell && _pointsPrevSub.spell !== 'none') {
           document.getElementById('topbar-title').textContent = '🔤 单词拼写';
+        } else if (_pointsPrevSub.doodle && _pointsPrevSub.doodle !== 'none') {
+          document.getElementById('topbar-title').textContent = '✍️ 单词随手拼';
         } else {
           document.getElementById('topbar-title').textContent = '📖 单词学习';
         }
@@ -1909,9 +2009,11 @@ const API = ".";
     var matchArea = document.getElementById('match-game-area');
     var choiceArea = document.getElementById('choice-learn-area');
     var spellArea = document.getElementById('spell-game-area');
+    var doodleArea = document.getElementById('doodle-game-area');
     var subVisible = (matchArea && matchArea.style.display && matchArea.style.display !== 'none') ||
                      (choiceArea && choiceArea.style.display && choiceArea.style.display !== 'none') ||
-                     (spellArea && spellArea.style.display && spellArea.style.display !== 'none');
+                     (spellArea && spellArea.style.display && spellArea.style.display !== 'none') ||
+                     (doodleArea && doodleArea.style.display && doodleArea.style.display !== 'none');
     if (subVisible) {
       if (_wda) _wda.style.display = 'none';
       return;
@@ -1997,6 +2099,8 @@ const API = ".";
     // 离开 KET / 拼读页时收起其消消乐面板（计时也停掉）
     try {
       if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Match.exit();
+      // 离开 KET / 拼读页时收起随手拼面板
+      if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Doodle.exit();
       // 离开 KET 页时收起独立的短文阅读（朗读也停掉）
       if (name !== 'ket' && typeof closeKetReading === 'function') closeKetReading();
     } catch (e) {}   // Match 尚未初始化时忽略
@@ -4727,6 +4831,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     hideMatchGame();
     var _spa = document.getElementById('spell-game-area');
     if (_spa) _spa.style.display = 'none';
+    var _doa = document.getElementById('doodle-game-area');
+    if (_doa) _doa.style.display = 'none';
+    if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
     document.getElementById("view-quiz").classList.remove("active");
     document.getElementById("word-list").style.display = "block";
     document.getElementById("quiz-toggle-bar").style.display = "";
@@ -4771,6 +4878,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById("word-list").style.display = "none";
     document.getElementById("match-game-area").style.display = "none";
     Match.stop();
+    var _dA4 = document.getElementById('doodle-game-area');
+    if (_dA4) _dA4.style.display = 'none';
+    if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
     document.getElementById("quiz-toggle-bar").style.display = "none";
     const _bh = document.getElementById("learn-back-home");
     if (_bh) _bh.style.display = "flex";
@@ -5420,6 +5530,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         document.getElementById('word-detail-area').style.display = 'none';
         document.getElementById('choice-learn-area').style.display = 'none';
         document.getElementById('spell-game-area').style.display = 'none';
+        var _dA = document.getElementById('doodle-game-area');
+        if (_dA) _dA.style.display = 'none';
+        if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
         document.getElementById('quiz-toggle-bar').style.display = '';
       } else {
         // KET / 拼读：游戏面板挂到对应页面容器内
@@ -5733,6 +5846,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById('match-game-area').style.display = 'none';
     Match.stop();
     document.getElementById('spell-game-area').style.display = 'none';
+    var _dA2 = document.getElementById('doodle-game-area');
+    if (_dA2) _dA2.style.display = 'none';
+    if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
     document.getElementById('quiz-toggle-bar').style.display = '';
     const area = document.getElementById('choice-learn-area');
     area.style.display = 'block';
@@ -6002,6 +6118,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById('match-game-area').style.display = 'none';
       document.getElementById('quiz-toggle-bar').style.display = '';
       document.getElementById('spell-game-area').style.display = 'block';
+      var _dA3 = document.getElementById('doodle-game-area');
+      if (_dA3) _dA3.style.display = 'none';
+      if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
 
       if (this.pool.length === 0) {
         document.getElementById('spell-game-area').innerHTML =
@@ -6283,6 +6402,520 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function startSpell(fresh) {
     Spell.start(fresh === true);
+  }
+
+  // ========== 单词随手拼（看中文写英文：键盘 / 手写两种模式） ==========
+  var Doodle = {
+    scope: null,        // {type,label,key,mountId,backLabel,words,hide}
+    queue: [],          // 打乱后的题目
+    idx: 0,
+    mode: 'keys',       // keys | hand
+    phase: 'ask',       // ask | ok | reveal
+    done: {},           // 已写对的单词（小写）
+    tries: 0,
+    hint: false,
+    input: '',
+    fb: null,
+    strokes: [],        // 手写笔画：[[{x,y}...], ...]
+    _hidden: [],
+    _wantFocus: false,
+    _ctx: null, _cw: 0, _ch: 0,
+
+    start(opts) {
+      const words = (opts.words || []).map(function (w) {
+        return { word: String(w.word || '').trim(), chinese: String(w.chinese || '').trim(), phonetic: w.phonetic || '' };
+      }).filter(function (w) { return w.word && w.chinese; });
+      if (!words.length) { toast('这里还没有可练的单词'); return; }
+      this.exit();
+      this.scope = {
+        type: opts.type || 'unit',
+        label: opts.label || '本节',
+        key: opts.key || opts.type || 'unit',
+        mountId: opts.mountId,
+        backLabel: opts.backLabel || '返回单词表',
+        words: words,
+        hide: opts.hide || []
+      };
+      this.queue = shuffle(words.slice());
+      this.idx = 0; this.done = {}; this.mode = 'keys'; this.phase = 'ask';
+      this.tries = 0; this.hint = false; this.input = ''; this.fb = null; this.strokes = [];
+      if (this.scope.hide.length) this.hideSiblings(this.scope.hide);
+      const mount = document.getElementById(this.scope.mountId);
+      if (mount) mount.style.display = 'block';
+      this.render();
+    },
+
+    exit() {
+      this.restoreSiblings();
+      if (this.scope) {
+        const m = document.getElementById(this.scope.mountId);
+        if (m) { m.style.display = 'none'; m.innerHTML = ''; }
+      }
+      this.scope = null; this.queue = []; this.idx = 0; this.done = {};
+      this.strokes = []; this.fb = null; this.phase = 'ask'; this.input = '';
+      this._ctx = null;
+    },
+
+    back() {
+      const type = this.scope && this.scope.type;
+      this.exit();
+      if (type === 'unit' && typeof showWordList === 'function') showWordList();
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    hideSiblings(ids) {
+      this._hidden = [];
+      const self = this;
+      (ids || []).forEach(function (id) {
+        const el = document.getElementById(id);
+        if (el && el.style.display !== 'none') {
+          self._hidden.push({ el: el, display: el.style.display });
+          el.style.display = 'none';
+        }
+      });
+    },
+
+    restoreSiblings() {
+      (this._hidden || []).forEach(function (h) { h.el.style.display = h.display; });
+      this._hidden = [];
+    },
+
+    current() { return this.queue[this.idx]; },
+
+    // ---- 键盘模式 ----
+    onInput(v) {
+      this.input = String(v || '');
+      const w = this.current();
+      if (!w) return;
+      const ans = String(w.word).toLowerCase();
+      const val = this.input.trim().toLowerCase();
+      const inp = document.getElementById('do-input');
+      if (inp) {
+        inp.classList.toggle('ok', val === ans);
+        if (val !== ans) inp.classList.remove('bad');
+      }
+      if (val && val === ans) this.correct(w);   // 打满即自动判对，节奏更顺
+    },
+
+    submit() {
+      const w = this.current();
+      if (!w) return;
+      const val = String(this.input || '').trim().toLowerCase().replace(/\s+/g, ' ');
+      const ans = String(w.word).toLowerCase().replace(/\s+/g, ' ');
+      if (!val) { toast('先写一下答案吧'); return; }
+      if (val === ans) this.correct(w);
+      else this.wrong(w, this.input.trim());
+    },
+
+    hintFirst() {
+      const w = this.current();
+      if (!w) return;
+      this.hint = true;
+      this.fb = {
+        type: 'info',
+        html: '💡 首字母是 <b>' + escDoodle(String(w.word).slice(0, 1).toUpperCase()) + '</b>，共 ' +
+              String(w.word).replace(/[^A-Za-z]/g, '').length + ' 个字母'
+      };
+      this.render();
+    },
+
+    // ---- 判分 ----
+    correct(w) {
+      if (this.phase === 'ok') return;
+      this.phase = 'ok';
+      const key = String(w.word).toLowerCase();
+      this.done[key] = true;
+      try { Celebrate.correct(); } catch (e) {}
+      try { speakWord(w.word); } catch (e) {}
+      let extra = '';
+      const res = Points.earn('doodle_correct', 'doodle_' + key);
+      if (res && res.success) {
+        showPointsToast(res.points, Points.getMessage('doodle_correct'));
+        updatePointsDisplay();
+      } else {
+        extra = '<div style="font-size:12.5px;color:#7a829a;margin-top:4px">（这个单词的积分已经拿过啦）</div>';
+      }
+      this.fb = {
+        type: 'ok',
+        html: '🎉 写对啦！<b style="font-size:17px">' + escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) + extra
+      };
+      this.render();
+    },
+
+    wrong(w, val) {
+      this.tries++;
+      try { Celebrate.wrong(); } catch (e) {}
+      const ans = String(w.word);
+      let tip = '再试一次，注意字母顺序';
+      if (this.tries >= 3) {
+        tip = '正确写法是 <b style="font-size:17px">' + escDoodle(ans) + '</b>，跟着读一遍再写';
+        this.input = '';
+      } else if (this.tries === 2) {
+        tip = '提示：首字母是 <b>' + escDoodle(ans.slice(0, 1).toUpperCase()) + '</b>';
+        this.hint = true;
+      }
+      this.fb = {
+        type: 'bad',
+        html: '❌ <b>' + escDoodle(val || '') + '</b> 还差一点～<div style="margin-top:4px">' + tip + '</div>'
+      };
+      this._wantFocus = true;
+      this.render();
+    },
+
+    // ---- 手写模式 ----
+    revealHand() {
+      const w = this.current();
+      if (!w) return;
+      if (!this.strokes.length) { toast('先手写一下答案吧'); return; }
+      this.phase = 'reveal';
+      this.fb = {
+        type: 'info',
+        html: '👀 正确写法是 <b style="font-size:17px">' + escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) +
+              '<div style="font-size:12.5px;margin-top:4px">对照你的手写看看，写得一样吗？</div>'
+      };
+      this.render();
+      try { speakWord(w.word); } catch (e) {}
+    },
+
+    selfJudge(ok) {
+      const w = this.current();
+      if (!w) return;
+      if (ok) { this.phase = 'ask'; this.correct(w); return; }
+      this.phase = 'ask';
+      this.strokes = [];
+      this.fb = { type: 'bad', html: '没关系～跟着读音再写一遍，慢慢来' };
+      this.render();
+      try { speakWord(w.word); } catch (e) {}
+    },
+
+    initCanvas() {
+      const cv = document.getElementById('do-canvas');
+      if (!cv || !cv.getContext) return;
+      const rect = cv.getBoundingClientRect ? cv.getBoundingClientRect() : { width: 320, height: 180 };
+      const cw = Math.max(200, Math.round(rect.width || 320));
+      const ch = Math.round(rect.height || 180);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(cw * dpr);
+      cv.height = Math.round(ch * dpr);
+      const ctx = cv.getContext('2d');
+      if (!ctx) return;              // jsdom 等无 canvas 环境直接跳过
+      ctx.scale(dpr, dpr);
+      ctx.lineWidth = 3.2;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = '#3d3a86';
+      this._ctx = ctx; this._cw = cw; this._ch = ch;
+      this.redraw();
+      const self = this;
+      let drawing = false;
+      const pos = function (e) {
+        const r = cv.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+      };
+      cv.addEventListener('pointerdown', function (e) {
+        if (self.phase === 'ok') return;
+        e.preventDefault();
+        drawing = true;
+        try { cv.setPointerCapture(e.pointerId); } catch (err) {}
+        self.strokes.push([pos(e)]);
+        self.redraw();
+      });
+      cv.addEventListener('pointermove', function (e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const s = self.strokes[self.strokes.length - 1];
+        if (!s) return;
+        s.push(pos(e));
+        self.redraw();
+      });
+      const end = function (e) { drawing = false; try { cv.releasePointerCapture(e.pointerId); } catch (err) {} };
+      cv.addEventListener('pointerup', end);
+      cv.addEventListener('pointercancel', end);
+      cv.addEventListener('pointerleave', function () { drawing = false; });
+    },
+
+    redraw() {
+      const ctx = this._ctx;
+      if (!ctx) return;
+      ctx.clearRect(0, 0, this._cw || 400, this._ch || 200);
+      (this.strokes || []).forEach(function (stroke) {
+        if (!stroke || !stroke.length) return;
+        ctx.beginPath();
+        ctx.moveTo(stroke[0].x, stroke[0].y);
+        for (let i = 1; i < stroke.length; i++) ctx.lineTo(stroke[i].x, stroke[i].y);
+        if (stroke.length === 1) ctx.lineTo(stroke[0].x + 0.1, stroke[0].y + 0.1);
+        ctx.stroke();
+      });
+      const tip = document.getElementById('do-canvas-tip');
+      if (tip) tip.style.display = (this.strokes && this.strokes.length) ? 'none' : '';
+    },
+
+    clearInk() { this.strokes = []; this.redraw(); },
+    undoInk() {
+      if (!this.strokes || !this.strokes.length) { toast('还没有写任何笔画'); return; }
+      this.strokes.pop();
+      this.redraw();
+    },
+
+    // ---- 导航 ----
+    switchMode(m) {
+      if (this.mode === m) return;
+      this.mode = m;
+      this.phase = 'ask';
+      this.strokes = [];
+      this.fb = null;
+      this._wantFocus = false;
+      this.render();
+    },
+
+    resetQ() {
+      this.phase = 'ask'; this.tries = 0; this.hint = false;
+      this.input = ''; this.fb = null; this.strokes = [];
+      this.render();
+    },
+
+    prev() {
+      if (this.idx <= 0) { toast('已经是第一个单词了'); return; }
+      this.idx--; this.resetQ();
+    },
+
+    next() {
+      if (this.idx >= this.queue.length - 1) { this.finish(); return; }
+      this.idx++; this.resetQ();
+    },
+
+    skip() { this.next(); },
+
+    restart() {
+      const s = this.scope;
+      if (!s) return;
+      this.start({ type: s.type, label: s.label, key: s.key, mountId: s.mountId, backLabel: s.backLabel, words: s.words, hide: s.hide });
+    },
+
+    finish() {
+      const mount = this.scope ? document.getElementById(this.scope.mountId) : null;
+      if (!mount) return;
+      const total = this.queue.length;
+      const right = Object.keys(this.done).length;
+      const label = this.scope.label || '本节';
+      try { Celebrate.play(); } catch (e) {}
+      const res = Points.earn('doodle_clear', 'doodle_clear_' + this.scope.key);
+      let bonusHtml = '';
+      if (res && res.success) {
+        showPointsToast(res.points, Points.getMessage('doodle_clear'));
+        updatePointsDisplay();
+        bonusHtml = '<div style="font-size:12.5px;color:#a08a6a;margin-top:6px">额外积分 +' + res.points + '</div>';
+      }
+      mount.innerHTML =
+        '<div class="do-card"><div class="do-done">' +
+          '<div class="dd-emoji">' + (right >= total ? '🎉' : '👏') + '</div>' +
+          '<div class="dd-title">' + (right >= total ? label + '全部写对啦！' : '这一轮写完啦') + '</div>' +
+          '<div class="dd-sub">' + escDoodle(label) + '共 ' + total + ' 个词，写对 ' + right + ' 个' + bonusHtml + '</div>' +
+          '<div class="do-nav" style="max-width:320px;margin:16px auto 0">' +
+            '<button class="btn btn-primary" onclick="Doodle.restart()">🔄 再来一轮</button>' +
+            '<button class="btn btn-secondary nav-back-btn" onclick="Doodle.back()">← 返回</button>' +
+          '</div>' +
+        '</div></div>';
+    },
+
+    render() {
+      const mount = this.scope ? document.getElementById(this.scope.mountId) : null;
+      if (!mount) return;
+      const w = this.current();
+      if (!w) { this.finish(); return; }
+      const total = this.queue.length;
+      const right = Object.keys(this.done).length;
+      const label = this.scope.label || '本节';
+      const pct = Math.round((this.idx / total) * 100);
+      const answer = String(w.word);
+      const letters = answer.replace(/[^A-Za-z]/g, '').length;
+      const solved = this.phase === 'ok';
+      const isHand = this.mode === 'hand';
+
+      let hintText = '共 ' + letters + ' 个字母' + (w.phonetic ? ' · ' + escDoodle(w.phonetic) : '');
+      if (this.hint) hintText += ' · 首字母 <b>' + escDoodle(answer.slice(0, 1).toUpperCase()) + '</b>';
+
+      // 答题区
+      let bodyHtml = '';
+      if (solved) {
+        bodyHtml = '<div class="do-fb ok" style="margin-top:14px">🎉 写对啦！<b style="font-size:18px">' +
+                   escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) + '</div>';
+      } else if (isHand) {
+        bodyHtml =
+          '<div class="do-hand-wrap">' +
+            '<div class="do-canvas-box">' +
+              '<canvas class="do-canvas" id="do-canvas"></canvas>' +
+              '<div class="do-canvas-tip" id="do-canvas-tip">用手指或鼠标在这里写英文单词</div>' +
+            '</div>' +
+            '<div class="do-hand-tools">' +
+              '<button class="do-tool" type="button" onclick="Doodle.clearInk()">🧽 清除</button>' +
+              '<button class="do-tool" type="button" onclick="Doodle.undoInk()">↩️ 撤销</button>' +
+              '<button class="do-tool" type="button" onclick="Doodle.revealHand()">✅ 写完了</button>' +
+            '</div>' +
+          '</div>';
+      } else {
+        bodyHtml =
+          '<div class="do-input-wrap">' +
+            '<input id="do-input" class="do-input" type="text" autocomplete="off" autocorrect="off" ' +
+              'autocapitalize="none" spellcheck="false" placeholder="在这里打出英文单词" value="' + escDoodle(this.input) + '" ' +
+              'oninput="Doodle.onInput(this.value)" ' +
+              'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Doodle.submit();}">' +
+          '</div>' +
+          '<div class="do-acts" style="grid-template-columns:repeat(2,minmax(0,1fr))">' +
+            '<button class="do-act" type="button" onclick="Doodle.submit()">✅ 确定</button>' +
+            '<button class="do-act" type="button" onclick="Doodle.hintFirst()">💡 提示首字母</button>' +
+          '</div>';
+      }
+
+      // 反馈 + 手写自评
+      let fbHtml = '';
+      if (this.fb && !solved) {
+        fbHtml = '<div class="do-fb ' + this.fb.type + '">' + this.fb.html + '</div>';
+      }
+      if (this.phase === 'reveal' && isHand) {
+        fbHtml += '<div class="do-self">' +
+          '<button class="btn btn-primary" type="button" onclick="Doodle.selfJudge(true)">✅ 我写对了</button>' +
+          '<button class="btn btn-secondary" type="button" onclick="Doodle.selfJudge(false)">❌ 再写一次</button>' +
+        '</div>';
+      }
+
+      // 导航
+      let navHtml = '<div class="do-nav">';
+      if (this.idx > 0) navHtml += '<button class="btn btn-secondary" type="button" onclick="Doodle.prev()">← 上一个</button>';
+      if (!solved) navHtml += '<button class="btn btn-secondary" type="button" onclick="Doodle.skip()">⏭ 跳过</button>';
+      if (this.idx < total - 1) {
+        navHtml += '<button class="btn btn-primary" type="button" onclick="Doodle.next()">下一个 →</button>';
+      } else {
+        navHtml += '<button class="btn btn-primary" type="button" onclick="Doodle.finish()">🏁 完成</button>';
+      }
+      navHtml += '</div>';
+
+      mount.innerHTML =
+        '<div class="do-card">' +
+          '<div class="do-top">' +
+            '<div>' +
+              '<div class="do-title">✍️ 单词随手拼</div>' +
+              '<div class="do-sub">' + escDoodle(label) + ' · 共 ' + total + ' 个词 · 已写对 ' + right + ' 个</div>' +
+            '</div>' +
+            '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">' +
+              '<div style="font-size:13px;font-weight:700;color:#d4801a;white-space:nowrap">第 ' + (this.idx + 1) + '/' + total + '</div>' +
+              '<button class="btn btn-sm btn-secondary nav-back-btn" style="padding:5px 10px;font-size:12px" type="button" onclick="Doodle.back()">← ' + escDoodle(this.scope.backLabel) + '</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="do-bar"><i style="width:' + pct + '%"></i></div>' +
+          '<div class="do-prompt">' +
+            '<div class="do-cn">' + escDoodle(w.chinese) + '</div>' +
+            '<div class="do-hint">看中文，写出英文单词 · ' + hintText + '</div>' +
+            '<button class="speak-btn" style="margin-top:8px" type="button" onclick="Doodle.speak()">🔊 听发音</button>' +
+          '</div>' +
+          '<div class="do-modes">' +
+            '<button class="do-mode' + (isHand ? '' : ' on') + '" type="button" onclick="Doodle.switchMode(\'keys\')">⌨️ 键盘输入</button>' +
+            '<button class="do-mode' + (isHand ? ' on' : '') + '" type="button" onclick="Doodle.switchMode(\'hand\')">✍️ 手写</button>' +
+          '</div>' +
+          bodyHtml +
+          fbHtml +
+          navHtml +
+        '</div>';
+
+      if (isHand) this.initCanvas();
+      if (!isHand && !solved && this._wantFocus) {
+        this._wantFocus = false;
+        const inp = document.getElementById('do-input');
+        if (inp) { try { inp.focus(); const n = inp.value.length; inp.setSelectionRange(n, n); } catch (e) {} }
+      }
+    },
+
+    speak() {
+      const w = this.current();
+      if (w) { try { speakWord(w.word); } catch (e) {} }
+    }
+  };
+
+  function escDoodle(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // ---- 单元：随手拼 ----
+  function startDoodle() {
+    if (!currentModule || !currentWords.length) {
+      toast('请先选择一个模块');
+      switchView('home');
+      return;
+    }
+    learnMode = 'doodle';
+    learnRestoreFn = restoreDoodleView;
+    setActiveTab('doodle');
+    document.getElementById('topbar-title').textContent = '✍️ 单词随手拼';
+    document.getElementById('learn-module-title').style.display = 'block';
+    document.getElementById('word-list').style.display = 'none';
+    document.getElementById('word-detail-area').style.display = 'none';
+    document.getElementById('choice-learn-area').style.display = 'none';
+    document.getElementById('match-game-area').style.display = 'none';
+    document.getElementById('spell-game-area').style.display = 'none';
+    document.getElementById('quiz-toggle-bar').style.display = '';
+    if (typeof Match !== 'undefined' && Match.stop) Match.stop();
+    switchView('learn');
+    Doodle.start({
+      type: 'unit',
+      label: '本单元',
+      key: 'unit_' + currentModule,
+      mountId: 'doodle-game-area',
+      backLabel: '返回单词表',
+      words: currentWords.map(function (w) { return { word: w.word, chinese: w.chinese, phonetic: w.phonetic }; })
+    });
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function restoreDoodleView() {
+    learnMode = 'doodle';
+    learnRestoreFn = restoreDoodleView;
+    const el = function (id, v) { const e = document.getElementById(id); if (e) e.style.display = v; };
+    el('word-list', 'none');
+    el('word-detail-area', 'none');
+    el('choice-learn-area', 'none');
+    el('match-game-area', 'none');
+    el('spell-game-area', 'none');
+    el('doodle-game-area', 'block');
+    el('learn-module-title', 'block');
+    el('quiz-toggle-bar', '');
+    document.getElementById('topbar-title').textContent = '✍️ 单词随手拼';
+  }
+
+  // ---- KET：随手拼（本类词汇） ----
+  function startKetDoodle() {
+    const words = toMatchWords(ketCurrentItems);
+    if (!words.length) { toast('本类还没有可练的单词'); return; }
+    Doodle.exit();
+    if (typeof Match !== 'undefined' && Match.exit) Match.exit();
+    if (typeof closeKetReading === 'function') closeKetReading();
+    Doodle.start({
+      type: 'ket',
+      label: '本类',
+      key: 'ket_' + (ketCurrentCategory || ''),
+      mountId: 'ket-doodle-area',
+      backLabel: '返回词汇列表',
+      words: words,
+      hide: ['ket-content-list', 'ket-quiz-entry', 'ket-pagination']
+    });
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ---- 自然拼读：随手拼（本组代表词） ----
+  function startPhonicsDoodle() {
+    const words = phonicsGroupWords(phonicsCurrentGroup);
+    if (!words.length) { toast('本组还没有可练的单词'); return; }
+    Doodle.exit();
+    if (typeof Match !== 'undefined' && Match.exit) Match.exit();
+    Doodle.start({
+      type: 'phonics',
+      label: '本组',
+      key: 'phonics_' + (phonicsCurrentGroup && phonicsCurrentGroup.id || ''),
+      mountId: 'phonics-doodle-area',
+      backLabel: '返回课时列表',
+      words: words,
+      hide: ['phonics-lesson-list', 'phonics-match-entry']
+    });
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // ========== 单词消消乐 ==========
@@ -6583,13 +7216,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const words = phonicsGroupWords(group);
         if (words.length >= 2) {
           pme.style.display = 'block';
-          pme.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startPhonicsMatch()">🎴 本组单词消消乐（' + words.length + ' 个）</button>';
+          pme.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startPhonicsMatch()">🎴 本组单词消消乐（' + words.length + ' 个）</button>' +
+            '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startPhonicsDoodle()">✍️ 本组随手拼（看中文写英文）</button>';
         } else {
           pme.style.display = 'none';
           pme.innerHTML = '';
         }
       }
       Match.exit();   // 切换分组时收起上一局的消消乐面板
+      if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();   // 顺手拼面板也一起收起
       const list = document.getElementById('phonics-lesson-list');
       list.innerHTML = '';
       group.lessons.forEach(lesson => {
@@ -6982,6 +7617,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🎯 本类词汇测验</button>' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
             '</div>' +
+            '<div style="display:flex;gap:8px;margin-top:8px">' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startKetDoodle()">✍️ 随手拼（看中文写英文）</button>' +
+            '</div>' +
             '<div id="ket-reading-entry" style="display:none;margin-top:8px">' +
               '<button class="btn btn-primary" id="ket-reading-btn" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="toggleKetReading()">📖 短文阅读</button>' +
             '</div>';
@@ -6990,6 +7628,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         // 切换分类/重开时收起上一局的消消乐面板与上一轮短文
         Match.exit();
         closeKetReading();
+        if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
 
       } else if (type === '句型') {
         titleEl.textContent = '💬 ' + category;
