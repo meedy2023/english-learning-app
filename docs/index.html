@@ -650,49 +650,50 @@
     .match-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
     /* ---- 单词拼写重组 ---- */
     .spell-card {
-      background: #fff;
-      border: 1px solid #e8ecff;
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.10);
+      background: #fdfdff;
+      border: 1px solid #f0f1fa;
+      border-radius: 24px;
+      padding: 26px 18px 18px;
+      box-shadow: 0 8px 28px rgba(108, 99, 255, 0.08);
     }
     .spell-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .spell-title { font-size: 16px; font-weight: 800; color: #3d3a86; }
     .spell-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
     .spell-bar { height: 6px; background: #eef0fb; border-radius: 3px; overflow: hidden; margin-top: 10px; }
     .spell-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #4f9fff, #6c63ff); border-radius: 3px; transition: width .3s; }
-    .spell-prompt {
-      margin-top: 14px;
-      text-align: center;
-      background: linear-gradient(135deg, #f4f7ff, #eef2ff);
-      border: 1px dashed #c9d4ff;
-      border-radius: 14px;
-      padding: 12px 10px;
+    /* 极简拼写：小灰字提示 + 大字词义 + 圆形发音钮 */
+    .sp-caption {
+      text-align: center; font-size: 13px; font-weight: 500; color: #a6adc9;
+      letter-spacing: 1px;
     }
-    /* 输入框式拼写 */
-    .spell-input-wrap { margin-top: 14px; }
+    .sp-caption .sp-prog { margin-left: 8px; color: #c3c8de; font-size: 12px; }
+    .sp-meaning {
+      margin-top: 10px;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .sp-cn { font-size: 22px; font-weight: 800; color: #2c3050; line-height: 1.35; text-align: center; }
+    .sp-speak {
+      width: 38px; height: 38px; flex: 0 0 38px;
+      border-radius: 50%; border: 1px solid #eceef8;
+      background: #fff; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 16px; box-shadow: 0 2px 8px rgba(60, 70, 130, 0.10);
+      transition: transform .12s;
+    }
+    .sp-speak:active { transform: scale(.92); }
+    /* 输入框式拼写（极简） */
+    .spell-input-wrap { margin-top: 18px; }
     .spell-input {
       width: 100%; box-sizing: border-box;
-      padding: 13px 14px; font-size: 18px; font-weight: 600; text-align: center; letter-spacing: 1px;
-      color: #3d3a86; background: #fbfcff;
-      border: 2px solid #cfd7ff; border-radius: 12px; outline: none;
+      padding: 17px 16px; font-size: 16px; font-weight: 600; text-align: left; letter-spacing: 0.5px;
+      color: #2c3050; background: #f3f4fa;
+      border: 1.5px solid transparent; border-radius: 16px; outline: none;
       transition: border-color .15s, background .15s, box-shadow .15s;
     }
-    .spell-input::placeholder { color: #b9c0d8; font-weight: 500; letter-spacing: 0; font-size: 15px; }
-    .spell-input:focus { border-color: #6c63ff; background: #fff; box-shadow: 0 0 0 3px rgba(108, 99, 255, .14); }
-    .spell-input.bad { border-color: #ff7875; background: #fff1f0; color: #cf1322; animation: sp-shake .32s; }
-    .spell-input.ok { border-color: #52c41a; background: #f6ffed; color: #389e0d; }
-    .spell-submit {
-      width: 100%; margin-top: 10px; padding: 13px 12px;
-      font-size: 16px; font-weight: 800; color: #fff;
-      background: linear-gradient(135deg, #4f9fff, #6c63ff);
-      border: none; border-radius: 12px; cursor: pointer;
-      box-shadow: 0 6px 16px rgba(108, 99, 255, .28);
-    }
-    .spell-submit:active { transform: scale(.98); }
-    .spell-submit:disabled { opacity: .5; box-shadow: none; cursor: default; }
-    .spell-prompt .sp-cn { font-size: 24px; font-weight: 800; color: #3d3a86; line-height: 1.3; }
-    .spell-prompt .sp-ph { font-size: 12.5px; color: #98a0b8; margin-top: 4px; }
+    .spell-input::placeholder { color: #b3b9d2; font-weight: 500; letter-spacing: 0; font-size: 15px; }
+    .spell-input:focus { border-color: #b9c0ff; background: #fff; box-shadow: 0 0 0 4px rgba(108, 99, 255, .08); }
+    .spell-input.bad { border-color: #ff9b98; background: #fff5f4; color: #cf1322; animation: sp-shake .32s; }
+    .spell-input.ok { border-color: #a9dE8b; background: #f7fdef; color: #389e0d; }
     .spell-slots { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 14px; }
     .spell-slot {
       width: 40px; height: 46px;
@@ -748,32 +749,14 @@
     .spell-tile:active { transform: scale(0.92); }
     .spell-tile.used { visibility: hidden; pointer-events: none; }
     .spell-fb {
-      margin-top: 12px; text-align: center; padding: 12px; border-radius: 12px;
+      margin-top: 14px; text-align: center; padding: 12px; border-radius: 14px;
       font-size: 15px; font-weight: 600; line-height: 1.5;
     }
-    .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; animation: fb-pop-in .28s ease-out; }
-    .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; animation: fb-pop-in .28s ease-out; }
-    .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; animation: fb-pop-in .28s ease-out; }
-    .spell-acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
-    .spell-act {
-      border: none; border-radius: 12px; padding: 10px 3px; font-size: 12px; font-weight: 600;
-      background: #eef2ff; color: #5a54e8; cursor: pointer; min-height: 42px;
-      white-space: nowrap; overflow: hidden;
-    }
-    .spell-act:active { transform: scale(0.96); }
-    .spell-act:disabled { opacity: .45; cursor: default; transform: none; }
-    /* 删除按钮：紧跟字母格子下方，便于拇指操作 */
-    .spell-tools { display: flex; justify-content: center; margin-top: 10px; }
-    .spell-del-btn {
-      border: none; border-radius: 999px; padding: 10px 26px;
-      font-size: 13.5px; font-weight: 700;
-      background: #ffeeec; color: #cf1322; cursor: pointer; min-height: 40px;
-      display: inline-flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 6px rgba(207, 19, 34, 0.12);
-    }
-    .spell-del-btn:active { transform: scale(0.95); }
-    .spell-nav { display: flex; gap: 8px; margin-top: 12px; }
-    .spell-nav .btn { flex: 1; padding: 11px 8px; font-size: 14px; }
+    .spell-fb.ok { background: #f0f9ec; color: #389e0d; animation: fb-pop-in .28s ease-out; }
+    .spell-fb.bad { background: #fdf1f0; color: #cf1322; animation: fb-pop-in .28s ease-out; }
+    .spell-fb.info { background: #fdf8e8; color: #d48806; animation: fb-pop-in .28s ease-out; }
+    .spell-nav { display: flex; gap: 8px; margin-top: 14px; }
+    .spell-nav .btn { flex: 1; padding: 12px 8px; font-size: 14px; }
     .spell-done { text-align: center; padding: 18px 10px; }
     .spell-done .sd-emoji { font-size: 46px; }
     .spell-done .sd-title { font-size: 17px; font-weight: 800; color: #3d3a86; margin-top: 6px; }
@@ -6278,7 +6261,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<div class="sd-title">' + (done >= total ? '本单元全部拼完啦！' : '本单元单词已全部过一遍') + '</div>' +
         '<div class="sd-sub">本单元共 ' + total + ' 个单词，本轮拼对 ' + done + ' 个<br>可以换下一个单元，也再练一轮</div>' +
         '<div class="spell-nav" style="max-width:320px;margin:16px auto 0">' +
-        '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个单词</button>' +
+        '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个</button>' +
         '<button class="btn btn-primary" onclick="Spell.start(true)">🔄 再拼一轮</button>' +
         '</div>' +
         '<button class="btn btn-secondary nav-back-btn" style="margin-top:10px;width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
@@ -6295,7 +6278,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (!area) return;
       const w = this.current();
       if (!w) { this.finish(); return; }
-      const pct = Math.round((this.idx / this.pool.length) * 100);
       const last = this.idx >= this.pool.length - 1;
       const fbHtml = this.fb
         ? '<div class="spell-fb ' + this.fb.type + '">' + this.fb.html + '</div>'
@@ -6306,32 +6288,22 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       navHtml += '</div>';
       area.innerHTML =
         '<div class="spell-card">' +
-          '<div class="spell-top">' +
-            '<div>' +
-              '<div class="spell-title">🔤 单词拼写</div>' +
-              '<div class="spell-sub">本单元 ' + this.pool.length + ' 个单词 · 已拼对 ' + Object.keys(this.solved).length + ' 个</div>' +
-            '</div>' +
-            '<div style="font-size:13px;font-weight:700;color:#6c63ff;white-space:nowrap">第 ' + (this.idx + 1) + '/' + this.pool.length + '</div>' +
-          '</div>' +
-          '<div class="spell-bar"><i style="width:' + pct + '%"></i></div>' +
-          '<div class="spell-prompt">' +
+          '<div class="sp-caption">写出这个单词<span class="sp-prog">' + (this.idx + 1) + '/' + this.pool.length + '</span></div>' +
+          '<div class="sp-meaning">' +
             '<div class="sp-cn">' + escSpell(w.chinese) + '</div>' +
-            '<div class="sp-ph">共 ' + String(w.word).replace(/[^A-Za-z]/g, '').length + ' 个字母' +
-              (w.phonetic ? ' · ' + escSpell(w.phonetic) : '') + '</div>' +
-            '<button class="speak-btn" style="margin-top:8px" onclick="Spell.speak()">🔊 听发音</button>' +
+            '<button class="sp-speak" type="button" aria-label="听发音" onclick="Spell.speak()">🔊</button>' +
           '</div>' +
           '<div class="spell-input-wrap">' +
             '<input id="sp-input" class="spell-input' + (this.badFlash ? ' bad' : '') + (this.locked ? ' ok' : '') + '" ' +
               'type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ' +
-              'placeholder="请输入英文单词" value="' + escSpell(this.input) + '" ' +
+              'placeholder="直接用键盘输入，回车提交" value="' + escSpell(this.input) + '" ' +
               (this.locked ? 'readonly ' : '') +
               'oninput="Spell.onInput(this.value)" ' +
               'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Spell.submit();}">' +
           '</div>' +
-          '<button class="spell-submit" id="spell-submit-btn" type="button"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.submit()">提交</button>' +
           fbHtml +
           (last && this.locked
-            ? '<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="Spell.finish()">🎉 完成本单元</button>'
+            ? '<button class="btn btn-primary" style="width:100%;margin-top:14px" onclick="Spell.finish()">🎉 完成本单元</button>'
             : '') +
           navHtml +
         '</div>';
