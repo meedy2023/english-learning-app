@@ -1242,7 +1242,6 @@
 
   <!-- ======= KET 学习 ======= -->
   <div id="view-ket" class="view">
-    <div class="section-title">📚 KET 学习</div>
     <div id="ket-category-list" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
       <!-- 分类列表由 JS 动态生成 -->
     </div>
@@ -3946,18 +3945,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     });
   }
 
-  // ========== 短文阅读（逐句朗读/跟读）==========
-  let readingContent = null; // 当前短文的 sentences 数组
-
-  function speakReadingLine(text) {
-    if (!text) return;
-    TTS.speak(text, 'en-US');
-  }
-
-  // 短文（KET）整篇朗读：与课文共用同一套播放器
-  function speakAllReading() {
-    LessonReader.start(0);
-  }
   function speakWord(word) {
     if (!word) { toast("没有可发音的内容"); return; }
     TTS.speak(word, 'en-US');
@@ -6609,75 +6596,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   
-  // ========== KET 短文阅读 ==========
-  async function renderKetReading(category) {
-    try {
-      const data = await apiGET('/api/ket/reading?category=' + encodeURIComponent(category));
-      const reading = data.reading;
-      if (!reading || !reading.sentences || reading.sentences.length === 0) return;
-
-      readingContent = reading.sentences;
-
-      const contentArea = document.getElementById('ket-content-area');
-      const listEl = document.getElementById('ket-content-list');
-
-      // 移除旧的短文容器（若存在）
-      let oldReading = document.getElementById('ket-reading');
-      if (oldReading) oldReading.remove();
-
-      const readingDiv = document.createElement('div');
-      readingDiv.id = 'ket-reading';
-      readingDiv.style.cssText = 'margin-top:24px;padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba';
-
-      let linesHtml = reading.sentences.map((line, idx) => `
-        <div class="lr-line" data-idx="${idx}" style="padding:10px 12px;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px;border-radius:10px">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">${idx + 1}</span>
-            <span class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">${lrWordsHtml(line.en)}</span>
-            <button class="speak-btn" onclick="speakReadingLine('${esc(line.en)}')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
-            <button class="ra-btn" onclick="raToggleKet(this, '${esc(line.en)}')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>
-          </div>
-          <div style="font-size:13px;color:#999;padding-left:28px">${esc(line.zh)}</div>
-        </div>
-      `).join('');
-
-      readingDiv.innerHTML = `
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-          <div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ${esc(reading.title || '')}</div>
-          <button class="speak-btn" onclick="LessonReader.toggle()" style="padding:6px 16px;font-size:13px;background:#ffd666;color:#7a5c00;border:none;border-radius:8px;cursor:pointer">🔊 朗读全文</button>
-        </div>
-        ${linesHtml}
-        <!-- 朗读控制条：与课文一致，固定悬浮在底部导航上方 -->
-        <div class="lr-dock" id="ket-reader-dock" style="display:none">
-          <div class="lr-ctrl">
-            <button class="lr-ctrl-btn lr-ctrl-main" id="ket-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>
-            <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>
-          </div>
-          <div class="lr-bar" id="ket-read-bar" style="display:none"><i></i></div>
-          <div class="lr-progress" id="ket-read-progress" style="display:none"></div>
-        </div>
-      `;
-
-      contentArea.insertBefore(readingDiv, listEl.nextSibling);
-
-      // 绑定朗读播放器（与课文完全相同的播放/暂停/继续/重播/跳句/高亮逻辑）
-      const mainBtn = document.getElementById('ket-full-speak-btn');
-      if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
-      const rpBtn = document.getElementById('ket-replay-btn');
-      if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
-      LessonReader.bind(reading.sentences, {
-        scope: 'ket-reading',
-        dock: 'ket-reader-dock',
-        main: 'ket-full-speak-btn',
-        replay: 'ket-replay-btn',
-        progress: 'ket-read-progress',
-        bar: 'ket-read-bar',
-        label: '🔊 朗读全文'
-      });
-    } catch (e) {
-      console.error('加载短文失败:', e);
-    }
-  }
 
   
   // ========== KET 分页功能 ==========
@@ -6844,7 +6762,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         
         renderKetCurrentPage();
         renderKetPagination(ketCurrentItems.length);
-        renderKetReading(category);
         const qe = document.getElementById('ket-quiz-entry');
         if (qe) {
           qe.style.display = 'block';
