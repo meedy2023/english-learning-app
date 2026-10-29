@@ -3368,6 +3368,7 @@ const API = ".";
       stopAllAudio();
       this.clearPaint();
       if (!silent) { this.state = 'idle'; this.idx = -1; }
+      if (!silent || this.state === 'finished') this.restoreReadingSpace();
       this.updateUI();
       return this;
     },
@@ -3378,6 +3379,7 @@ const API = ".";
       const line = this.lines[this.idx];
       const tk = ++this.token;
       this.paintStates();
+      this.ensureReadingSpace();
       this.scrollIntoView(line.item);
       this.startAt = Date.now();
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
@@ -3412,6 +3414,7 @@ const API = ".";
       this.handle = null;
       this.paintStates();
       this.updateUI();
+      this.restoreReadingSpace();
       const result = Points.earn('lesson_full_read');
       if (result.success) {
         showPointsToast(result.points, Points.getMessage('lesson_full_read'));
@@ -3484,11 +3487,38 @@ const API = ".";
         if (done) w.el.classList.add('lr-word-done');
       });
     },
+    // ---- 朗读可视区保障：动态测量底部悬浮控制条 + 底部导航的实际遮挡高度 ----
+    dockCoverHeight() {
+      let dockH = 0;
+      const dock = this.UI('dock', 'lesson-reader-dock');
+      if (dock && dock.getBoundingClientRect) {
+        const dr = dock.getBoundingClientRect();
+        if (dr.height > 0) dockH = window.innerHeight - dr.top; // 控制条顶边到底部（含下方底部导航）
+      }
+      return Math.max(dockH, 150); // 兜底：控制条未取到时按最坏遮挡估算
+    },
+    ensureReadingSpace() {
+      try {
+        if (this._padBackup === undefined) {
+          this._padBackup = document.body.style.paddingBottom || '';
+        }
+        document.body.style.paddingBottom = (this.dockCoverHeight() + 16) + 'px';
+      } catch (e) {}
+    },
+    restoreReadingSpace() {
+      try {
+        if (this._padBackup !== undefined) {
+          document.body.style.paddingBottom = this._padBackup;
+          this._padBackup = undefined;
+        }
+      } catch (e) {}
+    },
     scrollIntoView(item) {
       if (!item || !item.getBoundingClientRect) return;
       try {
         const r = item.getBoundingClientRect();
-        if (r.top < 90 || r.bottom > window.innerHeight - 60) {
+        const bottomLimit = window.innerHeight - this.dockCoverHeight() - 12;
+        if (r.top < 90 || r.bottom > bottomLimit) {
           item.scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
       } catch (e) {}
