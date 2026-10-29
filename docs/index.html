@@ -822,6 +822,14 @@
     .do-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #8a6100; }
     .do-self { display: flex; gap: 8px; margin-top: 10px; }
     .do-self .btn { flex: 1; padding: 10px 8px; font-size: 13.5px; }
+    .do-reveal {
+      margin-top: 14px; padding: 16px 14px 14px; border-radius: 14px; text-align: center;
+      background: #f2f7ff; border: 2px solid #b7d4ff; animation: fb-pop-in .28s ease-out;
+    }
+    .do-reveal-word { font-size: 28px; font-weight: 800; color: #2b3a67; letter-spacing: 1.5px; }
+    .do-reveal-ph { font-size: 13px; color: #6b7290; margin-top: 3px; }
+    .do-reveal-cn { font-size: 15px; color: #444c66; font-weight: 600; margin-top: 6px; }
+    .do-reveal-tip { font-size: 12.5px; color: #7a829a; margin-top: 10px; }
     .do-acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
     .do-act {
       padding: 10px 6px; border-radius: 10px; border: 1px solid #ffe0b8;
@@ -6566,15 +6574,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     revealHand() {
       const w = this.current();
       if (!w) return;
-      if (!this.strokes.length) { toast('先手写一下答案吧'); return; }
+      if (!this.strokes.length) {
+        // 没写笔迹：给页面内可见的提示（不依赖一闪而过的 toast），并滚到画布
+        this.fb = { type: 'bad', html: '✍️ 先在方框里写出这个单词，再点「写完了」对答案' };
+        this.render();
+        this.scrollToCard(true);
+        return;
+      }
       this.phase = 'reveal';
-      this.fb = {
-        type: 'info',
-        html: '👀 正确写法是 <b style="font-size:17px">' + escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) +
-              '<div style="font-size:12.5px;margin-top:4px">对照你的手写看看，写得一样吗？</div>'
-      };
-      this.render();
+      this.fb = null;   // 答案卡自带说明，避免重复
+      this.render();    // render 会把手写画布就地替换成答案卡
+      this.scrollToCard(false);
       try { speakWord(w.word); } catch (e) {}
+    },
+
+    // 把答案卡（或画布）滚到视口中间，保证点完按钮立即看到结果
+    scrollToCard(toCanvas) {
+      setTimeout(function () {
+        const el = toCanvas
+          ? (document.querySelector('.do-canvas-box') || document.getElementById('do-reveal'))
+          : (document.getElementById('do-reveal') || document.querySelector('.do-canvas-box'));
+        if (!el || !el.scrollIntoView) return;
+        try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
+        catch (e) { try { el.scrollIntoView(); } catch (e2) {} }
+      }, 80);
     },
 
     selfJudge(ok) {
@@ -6583,8 +6606,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (ok) { this.phase = 'ask'; this.correct(w); return; }
       this.phase = 'ask';
       this.strokes = [];
-      this.fb = { type: 'bad', html: '没关系～跟着读音再写一遍，慢慢来' };
+      this.fb = { type: 'info', html: '没关系～再写一遍，可以点 🔊 听发音跟着读' };
       this.render();
+      this.scrollToCard(true);
       try { speakWord(w.word); } catch (e) {}
     },
 
@@ -6740,6 +6764,20 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (solved) {
         bodyHtml = '<div class="do-fb ok" style="margin-top:14px">🎉 写对啦！<b style="font-size:18px">' +
                    escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) + '</div>';
+      } else if (isHand && this.phase === 'reveal') {
+        // 手写对答案：就地替换画布为大字答案卡，保证在视口内立即可见
+        bodyHtml =
+          '<div class="do-reveal" id="do-reveal">' +
+            '<div class="do-reveal-word">' + escDoodle(answer) + '</div>' +
+            (w.phonetic ? '<div class="do-reveal-ph">' + escDoodle(w.phonetic) + '</div>' : '') +
+            '<div class="do-reveal-cn">' + escDoodle(w.chinese) + '</div>' +
+            '<button class="speak-btn" style="margin-top:10px" type="button" onclick="Doodle.speak()">🔊 听发音</button>' +
+            '<div class="do-reveal-tip">对照你刚才写的，写的一样吗？</div>' +
+            '<div class="do-self">' +
+              '<button class="btn btn-primary" type="button" onclick="Doodle.selfJudge(true)">✅ 我写对了</button>' +
+              '<button class="btn btn-secondary" type="button" onclick="Doodle.selfJudge(false)">❌ 再写一次</button>' +
+            '</div>' +
+          '</div>';
       } else if (isHand) {
         bodyHtml =
           '<div class="do-hand-wrap">' +
@@ -6767,16 +6805,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '</div>';
       }
 
-      // 反馈 + 手写自评
+      // 反馈
       let fbHtml = '';
       if (this.fb && !solved) {
         fbHtml = '<div class="do-fb ' + this.fb.type + '">' + this.fb.html + '</div>';
-      }
-      if (this.phase === 'reveal' && isHand) {
-        fbHtml += '<div class="do-self">' +
-          '<button class="btn btn-primary" type="button" onclick="Doodle.selfJudge(true)">✅ 我写对了</button>' +
-          '<button class="btn btn-secondary" type="button" onclick="Doodle.selfJudge(false)">❌ 再写一次</button>' +
-        '</div>';
       }
 
       // 导航
