@@ -650,50 +650,49 @@
     .match-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
     /* ---- 单词拼写重组 ---- */
     .spell-card {
-      background: #fdfdff;
-      border: 1px solid #f0f1fa;
-      border-radius: 24px;
-      padding: 26px 18px 18px;
-      box-shadow: 0 8px 28px rgba(108, 99, 255, 0.08);
+      background: #fff;
+      border: 1px solid #e8ecff;
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 6px 20px rgba(108, 99, 255, 0.10);
     }
     .spell-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
     .spell-title { font-size: 16px; font-weight: 800; color: #3d3a86; }
     .spell-sub { font-size: 12px; color: #98a0b8; margin-top: 3px; }
     .spell-bar { height: 6px; background: #eef0fb; border-radius: 3px; overflow: hidden; margin-top: 10px; }
     .spell-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #4f9fff, #6c63ff); border-radius: 3px; transition: width .3s; }
-    /* 极简拼写：小灰字提示 + 大字词义 + 圆形发音钮 */
-    .sp-caption {
-      text-align: center; font-size: 13px; font-weight: 500; color: #a6adc9;
-      letter-spacing: 1px;
+    .spell-prompt {
+      margin-top: 14px;
+      text-align: center;
+      background: linear-gradient(135deg, #f4f7ff, #eef2ff);
+      border: 1px dashed #c9d4ff;
+      border-radius: 14px;
+      padding: 12px 10px;
     }
-    .sp-caption .sp-prog { margin-left: 8px; color: #c3c8de; font-size: 12px; }
-    .sp-meaning {
-      margin-top: 10px;
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-    }
-    .sp-cn { font-size: 22px; font-weight: 800; color: #2c3050; line-height: 1.35; text-align: center; }
-    .sp-speak {
-      width: 38px; height: 38px; flex: 0 0 38px;
-      border-radius: 50%; border: 1px solid #eceef8;
-      background: #fff; cursor: pointer;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 16px; box-shadow: 0 2px 8px rgba(60, 70, 130, 0.10);
-      transition: transform .12s;
-    }
-    .sp-speak:active { transform: scale(.92); }
-    /* 输入框式拼写（极简） */
-    .spell-input-wrap { margin-top: 18px; }
+    /* 输入框式拼写 */
+    .spell-input-wrap { margin-top: 14px; }
     .spell-input {
       width: 100%; box-sizing: border-box;
-      padding: 17px 16px; font-size: 16px; font-weight: 600; text-align: left; letter-spacing: 0.5px;
-      color: #2c3050; background: #f3f4fa;
-      border: 1.5px solid transparent; border-radius: 16px; outline: none;
+      padding: 13px 14px; font-size: 18px; font-weight: 600; text-align: center; letter-spacing: 1px;
+      color: #3d3a86; background: #fbfcff;
+      border: 2px solid #cfd7ff; border-radius: 12px; outline: none;
       transition: border-color .15s, background .15s, box-shadow .15s;
     }
-    .spell-input::placeholder { color: #b3b9d2; font-weight: 500; letter-spacing: 0; font-size: 15px; }
-    .spell-input:focus { border-color: #b9c0ff; background: #fff; box-shadow: 0 0 0 4px rgba(108, 99, 255, .08); }
-    .spell-input.bad { border-color: #ff9b98; background: #fff5f4; color: #cf1322; animation: sp-shake .32s; }
-    .spell-input.ok { border-color: #a9dE8b; background: #f7fdef; color: #389e0d; }
+    .spell-input::placeholder { color: #b9c0d8; font-weight: 500; letter-spacing: 0; font-size: 15px; }
+    .spell-input:focus { border-color: #6c63ff; background: #fff; box-shadow: 0 0 0 3px rgba(108, 99, 255, .14); }
+    .spell-input.bad { border-color: #ff7875; background: #fff1f0; color: #cf1322; animation: sp-shake .32s; }
+    .spell-input.ok { border-color: #52c41a; background: #f6ffed; color: #389e0d; }
+    .spell-submit {
+      width: 100%; margin-top: 10px; padding: 13px 12px;
+      font-size: 16px; font-weight: 800; color: #fff;
+      background: linear-gradient(135deg, #4f9fff, #6c63ff);
+      border: none; border-radius: 12px; cursor: pointer;
+      box-shadow: 0 6px 16px rgba(108, 99, 255, .28);
+    }
+    .spell-submit:active { transform: scale(.98); }
+    .spell-submit:disabled { opacity: .5; box-shadow: none; cursor: default; }
+    .spell-prompt .sp-cn { font-size: 24px; font-weight: 800; color: #3d3a86; line-height: 1.3; }
+    .spell-prompt .sp-ph { font-size: 12.5px; color: #98a0b8; margin-top: 4px; }
     .spell-slots { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 14px; }
     .spell-slot {
       width: 40px; height: 46px;
@@ -749,34 +748,61 @@
     .spell-tile:active { transform: scale(0.92); }
     .spell-tile.used { visibility: hidden; pointer-events: none; }
     .spell-fb {
-      margin-top: 14px; text-align: center; padding: 12px; border-radius: 14px;
+      margin-top: 12px; text-align: center; padding: 12px; border-radius: 12px;
       font-size: 15px; font-weight: 600; line-height: 1.5;
     }
-    .spell-fb.ok { background: #f0f9ec; color: #389e0d; animation: fb-pop-in .28s ease-out; }
-    .spell-fb.bad { background: #fdf1f0; color: #cf1322; animation: fb-pop-in .28s ease-out; }
-    .spell-fb.info { background: #fdf8e8; color: #d48806; animation: fb-pop-in .28s ease-out; }
-    .spell-nav { display: flex; gap: 8px; margin-top: 14px; }
-    .spell-nav .btn { flex: 1; padding: 12px 8px; font-size: 14px; }
+    .spell-fb.ok { background: #f6ffed; border: 1px solid #b7eb8f; color: #389e0d; animation: fb-pop-in .28s ease-out; }
+    .spell-fb.bad { background: #fff1f0; border: 1px solid #ffccc7; color: #cf1322; animation: fb-pop-in .28s ease-out; }
+    .spell-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #d48806; animation: fb-pop-in .28s ease-out; }
+    .spell-acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
+    .spell-act {
+      border: none; border-radius: 12px; padding: 10px 3px; font-size: 12px; font-weight: 600;
+      background: #eef2ff; color: #5a54e8; cursor: pointer; min-height: 42px;
+      white-space: nowrap; overflow: hidden;
+    }
+    .spell-act:active { transform: scale(0.96); }
+    .spell-act:disabled { opacity: .45; cursor: default; transform: none; }
+    /* 删除按钮：紧跟字母格子下方，便于拇指操作 */
+    .spell-tools { display: flex; justify-content: center; margin-top: 10px; }
+    .spell-del-btn {
+      border: none; border-radius: 999px; padding: 10px 26px;
+      font-size: 13.5px; font-weight: 700;
+      background: #ffeeec; color: #cf1322; cursor: pointer; min-height: 40px;
+      display: inline-flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 6px rgba(207, 19, 34, 0.12);
+    }
+    .spell-del-btn:active { transform: scale(0.95); }
+    .spell-nav { display: flex; gap: 8px; margin-top: 12px; }
+    .spell-nav .btn { flex: 1; padding: 11px 8px; font-size: 14px; }
     .spell-done { text-align: center; padding: 18px 10px; }
     .spell-done .sd-emoji { font-size: 46px; }
     .spell-done .sd-title { font-size: 17px; font-weight: 800; color: #3d3a86; margin-top: 6px; }
     .spell-done .sd-sub { font-size: 13px; color: #7a829a; margin-top: 6px; line-height: 1.6; }
     /* ---- 单词随手拼（看中文写英文，键盘 / 手写两种模式） ---- */
     .do-card {
-      background: #fff; border: 1px solid #ffe6c7; border-radius: 18px;
-      padding: 14px; box-shadow: 0 6px 20px rgba(255, 159, 67, 0.12);
+      background: #fffdfa; border: 1px solid #fbeadb; border-radius: 24px;
+      padding: 26px 18px 18px; box-shadow: 0 8px 28px rgba(255, 159, 67, 0.10);
     }
-    .do-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-    .do-title { font-size: 16px; font-weight: 800; color: #7a4b00; }
-    .do-sub { font-size: 12px; color: #a08a6a; margin-top: 3px; }
-    .do-bar { height: 6px; background: #fff2e0; border-radius: 3px; overflow: hidden; margin-top: 10px; }
-    .do-bar > i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ffb347, #ff6b9d); border-radius: 3px; transition: width .3s; }
-    .do-prompt {
-      margin-top: 14px; text-align: center;
-      background: linear-gradient(135deg, #fff8ee, #fff1f6);
-      border: 1px dashed #ffd7a8; border-radius: 14px; padding: 14px 10px;
+    /* 极简：小灰字提示 + 大字词义 + 圆形发音钮 */
+    .do-caption { text-align: center; font-size: 13px; font-weight: 500; color: #b9a488; letter-spacing: 1px; }
+    .do-caption .do-prog { margin-left: 8px; color: #d3c4ae; font-size: 12px; }
+    .do-meaning { margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .do-meaning .do-cn { font-size: 22px; font-weight: 800; color: #4a3410; line-height: 1.35; text-align: center; word-break: break-word; }
+    .do-speak {
+      width: 38px; height: 38px; flex: 0 0 38px;
+      border-radius: 50%; border: 1px solid #f6e6d2; background: #fff; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 16px; box-shadow: 0 2px 8px rgba(150, 110, 50, .12);
+      transition: transform .12s;
     }
-    .do-cn { font-size: 24px; font-weight: 800; color: #7a4b00; line-height: 1.35; word-break: break-word; }
+    .do-speak:active { transform: scale(.92); }
+    /* 卡片底部：极简文字入口（返回 / 切换输入方式），不占主视觉 */
+    .do-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 16px; }
+    .do-link {
+      background: none; border: none; padding: 2px 0;
+      font-size: 12.5px; color: #bda88d; cursor: pointer; font-family: inherit;
+    }
+    .do-link:active { opacity: .55; }
     .do-hint { font-size: 12.5px; color: #a08a6a; margin-top: 6px; }
     .do-modes { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
     .do-mode {
@@ -788,16 +814,17 @@
       background: linear-gradient(135deg, #ffb347, #ff8a3d); color: #fff;
       border-color: transparent; box-shadow: 0 4px 14px rgba(255, 145, 60, .3);
     }
-    .do-input-wrap { margin-top: 14px; }
+    .do-input-wrap { margin-top: 18px; }
     .do-input {
-      width: 100%; box-sizing: border-box; padding: 13px 14px;
-      font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-align: center;
-      border: 2px solid #ffe0b8; border-radius: 14px; outline: none;
-      color: #7a4b00; background: #fffdf8; transition: border-color .15s, box-shadow .15s;
+      width: 100%; box-sizing: border-box; padding: 17px 16px;
+      font-size: 16px; font-weight: 600; letter-spacing: .5px; text-align: left;
+      border: 1.5px solid transparent; border-radius: 16px; outline: none;
+      color: #4a3410; background: #faf6f0; transition: border-color .15s, box-shadow .15s, background .15s;
     }
-    .do-input:focus { border-color: #ffb347; box-shadow: 0 0 0 4px rgba(255, 179, 71, .18); }
-    .do-input.ok { border-color: #52c41a; background: #f6fff2; color: #227a12; }
-    .do-input.bad { border-color: #ff7875; background: #fff5f5; animation: do-shake .32s; }
+    .do-input::placeholder { color: #c9b79f; font-weight: 500; letter-spacing: 0; font-size: 15px; }
+    .do-input:focus { border-color: #ffd699; background: #fff; box-shadow: 0 0 0 4px rgba(255, 179, 71, .10); }
+    .do-input.ok { border-color: #a9de8b; background: #f7fdf2; color: #227a12; }
+    .do-input.bad { border-color: #ff9b98; background: #fff6f5; animation: do-shake .32s; }
     @keyframes do-shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-6px); }
@@ -822,9 +849,9 @@
       margin-top: 12px; padding: 12px 14px; border-radius: 12px;
       font-size: 14px; line-height: 1.6; animation: fb-pop-in .25s ease;
     }
-    .do-fb.ok { background: #f2fff0; border: 1px solid #b7eb8f; color: #227a12; }
-    .do-fb.bad { background: #fff5f5; border: 1px solid #ffc7c7; color: #a8071a; }
-    .do-fb.info { background: #fffbe6; border: 1px solid #ffe58f; color: #8a6100; }
+    .do-fb.ok { background: #f1f9ee; color: #227a12; }
+    .do-fb.bad { background: #fdf3f2; color: #a8071a; }
+    .do-fb.info { background: #fdf8ea; color: #8a6100; }
     .do-self { display: flex; gap: 8px; margin-top: 10px; }
     .do-self .btn { flex: 1; padding: 10px 8px; font-size: 13.5px; }
     .do-reveal {
@@ -6151,8 +6178,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 载入当前单词：清空输入，准备拼写
     load() {
-      if (this._advTimer) { clearTimeout(this._advTimer); this._advTimer = null; }
-      this._advPending = false;
       const w = this.pool[this.idx];
       if (!w) { this.finish(); return; }
       this.input = '';
@@ -6177,25 +6202,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     submit() {
       const w = this.current();
       if (!w) return;
-      if (this.locked) { toast('这一题已经拼对啦，马上进入下一题'); return; }
-      if (this._advPending) return;   // 已提交，等待自动进入下一题
+      if (this.locked) { toast('这一题已经拼对啦，点「下一个」继续'); return; }
       const val = String(this.input || '').trim().toLowerCase().replace(/\s+/g, '');
       const answer = String(w.word).trim().toLowerCase().replace(/\s+/g, '');
       if (!val) { toast('请输入英文单词'); return; }
       if (val === answer) this.correct(w);
       else this.wrong(w, String(this.input || '').trim(), String(w.word));
-    },
-
-    // 提交后自动进入下一题（卡片不放任何导航按钮）
-    scheduleNext(delay) {
-      const self = this;
-      if (this._advTimer) { clearTimeout(this._advTimer); }
-      this._advPending = true;
-      this._advTimer = setTimeout(function () {
-        self._advTimer = null;
-        self._advPending = false;
-        self.next();
-      }, delay);
     },
 
     correct(w) {
@@ -6229,17 +6241,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           updatePointsDisplay();
         }
       }
-      this.scheduleNext(1400);      // 答对：稍作停留后自动下一题
     },
 
     wrong(w, input, answer) {
       this.wrongCount++;
       this.badFlash = true;
       this.input = '';
-      this._advPending = true;      // 已提交，等待自动进入下一题（输入框置只读）
       this.fb = {
         type: 'bad',
-        html: '不对哦，正确拼写是：<b style="font-size:17px">' + answer + '</b>'
+        html: '❌ 错误，正确答案是：<b style="font-size:17px">' + answer + '</b>' +
+              '<div style="font-size:12.5px;color:#a8071a;margin-top:4px">' +
+              (w.chinese ? escSpell(w.chinese) + ' · ' : '') + '点「下一个」继续，或再想想拼写</div>'
       };
       this.render();
       Celebrate.wrong();            // 答错：提示音 + 震动
@@ -6249,7 +6261,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         self.badFlash = false;
         self.render();
       }, 500);
-      this.scheduleNext(2400);      // 答错：留出看清正确拼写的时间后自动下一题
     },
 
     prev() {
@@ -6294,27 +6305,47 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (!area) return;
       const w = this.current();
       if (!w) { this.finish(); return; }
+      const pct = Math.round((this.idx / this.pool.length) * 100);
+      const last = this.idx >= this.pool.length - 1;
       const fbHtml = this.fb
         ? '<div class="spell-fb ' + this.fb.type + '">' + this.fb.html + '</div>'
         : '';
+      let navHtml = '<div class="spell-nav">';
+      if (this.idx > 0) navHtml += '<button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button>';
+      if (!last) navHtml += '<button class="btn btn-primary" id="spell-next-btn" onclick="Spell.next()">下一个 →</button>';
+      navHtml += '</div>';
       area.innerHTML =
         '<div class="spell-card">' +
-          '<div class="sp-caption">写出这个单词<span class="sp-prog">' + (this.idx + 1) + '/' + this.pool.length + '</span></div>' +
-          '<div class="sp-meaning">' +
+          '<div class="spell-top">' +
+            '<div>' +
+              '<div class="spell-title">🔤 单词拼写</div>' +
+              '<div class="spell-sub">本单元 ' + this.pool.length + ' 个单词 · 已拼对 ' + Object.keys(this.solved).length + ' 个</div>' +
+            '</div>' +
+            '<div style="font-size:13px;font-weight:700;color:#6c63ff;white-space:nowrap">第 ' + (this.idx + 1) + '/' + this.pool.length + '</div>' +
+          '</div>' +
+          '<div class="spell-bar"><i style="width:' + pct + '%"></i></div>' +
+          '<div class="spell-prompt">' +
             '<div class="sp-cn">' + escSpell(w.chinese) + '</div>' +
-            '<button class="sp-speak" type="button" aria-label="听发音" onclick="Spell.speak()">🔊</button>' +
+            '<div class="sp-ph">共 ' + String(w.word).replace(/[^A-Za-z]/g, '').length + ' 个字母' +
+              (w.phonetic ? ' · ' + escSpell(w.phonetic) : '') + '</div>' +
+            '<button class="speak-btn" style="margin-top:8px" onclick="Spell.speak()">🔊 听发音</button>' +
           '</div>' +
           '<div class="spell-input-wrap">' +
             '<input id="sp-input" class="spell-input' + (this.badFlash ? ' bad' : '') + (this.locked ? ' ok' : '') + '" ' +
               'type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ' +
-              'placeholder="直接用键盘输入，回车提交" value="' + escSpell(this.input) + '" ' +
-              (this.locked || this._advPending ? 'readonly ' : '') +
+              'placeholder="请输入英文单词" value="' + escSpell(this.input) + '" ' +
+              (this.locked ? 'readonly ' : '') +
               'oninput="Spell.onInput(this.value)" ' +
               'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Spell.submit();}">' +
           '</div>' +
+          '<button class="spell-submit" id="spell-submit-btn" type="button"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.submit()">提交</button>' +
           fbHtml +
+          (last && this.locked
+            ? '<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="Spell.finish()">🎉 完成本单元</button>'
+            : '') +
+          navHtml +
         '</div>';
-      if (!this.locked && !this._advPending) {
+      if (!this.locked) {
         setTimeout(function () {
           const inp = document.getElementById('sp-input');
           if (inp) { try { inp.focus(); const n = inp.value.length; inp.setSelectionRange(n, n); } catch (e) {} }
@@ -6364,6 +6395,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         hide: opts.hide || []
       };
       this.queue = shuffle(words.slice());
+      this.clearAdvance();
       this.idx = 0; this.done = {}; this.mode = 'keys'; this.phase = 'ask';
       this.tries = 0; this.hint = false; this.input = ''; this.fb = null; this.strokes = [];
       if (this.scope.hide.length) this.hideSiblings(this.scope.hide);
@@ -6378,6 +6410,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const m = document.getElementById(this.scope.mountId);
         if (m) { m.style.display = 'none'; m.innerHTML = ''; }
       }
+      this.clearAdvance();
       this.scope = null; this.queue = []; this.idx = 0; this.done = {};
       this.strokes = []; this.fb = null; this.phase = 'ask'; this.input = '';
       this._ctx = null;
@@ -6427,11 +6460,29 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     submit() {
       const w = this.current();
       if (!w) return;
+      if (this.phase === 'ok' || this._advPending) return;
       const val = String(this.input || '').trim().toLowerCase().replace(/\s+/g, ' ');
       const ans = String(w.word).toLowerCase().replace(/\s+/g, ' ');
       if (!val) { toast('先写一下答案吧'); return; }
       if (val === ans) this.correct(w);
       else this.wrong(w, this.input.trim());
+    },
+
+    // 提交后自动进入下一题（卡片内不放任何导航按钮）
+    scheduleNext(delay) {
+      const self = this;
+      if (this._advTimer) { clearTimeout(this._advTimer); }
+      this._advPending = true;
+      this._advTimer = setTimeout(function () {
+        self._advTimer = null;
+        self._advPending = false;
+        self.next();
+      }, delay);
+    },
+
+    clearAdvance() {
+      if (this._advTimer) { clearTimeout(this._advTimer); this._advTimer = null; }
+      this._advPending = false;
     },
 
     hintFirst() {
@@ -6464,29 +6515,27 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
       this.fb = {
         type: 'ok',
-        html: '🎉 写对啦！<b style="font-size:17px">' + escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) + extra
+        html: '✅ 正确<b style="font-size:17px;margin-left:6px">' + escDoodle(w.word) + '</b>' + extra
       };
       this.render();
+      this.scheduleNext(1400);      // 答对：稍作停留后自动下一题
     },
 
     wrong(w, val) {
       this.tries++;
       try { Celebrate.wrong(); } catch (e) {}
       const ans = String(w.word);
-      let tip = '再试一次，注意字母顺序';
-      if (this.tries >= 3) {
-        tip = '正确写法是 <b style="font-size:17px">' + escDoodle(ans) + '</b>，跟着读一遍再写';
-        this.input = '';
-      } else if (this.tries === 2) {
-        tip = '提示：首字母是 <b>' + escDoodle(ans.slice(0, 1).toUpperCase()) + '</b>';
-        this.hint = true;
-      }
+      try { speakWord(ans); } catch (e) {}
+      this.input = '';
+      this._badFlash = true;
+      this._advPending = true;      // 已提交，等看完正确答案后自动下一题
       this.fb = {
         type: 'bad',
-        html: '❌ <b>' + escDoodle(val || '') + '</b> 还差一点～<div style="margin-top:4px">' + tip + '</div>'
+        html: '不对哦，正确拼写是：<b style="font-size:17px">' + escDoodle(ans) + '</b>'
       };
-      this._wantFocus = true;
       this.render();
+      setTimeout(function () { Doodle._badFlash = false; const i = document.getElementById('do-input'); if (i) i.classList.remove('bad'); }, 500);
+      this.scheduleNext(2400);      // 答错：留出看清拼写的时间后自动下一题
     },
 
     // ---- 手写模式 ----
@@ -6604,6 +6653,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     switchMode(m) {
       if (this.mode === m) return;
       this.mode = m;
+      this.clearAdvance();
       this.phase = 'ask';
       this.strokes = [];
       this.fb = null;
@@ -6612,6 +6662,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     resetQ() {
+      this.clearAdvance();
+      this._badFlash = false;
       this.phase = 'ask'; this.tries = 0; this.hint = false;
       this.input = ''; this.fb = null; this.strokes = [];
       this.render();
@@ -6678,12 +6730,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       let hintText = '共 ' + letters + ' 个字母' + (w.phonetic ? ' · ' + escDoodle(w.phonetic) : '');
       if (this.hint) hintText += ' · 首字母 <b>' + escDoodle(answer.slice(0, 1).toUpperCase()) + '</b>';
 
-      // 答题区
+      // 答题区（写对后由反馈条统一呈现结果）
       let bodyHtml = '';
-      if (solved) {
-        bodyHtml = '<div class="do-fb ok" style="margin-top:14px">🎉 写对啦！<b style="font-size:18px">' +
-                   escDoodle(w.word) + '</b> ' + escDoodle(w.chinese) + '</div>';
-      } else if (isHand && this.phase === 'reveal') {
+      if (isHand && this.phase === 'reveal') {
         // 手写对答案：就地替换画布为大字答案卡，保证在视口内立即可见
         bodyHtml =
           '<div class="do-reveal" id="do-reveal">' +
@@ -6713,64 +6762,43 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       } else {
         bodyHtml =
           '<div class="do-input-wrap">' +
-            '<input id="do-input" class="do-input" type="text" autocomplete="off" autocorrect="off" ' +
-              'autocapitalize="none" spellcheck="false" placeholder="在这里打出英文单词" value="' + escDoodle(this.input) + '" ' +
+            '<input id="do-input" class="do-input' + (this._badFlash ? ' bad' : '') + '" type="text" autocomplete="off" autocorrect="off" ' +
+              'autocapitalize="none" spellcheck="false" placeholder="直接用键盘输入，回车提交" value="' + escDoodle(this.input) + '" ' +
+              (solved || this._advPending ? 'readonly ' : '') +
               'oninput="Doodle.onInput(this.value)" ' +
               'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Doodle.submit();}">' +
-          '</div>' +
-          '<div class="do-acts" style="grid-template-columns:repeat(2,minmax(0,1fr))">' +
-            '<button class="do-act" type="button" onclick="Doodle.submit()">✅ 确定</button>' +
-            '<button class="do-act" type="button" onclick="Doodle.hintFirst()">💡 提示首字母</button>' +
           '</div>';
       }
 
       // 反馈
       let fbHtml = '';
-      if (this.fb && !solved) {
+      if (this.fb) {
         fbHtml = '<div class="do-fb ' + this.fb.type + '">' + this.fb.html + '</div>';
       }
 
-      // 导航
-      let navHtml = '<div class="do-nav">';
-      if (this.idx > 0) navHtml += '<button class="btn btn-secondary" type="button" onclick="Doodle.prev()">← 上一个</button>';
-      if (!solved) navHtml += '<button class="btn btn-secondary" type="button" onclick="Doodle.skip()">⏭ 跳过</button>';
-      if (this.idx < total - 1) {
-        navHtml += '<button class="btn btn-primary" type="button" onclick="Doodle.next()">下一个 →</button>';
-      } else {
-        navHtml += '<button class="btn btn-primary" type="button" onclick="Doodle.finish()">🏁 完成</button>';
-      }
-      navHtml += '</div>';
+      // 底部只留两枚不起眼的小文字入口：返回 / 切换输入方式
+      const footHtml =
+        '<div class="do-foot">' +
+          '<button class="do-link" type="button" onclick="Doodle.back()">← ' + escDoodle(this.scope.backLabel) + '</button>' +
+          '<button class="do-link" type="button" onclick="Doodle.switchMode(\'' + (isHand ? 'keys' : 'hand') + '\')">' +
+            (isHand ? '⌨️ 用键盘输入' : '✍️ 用手写输入') +
+          '</button>' +
+        '</div>';
 
       mount.innerHTML =
         '<div class="do-card">' +
-          '<div class="do-top">' +
-            '<div>' +
-              '<div class="do-title">✍️ 单词随手拼</div>' +
-              '<div class="do-sub">' + escDoodle(label) + ' · 共 ' + total + ' 个词 · 已写对 ' + right + ' 个</div>' +
-            '</div>' +
-            '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">' +
-              '<div style="font-size:13px;font-weight:700;color:#d4801a;white-space:nowrap">第 ' + (this.idx + 1) + '/' + total + '</div>' +
-              '<button class="btn btn-sm btn-secondary nav-back-btn" style="padding:5px 10px;font-size:12px" type="button" onclick="Doodle.back()">← ' + escDoodle(this.scope.backLabel) + '</button>' +
-            '</div>' +
-          '</div>' +
-          '<div class="do-bar"><i style="width:' + pct + '%"></i></div>' +
-          '<div class="do-prompt">' +
+          '<div class="do-caption">写出这个单词<span class="do-prog">' + (this.idx + 1) + '/' + total + '</span></div>' +
+          '<div class="do-meaning">' +
             '<div class="do-cn">' + escDoodle(w.chinese) + '</div>' +
-            '<div class="do-hint">看中文，写出英文单词 · ' + hintText + '</div>' +
-            '<button class="speak-btn" style="margin-top:8px" type="button" onclick="Doodle.speak()">🔊 听发音</button>' +
-          '</div>' +
-          '<div class="do-modes">' +
-            '<button class="do-mode' + (isHand ? '' : ' on') + '" type="button" onclick="Doodle.switchMode(\'keys\')">⌨️ 键盘输入</button>' +
-            '<button class="do-mode' + (isHand ? ' on' : '') + '" type="button" onclick="Doodle.switchMode(\'hand\')">✍️ 手写</button>' +
+            '<button class="do-speak" type="button" aria-label="听发音" onclick="Doodle.speak()">🔊</button>' +
           '</div>' +
           bodyHtml +
           fbHtml +
-          navHtml +
+          footHtml +
         '</div>';
 
       if (isHand) this.initCanvas();
-      if (!isHand && !solved && this._wantFocus) {
-        this._wantFocus = false;
+      if (!isHand && !solved && !this._advPending) {
         const inp = document.getElementById('do-input');
         if (inp) { try { inp.focus(); const n = inp.value.length; inp.setSelectionRange(n, n); } catch (e) {} }
       }
