@@ -669,29 +669,7 @@
       border-radius: 14px;
       padding: 12px 10px;
     }
-    /* 输入框式拼写 */
-    .spell-input-wrap { margin-top: 14px; }
-    .spell-input {
-      width: 100%; box-sizing: border-box;
-      padding: 13px 14px; font-size: 18px; font-weight: 600; text-align: center; letter-spacing: 1px;
-      color: #3d3a86; background: #fbfcff;
-      border: 2px solid #cfd7ff; border-radius: 12px; outline: none;
-      transition: border-color .15s, background .15s, box-shadow .15s;
-    }
-    .spell-input::placeholder { color: #b9c0d8; font-weight: 500; letter-spacing: 0; font-size: 15px; }
-    .spell-input:focus { border-color: #6c63ff; background: #fff; box-shadow: 0 0 0 3px rgba(108, 99, 255, .14); }
-    .spell-input.bad { border-color: #ff7875; background: #fff1f0; color: #cf1322; animation: sp-shake .32s; }
-    .spell-input.ok { border-color: #52c41a; background: #f6ffed; color: #389e0d; }
-    .spell-submit {
-      width: 100%; margin-top: 10px; padding: 13px 12px;
-      font-size: 16px; font-weight: 800; color: #fff;
-      background: linear-gradient(135deg, #4f9fff, #6c63ff);
-      border: none; border-radius: 12px; cursor: pointer;
-      box-shadow: 0 6px 16px rgba(108, 99, 255, .28);
-    }
-    .spell-submit:active { transform: scale(.98); }
-    .spell-submit:disabled { opacity: .5; box-shadow: none; cursor: default; }
-    .spell-prompt .sp-cn { font-size: 24px; font-weight: 800; color: #3d3a86; line-height: 1.3; }
+    .spell-prompt .sp-cn { font-size: 17px; font-weight: 700; color: #3d3a86; }
     .spell-prompt .sp-ph { font-size: 12.5px; color: #98a0b8; margin-top: 4px; }
     .spell-slots { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 14px; }
     .spell-slot {
@@ -6107,10 +6085,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     pool: [],      // 本单元可拼写的单词
     idx: 0,
     tiles: [],     // [{id, ch, used}] 打乱后的字母块
+    slots: [],     // [{ch, tileId}] 已填字母槽
     solved: {},    // 本轮拼对的单词 id
     locked: false, // 判定为正确后锁定（不再接受修改）
-    input: '',     // 输入框内容
-    wrongCount: 0, // 本题答错次数
     fb: null,      // {type:'ok'|'bad'|'info', html:''}
     badFlash: false,
 
@@ -6139,8 +6116,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.solved = {};
       this.fb = null;
       this.badFlash = false;
-      this.input = '';
-      this.locked = false;
       // 记住上一次玩到第几个单词（换单元后从头开始）
       if (!fresh) {
         const saved = parseInt(localStorage.getItem(this.progressKey()) || '0', 10);
@@ -6176,13 +6151,25 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    // 载入当前单词：清空输入，准备拼写
-    load() {
+    // 载入当前单词：拆成字母块并打乱（保证打乱结果不等于原单词）
+    load(shuffleRandom) {
       const w = this.pool[this.idx];
       if (!w) { this.finish(); return; }
-      this.input = '';
+      const letters = String(w.word).toLowerCase().split('');
+      const order = shuffle(letters.map(function (ch, i) { return i; }));
+      let seq = order.map(function (i) { return letters[i]; }).join('');
+      const target = letters.join('');
+      // 全随机可能刚好拼出正确顺序，重排几次避免“一进来就是答案”
+      for (let t = 0; t < 8 && seq === target && target.length > 1; t++) {
+        const o2 = shuffle(letters.map(function (ch, i) { return i; }));
+        seq = o2.map(function (i) { return letters[i]; }).join('');
+      }
+      const self = this;
+      this.tiles = seq.split('').map(function (ch, i) {
+        return { id: 't' + i + '_' + ch + '_' + i, ch: ch, used: false };
+      });
+      this.slots = letters.map(function () { return { ch: null, tileId: null }; });
       this.locked = false;
-      this.wrongCount = 0;
       this.badFlash = false;
       this.fb = null;
       localStorage.setItem(this.progressKey(), String(this.idx));
@@ -6191,23 +6178,52 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     current() { return this.pool[this.idx]; },
 
-    // 输入框内容变化
-    onInput(v) {
+    // 点击字母块 → 放进第一个空格子
+    pickTile(tileId) {
       if (this.locked) return;
-      this.input = String(v || '');
-      // 重新输入时清掉上一次的反馈
-      if (this.fb && this.fb.auto) { this.fb = null; this.render(); }
+      const t = this.tiles.filter(function (x) { return x.id === tileId && !x.used; })[0];
+      if (!t) return;
+      const slot = this.slots.filter(function (s) { return s.ch === null; })[0];
+      if (!slot) return;
+      slot.ch = t.ch;
+      slot.tileId = t.id;
+      t.used = true;
+      this.fb = null;
+      this.badFlash = false;
+      this.render();
+      if (this.slots.every(function (s) { return s.ch !== null; })) this.check();
     },
 
-    submit() {
+    // 点击已填的格子 → 字母退回原位
+    pickSlot(i) {
+      if (this.locked) return;
+      const s = this.slots[i];
+      if (!s || s.ch === null) return;
+      const t = this.tiles.filter(function (x) { return x.id === s.tileId; })[0];
+      if (t) t.used = false;
+      s.ch = null;
+      s.tileId = null;
+      this.fb = null;
+      this.badFlash = false;
+      this.render();
+    },
+
+    // 删除：退掉最后一个已填的字母（复用 pickSlot 的退回逻辑）
+    del() {
+      if (this.locked) { toast('已经拼对啦，点「下一个」继续'); return; }
+      let last = -1;
+      this.slots.forEach(function (s, i) { if (s.ch !== null) last = i; });
+      if (last < 0) { toast('还没有填入字母'); return; }
+      this.pickSlot(last);
+    },
+
+    check() {
       const w = this.current();
       if (!w) return;
-      if (this.locked) { toast('这一题已经拼对啦，点「下一个」继续'); return; }
-      const val = String(this.input || '').trim().toLowerCase().replace(/\s+/g, '');
-      const answer = String(w.word).trim().toLowerCase().replace(/\s+/g, '');
-      if (!val) { toast('请输入英文单词'); return; }
-      if (val === answer) this.correct(w);
-      else this.wrong(w, String(this.input || '').trim(), String(w.word));
+      const answer = String(w.word).toLowerCase();
+      const input = this.slots.map(function (s) { return s.ch; }).join('').toLowerCase();
+      if (input === answer) this.correct(w);
+      else this.wrong(input, answer);
     },
 
     correct(w) {
@@ -6217,9 +6233,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const self = this;
       this.fb = {
         type: 'ok',
-        html: '✅ 正确<div style="font-size:13px;color:#5b8a3a;margin-top:4px">' + String(w.word) + ' ' + (w.chinese || '') + '</div>'
+        html: '🎉 拼写正确！<b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '')
       };
-      this.render();
+      this.render(true);
       Celebrate.correct();          // 答对：撒花 + 提示音
       try { speakWord(w.word); } catch (e) {}
       let earned = 0;
@@ -6243,36 +6259,72 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
     },
 
-    wrong(w, input, answer) {
-      this.wrongCount++;
+    wrong(input, answer) {
       this.badFlash = true;
-      this.input = '';
       this.fb = {
         type: 'bad',
-        html: '❌ 错误，正确答案是：<b style="font-size:17px">' + answer + '</b>' +
-              '<div style="font-size:12.5px;color:#a8071a;margin-top:4px">' +
-              (w.chinese ? escSpell(w.chinese) + ' · ' : '') + '点「下一个」继续，或再想想拼写</div>'
+        html: '❌ 你拼的是 <b>' + input + '</b>，还差一点，再试一次！'
       };
       this.render();
       Celebrate.wrong();            // 答错：提示音 + 震动
-      try { speakWord(answer); } catch (e) {}
       const self = this;
       setTimeout(function () {
-        self.badFlash = false;
-        self.render();
+        if (self.fb && self.fb.type === 'bad') {
+          self.badFlash = false;
+          self.render();
+        }
       }, 500);
+    },
+
+    reshuffle() {
+      if (this.locked) return;   // 已拼对：按钮置灰，这里兜底不做任何事（前进请用「下一个」）
+      const w = this.current();
+      this.load(true);
+      this.fb = { type: 'info', html: '🔀 已重新打乱，再拼一次！' };
+      this.render();
+    },
+
+    reset() {
+      if (this.locked) { this.locked = false; }
+      this.slots.forEach(function (s) { s.ch = null; s.tileId = null; });
+      this.tiles.forEach(function (t) { t.used = false; });
+      this.fb = null;
+      this.badFlash = false;
+      this.render();
+    },
+
+    reveal() {
+      const w = this.current();
+      if (!w) return;
+      const letters = String(w.word).toLowerCase().split('');
+      // 用字母块按顺序填满格子（不参与积分 judging）
+      const self = this;
+      const pool = this.tiles.slice();
+      this.slots = letters.map(function (ch) {
+        const t = pool.filter(function (x) { return !x.used && x.ch === ch; })[0];
+        if (t) { t.used = true; return { ch: ch, tileId: t.id }; }
+        return { ch: ch, tileId: null };
+      });
+      this.fb = {
+        type: 'info',
+        html: '👀 正确答案是 <b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '') +
+              '<div style="font-size:13px;color:#a08107;margin-top:4px">点「🔀 重新打乱」换一组字母块，自己再拼一遍</div>'
+      };
+      this.badFlash = false;
+      this.render();
+      try { speakWord(w.word); } catch (e) {}
     },
 
     prev() {
       if (this.idx <= 0) { toast('已经是第一个单词了'); return; }
       this.idx--;
-      this.load();
+      this.load(true);
     },
 
     next() {
       if (this.idx >= this.pool.length - 1) { this.finish(); return; }
       this.idx++;
-      this.load();
+      this.load(true);
     },
 
     skip() {
@@ -6288,7 +6340,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<div class="sd-title">' + (done >= total ? '本单元全部拼完啦！' : '本单元单词已全部过一遍') + '</div>' +
         '<div class="sd-sub">本单元共 ' + total + ' 个单词，本轮拼对 ' + done + ' 个<br>可以换下一个单元，也再练一轮</div>' +
         '<div class="spell-nav" style="max-width:320px;margin:16px auto 0">' +
-        '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个</button>' +
+        '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个单词</button>' +
         '<button class="btn btn-primary" onclick="Spell.start(true)">🔄 再拼一轮</button>' +
         '</div>' +
         '<button class="btn btn-secondary nav-back-btn" style="margin-top:10px;width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
@@ -6300,20 +6352,33 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (w) speakWord(w.word);
     },
 
-    render() {
+    render(solved) {
       const area = document.getElementById('spell-game-area');
       if (!area) return;
       const w = this.current();
       if (!w) { this.finish(); return; }
+      const esc = function (s) { return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); };
       const pct = Math.round((this.idx / this.pool.length) * 100);
-      const last = this.idx >= this.pool.length - 1;
+      let slotsHtml = '';
+      const self = this;
+      this.slots.forEach(function (s, i) {
+        let cls = 'spell-slot';
+        if (s.ch) cls += ' filled';
+        if (solved) cls += ' ok';
+        if (self.badFlash) cls += ' bad';
+        slotsHtml += '<div class="' + cls + '" style="--i:' + i + '" onclick="Spell.pickSlot(' + i + ')" data-slot="' + i + '">' +
+                     (s.ch ? String(s.ch).toUpperCase() : '') + '</div>';
+      });
+      let tilesHtml = '';
+      this.tiles.forEach(function (t) {
+        tilesHtml += '<button class="spell-tile' + (t.used ? ' used' : '') + '" id="' + t.id + '" ' +
+                     'onclick="Spell.pickTile(\'' + t.id + '\')" ' + (t.used ? 'disabled' : '') + '>' +
+                     String(t.ch).toUpperCase() + '</button>';
+      });
       const fbHtml = this.fb
         ? '<div class="spell-fb ' + this.fb.type + '">' + this.fb.html + '</div>'
         : '';
-      let navHtml = '<div class="spell-nav">';
-      if (this.idx > 0) navHtml += '<button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button>';
-      if (!last) navHtml += '<button class="btn btn-primary" id="spell-next-btn" onclick="Spell.next()">下一个 →</button>';
-      navHtml += '</div>';
+      const dots = this.tiles.length;
       area.innerHTML =
         '<div class="spell-card">' +
           '<div class="spell-top">' +
@@ -6325,41 +6390,36 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '</div>' +
           '<div class="spell-bar"><i style="width:' + pct + '%"></i></div>' +
           '<div class="spell-prompt">' +
-            '<div class="sp-cn">' + escSpell(w.chinese) + '</div>' +
-            '<div class="sp-ph">共 ' + String(w.word).replace(/[^A-Za-z]/g, '').length + ' 个字母' +
-              (w.phonetic ? ' · ' + escSpell(w.phonetic) : '') + '</div>' +
+            '<div class="sp-cn">' + esc(w.chinese) + '</div>' +
+            '<div class="sp-ph">共 ' + dots + ' 个字母' + (w.phonetic ? ' · ' + esc(w.phonetic) : '') + '</div>' +
             '<button class="speak-btn" style="margin-top:8px" onclick="Spell.speak()">🔊 听发音</button>' +
           '</div>' +
-          '<div class="spell-input-wrap">' +
-            '<input id="sp-input" class="spell-input' + (this.badFlash ? ' bad' : '') + (this.locked ? ' ok' : '') + '" ' +
-              'type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" ' +
-              'placeholder="请输入英文单词" value="' + escSpell(this.input) + '" ' +
-              (this.locked ? 'readonly ' : '') +
-              'oninput="Spell.onInput(this.value)" ' +
-              'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Spell.submit();}">' +
-          '</div>' +
-          '<button class="spell-submit" id="spell-submit-btn" type="button"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.submit()">提交</button>' +
+          '<div class="spell-slots">' + slotsHtml + '</div>' +
+          (this.locked
+            ? ''
+            : '<div class="spell-tools"><button class="spell-del-btn" onclick="Spell.del()">⌫ 删除</button></div>' +
+              '<div class="spell-label">点上面的格子可以把字母退回来，或用「⌫ 删除」退掉最后一个</div>' +
+              '<div class="spell-pool">' + tilesHtml + '</div>') +
           fbHtml +
-          (last && this.locked
-            ? '<button class="btn btn-primary" style="width:100%;margin-top:12px" onclick="Spell.finish()">🎉 完成本单元</button>'
-            : '') +
-          navHtml +
+          '<div class="spell-acts">' +
+            '<button class="spell-act"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
+            '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
+            '<button class="spell-act" onclick="Spell.skip()">⏭ 跳过</button>' +
+          '</div>' +
+          '<div class="spell-nav">' +
+            (this.idx > 0
+              ? '<button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button>'
+              : '') +
+            (this.idx < this.pool.length - 1
+              ? '<button class="btn btn-primary" id="spell-next-btn" onclick="Spell.next()">下一个 →</button>'
+              : '') +
+          '</div>' +
         '</div>';
-      if (!this.locked) {
-        setTimeout(function () {
-          const inp = document.getElementById('sp-input');
-          if (inp) { try { inp.focus(); const n = inp.value.length; inp.setSelectionRange(n, n); } catch (e) {} }
-        }, 60);
-      }
     }
   };
 
   function startSpell(fresh) {
     Spell.start(fresh === true);
-  }
-
-  function escSpell(s) {
-    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
   // ========== 单词随手拼（看中文写英文：键盘 / 手写两种模式） ==========
