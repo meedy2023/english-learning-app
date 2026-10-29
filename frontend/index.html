@@ -2434,7 +2434,7 @@ const API = ".";
     APP_ID: 'b6392404',
     API_KEY: 'c757277ed0729711d3b7887a9450b416',
     API_SECRET: 'ZjA3M2ZkZTBmNTVjOTk5Njk3OThkZTRk',
-    HOST: 'iat.xf-yun.com',
+    HOST: 'iat-api.xfyun.cn',
     PATH: '/v2/iat',
     _b64(buf) {
       const arr = new Uint8Array(buf); let bin = '';
@@ -2625,10 +2625,26 @@ const API = ".";
   let _raRmsCount = 0;
   let _raPauses = { short: 0, mid: 0, long: 0 };
   let _raScoreDetail = null;
+  let _raMatchInfo = null;        // { matched, total, wrong:[] } —— 用于结果页展示比对明细
+  let _raRecognizedSource = '';   // 'asr' | 'browser' —— 识别文本来源
+  let _raScoreWaitStart = 0;      // 等待听写结果的起始时间（防长时间卡住）
+
+  // 写入识别文本：空结果不覆盖已有内容（讯飞失败时保留浏览器识别结果）
+  function raSetRecognized(text) {
+    const txt = String(text || '').trim();
+    if (txt) {
+      _raRecognizedText = txt;
+      _raRecognizedSource = 'asr';
+    }
+  }
 
   function raBeginAnalysis(stream, targetText, onSilence) {
     _raTargetText = targetText || '';
     _raRecognizedText = '';
+    _raRecognizedSource = '';
+    _raMatchInfo = null;
+    _raScoreDetail = null;
+    _raScoreWaitStart = 0;
     _raSilenceStop = onSilence || null;
     _raStartMs = Date.now();
     _raVoiceMs = 0;
@@ -2719,6 +2735,13 @@ const API = ".";
   }
 
   function raComputeScore() {
+    // 数字词归一：听写常把 ten 识别成 10（或反之），统一成阿拉伯数字再比对
+    const NUM_WORDS = {
+      zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9,
+      ten: 10, eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16,
+      seventeen: 17, eighteen: 18, nineteen: 19, twenty: 20, thirty: 30, forty: 40, fifty: 50,
+      sixty: 60, seventy: 70, eighty: 80, ninety: 90, hundred: 100
+    };
     // 归一化：小写、去标点、展开缩写
     const norm = s => String(s || '').toLowerCase()
       .replace(/[^a-z0-9'\s]/g, ' ')
@@ -2741,6 +2764,8 @@ const API = ".";
       .replace(/\b(you're|youre)\b/g, 'you are')
       .replace(/\b(let's|lets)\b/g, 'let us')
       .replace(/\bits\b/g, 'it is')
+      .replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred)\b/g,
+        m => String(NUM_WORDS[m]))
       .replace(/\s+/g, ' ')
       .trim();
     // 词形还原：去复数/第三人称/时态后缀，让词形差异不扣分
@@ -2788,15 +2813,20 @@ const API = ".";
       const rmsPeak = _raRmsPeak || 0;
       const voiceMs = _raVoiceMs || 0;
       if (rmsPeak < 0.012 && voiceMs < 120) {
-        _raScoreDetail = { accuracy: 0, completeness: 0, fluency: 0, prosody: 0 };
+        _raScoreDetail = { accuracy: 0, completeness: 0, fluency: 0, prosody: 0, fallback: false };
+        _raMatchInfo = { matched: 0, total: tw.length, wrong: tw.slice(0, 4) };
         return 0;
       }
     }
 
-    // ============ 维度一：准确度 (Accuracy) ============
-    // 有识别文本：字符级相似度(匹配质量) + 严重错误(音素混淆)额外扣分
-    let accuracy = 100;
+    // ============ 维度一：准确度（覆盖感知）============
+    // 准确度 = 读对的词的平均相似度 × 覆盖率（读对的比例）
+    // 这样"只读了一半"或"读成别的词"不会因为音色好而拿到高分
+    const fallback = !hasText;         // 没有识别文本 = 只能声学参考，不能判断对错
+    let accuracy = 0, completeness = 0;
     let matched = 0, matchSum = 0, severeCount = 0;
+    const wrongWords = [];
+
     if (hasText) {
       let sw2 = sw;
       if (sw.length > 1 && sw.every(w => w.length === 1)) sw2 = [sw.join('')];
@@ -2808,31 +2838,33 @@ const API = ".";
           const sim = charSim(ti, sw2[j]);
           if (sim > bestSim) { bestSim = sim; bestIdx = j; }
         }
-        if (bestIdx >= 0 && bestSim >= 0.5) {
+        // 判定阈值：短词(≤5字母)必须完全一致才算读对（name≠game）；
+        // 长词允许少量听写偏差（address/adress、banana/bananna）
+        const need = ti.length <= 5 ? 0.999 : 0.8;
+        if (bestIdx >= 0 && bestSim >= need) {
           used[bestIdx] = true; matched++; matchSum += bestSim;
-          if (bestSim < 0.7) severeCount++;   // 相似度低 = 音素混淆严重错误
+          if (bestSim < 0.9) severeCount++;      // 长词有偏差 → 轻微扣分
+        } else {
+          wrongWords.push(ti);                    // 没读对 / 漏读
         }
       }
-      const quality = matched > 0 ? matchSum / matched : 0;
-      accuracy = Math.round(quality * 100 - severeCount * 8);
+      const quality = matched > 0 ? matchSum / matched : 0;   // 读对的词有多准
+      const coverage = matched / wordCount;                    // 读对了多少比例
+      accuracy = Math.round(quality * coverage * 100 - severeCount * 5);
       accuracy = Math.max(0, Math.min(100, accuracy));
+      completeness = Math.round(coverage * 100);
     } else {
-      // 无识别文本（断网/华为无GMS）：准确度用声学近似
-      accuracy = 75;
+      // 无识别文本：只用声学特征（时长/音量/节奏）做参考，封顶 72 分
+      // 拿不到内容就无法判断对错，所以不能给高分
+      const ac = raAcousticScore();
+      accuracy = ac === null ? 0 : Math.min(72, Math.round(ac));
+      completeness = accuracy;
     }
 
-    // ============ 维度二：完整度 (Completeness) ============
-    // 漏词断崖下跌：漏1词 100→50，漏2词→20，漏3+→0
-    let completeness = 100;
-    if (hasText) {
-      const missed = tw.length - matched;
-      if (missed <= 0) completeness = 100;
-      else if (missed === 1) completeness = 50;
-      else if (missed === 2) completeness = 20;
-      else completeness = 0;
-    } else {
-      completeness = 80;
-    }
+    // ============ 维度二：完整度 ============
+    // 与覆盖率一致：读对 3/5 词 → 60 分
+    if (hasText) completeness = Math.round((matched / wordCount) * 100);
+    else completeness = accuracy;
 
     // ============ 维度三：流利度 (Fluency) ============
     // 停顿分级扣分 + 语速
@@ -2866,8 +2898,17 @@ const API = ".";
     prosody = Math.max(0, Math.min(100, prosody));
 
     // ============ 加权总分 ============
-    const total = accuracy * 0.50 + completeness * 0.25 + fluency * 0.15 + prosody * 0.10;
-    _raScoreDetail = { accuracy: Math.round(accuracy), completeness: Math.round(completeness), fluency: Math.round(fluency), prosody: Math.round(prosody) };
+    let total = accuracy * 0.50 + completeness * 0.25 + fluency * 0.15 + prosody * 0.10;
+    // 内容对不上时，流利/韵律再好也不能刷高分
+    if (hasText && matched === 0) total = Math.min(total, 28);          // 基本读错
+    else if (hasText && completeness < 60) total = Math.min(total, 62); // 漏读较多
+    if (fallback) total = Math.min(total, 72);                          // 仅声学参考封顶
+
+    _raScoreDetail = {
+      accuracy: Math.round(accuracy), completeness: Math.round(completeness),
+      fluency: Math.round(fluency), prosody: Math.round(prosody), fallback: fallback
+    };
+    _raMatchInfo = { matched: matched, total: wordCount, wrong: wrongWords.slice(0, 4) };
     return Math.max(0, Math.min(100, Math.round(total)));
   }
 
@@ -2888,11 +2929,21 @@ const API = ".";
   }
 
   function raShowScore() {
-    if (_raXfPending) { setTimeout(raShowScore, 600); return; }
+    // 等听写结果返回（最多 8 秒，避免网络异常时一直不弹分）
+    if (_raXfPending) {
+      if (!_raScoreWaitStart) _raScoreWaitStart = Date.now();
+      if (Date.now() - _raScoreWaitStart < 8000) { setTimeout(raShowScore, 400); return; }
+    }
+    _raScoreWaitStart = 0;
     const score = raComputeScore();
     if (score === null) return;
+    const isFallback = !!(_raScoreDetail && _raScoreDetail.fallback);
     let stars, msg, emoji;
-    if (score >= 90) { stars = '⭐⭐⭐'; msg = '太棒了！发音真标准！'; emoji = '🎉'; }
+    if (isFallback) {
+      stars = score >= 60 ? '⭐⭐' : '⭐';
+      msg = '声音收到了，但没识别出内容，再读一遍试试';
+      emoji = '🎧';
+    } else if (score >= 90) { stars = '⭐⭐⭐'; msg = '太棒了！发音真标准！'; emoji = '🎉'; }
     else if (score >= 70) { stars = '⭐⭐'; msg = '很不错！继续加油！'; emoji = '😊'; }
     else if (score >= 50) { stars = '⭐'; msg = '有进步，再读一遍试试！'; emoji = '💪'; }
     else { stars = ''; msg = '别灰心，跟着再读一次吧～'; emoji = '🌱'; }
@@ -2910,7 +2961,13 @@ const API = ".";
         <div style="font-size:20px;margin-bottom:4px">${stars}</div>
         <div style="font-size:48px;font-weight:800;color:#6c63ff;margin-bottom:8px">${score}<span style="font-size:20px;color:#999"> 分</span></div>
         <div style="font-size:15px;color:#666;margin-bottom:8px">${msg}</div>
-        <div style="font-size:12px;color:#bbb;margin-bottom:12px">${_raRecognizedText ? '已与原句逐词比对' : '发音流畅度参考（联网识别更准）'}</div>
+        <div style="font-size:12px;color:#bbb;margin-bottom:6px">${isFallback ? '未能识别语音内容，以下为声学参考分' : '已与原句逐词比对'}</div>
+        ${!_raScoreDetail || !_raScoreDetail.fallback ? `
+        <div style="font-size:12px;color:#999;margin-bottom:4px;max-width:280px;word-break:break-word">原句：${esc(_raTargetText)}</div>
+        <div style="font-size:12px;color:#666;margin-bottom:8px;max-width:280px;word-break:break-word">识别：${_raRecognizedText ? esc(_raRecognizedText) : '—'}</div>` : ''}
+        ${_raMatchInfo && _raMatchInfo.wrong && _raMatchInfo.wrong.length ? `
+        <div style="font-size:12px;color:#cf1322;margin-bottom:10px;max-width:280px;word-break:break-word">未读对：${_raMatchInfo.wrong.map(w => esc(w)).join(' / ')}</div>` : `
+        ${(!isFallback && _raMatchInfo && _raMatchInfo.total > 0 && _raMatchInfo.matched >= _raMatchInfo.total) ? `<div style="font-size:12px;color:#52c41a;margin-bottom:10px">全部读对啦</div>` : ''}`}
         ${_raScoreDetail ? `
         <div style="display:flex;gap:10px;justify-content:center;margin-bottom:16px">
           <div style="flex:1;background:#f6f8ff;border-radius:12px;padding:8px 4px">
@@ -2975,7 +3032,7 @@ const API = ".";
         _ra.onstop = function() {
           stream.getTracks().forEach(function(t) { t.stop(); });
           raEndAnalysis();
-          XFYunASR.recognize(new Blob(_raChunks, { type: 'audio/webm' }), function(t) { _raRecognizedText = t || ''; });
+          XFYunASR.recognize(new Blob(_raChunks, { type: 'audio/webm' }), raSetRecognized);
           raPlayBack(lineEl);
         };
         _ra.start();
@@ -3102,7 +3159,7 @@ const API = ".";
         _ra.onstop = function() {
           stream.getTracks().forEach(function(t) { t.stop(); });
           raEndAnalysis();
-          XFYunASR.recognize(new Blob(_raChunks, { type: 'audio/webm' }), function(t) { _raRecognizedText = t || ''; });
+          XFYunASR.recognize(new Blob(_raChunks, { type: 'audio/webm' }), raSetRecognized);
           raPlayBackWord(textEl, btn, card);
         };
         _ra.start();
@@ -3893,7 +3950,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         _ra.onstop = function() {
           stream.getTracks().forEach(function(t) { t.stop(); });
           raEndAnalysis();
-          XFYunASR.recognize(new Blob(_raChunks, { type: 'audio/webm' }), function(t) { _raRecognizedText = t || ''; });
+          XFYunASR.recognize(new Blob(_raChunks, { type: 'audio/webm' }), raSetRecognized);
           raPlayBackKet(btnEl, card);
         };
         _ra.start();
