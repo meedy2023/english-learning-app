@@ -1560,109 +1560,497 @@
  {
   "id": "consonant_blends",
   "title": "辅音字母组合",
-  "desc": "辅音连缀（blends）与辅音字母组合（digraphs）",
+  "desc": "辅音连缀（blends）与辅音字母组合（digraphs），每个组合单独一个课时",
   "lessons": [
    {
-    "id": "cb_l",
-    "title": "bl/cl/fl/gl/pl/sl",
-    "sound": "l 连缀",
+    "id": "cb_bl",
+    "title": "bl",
+    "sound": "/bl/",
     "sound_word": "blue",
-    "tip": "辅音 + l 的组合，两个音连读",
+    "tip": "b 和 l 连着读，中间不要加元音",
     "words": [
      {
       "w": "blue",
       "c": "蓝色"
      },
      {
+      "w": "black",
+      "c": "黑色"
+     },
+     {
+      "w": "block",
+      "c": "积木"
+     }
+    ]
+   },
+   {
+    "id": "cb_cl",
+    "title": "cl",
+    "sound": "/kl/",
+    "sound_word": "clock",
+    "tip": "k 和 l 连着读，气流从舌侧出来",
+    "words": [
+     {
       "w": "clock",
       "c": "时钟"
      },
+     {
+      "w": "clap",
+      "c": "拍手"
+     },
+     {
+      "w": "clean",
+      "c": "干净的"
+     }
+    ]
+   },
+   {
+    "id": "cb_fl",
+    "title": "fl",
+    "sound": "/fl/",
+    "sound_word": "flag",
+    "tip": "上齿咬下唇送气，再接 l",
+    "words": [
      {
       "w": "flag",
       "c": "旗帜"
      },
      {
+      "w": "fly",
+      "c": "飞"
+     },
+     {
+      "w": "flower",
+      "c": "花"
+     }
+    ]
+   },
+   {
+    "id": "cb_gl",
+    "title": "gl",
+    "sound": "/gl/",
+    "sound_word": "glass",
+    "tip": "舌根音 g 直接滑到 l",
+    "words": [
+     {
       "w": "glass",
       "c": "玻璃"
      },
+     {
+      "w": "glue",
+      "c": "胶水"
+     },
+     {
+      "w": "glove",
+      "c": "手套"
+     }
+    ]
+   },
+   {
+    "id": "cb_pl",
+    "title": "pl",
+    "sound": "/pl/",
+    "sound_word": "plane",
+    "tip": "p 送气后马上接 l",
+    "words": [
      {
       "w": "plane",
       "c": "飞机"
      },
      {
-      "w": "sleep",
-      "c": "睡觉"
+      "w": "play",
+      "c": "玩"
+     },
+     {
+      "w": "plate",
+      "c": "盘子"
      }
     ]
    },
    {
-    "id": "cb_r",
-    "title": "br/cr/dr/fr/gr/pr/tr",
-    "sound": "r 连缀",
+    "id": "cb_sl",
+    "title": "sl",
+    "sound": "/sl/",
+    "sound_word": "sleep",
+    "tip": "s 的嘶声滑到 l",
+    "words": [
+     {
+      "w": "sleep",
+      "c": "睡觉"
+     },
+     {
+      "w": "slide",
+      "c": "滑梯"
+     },
+     {
+      "w": "slow",
+      "c": "慢的"
+     }
+    ]
+   },
+   {
+    "id": "cb_br",
+    "title": "br",
+    "sound": "/br/",
     "sound_word": "bread",
-    "tip": "辅音 + r 的组合，两个音连读",
+    "tip": "b 滑到 r，舌尖要卷起来",
     "words": [
      {
       "w": "bread",
       "c": "面包"
      },
      {
+      "w": "brown",
+      "c": "棕色"
+     },
+     {
+      "w": "bridge",
+      "c": "桥"
+     }
+    ]
+   },
+   {
+    "id": "cb_cr",
+    "title": "cr",
+    "sound": "/kr/",
+    "sound_word": "crab",
+    "tip": "k 滑到 r，中间不加元音",
+    "words": [
+     {
       "w": "crab",
       "c": "螃蟹"
      },
+     {
+      "w": "cry",
+      "c": "哭"
+     },
+     {
+      "w": "cream",
+      "c": "奶油"
+     }
+    ]
+   },
+   {
+    "id": "cb_dr",
+    "title": "dr",
+    "sound": "/dr/",
+    "sound_word": "drum",
+    "tip": "d 滑到 r，像敲鼓一样",
+    "words": [
      {
       "w": "drum",
       "c": "鼓"
      },
      {
+      "w": "dress",
+      "c": "连衣裙"
+     },
+     {
+      "w": "draw",
+      "c": "画"
+     }
+    ]
+   },
+   {
+    "id": "cb_fr",
+    "title": "fr",
+    "sound": "/fr/",
+    "sound_word": "frog",
+    "tip": "f 摩擦音滑到 r",
+    "words": [
+     {
       "w": "frog",
       "c": "青蛙"
      },
+     {
+      "w": "fruit",
+      "c": "水果"
+     },
+     {
+      "w": "friend",
+      "c": "朋友"
+     }
+    ]
+   },
+   {
+    "id": "cb_gr",
+    "title": "gr",
+    "sound": "/ɡr/",
+    "sound_word": "grape",
+    "tip": "g 滑到 r，注意不要读成「哥」",
+    "words": [
      {
       "w": "grape",
       "c": "葡萄"
      },
      {
+      "w": "green",
+      "c": "绿色"
+     },
+     {
+      "w": "grass",
+      "c": "草"
+     }
+    ]
+   },
+   {
+    "id": "cb_pr",
+    "title": "pr",
+    "sound": "/pr/",
+    "sound_word": "prize",
+    "tip": "p 送气滑到 r",
+    "words": [
+     {
+      "w": "prize",
+      "c": "奖品"
+     },
+     {
+      "w": "prince",
+      "c": "王子"
+     },
+     {
+      "w": "pretty",
+      "c": "漂亮的"
+     }
+    ]
+   },
+   {
+    "id": "cb_tr",
+    "title": "tr",
+    "sound": "/tr/",
+    "sound_word": "tree",
+    "tip": "t 滑到 r，听上去像「戳」",
+    "words": [
+     {
       "w": "tree",
       "c": "树"
+     },
+     {
+      "w": "train",
+      "c": "火车"
+     },
+     {
+      "w": "truck",
+      "c": "卡车"
+     }
+    ]
+   },
+   {
+    "id": "cb_sm",
+    "title": "sm",
+    "sound": "/sm/",
+    "sound_word": "smile",
+    "tip": "s 接鼻音 m",
+    "words": [
+     {
+      "w": "smile",
+      "c": "微笑"
+     },
+     {
+      "w": "small",
+      "c": "小的"
+     },
+     {
+      "w": "smell",
+      "c": "闻"
+     }
+    ]
+   },
+   {
+    "id": "cb_sn",
+    "title": "sn",
+    "sound": "/sn/",
+    "sound_word": "snake",
+    "tip": "s 接鼻音 n",
+    "words": [
+     {
+      "w": "snake",
+      "c": "蛇"
+     },
+     {
+      "w": "snow",
+      "c": "雪"
+     },
+     {
+      "w": "snail",
+      "c": "蜗牛"
+     }
+    ]
+   },
+   {
+    "id": "cb_sp",
+    "title": "sp",
+    "sound": "/sp/",
+    "sound_word": "spoon",
+    "tip": "s 接 p，p 不用送气",
+    "words": [
+     {
+      "w": "spoon",
+      "c": "勺子"
+     },
+     {
+      "w": "spider",
+      "c": "蜘蛛"
+     },
+     {
+      "w": "spell",
+      "c": "拼写"
+     }
+    ]
+   },
+   {
+    "id": "cb_st",
+    "title": "st",
+    "sound": "/st/",
+    "sound_word": "star",
+    "tip": "s 接 t",
+    "words": [
+     {
+      "w": "star",
+      "c": "星星"
+     },
+     {
+      "w": "stop",
+      "c": "停"
+     },
+     {
+      "w": "stone",
+      "c": "石头"
+     }
+    ]
+   },
+   {
+    "id": "cb_sw",
+    "title": "sw",
+    "sound": "/sw/",
+    "sound_word": "swim",
+    "tip": "s 接 w，嘴唇要圆",
+    "words": [
+     {
+      "w": "swim",
+      "c": "游泳"
+     },
+     {
+      "w": "sweet",
+      "c": "甜的"
+     },
+     {
+      "w": "swing",
+      "c": "秋千"
      }
     ]
    },
    {
     "id": "cb_ch",
-    "title": "ch / sh / th / wh / ph",
-    "sound": "字母组合",
+    "title": "ch",
+    "sound": "/tʃ/",
     "sound_word": "chair",
-    "tip": "两个字母合成一个新音（digraph）",
+    "tip": "两个字母合成一个新音，像「吃」但更短",
     "words": [
      {
       "w": "chair",
       "c": "椅子"
      },
      {
+      "w": "cheese",
+      "c": "奶酪"
+     },
+     {
+      "w": "lunch",
+      "c": "午餐"
+     }
+    ]
+   },
+   {
+    "id": "cb_sh",
+    "title": "sh",
+    "sound": "/ʃ/",
+    "sound_word": "ship",
+    "tip": "嘴唇略前突，嘘——的声音",
+    "words": [
+     {
       "w": "ship",
       "c": "船"
      },
+     {
+      "w": "shoe",
+      "c": "鞋"
+     },
+     {
+      "w": "fish",
+      "c": "鱼"
+     }
+    ]
+   },
+   {
+    "id": "cb_th",
+    "title": "th",
+    "sound": "/θ/",
+    "sound_word": "three",
+    "tip": "舌尖轻放在上下齿之间送气",
+    "words": [
      {
       "w": "three",
       "c": "三"
      },
      {
+      "w": "think",
+      "c": "想"
+     },
+     {
+      "w": "mouth",
+      "c": "嘴"
+     }
+    ]
+   },
+   {
+    "id": "cb_wh",
+    "title": "wh",
+    "sound": "/w/",
+    "sound_word": "whale",
+    "tip": "wh 里 w 发音，h 不出声",
+    "words": [
+     {
       "w": "whale",
       "c": "鲸鱼"
      },
      {
+      "w": "white",
+      "c": "白色"
+     },
+     {
+      "w": "wheel",
+      "c": "轮子"
+     }
+    ]
+   },
+   {
+    "id": "cb_ph",
+    "title": "ph",
+    "sound": "/f/",
+    "sound_word": "phone",
+    "tip": "ph 和 f 同音",
+    "words": [
+     {
       "w": "phone",
       "c": "电话"
+     },
+     {
+      "w": "photo",
+      "c": "照片"
+     },
+     {
+      "w": "elephant",
+      "c": "大象"
      }
     ]
    },
    {
     "id": "cb_ck",
-    "title": "ck / ng / nk",
-    "sound": "尾音组合",
+    "title": "ck",
+    "sound": "/k/",
     "sound_word": "duck",
-    "tip": "常出现在词尾的组合",
+    "tip": "ck 在词尾发一个 k",
     "words": [
      {
       "w": "duck",
@@ -1673,6 +2061,19 @@
       "c": "袜子"
      },
      {
+      "w": "kick",
+      "c": "踢"
+     }
+    ]
+   },
+   {
+    "id": "cb_ng",
+    "title": "ng",
+    "sound": "/ŋ/",
+    "sound_word": "sing",
+    "tip": "鼻音，舌根抵住软腭",
+    "words": [
+     {
       "w": "sing",
       "c": "唱歌"
      },
@@ -1681,46 +2082,38 @@
       "c": "戒指"
      },
      {
-      "w": "pink",
-      "c": "粉色"
+      "w": "king",
+      "c": "国王"
      }
     ]
    },
    {
-    "id": "cb_s",
-    "title": "sm/sn/sp/st/sw",
-    "sound": "s 连缀",
-    "sound_word": "smile",
-    "tip": "s + 辅音的组合",
+    "id": "cb_nk",
+    "title": "nk",
+    "sound": "/ŋk/",
+    "sound_word": "pink",
+    "tip": "先鼻音 ŋ 再 k",
     "words": [
      {
-      "w": "smile",
-      "c": "微笑"
+      "w": "pink",
+      "c": "粉色"
      },
      {
-      "w": "snake",
-      "c": "蛇"
+      "w": "bank",
+      "c": "银行"
      },
      {
-      "w": "spoon",
-      "c": "勺子"
-     },
-     {
-      "w": "star",
-      "c": "星星"
-     },
-     {
-      "w": "swim",
-      "c": "游泳"
+      "w": "drink",
+      "c": "喝"
      }
     ]
    },
    {
-    "id": "cb_soft",
-    "title": "soft c / g",
-    "sound": "软音",
+    "id": "cb_soft_c",
+    "title": "soft c",
+    "sound": "/s/",
     "sound_word": "city",
-    "tip": "c 在 e/i/y 前发 /s/，g 在 e/i/y 前发 /dʒ/",
+    "tip": "c 在 e/i/y 前读 /s/",
     "words": [
      {
       "w": "city",
@@ -1733,7 +2126,16 @@
      {
       "w": "rice",
       "c": "米饭"
-     },
+     }
+    ]
+   },
+   {
+    "id": "cb_soft_g",
+    "title": "soft g",
+    "sound": "/dʒ/",
+    "sound_word": "giraffe",
+    "tip": "g 在 e/i/y 前读 /dʒ/",
+    "words": [
      {
       "w": "giraffe",
       "c": "长颈鹿"
@@ -1741,6 +2143,10 @@
      {
       "w": "orange",
       "c": "橙子"
+     },
+     {
+      "w": "page",
+      "c": "页"
      }
     ]
    }

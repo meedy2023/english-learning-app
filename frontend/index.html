@@ -7216,15 +7216,71 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (p && p.catch) p.catch(() => { if (audio.error) finish(false); });
   }
 
-  // 自然拼读发音：优先播本地音素音频（准确、离线可用），不再依赖网络 TTS
+  // 连缀类组合没有单段录音：按「先分音、再合音」的顺序依次播放
+  const PHONEME_SEQ = {
+    '/bl/': ['b', 'l'],
+    '/kl/': ['k', 'l'],
+    '/fl/': ['f', 'l'],
+    '/gl/': ['g', 'l'],
+    '/pl/': ['p', 'l'],
+    '/sl/': ['s', 'l'],
+    '/br/': ['b', 'r'],
+    '/kr/': ['k', 'r'],
+    '/dr/': ['d', 'r'],
+    '/fr/': ['f', 'r'],
+    '/ɡr/': ['g', 'r'],
+    '/pr/': ['p', 'r'],
+    '/tr/': ['t', 'r'],
+    '/sm/': ['s', 'm'],
+    '/sn/': ['s', 'n'],
+    '/sp/': ['s', 'p'],
+    '/st/': ['s', 't'],
+    '/sw/': ['s', 'w'],
+    '/ŋk/': ['ŋ', 'k'],
+  };
+  // 目前还没有录音的音素：只能读代表词，按钮文案也要标清楚
+  const PHONEME_NO_AUDIO = { '/θ/': 1 };
+
+  // 依次播放多个音素，间隔 130ms，听感上连成一串
+  function playPhonemeSeq(list, fallbackWord) {
+    stopAllAudio();
+    const token = window._audioToken;
+    let i = 0;
+    const step = () => {
+      if (token !== window._audioToken) return;   // 已经点了别的，停止
+      if (i >= list.length) return;
+      const audio = new Audio();
+      window._activeAudio = audio;
+      audio.preload = 'auto';
+      audio.src = phonicsWavUrl(list[i++]);
+      let moved = false;
+      const goNext = () => {
+        if (moved) return;
+        moved = true;
+        if (window._activeAudio === audio) window._activeAudio = null;
+        setTimeout(step, 130);
+      };
+      audio.onended = goNext;
+      audio.onerror = () => {
+        if (token !== window._audioToken) return;
+        if (fallbackWord) speakWord(fallbackWord);   // 缺文件就退回读代表词
+      };
+      const p = audio.play();
+      // 被下一次点击打断不算失败
+      if (p && p.catch) p.catch(() => { if (audio.error) audio.onerror(); });
+    };
+    step();
+  }
+
+  // 自然拼读发音：单音播录音、组合按顺序播、没有素材才读代表词
   function speakPhonicsSound(ipa, word) {
     let ph = (ipa || '').trim();
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
-    if (isIpa) {
-      playPhonicsWav(ph.slice(1, -1), word || '');
-    } else {
-      speakWord(word || '');
-    }
+    if (!isIpa) { speakWord(word || ''); return; }
+    if (PHONEME_NO_AUDIO[ph]) { speakWord(word || ''); return; }
+    const seq = PHONEME_SEQ[ph];
+    if (seq) { playPhonemeSeq(seq, word || ''); return; }
+    playPhonicsWav(ph.slice(1, -1), word || '');
   }
 
   async function openPhonics() {
@@ -7308,7 +7364,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         // 音标课时播本地音素音频；组合音课时没有单一音素，按钮注明读的是代表词
         const _sound = String(lesson.sound || '').trim();
         const _soundIsIpa = _sound.charAt(0) === '/' && _sound.charAt(_sound.length - 1) === '/' && !/[\u4e00-\u9fa5]/.test(_sound);
-        const _soundBtnText = _soundIsIpa ? '🔊 朗读' : '🔊 读代表词';
+        const _soundBtnText = (_soundIsIpa && !PHONEME_NO_AUDIO[_sound]) ? '🔊 朗读' : '🔊 读代表词';
         const card = document.createElement('div');
         card.className = 'word-detail-card';
         card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
