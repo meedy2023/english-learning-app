@@ -1564,6 +1564,7 @@
   "lessons": [
    {
     "id": "cb_bl",
+    "audio": "cb_bl",
     "title": "bl",
     "sound": "/bl/",
     "sound_word": "blue",
@@ -1585,6 +1586,7 @@
    },
    {
     "id": "cb_cl",
+    "audio": "cb_cl",
     "title": "cl",
     "sound": "/kl/",
     "sound_word": "clock",
@@ -1606,6 +1608,7 @@
    },
    {
     "id": "cb_fl",
+    "audio": "cb_fl",
     "title": "fl",
     "sound": "/fl/",
     "sound_word": "flag",
@@ -1627,6 +1630,7 @@
    },
    {
     "id": "cb_gl",
+    "audio": "cb_gl",
     "title": "gl",
     "sound": "/gl/",
     "sound_word": "glass",
@@ -1648,6 +1652,7 @@
    },
    {
     "id": "cb_pl",
+    "audio": "cb_pl",
     "title": "pl",
     "sound": "/pl/",
     "sound_word": "plane",
@@ -1669,6 +1674,7 @@
    },
    {
     "id": "cb_sl",
+    "audio": "cb_sl",
     "title": "sl",
     "sound": "/sl/",
     "sound_word": "sleep",
@@ -1690,6 +1696,7 @@
    },
    {
     "id": "cb_br",
+    "audio": "cb_br",
     "title": "br",
     "sound": "/br/",
     "sound_word": "bread",
@@ -1711,6 +1718,7 @@
    },
    {
     "id": "cb_cr",
+    "audio": "cb_cr",
     "title": "cr",
     "sound": "/kr/",
     "sound_word": "crab",
@@ -1732,6 +1740,7 @@
    },
    {
     "id": "cb_dr",
+    "audio": "cb_dr",
     "title": "dr",
     "sound": "/dr/",
     "sound_word": "drum",
@@ -1753,6 +1762,7 @@
    },
    {
     "id": "cb_fr",
+    "audio": "cb_fr",
     "title": "fr",
     "sound": "/fr/",
     "sound_word": "frog",
@@ -1774,6 +1784,7 @@
    },
    {
     "id": "cb_gr",
+    "audio": "cb_gr",
     "title": "gr",
     "sound": "/ɡr/",
     "sound_word": "grape",
@@ -1795,6 +1806,7 @@
    },
    {
     "id": "cb_pr",
+    "audio": "cb_pr",
     "title": "pr",
     "sound": "/pr/",
     "sound_word": "prize",
@@ -1816,6 +1828,7 @@
    },
    {
     "id": "cb_tr",
+    "audio": "cb_tr",
     "title": "tr",
     "sound": "/tr/",
     "sound_word": "tree",
@@ -1837,6 +1850,7 @@
    },
    {
     "id": "cb_sm",
+    "audio": "cb_sm",
     "title": "sm",
     "sound": "/sm/",
     "sound_word": "smile",
@@ -1858,6 +1872,7 @@
    },
    {
     "id": "cb_sn",
+    "audio": "cb_sn",
     "title": "sn",
     "sound": "/sn/",
     "sound_word": "snake",
@@ -1879,6 +1894,7 @@
    },
    {
     "id": "cb_sp",
+    "audio": "cb_sp",
     "title": "sp",
     "sound": "/sp/",
     "sound_word": "spoon",
@@ -1900,6 +1916,7 @@
    },
    {
     "id": "cb_st",
+    "audio": "cb_st",
     "title": "st",
     "sound": "/st/",
     "sound_word": "star",
@@ -1921,6 +1938,7 @@
    },
    {
     "id": "cb_sw",
+    "audio": "cb_sw",
     "title": "sw",
     "sound": "/sw/",
     "sound_word": "swim",
@@ -1942,6 +1960,7 @@
    },
    {
     "id": "cb_ch",
+    "audio": "cb_ch",
     "title": "ch",
     "sound": "/tʃ/",
     "sound_word": "chair",
@@ -1963,6 +1982,7 @@
    },
    {
     "id": "cb_sh",
+    "audio": "cb_sh",
     "title": "sh",
     "sound": "/ʃ/",
     "sound_word": "ship",
@@ -1984,6 +2004,7 @@
    },
    {
     "id": "cb_th",
+    "audio": "cb_th",
     "title": "th",
     "sound": "/θ/",
     "sound_word": "three",
@@ -2005,6 +2026,7 @@
    },
    {
     "id": "cb_wh",
+    "audio": "cb_wh",
     "title": "wh",
     "sound": "/w/",
     "sound_word": "whale",
@@ -2026,6 +2048,7 @@
    },
    {
     "id": "cb_ph",
+    "audio": "cb_ph",
     "title": "ph",
     "sound": "/f/",
     "sound_word": "phone",
@@ -2047,6 +2070,7 @@
    },
    {
     "id": "cb_ck",
+    "audio": "cb_ck",
     "title": "ck",
     "sound": "/k/",
     "sound_word": "duck",
@@ -2068,6 +2092,7 @@
    },
    {
     "id": "cb_ng",
+    "audio": "cb_ng",
     "title": "ng",
     "sound": "/ŋ/",
     "sound_word": "sing",
@@ -2089,6 +2114,7 @@
    },
    {
     "id": "cb_nk",
+    "audio": "cb_nk",
     "title": "nk",
     "sound": "/ŋk/",
     "sound_word": "pink",
@@ -2110,6 +2136,7 @@
    },
    {
     "id": "cb_soft_c",
+    "audio": "cb_soft_c",
     "title": "soft c",
     "sound": "/s/",
     "sound_word": "city",
@@ -2131,6 +2158,7 @@
    },
    {
     "id": "cb_soft_g",
+    "audio": "cb_soft_g",
     "title": "soft g",
     "sound": "/dʒ/",
     "sound_word": "giraffe",

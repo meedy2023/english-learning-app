@@ -7189,7 +7189,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 音素音频文件名规则：把 IPA 字符按 UTF-8 逐字节转十六进制，ASCII 字符保留原样
   // 例：/æ/ → c3a6.wav，/æt/ → c3a6t.wav，/iː/ → icb90.wav
   // 音频版本号：换音频时改这个值，URL 变了浏览器才会重新下载（否则可能播本地缓存里的旧 wav）
-  const PHONICS_AUDIO_VER = '86';
+  const PHONICS_AUDIO_VER = '87';
   function phonicsWavUrl(core) {
     return 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav?v=' + PHONICS_AUDIO_VER;
   }
@@ -7279,11 +7279,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   // 自然拼读发音：单音播录音、组合按顺序播、没有素材才读代表词
-  function speakPhonicsSound(ipa, word) {
+  function speakPhonicsSound(ipa, word, audioKey) {
     let ph = (ipa || '').trim();
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
     if (!isIpa) { speakWord(word || ''); return; }
     if (PHONEME_NO_AUDIO[ph]) { speakWord(word || ''); return; }
+    // 课时自带整段录音（cb_bl 这类：从真人单词里切出的辅音簇），优先播它
+    if (audioKey) {
+      playPhonicsWav(audioKey, word || '', function () {
+        const _s = PHONEME_SEQ[ph];
+        if (_s) playPhonemeSeq(_s, word || ''); else speakWord(word || '');
+      });
+      return;
+    }
     const seq = PHONEME_SEQ[ph];
     if (seq) {
       // 连缀优先播「连读」录音（bl.wav 这类），文件缺失才退回先分音再合音的旧方式
@@ -7380,8 +7388,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
         let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">'
           + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
-          + '<span style="font-size:16px;color:#f5a623;font-weight:700;cursor:pointer" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">' + lesson.sound + '</span>'
-          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">' + _soundBtnText + '</button>'
+          + '<span style="font-size:16px;color:#f5a623;font-weight:700;cursor:pointer" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\')">' + lesson.sound + '</span>'
+          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\')">' + _soundBtnText + '</button>'
           + '</div>'
           + '<div style="font-size:12px;color:#888;margin-bottom:10px">💡 ' + lesson.tip + '</div>';
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
