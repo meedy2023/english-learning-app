@@ -7239,7 +7239,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     '/ŋk/': ['ŋ', 'k'],
   };
   // 目前还没有录音的音素：只能读代表词，按钮文案也要标清楚
-  const PHONEME_NO_AUDIO = { '/θ/': 1 };
+  // 所有音素现在都有真人录音，不再需要「读代表词」白名单
+  const PHONEME_NO_AUDIO = {};
 
   // 依次播放多个音素，间隔 130ms，听感上连成一串
   function playPhonemeSeq(list, fallbackWord) {
