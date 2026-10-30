@@ -7193,7 +7193,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   // 播放本地音素音频；文件缺失时兜底走网络音素合成，最后才读代表词
-  function playPhonicsWav(core, fallbackWord) {
+  function playPhonicsWav(core, fallbackWord, onFail) {
     const url = phonicsWavUrl(core);
     stopAllAudio();
     const token = window._audioToken;
@@ -7207,7 +7207,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       done = true;
       if (token !== window._audioToken) return;
       if (window._activeAudio === audio) window._activeAudio = null;
-      if (!ok) TTS.speakPhoneme(core, fallbackWord || '', 'en-US', function () {});
+      if (!ok) {
+        if (onFail) { onFail(); return; }
+        TTS.speakPhoneme(core, fallbackWord || '', 'en-US', function () {});
+      }
     };
     audio.onended = () => finish(true);
     audio.onerror = () => finish(false);
@@ -7280,7 +7283,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (!isIpa) { speakWord(word || ''); return; }
     if (PHONEME_NO_AUDIO[ph]) { speakWord(word || ''); return; }
     const seq = PHONEME_SEQ[ph];
-    if (seq) { playPhonemeSeq(seq, word || ''); return; }
+    if (seq) {
+      // 连缀优先播「连读」录音（bl.wav 这类），文件缺失才退回先分音再合音的旧方式
+      playPhonicsWav(ph.slice(1, -1), word || '', function () { playPhonemeSeq(seq, word || ''); });
+      return;
+    }
     playPhonicsWav(ph.slice(1, -1), word || '');
   }
 
