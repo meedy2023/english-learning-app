@@ -7188,8 +7188,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 音素音频文件名规则：把 IPA 字符按 UTF-8 逐字节转十六进制，ASCII 字符保留原样
   // 例：/æ/ → c3a6.wav，/æt/ → c3a6t.wav，/iː/ → icb90.wav
+  // 音频版本号：换音频时改这个值，URL 变了浏览器才会重新下载（否则可能播本地缓存里的旧 wav）
+  const PHONICS_AUDIO_VER = '86';
   function phonicsWavUrl(core) {
-    return 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav';
+    return 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav?v=' + PHONICS_AUDIO_VER;
   }
 
   // 播放本地音素音频；文件缺失时兜底走网络音素合成，最后才读代表词
@@ -7372,19 +7374,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         // 音标课时播本地音素音频；组合音课时没有单一音素，按钮注明读的是代表词
         const _sound = String(lesson.sound || '').trim();
         const _soundIsIpa = _sound.charAt(0) === '/' && _sound.charAt(_sound.length - 1) === '/' && !/[\u4e00-\u9fa5]/.test(_sound);
-        const _soundBtnText = (_soundIsIpa && !PHONEME_NO_AUDIO[_sound]) ? '🔊 朗读' : '🔊 读代表词';
+        const _soundBtnText = (_soundIsIpa && !PHONEME_NO_AUDIO[_sound]) ? ('🔊 读 ' + _sound) : '🔊 读代表词';
         const card = document.createElement('div');
         card.className = 'word-detail-card';
         card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
         let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">'
           + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
-          + '<span style="font-size:16px;color:#f5a623;font-weight:700">' + lesson.sound + '</span>'
+          + '<span style="font-size:16px;color:#f5a623;font-weight:700;cursor:pointer" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">' + lesson.sound + '</span>'
           + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">' + _soundBtnText + '</button>'
           + '</div>'
           + '<div style="font-size:12px;color:#888;margin-bottom:10px">💡 ' + lesson.tip + '</div>';
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
           + '<span style="font-size:16px;font-weight:600;color:#333">' + lesson.sound_word + '</span>'
-          + ' <button class="btn btn-sm" style="padding:4px 10px" onclick="speakWord(\'' + esc(lesson.sound_word) + '\')">🔊 朗读</button>'
+          + ' <button class="btn btn-sm" style="padding:4px 10px" onclick="speakWord(\'' + esc(lesson.sound_word) + '\')">🔊 读单词</button>'
           + ' <button class="btn btn-sm ra-btn" style="padding:4px 10px" onclick="raToggleKet(this, \'' + esc(lesson.sound_word) + '\')">🎤 跟读</button>'
           + '</div>';
         html += '<div style="display:flex;flex-wrap:wrap;gap:8px">';
