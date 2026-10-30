@@ -7186,15 +7186,42 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let phonicsGroups = [];
   let phonicsCurrentGroup = null;
 
-  // 自然拼读发音：统一走设置里的发音引擎 / 发音人 / 语速
-  //  网络模式：Edge SSML <phoneme alphabet="ipa"> 直接读音标，速度跟随设置
-  //  本机模式：读该音标的代表词（如 /æ/ -> cat），速度跟随设置
+  // 音素音频文件名规则：把 IPA 字符按 UTF-8 逐字节转十六进制，ASCII 字符保留原样
+  // 例：/æ/ → c3a6.wav，/æt/ → c3a6t.wav，/iː/ → icb90.wav
+  function phonicsWavUrl(core) {
+    return 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav';
+  }
+
+  // 播放本地音素音频；文件缺失时兜底走网络音素合成，最后才读代表词
+  function playPhonicsWav(core, fallbackWord) {
+    const url = phonicsWavUrl(core);
+    stopAllAudio();
+    const token = window._audioToken;
+    const audio = new Audio();
+    window._activeAudio = audio;
+    audio.preload = 'auto';
+    audio.src = url;
+    let done = false;
+    const finish = (ok) => {
+      if (done) return;
+      done = true;
+      if (token !== window._audioToken) return;
+      if (window._activeAudio === audio) window._activeAudio = null;
+      if (!ok) TTS.speakPhoneme(core, fallbackWord || '', 'en-US', function () {});
+    };
+    audio.onended = () => finish(true);
+    audio.onerror = () => finish(false);
+    const p = audio.play();
+    // play() 被下一次点击打断时也会 reject，这种情况不算失败，别误降级成读代表词
+    if (p && p.catch) p.catch(() => { if (audio.error) finish(false); });
+  }
+
+  // 自然拼读发音：优先播本地音素音频（准确、离线可用），不再依赖网络 TTS
   function speakPhonicsSound(ipa, word) {
     let ph = (ipa || '').trim();
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
     if (isIpa) {
-      const core = ph.slice(1, -1);
-      TTS.speakPhoneme(core, word || '', 'en-US', function () {});
+      playPhonicsWav(ph.slice(1, -1), word || '');
     } else {
       speakWord(word || '');
     }
@@ -7278,13 +7305,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const list = document.getElementById('phonics-lesson-list');
       list.innerHTML = '';
       group.lessons.forEach(lesson => {
+        // 音标课时播本地音素音频；组合音课时没有单一音素，按钮注明读的是代表词
+        const _sound = String(lesson.sound || '').trim();
+        const _soundIsIpa = _sound.charAt(0) === '/' && _sound.charAt(_sound.length - 1) === '/' && !/[\u4e00-\u9fa5]/.test(_sound);
+        const _soundBtnText = _soundIsIpa ? '🔊 朗读' : '🔊 读代表词';
         const card = document.createElement('div');
         card.className = 'word-detail-card';
         card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
         let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">'
           + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
           + '<span style="font-size:16px;color:#f5a623;font-weight:700">' + lesson.sound + '</span>'
-          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">🔊 朗读</button>'
+          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\')">' + _soundBtnText + '</button>'
           + '</div>'
           + '<div style="font-size:12px;color:#888;margin-bottom:10px">💡 ' + lesson.tip + '</div>';
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
