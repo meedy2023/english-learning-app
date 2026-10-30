@@ -7189,7 +7189,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 音素音频文件名规则：把 IPA 字符按 UTF-8 逐字节转十六进制，ASCII 字符保留原样
   // 例：/æ/ → c3a6.wav，/æt/ → c3a6t.wav，/iː/ → icb90.wav
   // 音频版本号：换音频时改这个值，URL 变了浏览器才会重新下载（否则可能播本地缓存里的旧 wav）
-  const PHONICS_AUDIO_VER = '87';
+  const PHONICS_AUDIO_VER = '88';
   function phonicsWavUrl(core) {
     return 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav?v=' + PHONICS_AUDIO_VER;
   }
