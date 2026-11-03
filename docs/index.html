@@ -1445,6 +1445,7 @@ const API = ".";
       lesson_record: 2,    // 课文跟读
       lesson_full_read: 5, // 朗读全文
       match_clear: 3,       // 消消乐消完整个单元
+      match_round: 2,       // 消消乐每完成一局
       spell_correct: 2,     // 拼对一个单词
       spell_unit_clear: 5,  // 拼写完整个单元
       doodle_correct: 2,    // 随手拼写对一个单词
@@ -1566,6 +1567,7 @@ const API = ".";
         lesson_record: '课文跟读',
         lesson_full_read: '朗读全文',
         match_clear: '消消乐通关本单元',
+        match_round: '消消乐完成一局',
         spell_correct: '拼写正确',
         spell_unit_clear: '拼写通关本单元',
         doodle_correct: '随手拼正确',
@@ -5699,6 +5701,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
       this.matched++;
       this.updateHud();
+      try { Celebrate._tone([784, 1046.5], 0.09, 'triangle', 0.18, 0.22); } catch (e) {}
       var self = this;
       if (this.matched >= this.total) setTimeout(function () { self.finish(); }, 480);
     },
@@ -5707,6 +5710,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.lock = true;
       a.classList.add('wrong');
       b.classList.add('wrong');
+      try { Celebrate._tone([311, 233], 0.11, 'triangle', 0.14, 0.22); } catch (e) {}
       var self = this;
       setTimeout(function () {
         a.classList.remove('sel', 'wrong');
@@ -5751,6 +5755,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var acc = Math.round(this.total / Math.max(this.moves, this.total) * 100);
       var label = this.unitLabel();
 
+      // 积分：每完成一局都加 match_round；整单元通关再额外加 match_clear
+      var roundR = Points.earn('match_round');
+      var clearR = unitDone ? Points.earn('match_clear', 'match_' + this.scopeKey()) : null;
+
       document.getElementById('match-board').style.display = 'none';
       document.getElementById('match-tip').style.display = 'none';
       document.getElementById('match-result').style.display = 'block';
@@ -5762,12 +5770,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (unitDone) {
         sub.textContent = unitTotal + ' 个全部消除 · 用时 ' + matchClock(sec) + ' · 准确率 ' + acc + '%';
         nextBtn.textContent = '重玩' + label;
-        var r = Points.earn('match_clear', 'match_' + this.scopeKey());
-        if (r && r.success) showPointsToast(r.points, Points.getMessage('match_clear'));
+        if (clearR && clearR.success) showPointsToast(roundR.points + clearR.points, Points.getMessage('match_clear'));
       } else {
         sub.textContent = '本局 ' + this.total + ' 个已消完，' + label + '还剩 ' + (unitTotal - cleared) + ' 个，再来一局吧';
         nextBtn.textContent = '继续下一局';
+        if (roundR && roundR.success) showPointsToast(roundR.points, Points.getMessage('match_round'));
       }
+      updatePointsDisplay();
     }
   };
 
