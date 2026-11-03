@@ -5515,7 +5515,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     clearedCount() {
       var self = this;
-      return this.scopeWords().filter(function (w) { return self.cleared.indexOf(w.id) >= 0; }).length;
+      return this.scopeWords().filter(function (w) { return self.cleared.indexOf(String(w.id)) >= 0; }).length;
     },
 
     // 开始一局：fresh=true 表示清空本单元进度从头来
@@ -5529,10 +5529,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         switchView('home');
         return;
       }
-      this.cleared = opts.fresh ? [] : this.loadCleared();
+      var loaded = opts.fresh ? [] : this.loadCleared();
+      this.cleared = loaded.map(function (x) { return String(x); })
+                           .filter(function (x) { return x !== 'NaN' && x !== 'undefined'; });
       this.saveCleared();
 
-      var rest = pool.filter(function (w) { return this.cleared.indexOf(w.id) < 0; }, this);
+      var rest = pool.filter(function (w) { return this.cleared.indexOf(String(w.id)) < 0; }, this);
       if (rest.length === 0) {          // 一轮已全部消完，自动开启新一轮
         this.cleared = [];
         this.saveCleared();
@@ -5694,7 +5696,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       b.classList.remove('sel');
       a.classList.add('gone');
       b.classList.add('gone');
-      var id = Number(a.dataset.pid);
+      var id = String(a.dataset.pid);
       if (this.cleared.indexOf(id) < 0) {
         this.cleared.push(id);
         this.saveCleared();
