@@ -577,7 +577,7 @@
       border-radius: 12px;
       font-weight: 600;
       box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
-      z-index: 2000;
+      z-index: 10000;
       animation: pointsPop 0.5s ease;
     }
     @keyframes pointsPop {
@@ -6283,8 +6283,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         html: '🎉 拼写正确！<b style="font-size:17px">' + String(w.word) + '</b> ' + (w.chinese || '')
       };
       this.render(true);
-      Celebrate.correct();          // 答对：撒花 + 提示音
-      try { speakWord(w.word); } catch (e) {}
       let earned = 0;
       const res = Points.earn('spell_correct', 'spell_' + w.id + '_' + String(w.word).toLowerCase());
       if (res.success) {
@@ -6295,6 +6293,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         this.fb.html += '<div style="font-size:13px;color:#7a829a;margin-top:4px">（这个单词已经拿过积分啦）</div>';
         this.render(true);
       }
+      // 先提交积分状态并刷新显示，再播放庆祝；try 包裹避免庆祝异常阻断积分记录
+      try { Celebrate.correct(); } catch (e) {}
+      try { speakWord(w.word); } catch (e) {}
       // 本单元全部拼完 → 额外奖励
       const solvedCount = Object.keys(this.solved).length;
       if (solvedCount >= this.pool.length) {
