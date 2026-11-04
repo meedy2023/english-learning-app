@@ -7065,10 +7065,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return '#e8eeff';
   }
 
-  // 年级标签按钮样式
+  // 年级标签按钮样式（未选中也做成明显的可点击胶囊按钮）
   function gradeTabCSS(g, selected) {
-    if (selected) return 'padding:7px 16px;border-radius:20px;background:#6c63ff;color:white;font-weight:600;font-size:13px;cursor:pointer;border:none;flex-shrink:0';
-    return 'padding:7px 16px;border-radius:20px;background:#f0f4ff;color:#6c63ff;font-weight:500;font-size:13px;cursor:pointer;border:none;flex-shrink:0';
+    if (selected) return 'padding:7px 18px;border-radius:20px;background:#6c63ff;color:white;font-weight:600;font-size:13px;cursor:pointer;border:1.5px solid #6c63ff;flex-shrink:0;box-shadow:0 2px 8px rgba(108,99,255,0.3)';
+    return 'padding:7px 18px;border-radius:20px;background:#ffffff;color:#5a54e8;font-weight:600;font-size:13px;cursor:pointer;border:1.5px solid #c3cfff;flex-shrink:0;box-shadow:0 1px 4px rgba(0,0,0,0.06)';
   }
 
   // 选中报告年级
@@ -7106,7 +7106,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         byGrade[g].tm += p.mastered || 0;
         byGrade[g].modules[m] = p;
       }
-      const grades = Object.keys(byGrade).sort();
+      // 按年级固定顺序排序（三→四→五→六），避免默认字符串排序导致「五年级」排在「四年级」前
+      const GRADE_ORDER = ['三年级', '四年级', '五年级', '六年级'];
+      const grades = Object.keys(byGrade).sort((a, b) => {
+        const ia = GRADE_ORDER.indexOf(a), ib = GRADE_ORDER.indexOf(b);
+        if (ia !== -1 && ib !== -1) return ia - ib;
+        if (ia !== -1) return -1;
+        if (ib !== -1) return 1;
+        return a.localeCompare(b, 'zh');
+      });
       const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕'};
 
       // ========== 年级切换标签 ==========
