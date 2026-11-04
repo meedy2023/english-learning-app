@@ -3906,7 +3906,12 @@ function playAudioBlobEx(blob, onEnd) {
       try { window._activeAudio.src = ''; } catch (e) {}
       window._activeAudio = null;
     }
-    if (window.speechSynthesis) { try { speechSynthesis.cancel(); } catch (e) {} }
+    if (window.speechSynthesis) {
+      try { speechSynthesis.cancel(); } catch (e) {}
+      // Chrome/WebView：cancel() 后内部状态可能残留 paused/pending，
+      // 不复位会导致紧接着的 speak() 被静默丢弃（表现为「第二次点播放不发声」）
+      try { speechSynthesis.resume(); } catch (e) {}
+    }
   }
 
 function playAudioBlob(blob, onEnd) {
@@ -3916,6 +3921,8 @@ function playAudioBlob(blob, onEnd) {
     const audio = new Audio();
     window._activeAudio = audio;
     audio.src = url;
+    // 播放前显式复位播放位置（防御：避免播放器停在结尾导致无法重播）
+    try { audio.currentTime = 0; } catch (e) {}
     const finish = () => {
       if (token !== window._audioToken) return;
       if (window._activeAudio === audio) window._activeAudio = null;
@@ -3973,6 +3980,9 @@ function playAudioBlob(blob, onEnd) {
       const _G = G || ((f) => f);
       try {
         speechSynthesis.cancel();
+        // 复位浏览器内部 paused/pending 状态：cancel() 后若不 resume，
+        // 紧接着的 speak() 可能被静默丢弃（「第二次点播放不发声」）
+        try { speechSynthesis.resume(); } catch (e) {}
         const u = new SpeechSynthesisUtterance(text);
         u.lang = lang === 'zh-CN' ? 'zh-CN' : (enVoice.startsWith('en-US') ? 'en-US' : 'en-GB');
         u.rate = (lang === 'en-US' ? 0.85 : 0.95) * speechRate;
@@ -3981,8 +3991,11 @@ function playAudioBlob(blob, onEnd) {
         const v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
                || speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(prefix));
         if (v) u.voice = v;
-        u.onend = () => { if (cb) cb(); };
+        // 全局持有 utterance：局部变量被 GC 时 Chrome 会丢 onend / 不发声
+        window._ttsUtterance = u;
+        u.onend = () => { if (window._ttsUtterance === u) window._ttsUtterance = null; if (cb) cb(); };
         u.onerror = () => {
+          if (window._ttsUtterance === u) window._ttsUtterance = null;
           // 本机语音引擎出错（部分安卓机型缺 TTS 引擎）：网络可用时再试一次网络
           if (TTS_NET.usable() && ttsEngine !== 'system') {
             this.speakNetworkOnce(text, lang, cb, _G, true);
@@ -3991,7 +4004,13 @@ function playAudioBlob(blob, onEnd) {
             if (cb) cb();
           }
         };
-        speechSynthesis.speak(u);
+        // cancel() 后让出一帧再 speak，避开 Chrome 的 cancel/speak 竞态；
+        // 序号检查保证被更新的发音取代时不会抢播
+        const mySeq = this._seq;
+        setTimeout(function () {
+          if (mySeq !== TTS._seq) return;
+          try { speechSynthesis.speak(u); } catch (e) { if (cb) cb(); }
+        }, 0);
       } catch (e) { if (cb) cb(); }
     },
     // 网络链路：讯飞 → Edge → 降级本机发音（silent=true 时不再提示，避免重复打扰）
