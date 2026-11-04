@@ -52,7 +52,7 @@
 
     /* ========== 视图切换 ========== */
     .view { display: none; }
-    .view.active { display: block; }
+    .view.active { display: block; padding-bottom: 96px; }
 
     /* ========== 模块列表 ========== */
     .section-title {
@@ -441,9 +441,10 @@
 
     /* ========== 年级按钮 ========== */
     .grade-btn {
+      position: relative;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       gap: 16px;
       padding: 24px 28px;
       background: #fff;
@@ -4705,7 +4706,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <div class="grade-name">${grade}</div>
             <div class="grade-desc">${descMap[grade] || '外研版教材'}</div>
           </span>
-          <span style="font-size:20px;margin-left:auto">→</span>
+          <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
         `;
         btn.onclick = () => openGrade(grade);
         grid.appendChild(btn);
@@ -4720,7 +4721,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <div class="grade-name">三年级</div>
             <div class="grade-desc">外研社三年级上册/下册</div>
           </span>
-          <span style="font-size:20px;margin-left:auto">→</span>
+          <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
         </div>
         <div class="grade-btn" onclick="openGrade('四年级')">
           <span class="grade-icon">📖</span>
@@ -4728,7 +4729,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <div class="grade-name">四年级</div>
             <div class="grade-desc">外研社四年级上册/下册</div>
           </span>
-          <span style="font-size:20px;margin-left:auto">→</span>
+          <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
         </div>
         <div class="grade-btn" onclick="openGrade('五年级')">
           <span class="grade-icon">📕</span>
@@ -4736,7 +4737,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <div class="grade-name">五年级</div>
             <div class="grade-desc">外研社五年级上册/下册</div>
           </span>
-          <span style="font-size:20px;margin-left:auto">→</span>
+          <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
         </div>
       `;
     }
@@ -4784,6 +4785,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <div class="progress-fill" style="width:${pct}%"></div>
           </div>
           <div class="progress-text">${prog.learned}/${prog.total} 已学</div>
+          <div style="display:flex;justify-content:flex-end;margin-top:6px;color:#6c63ff;font-weight:700;font-size:18px">进入 →</div>
         `;
         card.onclick = () => openModule(m.module);
         grid.appendChild(card);
@@ -7109,7 +7111,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             + '<div style="display:flex;gap:16px;font-size:12px;color:#666">'
             + '<span>📖 已学 <b style="color:#333">' + mLearned + '</b></span>'
             + '<span>⭐ 已掌握 <b style="color:#333">' + mMastered + '</b></span>'
-            + '<span>📚 共 <b style="color:#333">' + mTotal + '</b></span></div>';
+            + '<span>📚 共 <b style="color:#333">' + mTotal + '</b></span></div>'
+            + '<div style="text-align:right;color:#6c63ff;font-weight:700;font-size:18px;margin-top:4px">进入 →</div>';
           div.onclick = (function(gg, mm) { return function() {
             currentGrade = gg;
             currentModule = mm;
@@ -7138,7 +7141,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             + '<div style="display:flex;gap:16px;font-size:12px;color:#666">'
             + '<span>📖 已学 <b style="color:#333">' + gData.tl + '</b></span>'
             + '<span>⭐ 已掌握 <b style="color:#333">' + gData.tm + '</b></span>'
-            + '<span>📚 共 <b style="color:#333">' + gData.tw + '</b></span></div>';
+            + '<span>📚 共 <b style="color:#333">' + gData.tw + '</b></span></div>'
+            + '<div style="text-align:right;color:#6c63ff;font-weight:700;font-size:18px;margin-top:4px">进入 →</div>';
           card.onclick = () => selectReportGrade(g, byGrade);
           container.appendChild(card);
         });
