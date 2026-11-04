@@ -4801,15 +4801,24 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   // ========== P4-② 减少层级：继续上次学习 ==========
+  // 判断一条 last_study 记录是否可被「继续上次学习」恢复（兼容旧版无 type 字段的记录）
+  function canContinue(rec) {
+    if (!rec) return false;
+    const type = rec.type || (rec.unit ? 'lesson' : (rec.module ? 'word' : null));
+    if (type === 'word') return !!rec.module;
+    if (type === 'lesson') return !!(rec.unit && rec.unit.content) || !!rec.module;
+    return false;
+  }
   function updateContinueEntry() {
     const el = document.getElementById('continue-entry');
     if (!el) return;
     const raw = localStorage.getItem('last_study_' + USER_ID);
     let rec = null; try { rec = JSON.parse(raw); } catch (e) { rec = null; }
-    if (rec && (rec.title || rec.module)) {
+    if (canContinue(rec)) {
       el.style.display = 'flex';
-      document.getElementById('continue-entry-type').textContent = (rec.type === 'lesson') ? '课文' : '单词';
-      document.getElementById('continue-entry-title').textContent = rec.title || rec.module || '';
+      const type = rec.type || (rec.unit ? 'lesson' : 'word');
+      document.getElementById('continue-entry-type').textContent = (type === 'lesson') ? '课文' : '单词';
+      document.getElementById('continue-entry-title').textContent = rec.title || rec.module || (rec.unit && rec.unit.unit) || '';
     } else {
       el.style.display = 'none';
     }
@@ -4819,14 +4828,28 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (!raw) { toast('还没有学习记录，先学一课吧！'); return; }
     let rec = null; try { rec = JSON.parse(raw); } catch (e) { rec = null; }
     if (!rec) return;
-    if (rec.type === 'word' && rec.module) {
+    // 兼容旧版记录：无 type 时根据可用字段推断类型
+    const type = rec.type || (rec.unit ? 'lesson' : (rec.module ? 'word' : null));
+    if (type === 'word' && rec.module) {
       openModule(rec.module);
-    } else if (rec.type === 'lesson' && rec.unit && rec.unit.content) {
-      switchView('learn');
-      document.getElementById('quiz-toggle-bar').style.display = 'none';
-      const gd = document.getElementById('grade-display');
-      if (gd && rec.grade) { gd.textContent = (rec.grade.match(/^[^-]+?年级/) || [rec.grade])[0]; }
-      showLessonDetail(rec.unit);
+    } else if (type === 'lesson') {
+      if (rec.grade) {
+        const gd = document.getElementById('grade-display');
+        if (gd) gd.textContent = (rec.grade.match(/^[^-]+?年级/) || [rec.grade])[0];
+        currentLessonGrade = rec.grade;
+      }
+      if (rec.unit && rec.unit.content && rec.unit.content.length) {
+        switchView('learn');
+        const qb = document.getElementById('quiz-toggle-bar');
+        if (qb) qb.style.display = 'none';
+        showLessonDetail(rec.unit);
+      } else if (rec.module) {
+        // 不完整/旧版课文记录：跳到对应模块单元列表，让用户接着选
+        switchView('learn');
+        openLessonModule(rec.module, rec.grade);
+      } else {
+        toast('上次的学习记录已失效，重新选一课吧！');
+      }
     } else {
       toast('上次的学习记录已失效，重新选一课吧！');
     }
