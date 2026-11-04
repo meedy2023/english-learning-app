@@ -4106,6 +4106,18 @@ function playAudioBlob(blob, onEnd) {
     }
   };
 
+// ========== 兼容旧版遗留视图按钮（消除 ReferenceError）==========
+// view-lesson-detail / result-overlay 是早期静态视图，新版已改用 view-learn 动态渲染；
+// 但 DOM 与 onclick 仍保留（含 SW 旧缓存页面），这里补齐全局实现，
+// 避免残留按钮被点到时抛 "xxx is not defined"。
+function speakCurrentLesson() {
+  try { LessonReader.toggle(); } catch (e) { toast('请先进入课文学习'); }
+}
+function nextQuestion() {
+  var ov = document.getElementById('result-overlay');
+  if (ov) ov.style.display = 'none';
+  try { nextQuizQuestion(); } catch (e) {}
+}
 function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== KET 跟读（复用全局 _ra 状态机）==========
