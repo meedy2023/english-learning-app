@@ -3488,15 +3488,6 @@ const API = ".";
     },
     pause() {
       if (this.state !== 'playing') return;
-      if (this.humanMode) {
-        // 真人节奏模式：无播放句柄，直接中断当前意群链并停掉音频
-        this.token++;
-        stopAllAudio();
-        this.state = 'paused';
-        this.stopTick();
-        this.updateUI();
-        return;
-      }
       if (this.handle && this.handle.pause) this.handle.pause();
       this.state = 'paused';
       this.stopTick();
@@ -3518,11 +3509,6 @@ const API = ".";
       if (this.state !== 'paused') return;
       this.state = 'playing';
       this.updateUI();
-      if (this.humanMode) {
-        // 真人节奏模式：从当前句重新开始（保持词级高亮从头）
-        this.playCurrentHuman();
-        return;
-      }
       if (this.handle && this.handle.resume) {
         const self = this;
         this.handle.resume();
@@ -3554,7 +3540,7 @@ const API = ".";
 
     playCurrent() {
       if (this.idx < 0 || this.idx >= this.lines.length) { this.finish(); return; }
-      // 真人节奏模式：走独立的意群朗读链路
+      // 真人节奏模式：整句合成 + 差异化标点停顿 + 语调
       if (this.humanMode) { this.playCurrentHuman(); return; }
       const self = this;
       const line = this.lines[this.idx];
@@ -3592,70 +3578,40 @@ const API = ".";
     // 真人节奏朗读：按标点把整句拆成「意群」，逐意群合成朗读，
     // 意群间用差异化自然停顿，句末标点保留在文本里让引擎自然读出升降调。
     playCurrentHuman() {
+      // 真人节奏：整句一次合成（避免逐意群拆开合成带来的网络往返卡顿与播放竞态），
+      // 通过 EdgeTTS 差异化 SSML 停顿（逗号短/句号中/问号长）+ 句末语调实现真人节奏；
+      // 词级高亮复用整句朗读的 startTick/markWord 机制，按播放进度精准跟随。
       const self = this;
       const line = this.lines[this.idx];
       const tk = ++this.token;
       this.paintStates();
       this.ensureReadingSpace();
       this.scrollIntoView(line.item);
-      this.stopTick();
-
-      // 把整句按标点拆成意群：逗号/分号/冒号/破折号=句内短停顿；句号/问号/感叹号=句末
-      // 每个意群保留结尾标点，引擎据此自然处理停顿与语调（问号上扬、感叹号加强、句号平稳）。
-      const text = String(line.text || '').trim();
-      const chunks = text.split(/(?<=[,;:—–…])\s+|(?<=[.!?])\s+/).filter(s => s && s.trim());
-
-      // 关联词节点：按顺序把每句里的 .lr-w 映射到意群，供高亮跟随
-      const wordEls = line.words || [];
-      // 统计每个意群含多少个词（按空格近似切词，忽略纯标点），并记录其起始词索引
-      const chunkMeta = [];   // [{startIdx, count, el}]
-      let wCursor = 0;
-      chunks.forEach((ch) => {
-        const count = String(ch).split(/\s+/).filter(w => /[A-Za-z']/.test(w)).length;
-        const el = wordEls[wCursor] ? wordEls[wCursor].el : null;
-        chunkMeta.push({ startIdx: wCursor, count: count, el: el });
-        wCursor += count;
-      });
-
-      if (!chunks.length) { this.advanceLine(tk); return; }
-
-      // 高亮清空，逐个点亮
-      line.words.forEach(w => { if (w.el) { w.el.classList.remove('lr-reading', 'lr-word-done'); } });
-
-      // 预合成本句所有意群：播放时直接从缓存取 blob，衔接零延迟、更连贯，
-      // 也避免「边播边合成」的网络往返卡顿与 play() 竞态（reject → 播放失败）。
-      chunks.forEach(ch => { if (ch) TTS.prefetch(ch, 'en-US'); });
-      // 顺带预合成下一句整句，读完本句后下一句衔接也顺
+      this.startAt = Date.now();
+      // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
+      this.estMs = Math.max(1200, (line.total / 14) * 1000 / (speechRate || 0.75) + 400);
+      // 预合成下一句（真人节奏：用 human 缓存键，弱网时下一句衔接更顺）
       const nextLine = this.lines[this.idx + 1];
-      if (nextLine && nextLine.text) TTS.prefetch(nextLine.text, 'en-US');
-
-      // 抖动：给停顿加 ±15% 随机，避免机械感（同一句内固定种子，保证不跳变）
-      const jitter = (base) => Math.round(base * (0.85 + Math.random() * 0.3));
-
-      let ci = 0;
-      const speakNext = () => {
-        if (tk !== self.token || self.state !== 'playing') return;
-        if (ci >= chunks.length) { self.advanceLine(tk); return; }
-        const chunk = chunks[ci];
-        const meta = chunkMeta[ci];
-        // 词级高亮：点亮当前意群起始词（意群内后续词由引擎一气呵成）
-        if (meta.el) {
-          line.words.forEach(w => { if (w.el) { w.el.classList.remove('lr-reading'); } });
-          meta.el.classList.add('lr-reading');
-        }
-        self.handle = TTS.speak(chunk, 'en-US', () => {
+      if (nextLine && nextLine.text) TTS.prefetch(nextLine.text, 'en-US', true);
+      this.handle = TTS.speakSentence(line.text, 'en-US', {
+        human: true,   // 差异化标点停顿 + 语调
+        onReady: function(audio) {
           if (tk !== self.token) return;
-          // 把当前意群覆盖的词标记为已读
-          for (let k = 0; k < meta.count; k++) {
-            const we = wordEls[meta.startIdx + k];
-            if (we && we.el) we.el.classList.add('lr-word-done');
-          }
-          ci++;
-          const delay = humanChunkGap(chunk);
-          setTimeout(speakNext, jitter(delay));
-        });
-      };
-      speakNext();
+          if (self.state === 'paused' && audio) { try { audio.pause(); } catch (e) {} }
+        },
+        onEnd: function() {
+          if (tk !== self.token) return;
+          self.stopTick();
+          self.markWordDone(line, true);
+          if (self.idx >= self.lines.length - 1) { self.finish(); return; }
+          setTimeout(function() {
+            if (tk !== self.token || self.state !== 'playing') return;
+            self.idx++;
+            self.playCurrent();
+          }, lessonLineGap());
+        }
+      }, (fn) => (typeof fn === 'function' ? function () { if (self.token === tk) return fn.apply(null, arguments); } : fn));
+      this.startTick();
     },
     // 当前句读完 → 进入下一句或结束
     advanceLine(tk) {
@@ -3876,17 +3832,6 @@ const API = ".";
   // 整篇朗读时句子之间的停顿（越慢停顿越长，给孩子反应时间）
   function lessonLineGap() { return Math.round(450 / speechRate); }
 
-  // 真人节奏：单个意群之后的停顿。按结尾标点给差异化时长，越接近真人呼吸节奏。
-  // 逗号/分号/冒号=短顿；句号=中顿；问号/感叹号=长顿（给语气起伏留出空间）。
-  function humanChunkGap(chunk) {
-    const t = String(chunk || '').trim();
-    const base = 500 / speechRate;               // 基准（约 0.5 秒 @1.0 语速）
-    if (/[!?]$/.test(t)) return Math.round(base * 1.5);   // 疑问/感叹：上扬/加强前稍长
-    if (/[.]$/.test(t)) return Math.round(base * 1.2);    // 句末：中长停顿
-    if (/[,;:—–…]$/.test(t)) return Math.round(base * 0.7);// 句内逗号：短停顿
-    return Math.round(base * 0.45);                      // 无标点断行：很短的换气停顿
-  }
-
   function escapeXml(s) {
     return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
@@ -3894,7 +3839,7 @@ const API = ".";
   // ---- 网络发音：Edge TTS（免费、无需 Key，浏览器直连 wss）----
   const EdgeTTS = {
     WS_URL: 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D18AC1447B9B4DE3946C719C8B',
-    synthesize(text, lang, onAudio, onError, voiceOverride, ipa) {
+    synthesize(text, lang, onAudio, onError, voiceOverride, ipa, human) {
       if (typeof WebSocket === 'undefined') { onError && onError(new Error('no websocket')); return; }
       let ws;
       try { ws = new WebSocket(this.WS_URL); } catch (e) { onError && onError(e); return; }
@@ -3928,12 +3873,24 @@ const API = ".";
         if (ipa) {
           spoken = "<phoneme alphabet='ipa' ph='" + ipa + "'>" + spoken + "</phoneme>";
         } else if (lang === 'en-US') {
-          // 短横线或逗号处加 200ms 停顿，单词间加 100ms
-          spoken = spoken
-            .replace(/, /g, "<break time='180ms'/>")
-            .replace(/\. /g, "<break time='220ms'/>. ")
-            .replace(/! /g, "<break time='220ms'/>! ")
-            .replace(/\? /g, "<break time='220ms'/>? ");
+          // 真人节奏：按标点给差异化停顿（逗号短、句号中、问号/感叹号长），
+          // 句末标点保留，让引擎自然读出升降调（问号上扬、感叹号加强、句号平稳）。
+          if (human) {
+            spoken = spoken
+              .replace(/,\s*/g, "<break time='120ms'/> ")
+              .replace(/;\s*/g, "<break time='160ms'/> ")
+              .replace(/:\s*/g, "<break time='160ms'/> ")
+              .replace(/([.!])\s+/g, "<break time='280ms'/>$1 ")
+              .replace(/(\?)\s+/g, "<break time='420ms'/>$1 ")
+              .replace(/([!?])$/g, "<break time='120ms'/>$1");
+          } else {
+            // 普通模式：固定标点停顿
+            spoken = spoken
+              .replace(/, /g, "<break time='180ms'/>")
+              .replace(/\. /g, "<break time='220ms'/>. ")
+              .replace(/! /g, "<break time='220ms'/>! ")
+              .replace(/\? /g, "<break time='220ms'/>? ");
+          }
         }
         const ratePct = Math.round((speechRate - 1) * 100);
         const xmlLang = lang === 'zh-CN' ? 'zh-CN' : 'en-GB';
@@ -4233,7 +4190,7 @@ function playAudioBlob(blob, onEnd) {
           TTS_NET.onFail();
           goSystem();
         }
-      });
+      }, opts.human);
       return handle;
     },
     // 音标发音（自然拼读）：网络走 Edge SSML <phoneme>，本机模式读代表词；
@@ -4257,9 +4214,9 @@ function playAudioBlob(blob, onEnd) {
       }, enVoice, ipaCore);
     },
     // 只合成、不播放（返回 blob 或 null）
-    synthOnce(text, lang, cb) {
+    synthOnce(text, lang, cb, human) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
-      const key = ttsCacheKey(text, lang, voice);
+      const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
       // 合成返回空 blob 视为失败（避免缓存/播放破损音频），继续尝试下一引擎
@@ -4268,21 +4225,21 @@ function playAudioBlob(blob, onEnd) {
         TTS_NET.onOk(); ttsCacheSet(key, blob); cb(blob);
       };
       XFYunTTS.synth(text, lang, ok, () => {
-        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); });
+        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, undefined, undefined, human);
       });
     },
     // 预合成（不播放）：整篇朗读时提前把下一句缓存好，弱网下也能连贯地播下去
-    prefetch(text, lang) {
+    prefetch(text, lang, human) {
       if (!text || !this.useNetwork(lang)) return;
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
-      const key = ttsCacheKey(text, lang, voice);
+      const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
       if (_ttsCache.has(key)) return;
       const ok = (blob) => {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob);
       };
       XFYunTTS.synth(text, lang, ok, () => {
-        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); });
+        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, undefined, undefined, human);
       });
     }
   };
