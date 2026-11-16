@@ -2445,7 +2445,7 @@ const API = ".";
       <div class="lr-dock" id="lesson-reader-dock">
         <div class="lr-ctrl">
           <button class="lr-ctrl-btn lr-ctrl-main" id="lesson-full-speak-btn" data-reading="0">🔊 朗读整篇课文</button>
-          <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-syllable-btn" type="button" aria-label="切换逐音节朗读">🔤 逐音节</button>
+          <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-human-btn" type="button" aria-label="切换真人节奏朗读">🎙 真人节奏</button>
           <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-replay-btn" style="display:none">🔁 重播</button>
         </div>
         <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
@@ -2486,9 +2486,9 @@ const API = ".";
     if (replayBtn) {
       replayBtn.onclick = function() { LessonReader.replay(); };
     }
-    var syllableBtn = document.getElementById("lesson-syllable-btn");
-    if (syllableBtn) {
-      syllableBtn.onclick = function() { LessonReader.toggleSyllableMode(); };
+    var humanBtn = document.getElementById("lesson-human-btn");
+    if (humanBtn) {
+      humanBtn.onclick = function() { LessonReader.toggleHumanMode(); };
     }
     // 绑定句子：采集朗读行
     LessonReader.bind(unit.content);
@@ -3385,75 +3385,6 @@ const API = ".";
       .map(w => '<span class="lr-w">' + escapeHtml(w) + '</span>').join(' ');
   }
 
-  // ===== 英文单词音节切分 =====
-  // 基于「元音组 + 常见构词规则」的轻量切分：把单词拆成若干音节片段，供「逐音节朗读」使用。
-  // 规则覆盖：沉默 e、-le 成音节、辅音连读簇、双写辅音等常见情况。
-  function syllabify(word) {
-    let w = String(word || '').trim().toLowerCase().replace(/[^a-z']/g, '');
-    if (!w) return [];
-    if (w.length <= 3) return [w];              // 短词不做切分（cat / hi / be / go）
-
-    const isV = (c) => /[aeiouy]/.test(c);
-
-    // 沉默 e：词尾「元音 + 辅音 + e」（make/name/like/bike）→ 去掉末尾 e 参与切分，最后拼回
-    let silentE = false;
-    if (/[aeiou][^aeiouy]e$/.test(w) && w.length >= 4 && !/[^aeiou]le$/.test(w)) {
-      silentE = true;
-      w = w.slice(0, -1);
-    }
-
-    const chars = w.split('');
-    const n = chars.length;
-    const out = [];
-    let cur = '';
-    let i = 0;
-
-    while (i < n) {
-      const c = chars[i];
-      if (isV(c)) {
-        // 元音组：缓冲区（前置辅音）+ 连续元音都归入当前音节
-        let j = i;
-        while (j < n && isV(chars[j])) j++;
-        cur += chars.slice(i, j).join('');
-        i = j;
-
-        // 看元音组后是否还有元音（决定是否在此断音节）
-        let k = i;
-        while (k < n && !isV(chars[k])) k++;
-        if (k >= n) {
-          // 后面没有元音了：剩余辅音全归本音节（school / morning）
-          cur += chars.slice(i, n).join('');
-          i = n;
-        } else {
-          const cons = chars.slice(i, k);        // 两个元音组之间的辅音串
-          if (cons.length === 0) {
-            // 元音紧邻（create / poem 之类）：当前音节结束
-            out.push(cur); cur = '';
-          } else if (k + 2 === n && chars[k] !== 'l' && chars[k + 1] === 'l' && chars[k + 2] === 'e') {
-            // 末尾「辅音 + le」成音节：ap-ple / lit-tle / ta-ble
-            cur += cons.join('');
-            out.push(cur); cur = '';
-            i = k;
-          } else {
-            // 默认：留一个辅音给本音节，其余作为下一音节的开头辅音
-            cur += cons[0];
-            out.push(cur); cur = '';
-            i = i + 1;
-          }
-        }
-      } else {
-        // 辅音：加入缓冲区（作为下一音节的开头）
-        cur += c;
-        i++;
-      }
-    }
-    if (cur) out.push(cur);
-
-    const result = out.filter(s => s.length > 0);
-    // 拼回沉默 e 到最后一个音节
-    if (silentE && result.length) result[result.length - 1] += 'e';
-    return result;
-  }
   const LessonReader = {
     lines: [],        // [{item, words:[{el, chars}], text, total}]
     idx: -1,
@@ -3464,26 +3395,26 @@ const API = ".";
     startAt: 0,       // 当前句开始时间（系统语音用）
     estMs: 2000,      // 当前句估算时长（系统语音无 currentTime 时用）
     paused: false,
-    syllableMode: localStorage.getItem('reader_syllable_mode') === '1',  // true=逐音节朗读，false=整句朗读
+    humanMode: localStorage.getItem('reader_human_mode') === '1',  // true=真人节奏朗读，false=整句匀速朗读
     ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
-    // 切换「逐音节 / 整句」朗读模式
-    toggleSyllableMode() {
-      this.syllableMode = !this.syllableMode;
-      try { localStorage.setItem('reader_syllable_mode', this.syllableMode ? '1' : '0'); } catch (e) {}
+    // 切换「真人节奏 / 整句」朗读模式
+    toggleHumanMode() {
+      this.humanMode = !this.humanMode;
+      try { localStorage.setItem('reader_human_mode', this.humanMode ? '1' : '0'); } catch (e) {}
       if (this.state === 'playing' || this.state === 'paused') {
         // 正在朗读时切换：从当前句重新以新模式朗读
         const cur = this.idx >= 0 ? this.idx : 0;
         this.start(cur);
       }
-      this.updateSyllableBtn();
+      this.updateHumanBtn();
     },
-    updateSyllableBtn() {
-      const btn = this.UI('syllable', 'lesson-syllable-btn');
+    updateHumanBtn() {
+      const btn = this.UI('human', 'lesson-human-btn');
       if (!btn) return;
-      const on = this.syllableMode;
+      const on = this.humanMode;
       btn.classList.toggle('lr-mode-on', on);
-      btn.textContent = on ? '🔤 逐音节·开' : '🔤 逐音节';
-      btn.title = on ? '当前：逐音节朗读（点此切回整句朗读）' : '当前：整句朗读（点此切换逐音节朗读）';
+      btn.textContent = on ? '🎙 真人节奏·开' : '🎙 真人节奏';
+      btn.title = on ? '当前：真人节奏朗读（点此切回普通朗读）' : '当前：普通朗读（点此切换真人节奏）';
     },
     // 取 UI 元素：优先本次绑定的 ids，回落到课文页默认 id
     UI(key, defId) {
@@ -3522,7 +3453,7 @@ const API = ".";
         d.style.display = (d.id === dockId) ? '' : 'none';
       });
       this.updateUI();
-      this.updateSyllableBtn();
+      this.updateHumanBtn();
     },
 
     // 主按钮：播放 / 暂停 / 继续
@@ -3556,8 +3487,8 @@ const API = ".";
     },
     pause() {
       if (this.state !== 'playing') return;
-      if (this.syllableMode) {
-        // 逐音节模式：无播放句柄，直接中断当前音节链并停掉音频
+      if (this.humanMode) {
+        // 真人节奏模式：无播放句柄，直接中断当前意群链并停掉音频
         this.token++;
         stopAllAudio();
         this.state = 'paused';
@@ -3586,9 +3517,9 @@ const API = ".";
       if (this.state !== 'paused') return;
       this.state = 'playing';
       this.updateUI();
-      if (this.syllableMode) {
-        // 逐音节模式：从当前句重新开始（保持词级高亮从头）
-        this.playCurrentSyllable();
+      if (this.humanMode) {
+        // 真人节奏模式：从当前句重新开始（保持词级高亮从头）
+        this.playCurrentHuman();
         return;
       }
       if (this.handle && this.handle.resume) {
@@ -3622,8 +3553,8 @@ const API = ".";
 
     playCurrent() {
       if (this.idx < 0 || this.idx >= this.lines.length) { this.finish(); return; }
-      // 逐音节模式：走独立的音节播放链路
-      if (this.syllableMode) { this.playCurrentSyllable(); return; }
+      // 真人节奏模式：走独立的意群朗读链路
+      if (this.humanMode) { this.playCurrentHuman(); return; }
       const self = this;
       const line = this.lines[this.idx];
       const tk = ++this.token;
@@ -3657,8 +3588,9 @@ const API = ".";
       }, (fn) => (typeof fn === 'function' ? function () { if (self.token === tk) return fn.apply(null, arguments); } : fn));
       this.startTick();
     },
-    // 逐音节朗读：把整句拆成「词 → 音节」逐段朗读，词级高亮跟随
-    playCurrentSyllable() {
+    // 真人节奏朗读：按标点把整句拆成「意群」，逐意群合成朗读，
+    // 意群间用差异化自然停顿，句末标点保留在文本里让引擎自然读出升降调。
+    playCurrentHuman() {
       const self = this;
       const line = this.lines[this.idx];
       const tk = ++this.token;
@@ -3667,59 +3599,52 @@ const API = ".";
       this.scrollIntoView(line.item);
       this.stopTick();
 
-      // 拆分句子：词 + 标点（保留单词，标点当作停顿）
-      const rawWords = String(line.text || '').split(/\s+/).filter(w => w.length > 0);
-      // 构建待读序列：[{text, wordEl, isWord}]
-      const seq = [];
+      // 把整句按标点拆成意群：逗号/分号/冒号/破折号=句内短停顿；句号/问号/感叹号=句末
+      // 每个意群保留结尾标点，引擎据此自然处理停顿与语调（问号上扬、感叹号加强、句号平稳）。
+      const text = String(line.text || '').trim();
+      const chunks = text.split(/(?<=[,;:—–…])\s+|(?<=[.!?])\s+/).filter(s => s && s.trim());
+
+      // 关联词节点：按顺序把每句里的 .lr-w 映射到意群，供高亮跟随
       const wordEls = line.words || [];
-      let wordIdx = 0;
-      rawWords.forEach((raw) => {
-        const m = raw.match(/^([A-Za-z']+)(.*)$/);
-        if (m) {
-          const word = m[1];
-          const punct = m[2];
-          const el = wordEls[wordIdx] ? wordEls[wordIdx].el : null;
-          wordIdx++;
-          const syls = syllabify(word);
-          if (syls.length <= 1) {
-            seq.push({ text: word + punct, wordEl: el, isWord: true, syl: 0, sylTotal: 1 });
-          } else {
-            syls.forEach((s, si) => {
-              const t = s + ((si === syls.length - 1) ? punct : '');
-              seq.push({ text: t, wordEl: el, isWord: true, syl: si, sylTotal: syls.length });
-            });
-          }
-        } else {
-          // 纯标点/数字等
-          seq.push({ text: raw, wordEl: null, isWord: false, syl: 0, sylTotal: 1 });
-        }
+      // 统计每个意群含多少个词（按空格近似切词，忽略纯标点），并记录其起始词索引
+      const chunkMeta = [];   // [{startIdx, count, el}]
+      let wCursor = 0;
+      chunks.forEach((ch) => {
+        const count = String(ch).split(/\s+/).filter(w => /[A-Za-z']/.test(w)).length;
+        const el = wordEls[wCursor] ? wordEls[wCursor].el : null;
+        chunkMeta.push({ startIdx: wCursor, count: count, el: el });
+        wCursor += count;
       });
 
-      if (!seq.length) { this.advanceLine(tk); return; }
+      if (!chunks.length) { this.advanceLine(tk); return; }
 
-      // 高亮当前句所有词清空，逐个点亮
+      // 高亮清空，逐个点亮
       line.words.forEach(w => { if (w.el) { w.el.classList.remove('lr-reading', 'lr-word-done'); } });
 
-      let si = 0;
-      const gapMs = 130;      // 音节间停顿
-      const wordGapMs = 260;  // 词间停顿（略长，听感更清晰）
+      // 抖动：给停顿加 ±15% 随机，避免机械感（同一句内固定种子，保证不跳变）
+      const jitter = (base) => Math.round(base * (0.85 + Math.random() * 0.3));
 
+      let ci = 0;
       const speakNext = () => {
         if (tk !== self.token || self.state !== 'playing') return;
-        if (si >= seq.length) { self.advanceLine(tk); return; }
-        const seg = seq[si];
-        // 词级高亮：点亮当前音节所属的单词
-        if (seg.wordEl) {
+        if (ci >= chunks.length) { self.advanceLine(tk); return; }
+        const chunk = chunks[ci];
+        const meta = chunkMeta[ci];
+        // 词级高亮：点亮当前意群起始词（意群内后续词由引擎一气呵成）
+        if (meta.el) {
           line.words.forEach(w => { if (w.el) { w.el.classList.remove('lr-reading'); } });
-          seg.wordEl.classList.add('lr-reading');
+          meta.el.classList.add('lr-reading');
         }
-        self.handle = TTS.speak(seg.text, 'en-US', () => {
+        self.handle = TTS.speak(chunk, 'en-US', () => {
           if (tk !== self.token) return;
-          if (seg.wordEl) seg.wordEl.classList.add('lr-word-done');
-          si++;
-          const nextSeg = seq[si];
-          const delay = (nextSeg && nextSeg.wordEl === seg.wordEl) ? gapMs : wordGapMs;
-          setTimeout(speakNext, delay);
+          // 把当前意群覆盖的词标记为已读
+          for (let k = 0; k < meta.count; k++) {
+            const we = wordEls[meta.startIdx + k];
+            if (we && we.el) we.el.classList.add('lr-word-done');
+          }
+          ci++;
+          const delay = humanChunkGap(chunk);
+          setTimeout(speakNext, jitter(delay));
         });
       };
       speakNext();
@@ -3942,6 +3867,17 @@ const API = ".";
   }
   // 整篇朗读时句子之间的停顿（越慢停顿越长，给孩子反应时间）
   function lessonLineGap() { return Math.round(450 / speechRate); }
+
+  // 真人节奏：单个意群之后的停顿。按结尾标点给差异化时长，越接近真人呼吸节奏。
+  // 逗号/分号/冒号=短顿；句号=中顿；问号/感叹号=长顿（给语气起伏留出空间）。
+  function humanChunkGap(chunk) {
+    const t = String(chunk || '').trim();
+    const base = 500 / speechRate;               // 基准（约 0.5 秒 @1.0 语速）
+    if (/[!?]$/.test(t)) return Math.round(base * 1.5);   // 疑问/感叹：上扬/加强前稍长
+    if (/[.]$/.test(t)) return Math.round(base * 1.2);    // 句末：中长停顿
+    if (/[,;:—–…]$/.test(t)) return Math.round(base * 0.7);// 句内逗号：短停顿
+    return Math.round(base * 0.45);                      // 无标点断行：很短的换气停顿
+  }
 
   function escapeXml(s) {
     return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -7793,7 +7729,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div class="lr-dock" id="ket-reader-dock" style="display:none">
             <div class="lr-ctrl">
               <button class="lr-ctrl-btn lr-ctrl-main" id="ket-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>
-              <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-syllable-btn" type="button" aria-label="切换逐音节朗读">🔤 逐音节</button>
+              <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-human-btn" type="button" aria-label="切换真人节奏朗读">🎙 真人节奏</button>
               <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>
             </div>
             <div class="lr-bar" id="ket-read-bar" style="display:none"><i></i></div>
@@ -7807,14 +7743,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
       const rpBtn = document.getElementById('ket-replay-btn');
       if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
-      const sylBtn = document.getElementById('ket-syllable-btn');
-      if (sylBtn) sylBtn.onclick = function () { LessonReader.toggleSyllableMode(); };
+      const humanBtn = document.getElementById('ket-human-btn');
+      if (humanBtn) humanBtn.onclick = function () { LessonReader.toggleHumanMode(); };
       LessonReader.bind(reading.sentences, {
         scope: 'ket-reading',
         dock: 'ket-reader-dock',
         main: 'ket-full-speak-btn',
         replay: 'ket-replay-btn',
-        syllable: 'ket-syllable-btn',
+        human: 'ket-human-btn',
         progress: 'ket-read-progress',
         bar: 'ket-read-bar',
         label: '🔊 朗读全文'
