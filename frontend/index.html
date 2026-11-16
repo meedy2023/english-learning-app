@@ -2135,6 +2135,8 @@ const API = ".";
       if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Doodle.exit();
       // 离开 KET 页时收起独立的短文阅读（朗读也停掉）
       if (name !== 'ket' && typeof closeKetReading === 'function') closeKetReading();
+      // 切换视图时彻底重置朗读（课文/短文）：停掉播放、清高亮、按钮恢复「朗读」初始态
+      try { LessonReader.stop(); } catch (e) {}
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
