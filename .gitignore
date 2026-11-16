@@ -21,3 +21,6 @@ docs/diag.html
 
 # Piper TTS model (local generation tool, not needed at runtime)
 piper_model/
+
+# Chrome CDP test profiles (transient)
+.cdp_score*/

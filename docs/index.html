@@ -3832,6 +3832,8 @@ const API = ".";
 
 // 与 playAudioBlob 相同，但返回 audio 元素（整篇朗读需要暂停/继续）
 function playAudioBlobEx(blob, onEnd) {
+  // 空 blob 防御：网络合成失败/返回空数据时，不再创建会报 ERR_FILE_NOT_FOUND 的破损音频
+  if (!blob || (blob.size != null && blob.size === 0)) { if (onEnd) onEnd(); return null; }
   stopAllAudio();
   const token = window._audioToken;
   const url = URL.createObjectURL(blob);
@@ -3841,7 +3843,9 @@ function playAudioBlobEx(blob, onEnd) {
   const finish = () => {
     if (token !== window._audioToken) return;
     if (window._activeAudio === audio) window._activeAudio = null;
-    URL.revokeObjectURL(url);
+    // 先摘掉 src 再释放 URL，避免浏览器仍在加载该 blob 时被 revoke 触发 ERR_FILE_NOT_FOUND
+    try { audio.onended = null; audio.onerror = null; audio.src = ''; } catch (e) {}
+    setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 0);
     if (onEnd) onEnd();
   };
   audio.onended = () => finish();
@@ -3915,6 +3919,8 @@ function playAudioBlobEx(blob, onEnd) {
   }
 
 function playAudioBlob(blob, onEnd) {
+    // 空 blob 防御：网络合成失败/返回空数据时，不再创建会报 ERR_FILE_NOT_FOUND 的破损音频
+    if (!blob || (blob.size != null && blob.size === 0)) { if (onEnd) onEnd(); return; }
     stopAllAudio();
     const token = window._audioToken;
     const url = URL.createObjectURL(blob);
@@ -3926,7 +3932,10 @@ function playAudioBlob(blob, onEnd) {
     const finish = () => {
       if (token !== window._audioToken) return;
       if (window._activeAudio === audio) window._activeAudio = null;
-      URL.revokeObjectURL(url);
+      // 先摘掉 src 再释放 URL，避免浏览器仍在加载该 blob 时被 revoke 触发 ERR_FILE_NOT_FOUND
+      try { audio.onended = null; audio.onerror = null; audio.src = ''; } catch (e) {}
+      // 延迟一帧再 revoke，给仍在进行的加载留出收尾时间（否则控制台报 blob 404）
+      setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 0);
       if (onEnd) onEnd();
     };
     audio.onended = () => finish();
@@ -4019,11 +4028,14 @@ function playAudioBlob(blob, onEnd) {
       const key = ttsCacheKey(text, lang, voice);
       const cached = ttsCacheGet(key);
       if (cached) { playAudioBlob(cached, cb); return; }
-      const okNode = G((blob) => { TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, cb); });
       const toSystem = G(() => {
         TTS_NET.onFail();
         if (!silent) TTS_NET.notifyFallback();
         TTS.speakSystem(text, lang, cb, G);
+      });
+      const okNode = G((blob) => {
+        if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); toSystem(); return; }
+        TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, cb);
       });
       XFYunTTS.synth(text, lang, okNode, G(() => {
         EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
@@ -4074,6 +4086,7 @@ function playAudioBlob(blob, onEnd) {
       if (cached) { playAudioBlob(cached, onEnd); return; }
       const self = this;
       EdgeTTS.synthesize(word, lang, (blob) => {
+        if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); self.speakSystem(word, lang, onEnd); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, onEnd);
       }, () => {
         // Edge 读不了这个音标时：退回代表词（仍走设置里的语速/发音人）
@@ -4088,7 +4101,11 @@ function playAudioBlob(blob, onEnd) {
       const key = ttsCacheKey(text, lang, voice);
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
-      const ok = (blob) => { TTS_NET.onOk(); ttsCacheSet(key, blob); cb(blob); };
+      // 合成返回空 blob 视为失败（避免缓存/播放破损音频），继续尝试下一引擎
+      const ok = (blob) => {
+        if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); cb(null); return; }
+        TTS_NET.onOk(); ttsCacheSet(key, blob); cb(blob);
+      };
       XFYunTTS.synth(text, lang, ok, () => {
         EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); });
       });
@@ -4099,7 +4116,10 @@ function playAudioBlob(blob, onEnd) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
       const key = ttsCacheKey(text, lang, voice);
       if (_ttsCache.has(key)) return;
-      const ok = (blob) => { TTS_NET.onOk(); ttsCacheSet(key, blob); };
+      const ok = (blob) => {
+        if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); return; }
+        TTS_NET.onOk(); ttsCacheSet(key, blob);
+      };
       XFYunTTS.synth(text, lang, ok, () => {
         EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); });
       });
