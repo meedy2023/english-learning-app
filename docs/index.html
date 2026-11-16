@@ -4637,6 +4637,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         r.nextReview = this.todayPlus(r.interval);
       }
       this.saveData(d);
+      this.refreshEntry();
     },
     wrong(wordId) {
       const d = this.getData();
@@ -4647,6 +4648,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       r.interval = 1;
       r.nextReview = this.todayPlus(1);
       this.saveData(d);
+      this.refreshEntry();
     },
     due() {
       const d = this.getData();
@@ -4661,14 +4663,22 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const totalN = this.count();
       if (totalN === 0) { el.style.display = 'none'; return; }
       el.style.display = 'flex';
-      document.getElementById('review-entry-badge').textContent = '错词 ' + totalN + ' 个';
+      const dueN = this.due().length;
+      document.getElementById('review-entry-badge').textContent = '待复习 ' + dueN + ' 个';
     }
   };
 
   function openReview() {
-    const due = Review.all();
+    // 间隔重复：只复习「到期」的错词（按艾宾浩斯曲线调度），未到期的暂不出现
+    const due = Review.due();
     if (due.length === 0) {
-      toast('错词本是空的，先去学习吧！');
+      const total = Review.count();
+      if (total === 0) {
+        toast('错词本是空的，先去学习吧！');
+      } else {
+        // 有错词，但都还没到复习时间
+        toast('今天没有到复习时间的错词，先休息一下吧！');
+      }
       return;
     }
     getAllWords().then(function (all) {
@@ -4855,7 +4865,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const pct = rvTotal > 0 ? Math.round(rvCorrect / rvTotal * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = pct >= 90 ? '复习得太棒了！' : pct >= 70 ? '复习得很不错！' : pct >= 50 ? '继续加油，会记住的！' : '没关系，明天再巩固一次！';
-    const remain = Review.count();
+    const remain = Review.due().length;
     const area = document.getElementById('review-area');
     area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
@@ -5207,6 +5217,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     quizOrder = shuffle(currentWords.map(w => w.id));
     currentQuizIndex = 0;
     window.quizResults = [];
+    window._quizRetry = false;
     comboCount = 0;
     hideCombo();
     // 恢复显示跳过按钮和题号
@@ -5230,6 +5241,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       showQuizSummary();
       return;
     }
+    // 重置本题重试状态
+    window._quizRetry = false;
     // 重置反馈区
     clearTimeout(window._quizAutoNext);
     document.getElementById("quiz-feedback").style.display = "none";
@@ -5287,77 +5300,107 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function handleQuizChoice(btnEl, opt, correctWord, mode) {
-    // 禁用所有选项
-    document.querySelectorAll("#quiz-options button").forEach(function(b) {
-      b.style.pointerEvents = "none";
-    });
-
     const feedback = document.getElementById("quiz-feedback");
     const nextBtn = document.getElementById("quiz-next-btn");
     const isCorrect = opt.correct;
 
-    // 记录本题结果用于判断是否全对
     if (!window.quizResults) window.quizResults = [];
-    window.quizResults.push({ correct: isCorrect });
+    if (!window._quizRetry) window._quizRetry = false;
 
+    // ---- 答对：直接进入下一题 ----
     if (isCorrect) {
+      document.querySelectorAll("#quiz-options button").forEach(function(b) {
+        b.style.pointerEvents = "none";
+      });
       btnEl.style.background = "#f6ffed";
       btnEl.style.borderColor = "#52c41a";
       btnEl.style.color = "#52c41a";
       feedback.style.display = "block";
       feedback.style.background = "#f6ffed";
       feedback.style.color = "#52c41a";
-      feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word));
+      // 提示后答对：鼓励「试错后成功」，但不按全对算（结果里保留 retried 标记）
+      const retried = window._quizRetry;
+      feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word)) + (retried ? "<br><span style='font-size:12px;color:#52c41a'>（再试一次就答对了，真棒！）</span>" : "");
       speakChinese("正确");
+      window.quizResults.push({ correct: true, retried: retried });
 
       comboCount++;
       showCombo(comboCount);
 
-      // 获得积分：测验答对
+      // 首次答对才给满分积分；提示后答对给一半（鼓励试错）
       const result = Points.earn('quiz_correct');
       if (result.success) {
-        showPointsToast(result.points, Points.getMessage('quiz_correct'));
+        showPointsToast(retried ? Math.max(1, Math.round(result.points / 2)) : result.points, Points.getMessage('quiz_correct'));
         updatePointsDisplay();
       }
 
-      // 保存进度：最后一题且全对时标记 mastered
       const isLast = currentQuizIndex + 1 >= quizOrder.length;
       const allCorrect = isLast && window.quizResults.every(function(r) { return r.correct; });
       apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=" + (allCorrect ? "mastered" : "learned"), {});
-    } else {
-      btnEl.style.background = "#fff2f0";
-      btnEl.style.borderColor = "#ff4d4f";
-      btnEl.style.color = "#ff4d4f";
-      // 高亮正确答案
-      const correctText = mode === "en_to_cn" ? correctWord.chinese : correctWord.word;
-      document.querySelectorAll("#quiz-options button").forEach(function(b) {
-        const span = b.querySelector("span:last-child");
-        if (span && span.textContent.trim() === correctText) {
-          b.style.background = "#f6ffed";
-          b.style.borderColor = "#52c41a";
-          b.style.color = "#52c41a";
-        }
-      });
-      feedback.style.display = "block";
-      feedback.style.background = "#fff2f0";
-      feedback.style.color = "#ff4d4f";
-      feedback.innerHTML = "<strong>❌ 不对哦~</strong><br>正确答案：<strong>" + correctText + "</strong>";
-      speakChinese("不对");
-      comboCount = 0;
-      hideCombo();
-      Review.add(correctWord.id);
+
+      window._quizRetry = false;
+      if (isLast) { nextBtn.style.display = "block"; nextBtn.textContent = "查看成绩 🎉"; }
+      clearTimeout(window._quizAutoNext);
+      window._quizAutoNext = setTimeout(function() { nextQuizQuestion(); }, isLast ? 2000 : 1200);
+      return;
     }
 
-    if (currentQuizIndex + 1 >= quizOrder.length) {
+    // ---- 答错 ----
+    btnEl.style.background = "#fff2f0";
+    btnEl.style.borderColor = "#ff4d4f";
+    btnEl.style.color = "#ff4d4f";
+
+    if (!window._quizRetry) {
+      // 第一次答错：给首字母提示，让学生再试一次（脚手架：先给支架，不直接给答案）
+      window._quizRetry = true;
+      const correctText = mode === "en_to_cn" ? correctWord.chinese : correctWord.word;
+      const firstChar = String(correctText).charAt(0);
+      // 该选项禁用，其余恢复可点
+      btnEl.style.pointerEvents = "none";
+      document.querySelectorAll("#quiz-options button").forEach(function(b) {
+        if (b !== btnEl) b.style.pointerEvents = "auto";
+      });
+      feedback.style.display = "block";
+      feedback.style.background = "#fff7e6";
+      feedback.style.color = "#ad6800";
+      feedback.innerHTML = "<strong>💡 再想想~</strong><br>提示：正确答案以「<strong>" + escapeHtml(firstChar) + "</strong>」开头，再试一次吧！";
+      speakChinese("再试一次");
+      // 不打断连击计数，等最终结果再判定；不自动跳题，等学生再选
+      clearTimeout(window._quizAutoNext);
+      return;
+    }
+
+    // 第二次仍答错：才显示正确答案，记错进错词本
+    document.querySelectorAll("#quiz-options button").forEach(function(b) {
+      b.style.pointerEvents = "none";
+    });
+    const correctText = mode === "en_to_cn" ? correctWord.chinese : correctWord.word;
+    document.querySelectorAll("#quiz-options button").forEach(function(b) {
+      const span = b.querySelector("span:last-child");
+      if (span && span.textContent.trim() === correctText) {
+        b.style.background = "#f6ffed";
+        b.style.borderColor = "#52c41a";
+        b.style.color = "#52c41a";
+      }
+    });
+    feedback.style.display = "block";
+    feedback.style.background = "#fff2f0";
+    feedback.style.color = "#ff4d4f";
+    feedback.innerHTML = "<strong>❌ 不对哦~</strong><br>正确答案：<strong>" + correctText + "</strong>";
+    speakChinese("不对");
+    comboCount = 0;
+    hideCombo();
+    Review.add(correctWord.id);
+    window.quizResults.push({ correct: false, retried: true });
+
+    window._quizRetry = false;
+    const isLast = currentQuizIndex + 1 >= quizOrder.length;
+    if (isLast) {
       nextBtn.style.display = "block";
       nextBtn.textContent = "查看成绩 🎉";
     }
-
-    // 答完后自动切换下一题（无需手动点击「下一题」）；答错多停留一会儿看清答案
     clearTimeout(window._quizAutoNext);
-    const isLastQ = currentQuizIndex + 1 >= quizOrder.length;
-    const autoDelay = isLastQ ? 2000 : (isCorrect ? 1200 : 2800);
-    window._quizAutoNext = setTimeout(function() { nextQuizQuestion(); }, autoDelay);
+    window._quizAutoNext = setTimeout(function() { nextQuizQuestion(); }, isLast ? 2000 : 2800);
   }
 
   function nextQuizQuestion() {
