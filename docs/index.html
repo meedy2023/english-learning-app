@@ -3855,6 +3855,19 @@ const API = ".";
   // 整篇朗读时句子之间的停顿（越慢停顿越长，给孩子反应时间）
   function lessonLineGap() { return Math.round(450 / speechRate); }
 
+  // 英文缩写展开：TTS 引擎（讯飞/Edge）对 Ms / Mr / Mrs 等缩写常按字母或错误音节拼读，
+  // 这里在发音前把它们展开成正确读音（只改发音，不改页面显示文本）。
+  // 边界：仅匹配「缩写(可带点) + 空格 + 大写字母开头的人名」，避免误伤普通词。
+  function expandAbbrev(text, lang) {
+    if (!text || lang !== 'en-US') return text;
+    return String(text)
+      .replace(/\bMs\.?\s+(?=[A-Z])/g, 'Miz ')
+      .replace(/\bMr\.?\s+(?=[A-Z])/g, 'Mister ')
+      .replace(/\bMrs\.?\s+(?=[A-Z])/g, 'Missus ')
+      .replace(/\bDr\.?\s+(?=[A-Z])/g, 'Doctor ')
+      .replace(/\bSt\.?\s+(?=[A-Z])/g, 'Saint ');
+  }
+
   function escapeXml(s) {
     return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
@@ -4145,6 +4158,7 @@ function playAudioBlob(blob, onEnd) {
       if (!text) { if (onEnd) onEnd(); return; }
       stopAllAudio();
       lang = lang || 'en-US';
+      text = expandAbbrev(text, lang);  // Ms/Mr/Mrs 等缩写展开为正确读音
       const token = ++this._seq;
       const G = (fn) => {
         if (typeof fn !== 'function') return undefined;
@@ -4222,6 +4236,8 @@ function playAudioBlob(blob, onEnd) {
     // 整篇朗读：单句播放句柄（可暂停/继续），供 LessonReader 使用
     speakSentence(text, lang, opts, G) {
       opts = opts || {};
+      lang = lang || 'en-US';
+      text = expandAbbrev(text, lang);  // Ms/Mr/Mrs 等缩写展开为正确读音（仅发音，不影响显示）
       const handle = { kind: 'none', el: null, pause: null, resume: null, stop: null };
       const useNet = this.useNetwork(lang);
       const goSystem = () => {
@@ -4301,6 +4317,8 @@ function playAudioBlob(blob, onEnd) {
     // 预合成（不播放）：整篇朗读时提前把下一句缓存好，弱网下也能连贯地播下去
     prefetch(text, lang, human) {
       if (!text || !this.useNetwork(lang)) return;
+      lang = lang || 'en-US';
+      text = expandAbbrev(text, lang);  // 与 speakSentence 展开保持一致，否则缓存 key 不一致导致预合成白做
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
       const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
       if (_ttsCache.has(key)) return;
