@@ -7731,7 +7731,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         <div style="padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
             <div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ${esc(reading.title || '')}</div>
-            <button class="speak-btn" onclick="LessonReader.toggle()" style="padding:6px 16px;font-size:13px;background:#ffd666;color:#7a5c00;border:none;border-radius:8px;cursor:pointer">🔊 朗读全文</button>
           </div>
           ${linesHtml}
           <!-- 朗读控制条：与课文一致，固定悬浮在底部导航上方 -->
@@ -7752,7 +7751,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const rpBtn = document.getElementById('ket-replay-btn');
       if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
       LessonReader.bind(reading.sentences, {
-        scope: 'ket-reading',
+        scope: 'ket-reading-area',
         dock: 'ket-reader-dock',
         main: 'ket-full-speak-btn',
         replay: 'ket-replay-btn',
