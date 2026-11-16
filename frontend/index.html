@@ -3465,6 +3465,7 @@ const API = ".";
     start(fromIdx) {
       if (!this.lines.length) { toast('没有可朗读的内容'); return; }
       this.stop(true);
+      unlockAudio();   // 在用户手势里解锁自动播放，保证后续连播意群能出声
       this.idx = Math.max(0, Math.min(this.lines.length - 1, fromIdx || 0));
       this.paintStates();
       this.state = 'playing';
@@ -3620,6 +3621,13 @@ const API = ".";
 
       // 高亮清空，逐个点亮
       line.words.forEach(w => { if (w.el) { w.el.classList.remove('lr-reading', 'lr-word-done'); } });
+
+      // 预合成本句所有意群：播放时直接从缓存取 blob，衔接零延迟、更连贯，
+      // 也避免「边播边合成」的网络往返卡顿与 play() 竞态（reject → 播放失败）。
+      chunks.forEach(ch => { if (ch) TTS.prefetch(ch, 'en-US'); });
+      // 顺带预合成下一句整句，读完本句后下一句衔接也顺
+      const nextLine = this.lines[this.idx + 1];
+      if (nextLine && nextLine.text) TTS.prefetch(nextLine.text, 'en-US');
 
       // 抖动：给停顿加 ±15% 随机，避免机械感（同一句内固定种子，保证不跳变）
       const jitter = (base) => Math.round(base * (0.85 + Math.random() * 0.3));
@@ -3979,7 +3987,8 @@ function playAudioBlobEx(blob, onEnd) {
   audio.onended = () => finish();
   audio.onerror = () => finish();
   const p = audio.play();
-  if (p && p.catch) p.catch(() => { if (token === window._audioToken) { toast('音频播放失败，请检查设备音量'); finish(); } });
+  // 连播场景 play() reject 多为竞态（被 stopAllAudio 中断 / 自动播放策略拦截），静默收尾即可
+  if (p && p.catch) p.catch(() => { if (token === window._audioToken) finish(); });
   return audio;
 }
 
@@ -4046,6 +4055,28 @@ function playAudioBlobEx(blob, onEnd) {
     }
   }
 
+  // 解锁自动播放：浏览器对「无用户手势的音频播放」会拦截（NotAllowedError）。
+  // 在用户点击「朗读」的手势里播放一个极短静音，拿到媒体播放许可后，
+  // 后续连播的意群（setTimeout 自动触发）才能正常出声。
+  function unlockAudio() {
+    try {
+      if (window._audioUnlocked) return;
+      // 播放一个静音、极短的音频，向浏览器申请「自动播放」许可。
+      // 该 play() 处于用户点击手势的调用栈内，成功后页面后续 audio 播放不再被拦截。
+      const a = new Audio();
+      a.muted = true;
+      a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+      const p = a.play();
+      if (p && p.then) {
+        p.then(() => { window._audioUnlocked = true; }).catch(() => {});
+      } else {
+        window._audioUnlocked = true;
+      }
+      // 及时释放，避免保留元素占用资源
+      setTimeout(() => { try { a.pause(); a.src = ''; } catch (e) {} }, 100);
+    } catch (e) {}
+  }
+
 function playAudioBlob(blob, onEnd) {
     // 空 blob 防御：网络合成失败/返回空数据时，不再创建会报 ERR_FILE_NOT_FOUND 的破损音频
     if (!blob || (blob.size != null && blob.size === 0)) { if (onEnd) onEnd(); return; }
@@ -4068,7 +4099,9 @@ function playAudioBlob(blob, onEnd) {
     };
     audio.onended = () => finish();
     audio.onerror = () => finish();
-    audio.play().catch(() => { toast('音频播放失败，请检查设备音量'); finish(); });
+    // play() reject 在连播场景多为竞态（被 stopAllAudio 中断 / 自动播放策略拦截），
+    // 静默收尾即可：finish() 内部有 token 守卫，token 已过期时不会误触发 onEnd 跳到下一段。
+    audio.play().catch(() => { finish(); });
   }
 
   // ---- 统一 TTS 调度 ----
