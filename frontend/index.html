@@ -5105,10 +5105,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const status = wordStatuses[w.id] || "new";
       const item = document.createElement("div");
       item.className = "word-item";
+      // 图文双通道：列表小图标（emoji 兜底）
+      const vis = wordVisual(w);
+      const visChar = vis && vis.type === 'emoji' ? vis.char : '';
       item.innerHTML = `
-        <div class="word-item-left">
-          <div class="word-item-word">${capitalize(w.word)}</div>
-          <div class="word-item-phonetic">${w.phonetic}</div>
+        <div class="word-item-left" style="${visChar ? 'flex-direction:row;align-items:center;gap:10px' : ''}">
+          ${visChar ? '<span style="font-size:26px;line-height:1;flex-shrink:0">' + visChar + '</span>' : ''}
+          <div style="display:flex;flex-direction:column">
+            <div class="word-item-word">${capitalize(w.word)}</div>
+            <div class="word-item-phonetic">${w.phonetic}</div>
+          </div>
         </div>
         <div style="display:flex;align-items:center;gap:12px">
           <div class="word-item-chinese">${w.chinese}</div>
@@ -5125,6 +5131,72 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const all = await apiGET(`/api/word-status/${USER_ID}?module=${encodeURIComponent(currentModule)}`);
       return all[wordId] || "new";
     } catch { return "new"; }
+  }
+
+  // ========== 单词图文双通道（认知负荷：双编码原则） ==========
+  // 为单词生成一个视觉锚点图形。三层降级：
+  //   1) w.image —— 未来手工补充的真实配图（最高优先）
+  //   2) 英文单词精确 emoji 映射 —— 高频具体名词/颜色/数字/星期/动物/食物/文具等
+  //   3) 词性兜底 emoji —— 保证每个词都有视觉锚点
+  // 返回 { type:'image'|'emoji', src/char }，无匹配返回 null。
+  const WORD_EMOJI = {
+    // 动物
+    dog:'🐶', cat:'🐱', bird:'🐦', panda:'🐼', elephant:'🐘', bear:'🐻', giraffe:'🦒',
+    monkey:'🐵', tiger:'🐯', lion:'🦁', zebra:'🦓', fish:'🐟', rabbit:'🐰', mouse:'🐭',
+    horse:'🐴', cow:'🐮', pig:'🐷', duck:'🦆', sheep:'🐑', hen:'🐔', chick:'🐤', frog:'🐸',
+    snake:'🐍', butterfly:'🦋', bee:'🐝', owl:'🦉', ostrich:'🦩', chameleon:'🦎', miaow:'🐱',
+    // 食物/饮品
+    apple:'🍎', banana:'🍌', orange:'🍊', egg:'🥚', cake:'🎂', bread:'🍞', rice:'🍚',
+    noodle:'🍜', milk:'🥛', water:'💧', juice:'🧃', tea:'🍵', coffee:'☕', candy:'🍬',
+    hamburger:'🍔', ice:'🧊', potato:'🥔', tomato:'🍅', carrot:'🥕', meat:'🍖', fish_food:'🍣',
+    // 文具/学习
+    book:'📖', pen:'🖊️', pencil:'✏️', bag:'🎒', ruler:'📏', eraser:'🧽', schoolbag:'🎒',
+    pencil_case:'🖊️', paper:'📄', picture:'🖼️', school:'🏫',
+    // 颜色
+    red:'🔴', blue:'🔵', green:'🟢', yellow:'🟡', black:'⚫', white:'⚪', pink:'🌸',
+    purple:'🟣', orange:'🟠', brown:'🟤', grey:'⬜', gray:'⬜',
+    // 数字
+    one:'1️⃣', two:'2️⃣', three:'3️⃣', four:'4️⃣', five:'5️⃣', six:'6️⃣', seven:'7️⃣',
+    eight:'8️⃣', nine:'9️⃣', ten:'🔟', eleven:'🔢', twelve:'🔢', thirteen:'🔢', fourteen:'🔢',
+    fifteen:'🔢', twenty:'🔢', thirty:'🔢', forty:'🔢', fifty:'🔢', sixty:'🔢', seventy:'🔢',
+    eighty:'🔢', ninety:'🔢', hundred:'💯', thousand:'💯', number:'🔢',
+    // 星期
+    monday:'📅', tuesday:'📅', wednesday:'📅', thursday:'📅', friday:'📅', saturday:'📅', sunday:'📅',
+    // 家人
+    dad:'👨', mum:'👩', mom:'👩', mother:'👩', father:'👨', brother:'👦', sister:'👧',
+    grandfather:'👴', grandmother:'👵', grandma:'👵', grandpa:'👴', family:'👨‍👩‍👧‍👦',
+    baby:'👶', teacher:'👩‍🏫', friend:'🧑‍🤝‍🧑', kid:'🧒', boy:'👦', girl:'👧', man:'👨', woman:'👩',
+    // 身体/动作
+    hand:'✋', eye:'👁️', head:'🗣️', mouth:'👄', nose:'👃', ear:'👂', foot:'🦶', leg:'🦵', arm:'💪',
+    stand:'🧍', sit:'🪑', run:'🏃', walk:'🚶', jump:'🦘', swim:'🏊', sing:'🎤', read:'📖',
+    write:'✍️', listen:'🎧', look:'👀', see:'👀', smile:'😊', love:'❤️', happy:'😄',
+    // 自然/天气
+    sun:'☀️', moon:'🌙', star:'⭐', rainbow:'🌈', rain:'🌧️', snow:'❄️', wind:'🌬️',
+    cloud:'☁️', tree:'🌳', flower:'🌸', balloon:'🎈', world:'🌍', sea:'🌊', mountain:'⛰️',
+    // 物品/场所
+    umbrella:'☂️', door:'🚪', chair:'🪑', bed:'🛏️', table:'🪑', box:'📦', toy:'🧸',
+    ball:'⚽', game:'🎮', home:'🏠', room:'🚪', kitchen:'🍳', bathroom:'🛁', bedroom:'🛏️',
+    zoo:'🦁', park:'🌳', photo:'📷', cap:'🧢', clothes:'👕', shoe:'👟', clock:'⏰', watch:'⌚',
+    key:'🔑', phone:'📱', computer:'💻', tv:'📺', car:'🚗', bus:'🚌', train:'🚂', plane:'✈️',
+    boat:'⛵', bike:'🚲', flag:'🚩', gift:'🎁', money:'💰', house:'🏠', rope:'🪢', knot:'🪢',
+  };
+  const WORD_TYPE_EMOJI = {
+    noun:'📦', verb:'✋', adjective:'✨', adverb:'➡️', pronoun:'🙋', number:'🔢',
+    preposition:'🧭', conjunction:'🔗', interjection:'💬', greeting:'👋', phrase:'💬', day:'📅', article:'📎'
+  };
+  function wordVisual(w) {
+    if (!w) return null;
+    // 1) 真实配图字段优先（未来扩展）
+    if (w.image) return { type: 'image', src: w.image, alt: w.word };
+    // 2) 英文单词精确 emoji（小写、去空格连字符）
+    const key = String(w.word || '').toLowerCase().replace(/[\s-]/g, '_');
+    const emoji = WORD_EMOJI[key];
+    if (emoji) return { type: 'emoji', char: emoji, alt: w.word };
+    // 3) 词性兜底
+    const t = (w.type || '').toLowerCase();
+    const te = WORD_TYPE_EMOJI[t];
+    if (te) return { type: 'emoji', char: te, alt: w.type };
+    return null;
   }
 
   // ========== 单词详情 ==========
@@ -5152,9 +5224,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 转义单引号，防止破坏 HTML onclick 属性的 JS 字符串
     const esc = s => (s || "").replace(/'/g, "\\'");
     const wordId = 'ra-word-' + w.id;
+    // 图文双通道：视觉锚点（真实配图优先，emoji 兜底）
+    const vis = wordVisual(w);
+    const visHTML = vis
+      ? (vis.type === 'image'
+          ? '<img src="' + vis.src + '" alt="' + (vis.alt || '') + '" style="width:96px;height:96px;object-fit:cover;border-radius:16px">'
+          : '<span style="font-size:72px;line-height:1">' + vis.char + '</span>')
+      : '';
     area.innerHTML = `
       <div class="word-detail-card" id="${wordId}">
         <div class="word-type-badge">${w.type}</div>
+        ${visHTML ? '<div style="text-align:center;margin-bottom:12px">' + visHTML + '</div>' : ''}
         <div class="word-text" id="${wordId}-text">${capitalize(w.word)}</div>
         <div class="word-phonetic">${w.phonetic}</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
