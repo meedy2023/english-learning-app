@@ -2687,10 +2687,13 @@ const API = ".";
       const authOrigin = 'api_key="' + this.API_KEY + '", algorithm="hmac-sha256", headers="host date request-line", signature="' + sigB64 + '"';
       return { date: date, auth: btoa(authOrigin) };
     },
-    synth(text, lang, onAudio, onError, voiceOverride) {
+    synth(text, lang, onAudio, onError, voiceOverride, pitchAdj, speedAdj) {
       if (typeof WebSocket === 'undefined' || !window.crypto || !crypto.subtle) { onError && onError(new Error('no websocket')); return; }
       const voice = voiceOverride || (lang === 'zh-CN' ? zhVoice : enVoice);
       const vp = VOICE_PROFILES[voice] || { vcn: voice, pitch: 50, speed: 50 };
+      // 真人节奏：按句型微调音调/语速，制造可感知的语调起伏（疑问升调、感叹加重、陈述平稳）
+      const pitch = Math.max(0, Math.min(100, Math.round(vp.pitch + (pitchAdj || 0))));
+      const speed = Math.max(0, Math.min(100, Math.round(vp.speed * speechRate + (speedAdj || 0))));
       (async () => {
       try {
       const { date, auth } = await this._signature();
@@ -2714,7 +2717,7 @@ const API = ".";
         try {
           ws.send(JSON.stringify({
             common: { app_id: this.APP_ID },
-            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: vp.vcn, tte: 'UTF8', speed: Math.max(0, Math.min(100, Math.round(vp.speed * speechRate))), volume: 50, pitch: vp.pitch },
+            business: { aue: 'lame', sfl: 1, auf: 'audio/L16;rate=16000', vcn: vp.vcn, tte: 'UTF8', speed: speed, volume: 50, pitch: pitch },
             data: { status: 2, text: this._b64(new TextEncoder().encode(text)) }
           }));
         } catch (e) { onError && onError(e); }
@@ -3893,16 +3896,24 @@ const API = ".";
         if (ipa) {
           spoken = "<phoneme alphabet='ipa' ph='" + ipa + "'>" + spoken + "</phoneme>";
         } else if (lang === 'en-US') {
-          // 真人节奏：按标点给差异化停顿（逗号短、句号中、问号/感叹号长），
-          // 句末标点保留，让引擎自然读出升降调（问号上扬、感叹号加强、句号平稳）。
+          // 真人节奏：按标点给差异化停顿 + 句末语调（问号升调 contour、感叹加强、句号降调收束），
+          // 停顿幅度明显大于普通模式，语调起伏明显，可被清晰感知。
           if (human) {
+            // 句末语调（Edge SSML prosody contour）：问号上扬、感叹句先升后落加重、陈述句自然收束
+            if (/\?\s*$/.test(text)) {
+              spoken = spoken.replace(/\?\s*$/, "<prosody contour='(0%,+10Hz)(100%,+35Hz)'>?</prosody>");
+            } else if (/!\s*$/.test(text)) {
+              spoken = spoken.replace(/!\s*$/, "<prosody contour='(0%,+20Hz)(60%,+15Hz)(100%,-15Hz)'>!</prosody>");
+            } else if (/[.;:]\s*$/.test(text)) {
+              spoken = spoken.replace(/([.;:])\s*$/, "<prosody contour='(0%,+5Hz)(100%,-12Hz)'>$1</prosody>");
+            }
             spoken = spoken
-              .replace(/,\s*/g, "<break time='120ms'/> ")
-              .replace(/;\s*/g, "<break time='160ms'/> ")
-              .replace(/:\s*/g, "<break time='160ms'/> ")
-              .replace(/([.!])\s+/g, "<break time='280ms'/>$1 ")
-              .replace(/(\?)\s+/g, "<break time='420ms'/>$1 ")
-              .replace(/([!?])$/g, "<break time='120ms'/>$1");
+              .replace(/,\s*/g, "<break time='260ms'/> ")
+              .replace(/;\s*/g, "<break time='360ms'/> ")
+              .replace(/:\s*/g, "<break time='360ms'/> ")
+              .replace(/([.])\s+/g, "<break time='520ms'/>$1 ")
+              .replace(/([!])\s+/g, "<break time='580ms'/>$1 ")
+              .replace(/([?])\s+/g, "<break time='640ms'/>$1 ");
           } else {
             // 普通模式：固定标点停顿
             spoken = spoken
@@ -4260,12 +4271,24 @@ function playAudioBlob(blob, onEnd) {
         self.speakSystem(word, lang, onEnd);
       }, enVoice, ipaCore);
     },
+    // 真人节奏：按句末标点判定句型，返回 {pitchAdj, speedAdj}，供讯飞引擎做语调/语速微调。
+    // 疑问句升调、感叹句加重稍慢、陈述句轻微自然起伏，制造明显可感知的语调差异。
+    humanProsody(text, lang) {
+      if (lang !== 'en-US') return { pitchAdj: 0, speedAdj: 0 };
+      const t = String(text || '').trim();
+      const last = t.slice(-1);
+      if (last === '?') return { pitchAdj: 15, speedAdj: -2 };       // 疑问句：升调
+      if (last === '!') return { pitchAdj: 8, speedAdj: -3 };        // 感叹句：加重、稍慢强调
+      if (last === '.' || last === ',' || last === ';' || last === ':') return { pitchAdj: 3, speedAdj: 0 }; // 陈述：轻微起伏
+      return { pitchAdj: 2, speedAdj: 0 };
+    },
     // 只合成、不播放（返回 blob 或 null）
     synthOnce(text, lang, cb, human) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
       const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
+      const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
       // 合成返回空 blob 视为失败（避免缓存/播放破损音频），继续尝试下一引擎
       const ok = (blob) => {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); cb(null); return; }
@@ -4273,7 +4296,7 @@ function playAudioBlob(blob, onEnd) {
       };
       XFYunTTS.synth(text, lang, ok, () => {
         EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, undefined, undefined, human);
-      });
+      }, undefined, pros.pitchAdj, pros.speedAdj);
     },
     // 预合成（不播放）：整篇朗读时提前把下一句缓存好，弱网下也能连贯地播下去
     prefetch(text, lang, human) {
@@ -4281,13 +4304,14 @@ function playAudioBlob(blob, onEnd) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
       const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
       if (_ttsCache.has(key)) return;
+      const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
       const ok = (blob) => {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob);
       };
       XFYunTTS.synth(text, lang, ok, () => {
         EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, undefined, undefined, human);
-      });
+      }, undefined, pros.pitchAdj, pros.speedAdj);
     }
   };
 
