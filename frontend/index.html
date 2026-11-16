@@ -3549,6 +3549,7 @@ const API = ".";
       this.ensureReadingSpace();
       this.scrollIntoView(line.item);
       this.startAt = Date.now();
+      this._audioStartAt = null;
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
       this.estMs = Math.max(1200, (line.total / 14) * 1000 / (speechRate || 0.75) + 400);
       // 预合成下一句（弱网时下一句衔接更顺）
@@ -3556,8 +3557,12 @@ const API = ".";
       if (nextLine && nextLine.text) TTS.prefetch(nextLine.text, 'en-US');
       this.handle = TTS.speakSentence(line.text, 'en-US', {
         onReady: function(audio) {
-          // 暂停期间才姗姗来迟的音频：不要自己响起来
           if (tk !== self.token) return;
+          self._audioStartAt = Date.now();  // 音频真正开始播，重置高亮计时起点
+          if (audio && isFinite(audio.duration) && audio.duration > 0) {
+            self.estMs = audio.duration * 1000;  // 用真实时长校准估算
+          }
+          // 暂停期间才姗姗来迟的音频：不要自己响起来
           if (self.state === 'paused' && audio) { try { audio.pause(); } catch (e) {} }
         },
         onEnd: function() {
@@ -3588,6 +3593,7 @@ const API = ".";
       this.ensureReadingSpace();
       this.scrollIntoView(line.item);
       this.startAt = Date.now();
+      this._audioStartAt = null;
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
       this.estMs = Math.max(1200, (line.total / 14) * 1000 / (speechRate || 0.75) + 400);
       // 预合成下一句（真人节奏：用 human 缓存键，弱网时下一句衔接更顺）
@@ -3597,6 +3603,10 @@ const API = ".";
         human: true,   // 差异化标点停顿 + 语调
         onReady: function(audio) {
           if (tk !== self.token) return;
+          self._audioStartAt = Date.now();  // 音频真正开始播，重置高亮计时起点
+          if (audio && isFinite(audio.duration) && audio.duration > 0) {
+            self.estMs = audio.duration * 1000;  // 用真实时长校准估算
+          }
           if (self.state === 'paused' && audio) { try { audio.pause(); } catch (e) {} }
         },
         onEnd: function() {
@@ -3652,8 +3662,18 @@ const API = ".";
       if (!line) return;
       let p = 0;
       const el = this.handle && this.handle.el;
-      if (el && el.duration && isFinite(el.duration) && el.duration > 0) {
+      if (el && isFinite(el.duration) && el.duration > 0) {
+        // 音频真实 duration 可读：用真实进度，并据此校准估算时长，供降级/系统语音场景复用
         p = el.currentTime / el.duration;
+        if (this._audioStartAt) {
+          // 用「已播时长 + 真实剩余时长」更准地校准 estMs（估算起点按音频真正开始播计算）
+          this.estMs = (el.currentTime * 1000) + (el.duration - el.currentTime) * 1000;
+        }
+      } else if (el && !el.paused && !el.ended && this._audioStartAt) {
+        // 音频已开始播但 duration 暂不可读（如刚设 src 未加载完元数据）：
+        // 用音频真实已播时长估算，而不是从 playCurrent 调用时刻开始计（消除合成延迟偏差）
+        p = Math.min(1, el.currentTime / Math.max(this.estMs / 1000, el.currentTime + 0.001));
+        if (!isFinite(el.currentTime)) p = Math.min(1, (Date.now() - this._audioStartAt) / this.estMs);
       } else {
         p = Math.min(1, (Date.now() - this.startAt) / this.estMs);
       }
@@ -3924,7 +3944,8 @@ const API = ".";
   };
 
 // 与 playAudioBlob 相同，但返回 audio 元素（整篇朗读需要暂停/继续）
-function playAudioBlobEx(blob, onEnd) {
+// onPlayBlocked：当 play() 因自动播放策略被拦截（NotAllowedError）时回调，供调用方降级到系统语音。
+function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
   // 空 blob 防御：网络合成失败/返回空数据时，不再创建会报 ERR_FILE_NOT_FOUND 的破损音频
   if (!blob || (blob.size != null && blob.size === 0)) { if (onEnd) onEnd(); return null; }
   stopAllAudio();
@@ -3944,8 +3965,22 @@ function playAudioBlobEx(blob, onEnd) {
   audio.onended = () => finish();
   audio.onerror = () => finish();
   const p = audio.play();
-  // 连播场景 play() reject 多为竞态（被 stopAllAudio 中断 / 自动播放策略拦截），静默收尾即可
-  if (p && p.catch) p.catch(() => { if (token === window._audioToken) finish(); });
+  if (p && p.catch) {
+    p.catch((err) => {
+      // 自动播放策略拦截（NotAllowedError）：不是真正的音频错误，不能静默 finish 跳句，
+      // 否则会形成「后面每句都无声但快速跳完」的静默循环。交给调用方降级到系统语音。
+      if (err && err.name === 'NotAllowedError') {
+        try { audio.onended = null; audio.onerror = null; audio.src = ''; } catch (e) {}
+        setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 0);
+        if (window._activeAudio === audio) window._activeAudio = null;
+        if (onPlayBlocked) { onPlayBlocked(); return; }
+        // 无降级回调时，保持当前句不跳，等待用户手动重试，避免静默快进
+        return;
+      }
+      // 其它播放竞态（被 stopAllAudio 中断等）：静默收尾
+      if (token === window._audioToken) finish();
+    });
+  }
   return audio;
 }
 
@@ -4013,24 +4048,34 @@ function playAudioBlobEx(blob, onEnd) {
   }
 
   // 解锁自动播放：浏览器对「无用户手势的音频播放」会拦截（NotAllowedError）。
-  // 在用户点击「朗读」的手势里播放一个极短静音，拿到媒体播放许可后，
-  // 后续连播的意群（setTimeout 自动触发）才能正常出声。
+  // 关键：很多移动浏览器（尤其 iOS Safari、部分安卓 WebView）里，muted 静音播放
+  // 不会授予「非静音音频」的自动播放许可，导致后续连播句（setTimeout 异步触发）被拦截。
+  // 因此这里必须在用户手势栈内成功播放一个「可听」的音频，才能真正建立 sticky activation。
   function unlockAudio() {
     try {
       if (window._audioUnlocked) return;
-      // 播放一个静音、极短的音频，向浏览器申请「自动播放」许可。
-      // 该 play() 处于用户点击手势的调用栈内，成功后页面后续 audio 播放不再被拦截。
       const a = new Audio();
-      a.muted = true;
+      // 用真实可听（非静音）的极短音频解锁，避免 muted 播放被移动浏览器判定为无效激活
       a.src = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
+      a.volume = 0.01; // 几乎听不到，但属于「有声」播放
       const p = a.play();
       if (p && p.then) {
-        p.then(() => { window._audioUnlocked = true; }).catch(() => {});
+        p.then(() => {
+          window._audioUnlocked = true;
+          // 保留一个已被用户激活的持久 Audio 元素作为「解锁锚点」：
+          // 后续连播句用它来接力 play，可显著降低被 autoplay 拦截的概率。
+          try {
+            if (!window._unlockAnchor) {
+              window._unlockAnchor = a;
+              a.loop = false;
+            } else { a.pause(); a.src = ''; }
+          } catch (e) {}
+        }).catch(() => {});
       } else {
         window._audioUnlocked = true;
       }
-      // 及时释放，避免保留元素占用资源
-      setTimeout(() => { try { a.pause(); a.src = ''; } catch (e) {} }, 100);
+      // 及时释放，避免保留元素占用资源（成功后 anchor 另存，这里仅停掉临时引用）
+      setTimeout(() => { try { if (a !== window._unlockAnchor) { a.pause(); a.src = ''; } } catch (e) {} }, 100);
     } catch (e) {}
   }
 
@@ -4179,7 +4224,9 @@ function playAudioBlob(blob, onEnd) {
       this.synthOnce(text, lang, (blob) => {
         if (blob) {
           const _G = G || ((f) => f);
-          const audio = playAudioBlobEx(blob, opts.onEnd);
+          // 网络音频被自动播放策略拦截时，降级到系统语音（speechSynthesis 不受 autoplay 限制），
+          // 避免「后面每句都无声但快速跳完」的静默循环。
+          const audio = playAudioBlobEx(blob, opts.onEnd, () => { goSystem(); });
           handle.kind = 'audio';
           handle.el = audio;
           handle.pause = () => { try { audio.pause(); } catch (e) {} };
