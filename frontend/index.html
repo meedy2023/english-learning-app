@@ -535,7 +535,6 @@
   .lr-ctrl-btn { flex: 1; padding: 12px; font-size: 14px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; }
   .lr-ctrl-main { background: linear-gradient(135deg,#4f9fff,#6c63ff); color: #fff; }
   .lr-ctrl-sub { flex: 0 0 auto; padding: 12px 14px; background: #f5f7ff; border: 1px solid #e0e6ff; color: #6c63ff; }
-  .lr-ctrl-btn.lr-mode-on { background: linear-gradient(135deg,#ff9f43,#ff6b6b); color: #fff; border-color: transparent; box-shadow: 0 2px 8px rgba(255,159,67,.35); }
   .lr-ctrl-btn:active { transform: scale(.97); }
   .lr-progress { margin-top: 8px; font-size: 12px; color: #888; text-align: center; }
   .lr-nav { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8ff; }
@@ -2445,7 +2444,6 @@ const API = ".";
       <div class="lr-dock" id="lesson-reader-dock">
         <div class="lr-ctrl">
           <button class="lr-ctrl-btn lr-ctrl-main" id="lesson-full-speak-btn" data-reading="0">🔊 朗读整篇课文</button>
-          <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-human-btn" type="button" aria-label="切换真人节奏朗读">🎙 真人节奏</button>
           <button class="lr-ctrl-btn lr-ctrl-sub" id="lesson-replay-btn" style="display:none">🔁 重播</button>
         </div>
         <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
@@ -2485,10 +2483,6 @@ const API = ".";
     var replayBtn = document.getElementById("lesson-replay-btn");
     if (replayBtn) {
       replayBtn.onclick = function() { LessonReader.replay(); };
-    }
-    var humanBtn = document.getElementById("lesson-human-btn");
-    if (humanBtn) {
-      humanBtn.onclick = function() { LessonReader.toggleHumanMode(); };
     }
     // 绑定句子：采集朗读行
     LessonReader.bind(unit.content);
@@ -3398,27 +3392,7 @@ const API = ".";
     startAt: 0,       // 当前句开始时间（系统语音用）
     estMs: 2000,      // 当前句估算时长（系统语音无 currentTime 时用）
     paused: false,
-    humanMode: localStorage.getItem('reader_human_mode') === '1',  // true=真人节奏朗读，false=整句匀速朗读
     ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
-    // 切换「真人节奏 / 整句」朗读模式
-    toggleHumanMode() {
-      this.humanMode = !this.humanMode;
-      try { localStorage.setItem('reader_human_mode', this.humanMode ? '1' : '0'); } catch (e) {}
-      if (this.state === 'playing' || this.state === 'paused') {
-        // 正在朗读时切换：从当前句重新以新模式朗读
-        const cur = this.idx >= 0 ? this.idx : 0;
-        this.start(cur);
-      }
-      this.updateHumanBtn();
-    },
-    updateHumanBtn() {
-      const btn = this.UI('human', 'lesson-human-btn');
-      if (!btn) return;
-      const on = this.humanMode;
-      btn.classList.toggle('lr-mode-on', on);
-      btn.textContent = on ? '🎙 真人节奏·开' : '🎙 真人节奏';
-      btn.title = on ? '当前：真人节奏朗读（点此切回普通朗读）' : '当前：普通朗读（点此切换真人节奏）';
-    },
     // 取 UI 元素：优先本次绑定的 ids，回落到课文页默认 id
     UI(key, defId) {
       const id = (this.ui && this.ui[key]) || defId;
@@ -3456,7 +3430,6 @@ const API = ".";
         d.style.display = (d.id === dockId) ? '' : 'none';
       });
       this.updateUI();
-      this.updateHumanBtn();
     },
 
     // 主按钮：播放 / 暂停 / 继续
@@ -3543,51 +3516,8 @@ const API = ".";
 
     playCurrent() {
       if (this.idx < 0 || this.idx >= this.lines.length) { this.finish(); return; }
-      // 真人节奏模式：整句合成 + 差异化标点停顿 + 语调
-      if (this.humanMode) { this.playCurrentHuman(); return; }
-      const self = this;
-      const line = this.lines[this.idx];
-      const tk = ++this.token;
-      this.paintStates();
-      this.ensureReadingSpace();
-      this.scrollIntoView(line.item);
-      this.startAt = Date.now();
-      this._audioStartAt = null;
-      // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
-      this.estMs = Math.max(1200, (line.total / 14) * 1000 / (speechRate || 0.75) + 400);
-      // 预合成下一句（弱网时下一句衔接更顺）
-      const nextLine = this.lines[this.idx + 1];
-      if (nextLine && nextLine.text) TTS.prefetch(nextLine.text, 'en-US');
-      this.handle = TTS.speakSentence(line.text, 'en-US', {
-        onReady: function(audio) {
-          if (tk !== self.token) return;
-          self._audioStartAt = Date.now();  // 音频真正开始播，重置高亮计时起点
-          if (audio && isFinite(audio.duration) && audio.duration > 0) {
-            self.estMs = audio.duration * 1000;  // 用真实时长校准估算
-          }
-          // 暂停期间才姗姗来迟的音频：不要自己响起来
-          if (self.state === 'paused' && audio) { try { audio.pause(); } catch (e) {} }
-        },
-        onEnd: function() {
-          if (tk !== self.token) return;
-          self.stopTick();
-          self.markWordDone(line, true);
-          if (self.idx >= self.lines.length - 1) { self.finish(); return; }
-          // 句间停顿结束后再切到下一句，避免停顿期间高亮提前跳走
-          setTimeout(function() {
-            if (tk !== self.token || self.state !== 'playing') return;
-            self.idx++;
-            self.playCurrent();
-          }, lessonLineGap());
-        }
-      }, (fn) => (typeof fn === 'function' ? function () { if (self.token === tk) return fn.apply(null, arguments); } : fn));
-      this.startTick();
-    },
-    // 真人节奏朗读：按标点把整句拆成「意群」，逐意群合成朗读，
-    // 意群间用差异化自然停顿，句末标点保留在文本里让引擎自然读出升降调。
-    playCurrentHuman() {
-      // 真人节奏：整句一次合成（避免逐意群拆开合成带来的网络往返卡顿与播放竞态），
-      // 通过 EdgeTTS 差异化 SSML 停顿（逗号短/句号中/问号长）+ 句末语调实现真人节奏；
+      // 整句一次合成（避免逐意群拆开合成带来的网络往返卡顿与播放竞态），
+      // 通过差异化标点停顿 + 句末语调实现真人节奏；
       // 词级高亮复用整句朗读的 startTick/markWord 机制，按播放进度精准跟随。
       const self = this;
       const line = this.lines[this.idx];
@@ -7808,7 +7738,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div class="lr-dock" id="ket-reader-dock" style="display:none">
             <div class="lr-ctrl">
               <button class="lr-ctrl-btn lr-ctrl-main" id="ket-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>
-              <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-human-btn" type="button" aria-label="切换真人节奏朗读">🎙 真人节奏</button>
               <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>
             </div>
             <div class="lr-bar" id="ket-read-bar" style="display:none"><i></i></div>
@@ -7822,14 +7751,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
       const rpBtn = document.getElementById('ket-replay-btn');
       if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
-      const humanBtn = document.getElementById('ket-human-btn');
-      if (humanBtn) humanBtn.onclick = function () { LessonReader.toggleHumanMode(); };
       LessonReader.bind(reading.sentences, {
         scope: 'ket-reading',
         dock: 'ket-reader-dock',
         main: 'ket-full-speak-btn',
         replay: 'ket-replay-btn',
-        human: 'ket-human-btn',
         progress: 'ket-read-progress',
         bar: 'ket-read-bar',
         label: '🔊 朗读全文'
