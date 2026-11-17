@@ -5733,12 +5733,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const wordId = quizOrder[currentQuizIndex];
     const w = currentWords.find(x => x.id === wordId);
     if (!w) return;
-    if (currentQuizMode === "en_to_cn") {
-      speakWord(w.word);
-    } else {
-      // 中文题：朗读中文
-      speakChinese(w.chinese);
-    }
+    // 无论哪种题型，「听发音」都播放英文单词发音
+    speakWord(w.word);
   }
 
 
@@ -6501,9 +6497,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function speakChoiceWord(mode, wordId) {
     const w = cl_words.find(function(x) { return x.id === wordId; });
     if (!w) return;
-    // en2cn 与 listen 都听英文发音；cn2en 听中文
-    if (mode === 'en2cn' || mode === 'listen') speakWord(w.word);
-    else speakChinese(w.chinese);
+    // 无论哪种题型，「听发音」都播放英文单词发音
+    speakWord(w.word);
   }
 
   function handleChoiceAnswer(opt, word, mode) {
