@@ -6,7 +6,7 @@
   const _origFetch = window.fetch ? window.fetch.bind(window) : null;
 
   // ---------- 数据容器 ----------
-  const DATA = { words: [], textbook: {}, ket: {}, phonics: [] };
+  const DATA = { words: [], textbook: {}, ket: {}, phonics: [], toefl: {} };
   let _ready = null;
 
   function loadData() {
@@ -16,12 +16,14 @@
       fetch("./data/textbook.json").then((r) => r.json()),
       fetch("./data/ket.json").then((r) => r.json()),
       fetch("./data/phonics.json").then((r) => r.json()).catch(() => []),
+      fetch("./data/toefl.json").then((r) => r.json()).catch(() => ({})),
     ])
-      .then(([w, t, k, p]) => {
+      .then(([w, t, k, p, tj]) => {
         DATA.words = Array.isArray(w) ? w : w.words || [];
         DATA.textbook = t || {};
         DATA.ket = k || {};
         DATA.phonics = p || [];
+        DATA.toefl = tj || {};
       })
       .catch((e) => {
         console.error("[静态版] 数据加载失败：", e);
@@ -227,6 +229,18 @@
     return { categories: cats };
   }
 
+  // ---------- 小托福分类 ----------
+  function toeflCategories() {
+    const cats = [];
+    const td = DATA.toefl;
+    if (td["词汇"] && td["词汇"]["分类"]) {
+      Object.keys(td["词汇"]["分类"]).forEach((sub) =>
+        cats.push({ type: "词汇", category: sub, count: (td["词汇"]["分类"][sub] || []).length })
+      );
+    }
+    return { categories: cats };
+  }
+
   // ---------- 评分 ----------
   function simpleScore(user_answer, correct_answer) {
     const u = (user_answer || "").trim().toLowerCase();
@@ -389,6 +403,14 @@
         const c = params.get("category");
         const r = (DATA.ket["短文"] && DATA.ket["短文"][c]) || null;
         return json({ reading: r });
+      }
+
+      // ===== 小托福（TOEFL Junior）系列 =====
+      if (api === "toefl/categories") return json(toeflCategories());
+      if (api === "toefl/words") {
+        const c = params.get("category");
+        const list = (DATA.toefl["词汇"] && DATA.toefl["词汇"]["分类"] && DATA.toefl["词汇"]["分类"][c]) || [];
+        return json({ words: list });
       }
 
       // ===== 自然拼读系列 =====

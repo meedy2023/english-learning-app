@@ -1395,6 +1395,24 @@
   <div id="ket-quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="ket-quiz-num">1</span> / <span id="ket-quiz-total">0</span> 题</div>
 </div>
 
+<!-- ======= 小托福（TOEFL Junior）学习 ======= -->
+<div id="view-toefl" class="view">
+  <div id="toefl-category-list" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+    <!-- 分类列表由 JS 动态生成 -->
+  </div>
+  <div id="toefl-content-area" style="display:none">
+    <button class="btn btn-secondary nav-back-btn" onclick="backToToeflCategories()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
+      <span class="nav-back-ico" aria-hidden="true">←</span> 返回分类
+    </button>
+    <div id="toefl-content-title" style="font-size:18px;font-weight:600;margin-bottom:8px"></div>
+    <div id="toefl-level-tip" style="display:none;margin-bottom:12px;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500"></div>
+    <div id="toefl-quiz-entry" style="display:none;margin-bottom:12px"></div>
+    <div id="toefl-match-area" style="display:none"></div>
+    <div id="toefl-doodle-area" style="display:none"></div>
+    <div id="toefl-content-list"></div>
+  </div>
+</div>
+
   <!-- ======= 自然拼读 ======= -->
   <div id="view-phonics" class="view">
     <div id="phonics-group-list" style="margin-top:8px"></div>
@@ -2128,11 +2146,11 @@ const API = ".";
       if (_lbh) _lbh.style.top = '84px';
     }
     currentView = name;
-    // 离开 KET / 拼读页时收起其消消乐面板（计时也停掉）
+    // 离开 KET / 拼读 / 小托福页时收起其消消乐面板（计时也停掉）
     try {
-      if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Match.exit();
-      // 离开 KET / 拼读页时收起随手拼面板
-      if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics') Doodle.exit();
+      if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics' && name !== 'toefl') Match.exit();
+      // 离开 KET / 拼读 / 小托福页时收起随手拼面板
+      if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics' && name !== 'toefl') Doodle.exit();
       // 离开 KET 页时收起独立的短文阅读（朗读也停掉）
       if (name !== 'ket' && typeof closeKetReading === 'function') closeKetReading();
       // 切换视图时彻底重置朗读（课文/短文）：停掉播放、清高亮、按钮恢复「朗读」初始态
@@ -2140,7 +2158,7 @@ const API = ".";
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
+    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", toefl: "🎓 小托福", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
@@ -2154,6 +2172,7 @@ const API = ".";
     if (name === "settings") refreshSettingsInfo();
     if (name === "report") loadReport();
     if (name === "ket") loadKetCategories();
+    if (name === "toefl") loadToeflCategories();
     if (name === "phonics") loadPhonics();
     if (name === "home") {
       // 如果没有选年级，回到年级选择页
@@ -2169,7 +2188,7 @@ const API = ".";
     }
     // 更新底部导航激活状态
     var navName = (name === 'ket-quiz') ? 'ket' : name;
-    ['home', 'learn', 'ket', 'report', 'phonics'].forEach(function(v) {
+    ['home', 'learn', 'ket', 'toefl', 'report', 'phonics'].forEach(function(v) {
       var el = document.getElementById('nav-' + v);
       if (el) {
         if (v === navName) el.classList.add('active');
@@ -7596,6 +7615,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     <div id="nav-ket" class="nav-item" onclick="switchView('ket')">
       <span class="nav-item-icon">📚</span>KET
     </div>
+    <div id="nav-toefl" class="nav-item" onclick="switchView('toefl')">
+      <span class="nav-item-icon">🎓</span>小托福
+    </div>
     <div id="nav-phonics" class="nav-item" onclick="switchView('phonics')">
       <span class="nav-item-icon">🔤</span>拼读
     </div>
@@ -8272,9 +8294,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== KET 测验（词汇/句型/语法 通用） ==========
   // 标准化题目结构：{ prompt, question, speak, options:[{text,correct}], answerLabel }
-  function buildKetQuiz(shape) {
+  function buildKetQuiz(shape, overrideSrc) {
     let src;
-    if (shape === 'word') src = (ketCurrentItems || []).map(function (w) { return { en: w.word, zh: w.chinese }; });
+    if (overrideSrc) src = overrideSrc;
+    else if (shape === 'word') src = (ketCurrentItems || []).map(function (w) { return { en: w.word, zh: w.chinese }; });
     else if (shape === 'sentence') src = (ketCurrentItems || []).map(function (s) { return { en: s.english, zh: s.chinese }; });
     else if (shape === 'grammar') src = (ketGrammarExamples || []).map(function (ex) { return { en: ex, zh: null }; });
     else src = [];
@@ -8328,12 +8351,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return queue.filter(function (q) { return q.options && q.options.length >= 2; });
   }
 
-  function startKetQuiz(shape) {
+  function startKetQuiz(shape, overrideSrc, returnView) {
     ketQuizShape = shape || 'word';
-    ketQuizQueue = buildKetQuiz(ketQuizShape);
+    ketQuizQueue = buildKetQuiz(ketQuizShape, overrideSrc);
     if (!ketQuizQueue || ketQuizQueue.length === 0) return;
     ketQuizIndex = 0;
     window.ketQuizResults = [];
+    window._ketQuizReturnView = returnView || 'ket';   // 记录来源：ket 或 toefl
     comboCount = 0;
     hideCombo();
     switchView('ket-quiz');
@@ -8456,13 +8480,210 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function backToKetCategory() {
-    currentView = 'ket';
+    const ret = window._ketQuizReturnView || 'ket';
+    currentView = ret;
     document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
-    document.getElementById('view-ket').classList.add('active');
-    document.getElementById('topbar-title').textContent = '📚 KET 学习';
+    document.getElementById('view-' + ret).classList.add('active');
+    document.getElementById('topbar-title').textContent = ret === 'toefl' ? '🎓 小托福' : '📚 KET 学习';
     document.getElementById('grade-display').style.display = 'none';
-    document.getElementById('ket-category-list').style.display = 'none';
-    document.getElementById('ket-content-area').style.display = 'block';
+    if (ret === 'toefl') {
+      document.getElementById('toefl-category-list').style.display = 'none';
+      document.getElementById('toefl-content-area').style.display = 'block';
+    } else {
+      document.getElementById('ket-category-list').style.display = 'none';
+      document.getElementById('ket-content-area').style.display = 'block';
+    }
+  }
+
+  // ========== 小托福（TOEFL Junior）词汇模块 ==========
+  // 基于认知负荷/脚手架/发展心理学设计：四大类分组 + 三级难度 + 语境例句。
+  let toeflCategories = [];
+  let toeflCurrentCategory = '';
+  let toeflCurrentItems = [];
+  let toeflCurrentPage = 1;
+  let toeflItemsPerPage = 10;
+
+  // 难度标签配色：基础=绿、进阶=橙、冲刺=红（脚手架理论：可见的递进阶梯）
+  const TOEFL_LEVEL_STYLE = {
+    '基础': { bg: '#eaf3de', color: '#3b6d11', label: '基础' },
+    '进阶': { bg: '#faeeda', color: '#854f0b', label: '进阶' },
+    '冲刺': { bg: '#fcebeb', color: '#a32d2d', label: '冲刺' }
+  };
+  function toeflLevelBadge(level) {
+    const s = TOEFL_LEVEL_STYLE[level] || TOEFL_LEVEL_STYLE['基础'];
+    return '<span style="background:' + s.bg + ';color:' + s.color + ';padding:2px 8px;border-radius:10px;font-size:12px;font-weight:500">' + s.label + '</span>';
+  }
+
+  async function loadToeflCategories() {
+    try {
+      const data = await apiGET('/api/toefl/categories');
+      toeflCategories = data.categories || [];
+      const container = document.getElementById('toefl-category-list');
+      container.innerHTML = '';
+      if (toeflCategories.length === 0) {
+        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:40px">小托福词汇正在准备中，敬请期待</div>';
+        return;
+      }
+      toeflCategories.forEach(cat => {
+        const card = document.createElement('div');
+        card.className = 'module-card';
+        card.innerHTML = `
+          <div class="module-name">${cat.category}</div>
+          <div class="module-count">${cat.count} 词</div>
+        `;
+        card.onclick = () => openToeflCategory(cat.category);
+        container.appendChild(card);
+      });
+      restoreToeflView();
+    } catch (e) {
+      console.error('加载小托福分类失败:', e);
+      toast('加载失败，请检查数据');
+    }
+  }
+
+  function restoreToeflView() {
+    const catList = document.getElementById('toefl-category-list');
+    const contentArea = document.getElementById('toefl-content-area');
+    if (toeflCurrentCategory && contentArea) {
+      if (catList) catList.style.display = 'none';
+      contentArea.style.display = 'block';
+    } else {
+      if (catList) catList.style.display = 'grid';
+      if (contentArea) contentArea.style.display = 'none';
+    }
+  }
+
+  async function openToeflCategory(category) {
+    try {
+      const container = document.getElementById('toefl-content-list');
+      const titleEl = document.getElementById('toefl-content-title');
+      toeflCurrentCategory = category;
+      toeflCurrentPage = 1;
+
+      document.getElementById('toefl-category-list').style.display = 'none';
+      document.getElementById('toefl-content-area').style.display = 'block';
+
+      const data = await apiGET('/api/toefl/words?category=' + encodeURIComponent(category));
+      toeflCurrentItems = data.words || [];
+      titleEl.textContent = '🎓 ' + category;
+
+      // 难度分级提示（脚手架理论：让学生看到自己处在哪一级台阶）
+      const tipEl = document.getElementById('toefl-level-tip');
+      const levels = {};
+      toeflCurrentItems.forEach(w => { levels[w.level] = (levels[w.level] || 0) + 1; });
+      const lvNames = ['基础', '进阶', '冲刺'];
+      const tipParts = lvNames.filter(l => levels[l]).map(l => {
+        const s = TOEFL_LEVEL_STYLE[l];
+        return '<span style="background:' + s.bg + ';color:' + s.color + ';padding:2px 8px;border-radius:6px">' + l + ' ' + (levels[l] || 0) + ' 词</span>';
+      });
+      if (tipParts.length) {
+        tipEl.style.display = 'block';
+        tipEl.innerHTML = '📶 本类难度：' + tipParts.join(' ');
+      } else {
+        tipEl.style.display = 'none';
+      }
+
+      renderToeflCurrentPage();
+
+      // 测验 + 消消乐 + 随手拼 入口（复用通用组件）
+      const qe = document.getElementById('toefl-quiz-entry');
+      qe.style.display = 'block';
+      qe.innerHTML =
+        '<div style="display:flex;gap:8px">' +
+          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🎯 本类词汇测验</button>' +
+          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflMatch()">🎴 消消乐</button>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;margin-top:8px">' +
+          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflDoodle()">✍️ 随手拼</button>' +
+        '</div>';
+    } catch (e) {
+      console.error('加载小托福词汇失败:', e);
+      toast('加载失败');
+    }
+  }
+
+  function backToToeflCategories() {
+    toeflCurrentCategory = '';
+    if (typeof Match !== 'undefined' && Match.exit) Match.exit();
+    if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit') Doodle.exit();
+    document.getElementById('toefl-category-list').style.display = 'grid';
+    document.getElementById('toefl-content-area').style.display = 'none';
+    const qe = document.getElementById('toefl-quiz-entry');
+    if (qe) qe.style.display = 'none';
+  }
+
+  function renderToeflCurrentPage() {
+    const container = document.getElementById('toefl-content-list');
+    const start = (toeflCurrentPage - 1) * toeflItemsPerPage;
+    const end = start + toeflItemsPerPage;
+    const pageItems = toeflCurrentItems.slice(start, end);
+    if (pageItems.length === 0) {
+      container.innerHTML = '<div style="text-align:center;color:#999;padding:30px">本类暂无词汇</div>';
+      return;
+    }
+    container.innerHTML = pageItems.map((w, i) => `
+      <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+        <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
+          <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
+          <span style="font-size:20px;font-weight:600;color:#333">${w.word}</span>
+          ${toeflLevelBadge(w.level)}
+          <button class="speak-btn" onclick="speakWord('${esc(w.word)}')" style="padding:6px 14px;font-size:13px;margin-left:auto">🔊 朗读</button>
+          <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.word)}')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+        </div>
+        ${w.phonetic ? '<div style="font-size:13px;color:#888;font-style:italic;margin-bottom:4px">' + w.phonetic + '</div>' : ''}
+        <div style="font-size:14px;color:#666;margin-bottom:6px">${w.chinese}</div>
+        ${w.example ? `
+        <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;background:#fafafa;border-radius:8px;padding:8px 10px">
+          <span style="font-size:13px;color:#999;font-style:italic;flex:1;line-height:1.5;min-width:0">例：${w.example}</span>
+          <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+            <button class="speak-btn" onclick="speakWord('${esc(w.example)}')" style="padding:4px 10px;font-size:12px">🔊 例句</button>
+            <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.example)}')" style="padding:4px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+          </div>
+        </div>` : ''}
+      </div>
+    `).join('');
+  }
+
+  // 小托福测验：复用 KET 测验视图与逻辑，只换词表来源
+  function startToeflQuiz() {
+    const src = (toeflCurrentItems || []).map(function (w) { return { en: w.word, zh: w.chinese }; });
+    if (src.length === 0) { toast('本类还没有可测的词汇'); return; }
+    startKetQuiz('word', src, 'toefl');
+  }
+
+  // 小托福消消乐：复用 Match 组件
+  function startToeflMatch() {
+    const words = toMatchWords(toeflCurrentItems);
+    if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); return; }
+    Match.exit();
+    Match.scope = {
+      type: 'toefl',
+      words: words,
+      key: 'toefl_' + (toeflCurrentCategory || ''),
+      mount: document.getElementById('toefl-match-area'),
+      unitLabel: '本类'
+    };
+    Match.hideSiblings(['toefl-content-list', 'toefl-quiz-entry']);
+    Match.start({});
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 小托福随手拼：复用 Doodle 组件
+  function startToeflDoodle() {
+    const words = toMatchWords(toeflCurrentItems);
+    if (!words.length) { toast('本类还没有可练的单词'); return; }
+    Doodle.exit();
+    if (typeof Match !== 'undefined' && Match.exit) Match.exit();
+    Doodle.start({
+      type: 'toefl',
+      label: '本类',
+      key: 'toefl_' + (toeflCurrentCategory || ''),
+      mountId: 'toefl-doodle-area',
+      backLabel: '返回词汇列表',
+      words: words,
+      hide: ['toefl-content-list', 'toefl-quiz-entry']
+    });
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // ========== 启动 ==========

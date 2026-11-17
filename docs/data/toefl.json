@@ -1,0 +1,106 @@
+{
+  "词汇": {
+    "分类": {
+      "高频核心·校园与日常": [
+        { "word": "attend", "chinese": "参加；出席", "phonetic": "/əˈtend/", "level": "基础", "example": "Students attend classes every morning." },
+        { "word": "require", "chinese": "需要；要求", "phonetic": "/rɪˈkwaɪə(r)/", "level": "基础", "example": "This job requires a lot of patience." },
+        { "word": "provide", "chinese": "提供", "phonetic": "/prəˈvaɪd/", "level": "基础", "example": "The school provides free lunches for students." },
+        { "word": "explain", "chinese": "解释；说明", "phonetic": "/ɪkˈspleɪn/", "level": "基础", "example": "The teacher explained the rule to us." },
+        { "word": "describe", "chinese": "描述", "phonetic": "/dɪˈskraɪb/", "level": "基础", "example": "Can you describe the picture to me?" },
+        { "word": "decide", "chinese": "决定", "phonetic": "/dɪˈsaɪd/", "level": "基础", "example": "We decided to go by train." },
+        { "word": "notice", "chinese": "注意到", "phonetic": "/ˈnəʊtɪs/", "level": "基础", "example": "I noticed a strange sound outside." },
+        { "word": "borrow", "chinese": "借入", "phonetic": "/ˈbɒrəʊ/", "level": "基础", "example": "Can I borrow your dictionary?" },
+        { "word": "return", "chinese": "归还；返回", "phonetic": "/rɪˈtɜːn/", "level": "基础", "example": "Please return the books on time." },
+        { "word": "prepare", "chinese": "准备", "phonetic": "/prɪˈpeə(r)/", "level": "基础", "example": "We prepared for the test together." },
+        { "word": "probably", "chinese": "可能；大概", "phonetic": "/ˈprɒbəbli/", "level": "基础", "example": "It will probably rain tomorrow." },
+        { "word": "especially", "chinese": "尤其；特别", "phonetic": "/ɪˈspeʃəli/", "level": "基础", "example": "I like fruit, especially apples." },
+        { "word": "suddenly", "chinese": "突然地", "phonetic": "/ˈsʌdənli/", "level": "基础", "example": "Suddenly, the lights went out." },
+        { "word": "almost", "chinese": "几乎；差不多", "phonetic": "/ˈɔːlməʊst/", "level": "基础", "example": "I almost missed the bus." },
+        { "word": "instead", "chinese": "代替；反而", "phonetic": "/ɪnˈsted/", "level": "基础", "example": "He stayed home instead of going out." }
+      ],
+      "高频核心·情感与品质": [
+        { "word": "confident", "chinese": "自信的", "phonetic": "/ˈkɒnfɪdənt/", "level": "基础", "example": "She felt confident about the exam." },
+        { "word": "curious", "chinese": "好奇的", "phonetic": "/ˈkjʊəriəs/", "level": "基础", "example": "The child is curious about everything." },
+        { "word": "nervous", "chinese": "紧张的", "phonetic": "/ˈnɜːvəs/", "level": "基础", "example": "I felt nervous before my speech." },
+        { "word": "patient", "chinese": "耐心的", "phonetic": "/ˈpeɪʃnt/", "level": "基础", "example": "Be patient, the bus will come." },
+        { "word": "honest", "chinese": "诚实的", "phonetic": "/ˈɒnɪst/", "level": "基础", "example": "He gave an honest answer." },
+        { "word": "brave", "chinese": "勇敢的", "phonetic": "/breɪv/", "level": "基础", "example": "The brave fireman saved the boy." },
+        { "word": "proud", "chinese": "自豪的", "phonetic": "/praʊd/", "level": "基础", "example": "I am proud of my team." },
+        { "word": "serious", "chinese": "严肃的；认真的", "phonetic": "/ˈsɪəriəs/", "level": "基础", "example": "This is a serious problem." },
+        { "word": "friendly", "chinese": "友好的", "phonetic": "/ˈfrendli/", "level": "基础", "example": "The people here are very friendly." },
+        { "word": "careful", "chinese": "仔细的；小心的", "phonetic": "/ˈkeəfl/", "level": "基础", "example": "Be careful when you cross the road." }
+      ],
+      "非学术·校园场景": [
+        { "word": "assignment", "chinese": "作业；任务", "phonetic": "/əˈsaɪnmənt/", "level": "进阶", "example": "I finished my math assignment early." },
+        { "word": "semester", "chinese": "学期", "phonetic": "/sɪˈmestə(r)/", "level": "进阶", "example": "The new semester starts in September." },
+        { "word": "schedule", "chinese": "日程；时间表", "phonetic": "/ˈʃedjuːl/", "level": "进阶", "example": "My schedule is full this week." },
+        { "word": "permission", "chinese": "许可", "phonetic": "/pəˈmɪʃn/", "level": "进阶", "example": "You need permission to leave early." },
+        { "word": "attendance", "chinese": "出席；出勤", "phonetic": "/əˈtendəns/", "level": "进阶", "example": "Good attendance is important for learning." },
+        { "word": "achievement", "chinese": "成就；成绩", "phonetic": "/əˈtʃiːvmənt/", "level": "进阶", "example": "Winning the prize was a great achievement." },
+        { "word": "grade", "chinese": "分数；年级", "phonetic": "/ɡreɪd/", "level": "进阶", "example": "She got a high grade on the test." },
+        { "word": "campus", "chinese": "校园", "phonetic": "/ˈkæmpəs/", "level": "进阶", "example": "The library is in the center of the campus." },
+        { "word": "register", "chinese": "注册；登记", "phonetic": "/ˈredʒɪstə(r)/", "level": "进阶", "example": "You must register for the class online." },
+        { "word": "deadline", "chinese": "截止日期", "phonetic": "/ˈdedlaɪn/", "level": "进阶", "example": "The deadline for the report is Friday." }
+      ],
+      "非学术·社会生活": [
+        { "word": "environment", "chinese": "环境", "phonetic": "/ɪnˈvaɪrənmənt/", "level": "进阶", "example": "We should protect the environment." },
+        { "word": "community", "chinese": "社区；群体", "phonetic": "/kəˈmjuːnəti/", "level": "进阶", "example": "Our community has a new park." },
+        { "word": "volunteer", "chinese": "志愿者；自愿", "phonetic": "/ˌvɒlənˈtɪə(r)/", "level": "进阶", "example": "She works as a volunteer at the hospital." },
+        { "word": "opportunity", "chinese": "机会", "phonetic": "/ˌɒpəˈtjuːnəti/", "level": "进阶", "example": "This is a great opportunity to learn." },
+        { "word": "experience", "chinese": "经历；经验", "phonetic": "/ɪkˈspɪəriəns/", "level": "进阶", "example": "Traveling abroad was an amazing experience." },
+        { "word": "transportation", "chinese": "交通；运输", "phonetic": "/ˌtrænspɔːˈteɪʃn/", "level": "进阶", "example": "Public transportation is cheap and fast." },
+        { "word": "population", "chinese": "人口", "phonetic": "/ˌpɒpjuˈleɪʃn/", "level": "进阶", "example": "The population of the city is growing." },
+        { "word": "culture", "chinese": "文化", "phonetic": "/ˈkʌltʃə(r)/", "level": "进阶", "example": "Each country has its own culture." },
+        { "word": "tradition", "chinese": "传统", "phonetic": "/trəˈdɪʃn/", "level": "进阶", "example": "It is a family tradition to eat together." },
+        { "word": "government", "chinese": "政府", "phonetic": "/ˈɡʌvənmənt/", "level": "进阶", "example": "The government built new schools." }
+      ],
+      "学术·生物": [
+        { "word": "species", "chinese": "物种", "phonetic": "/ˈspiːʃiːz/", "level": "冲刺", "example": "Many species of birds live in this forest." },
+        { "word": "habitat", "chinese": "栖息地", "phonetic": "/ˈhæbɪtæt/", "level": "冲刺", "example": "The panda's habitat is the bamboo forest." },
+        { "word": "evolve", "chinese": "进化；演变", "phonetic": "/ɪˈvɒlv/", "level": "冲刺", "example": "Birds evolved from dinosaurs." },
+        { "word": "organism", "chinese": "有机体；生物", "phonetic": "/ˈɔːɡənɪzəm/", "level": "冲刺", "example": "A cell is the smallest living organism." },
+        { "word": "predator", "chinese": "捕食者", "phonetic": "/ˈpredətə(r)/", "level": "冲刺", "example": "The lion is a powerful predator." },
+        { "word": "nutrient", "chinese": "营养物质", "phonetic": "/ˈnjuːtriənt/", "level": "冲刺", "example": "Plants take nutrients from the soil." },
+        { "word": "photosynthesis", "chinese": "光合作用", "phonetic": "/ˌfəʊtəʊˈsɪnθəsɪs/", "level": "冲刺", "example": "Photosynthesis turns sunlight into energy." },
+        { "word": "adapt", "chinese": "适应", "phonetic": "/əˈdæpt/", "level": "冲刺", "example": "Animals adapt to changes in climate." },
+        { "word": "mammal", "chinese": "哺乳动物", "phonetic": "/ˈmæml/", "level": "冲刺", "example": "A whale is a mammal, not a fish." },
+        { "word": "ecosystem", "chinese": "生态系统", "phonetic": "/ˈiːkəʊsɪstəm/", "level": "冲刺", "example": "A pond is a small ecosystem." }
+      ],
+      "学术·地理与天文": [
+        { "word": "continent", "chinese": "大陆；洲", "phonetic": "/ˈkɒntɪnənt/", "level": "冲刺", "example": "Asia is the largest continent." },
+        { "word": "climate", "chinese": "气候", "phonetic": "/ˈklaɪmət/", "level": "冲刺", "example": "The climate here is warm and wet." },
+        { "word": "erosion", "chinese": "侵蚀", "phonetic": "/ɪˈrəʊʒn/", "level": "冲刺", "example": "Wind and water cause erosion of rocks." },
+        { "word": "volcano", "chinese": "火山", "phonetic": "/vɒlˈkeɪnəʊ/", "level": "冲刺", "example": "The volcano erupted last year." },
+        { "word": "atmosphere", "chinese": "大气层", "phonetic": "/ˈætməsfɪə(r)/", "level": "冲刺", "example": "The atmosphere protects Earth from the sun." },
+        { "word": "gravity", "chinese": "重力；引力", "phonetic": "/ˈɡrævəti/", "level": "冲刺", "example": "Gravity keeps us on the ground." },
+        { "word": "orbit", "chinese": "轨道；绕行", "phonetic": "/ˈɔːbɪt/", "level": "冲刺", "example": "The moon orbits around the Earth." },
+        { "word": "solar", "chinese": "太阳的", "phonetic": "/ˈsəʊlə(r)/", "level": "冲刺", "example": "Solar energy comes from the sun." },
+        { "word": "glacier", "chinese": "冰川", "phonetic": "/ˈɡlæsiə(r)/", "level": "冲刺", "example": "Glaciers are slowly melting." }
+      ],
+      "学术·历史与文化": [
+        { "word": "ancient", "chinese": "古代的", "phonetic": "/ˈeɪnʃənt/", "level": "冲刺", "example": "We visited ancient ruins in Greece." },
+        { "word": "civilization", "chinese": "文明", "phonetic": "/ˌsɪvəlaɪˈzeɪʃn/", "level": "冲刺", "example": "The Mayan civilization was very advanced." },
+        { "word": "empire", "chinese": "帝国", "phonetic": "/ˈempaɪə(r)/", "level": "冲刺", "example": "The Roman Empire lasted for centuries." },
+        { "word": "revolution", "chinese": "革命；巨变", "phonetic": "/ˌrevəˈluːʃn/", "level": "冲刺", "example": "The Industrial Revolution changed the world." },
+        { "word": "artifact", "chinese": "人工制品；文物", "phonetic": "/ˈɑːtɪfækt/", "level": "冲刺", "example": "The museum shows ancient artifacts." },
+        { "word": "tradition", "chinese": "传统", "phonetic": "/trəˈdɪʃn/", "level": "冲刺", "example": "This tradition is hundreds of years old." },
+        { "word": "heritage", "chinese": "遗产", "phonetic": "/ˈherɪtɪdʒ/", "level": "冲刺", "example": "The old town is a world heritage site." },
+        { "word": "dynasty", "chinese": "王朝", "phonetic": "/ˈdɪnəsti/", "level": "冲刺", "example": "The Tang Dynasty was a golden age." },
+        { "word": "ancestor", "chinese": "祖先", "phonetic": "/ˈænsestə(r)/", "level": "冲刺", "example": "Our ancestors lived in this valley." },
+        { "word": "monument", "chinese": "纪念碑；遗迹", "phonetic": "/ˈmɒnjumənt/", "level": "冲刺", "example": "The monument honors the heroes." }
+      ],
+      "逻辑衔接": [
+        { "word": "however", "chinese": "然而", "phonetic": "/haʊˈevə(r)/", "level": "进阶", "example": "It was raining; however, we still went out." },
+        { "word": "therefore", "chinese": "因此", "phonetic": "/ˈðeəfɔː(r)/", "level": "进阶", "example": "He studied hard; therefore, he passed." },
+        { "word": "furthermore", "chinese": "此外；而且", "phonetic": "/ˌfɜːðəˈmɔː(r)/", "level": "进阶", "example": "The book is interesting; furthermore, it is cheap." },
+        { "word": "meanwhile", "chinese": "与此同时", "phonetic": "/ˈmiːnwaɪl/", "level": "进阶", "example": "Mom cooked; meanwhile, I set the table." },
+        { "word": "although", "chinese": "尽管；虽然", "phonetic": "/ɔːlˈðəʊ/", "level": "基础", "example": "Although it was cold, we went swimming." },
+        { "word": "unless", "chinese": "除非", "phonetic": "/ənˈles/", "level": "基础", "example": "You will miss the bus unless you hurry." },
+        { "word": "whereas", "chinese": "然而；鉴于", "phonetic": "/ˌweərˈæz/", "level": "冲刺", "example": "He likes coffee, whereas she likes tea." },
+        { "word": "nevertheless", "chinese": "尽管如此", "phonetic": "/ˌnevəðəˈles/", "level": "冲刺", "example": "It was difficult; nevertheless, we finished." },
+        { "word": "consequently", "chinese": "因此；结果", "phonetic": "/ˈkɒnsɪkwəntli/", "level": "冲刺", "example": "He was late; consequently, he missed the start." },
+        { "word": "moreover", "chinese": "此外", "phonetic": "/mɔːrˈəʊvə(r)/", "level": "冲刺", "example": "The plan is good; moreover, it is easy." }
+      ]
+    }
+  }
+}
