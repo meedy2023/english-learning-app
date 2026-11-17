@@ -2187,6 +2187,9 @@ const API = ".";
       if (_lbh) _lbh.style.top = '84px';
     }
     currentView = name;
+    // 离开学习页/报告页（切到首页、各模块主页、设置等）时，清理外部模块单词学习的返回上下文，
+    // 避免 clExtCtx 残留导致后续报告模块定位误判（报告页返回学习页需保留，故 report 不清理）
+    if (name !== 'learn' && name !== 'report') clExtCtx = null;
     // 离开 KET / 拼读 / 小托福页时收起其消消乐面板（计时也停掉）
     try {
       if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics' && name !== 'toefl') Match.exit();
@@ -4618,7 +4621,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       reportReturnTitle = _t ? _t.textContent : null;
     }
     // 根据来源视图自动定位报告模块
-    const src = reportReturnView || currentView;
+    // 外部模块（KET/小托福/拼读）的单词学习页复用课文 learn 视图，
+    // 此时 currentView 为 'learn'，需用 clExtCtx.view 定位真实来源模块。
+    // 仅当确实停留在学习页(currentView==='learn')时才采用 clExtCtx.view，
+    // 避免用户经底部导航跳离学习页后 clExtCtx 残留导致报告模块误判。
+    const src = (currentView === 'learn' && clExtCtx && clExtCtx.view) || reportReturnView || currentView;
     if (src === 'ket' || src === 'ket-quiz') reportModule = 'ket';
     else if (src === 'toefl') reportModule = 'toefl';
     else if (src === 'phonics') reportModule = 'phonics';
