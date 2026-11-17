@@ -3873,15 +3873,43 @@ const API = ".";
     const w = String(text == null ? '' : text).trim().toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, '');
     return HOMOGRAPH_IPA[w] || null;
   }
+  // 形容词用法的 live（/laɪv/）：live + 名词。这些场景不纠正，交给 TTS 按语境读。
+  const LIVE_ADJ_NOUN = 'music|lobster|show|concert|band|performance|broadcast|stream|event|feed|wire|animal|chicken|version|recording|telecast|coverage';
+  // 句子中是否含「居住」语境的 live（需强制 /lɪv/）。只要有一个符合条件的 live 就返回 true。
+  // 判定：live 后不接「形容词 + 名词」结构，即视为动词「居住」（后跟介词/句尾/疑问）。
+  function sentenceNeedLiveIpa(text, lang) {
+    if (lang !== 'en-US' || !text) return false;
+    const re = /\blive\b/gi;
+    let m;
+    while ((m = re.exec(text)) !== null) {
+      const after = text.slice(m.index + m[0].length);
+      if (new RegExp('^\\s+(' + LIVE_ADJ_NOUN + ')\\b', 'i').test(after)) continue;
+      return true;
+    }
+    return false;
+  }
 
   function escapeXml(s) {
     return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+  // 在已转义的句子文本上，把「居住」语境的 live 包成 Edge SSML phoneme，强制读 /lɪv/。
+  // 跳过 live + 名词（live music / live lobster 等形容词用法）。输入为 escapeXml 之后的文本。
+  function markLiveIpa(spoken) {
+    const re = /\blive\b/gi;
+    let out = '', last = 0, m;
+    while ((m = re.exec(spoken)) !== null) {
+      const after = spoken.slice(m.index + m[0].length);
+      if (new RegExp('^\\s+(' + LIVE_ADJ_NOUN + ')\\b', 'i').test(after)) continue;
+      out += spoken.slice(last, m.index) + "<phoneme alphabet='ipa' ph='lɪv'>" + m[0] + "</phoneme>";
+      last = m.index + m[0].length;
+    }
+    return out + spoken.slice(last);
   }
 
   // ---- 网络发音：Edge TTS（免费、无需 Key，浏览器直连 wss）----
   const EdgeTTS = {
     WS_URL: 'wss://speech.platform.bing.com/consumer/speech/synthesize/readaloud/edge/v1?TrustedClientToken=6A5AA1D18AC1447B9B4DE3946C719C8B',
-    synthesize(text, lang, onAudio, onError, voiceOverride, ipa, human) {
+    synthesize(text, lang, onAudio, onError, voiceOverride, ipa, human, fixLive) {
       if (typeof WebSocket === 'undefined') { onError && onError(new Error('no websocket')); return; }
       let ws;
       try { ws = new WebSocket(this.WS_URL); } catch (e) { onError && onError(e); return; }
@@ -3946,6 +3974,8 @@ const API = ".";
               .replace(/\? /g, "<break time='220ms'/>? ");
           }
         }
+        // 多音词 live：句子中的「居住」读音用局部 phoneme 强制 /lɪv/（整词发音 ipa 分支已整体包裹，跳过）
+        if (fixLive && !ipa && lang === 'en-US') spoken = markLiveIpa(spoken);
         // 语速统一由播放端 audio.playbackRate 控制；合成端固定基准速度，避免双重变速
         const ratePct = 0;
         const xmlLang = lang === 'zh-CN' ? 'zh-CN' : 'en-GB';
@@ -4228,11 +4258,12 @@ function playAudioBlob(blob, onEnd) {
     // 网络链路：讯飞 → Edge → 降级本机发音（silent=true 时不再提示，避免重复打扰）
     speakNetworkOnce(text, lang, cb, G, silent) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
-      // 多音词（如 live=/lɪv/ 居住）：单独读时 TTS 易读成 /laɪv/（现场的）。
-      // 用 Edge SSML <phoneme> 强制音标；讯飞不支持音标，故多音词直接走 Edge。
+      // 多音词（如 live=/lɪv/ 居住）：单独读或句中都易被 TTS 读成 /laɪv/（现场的）。
+      // 用 Edge SSML <phoneme> 强制音标；讯飞不支持音标，故多音词一律直接走 Edge。
       // 缓存 key 加 homo 前缀，避免命中之前误读音频，也不污染普通发音缓存。
       const ipa = (lang === 'en-US') ? homographIpa(text) : null;
-      const key = ipa ? ('homo|' + text + '|' + ipa) : ttsCacheKey(text, lang, voice);
+      const needLive = !ipa && sentenceNeedLiveIpa(text, lang);
+      const key = (ipa || needLive) ? ('homo|' + text + '|' + (ipa || 'live')) : ttsCacheKey(text, lang, voice);
       const cached = ttsCacheGet(key);
       if (cached) { playAudioBlob(cached, cb); return; }
       const toSystem = G(() => {
@@ -4244,11 +4275,11 @@ function playAudioBlob(blob, onEnd) {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); toSystem(); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, cb);
       });
-      if (ipa) {
+      if (ipa || needLive) {
         EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
           console.warn('多音词音标发音失败，降级本机发音', e2);
           toSystem();
-        }), undefined, ipa);
+        }), undefined, ipa, false, needLive);
         return;
       }
       XFYunTTS.synth(text, lang, okNode, G(() => {
@@ -4327,7 +4358,8 @@ function playAudioBlob(blob, onEnd) {
     // 只合成、不播放（返回 blob 或 null）
     synthOnce(text, lang, cb, human) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
-      const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
+      const needLive = sentenceNeedLiveIpa(text, lang);
+      const key = (needLive ? 'homo|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
@@ -4336,6 +4368,8 @@ function playAudioBlob(blob, onEnd) {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); cb(null); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob); cb(blob);
       };
+      const edge = () => EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, undefined, undefined, human, needLive);
+      if (needLive) { edge(); return; }  // 讯飞不支持音标，多音词句子直接走 Edge
       XFYunTTS.synth(text, lang, ok, () => {
         EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, undefined, undefined, human);
       }, undefined, pros.pitchAdj, pros.speedAdj);
@@ -4346,13 +4380,15 @@ function playAudioBlob(blob, onEnd) {
       lang = lang || 'en-US';
       text = expandAbbrev(text, lang);  // 与 speakSentence 展开保持一致，否则缓存 key 不一致导致预合成白做
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
-      const key = ttsCacheKey(text, lang, voice) + (human ? '|human' : '');
+      const needLive = sentenceNeedLiveIpa(text, lang);
+      const key = (needLive ? 'homo|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       if (_ttsCache.has(key)) return;
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
       const ok = (blob) => {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob);
       };
+      if (needLive) { EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, undefined, undefined, human, needLive); return; }
       XFYunTTS.synth(text, lang, ok, () => {
         EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, undefined, undefined, human);
       }, undefined, pros.pitchAdj, pros.speedAdj);
