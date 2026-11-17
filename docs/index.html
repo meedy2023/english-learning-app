@@ -4942,7 +4942,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       feedback.style.background = '#f6ffed';
       feedback.style.color = '#52c41a';
       feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word));
-      speakChinese('正确');
+      Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
       Review.correct(wordId);
     } else {
       btnEl.style.background = '#fff2f0';
@@ -4961,7 +4961,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       feedback.style.background = '#fff2f0';
       feedback.style.color = '#ff4d4f';
       feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + correctText + '</strong>';
-      speakChinese('不对');
+      Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
       Review.wrong(wordId);
     }
 
@@ -5648,7 +5648,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       // 提示后答对：鼓励「试错后成功」，但不按全对算（结果里保留 retried 标记）
       const retried = window._quizRetry;
       feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word)) + (retried ? "<br><span style='font-size:12px;color:#52c41a'>（再试一次就答对了，真棒！）</span>" : "");
-      speakChinese("正确");
+      Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
       window.quizResults.push({ correct: true, retried: retried });
 
       comboCount++;
@@ -5691,7 +5691,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       feedback.style.background = "#fff7e6";
       feedback.style.color = "#ad6800";
       feedback.innerHTML = "<strong>💡 再想想~</strong><br>提示：正确答案以「<strong>" + escapeHtml(firstChar) + "</strong>」开头，再试一次吧！";
-      speakChinese("再试一次");
+      Celebrate.answerWrong();  // 首次答错：提示音乐替代语音播报「再试一次」
       // 不打断连击计数，等最终结果再判定；不自动跳题，等学生再选
       clearTimeout(window._quizAutoNext);
       return;
@@ -5714,7 +5714,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     feedback.style.background = "#fff2f0";
     feedback.style.color = "#ff4d4f";
     feedback.innerHTML = "<strong>❌ 不对哦~</strong><br>正确答案：<strong>" + correctText + "</strong>";
-    speakChinese("不对");
+    Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
     comboCount = 0;
     hideCombo();
     Review.add(correctWord.id);
@@ -8818,7 +8818,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       btnEl.style.background = '#f6ffed'; btnEl.style.borderColor = '#52c41a'; btnEl.style.color = '#52c41a';
       feedback.style.display = 'block'; feedback.style.background = '#f6ffed'; feedback.style.color = '#52c41a';
       feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + cur.answerLabel;
-      speakChinese('正确');
+      Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
       comboCount++;
       showCombo(comboCount);
       const r = Points.earn('quiz_correct');
@@ -8830,7 +8830,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       });
       feedback.style.display = 'block'; feedback.style.background = '#fff2f0'; feedback.style.color = '#ff4d4f';
       feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + cur.answerLabel + '</strong>';
-      speakChinese('不对');
+      Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
     }
 
     if (ketQuizIndex + 1 >= ketQuizQueue.length) {
