@@ -5662,8 +5662,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
 
       const isLast = currentQuizIndex + 1 >= quizOrder.length;
-      const allCorrect = isLast && window.quizResults.every(function(r) { return r.correct; });
-      apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=" + (allCorrect ? "mastered" : "learned"), {});
+      // 按词判定掌握：答对即 mastered，不再要求整轮全对
+      apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=mastered", {});
 
       window._quizRetry = false;
       if (isLast) { nextBtn.style.display = "block"; nextBtn.textContent = "查看成绩 🎉"; }
@@ -5692,6 +5692,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       feedback.style.color = "#ad6800";
       feedback.innerHTML = "<strong>💡 再想想~</strong><br>提示：正确答案以「<strong>" + escapeHtml(firstChar) + "</strong>」开头，再试一次吧！";
       Celebrate.answerWrong();  // 首次答错：提示音乐替代语音播报「再试一次」
+      // 答错记为已学；若再试答对会升级为 mastered（后端状态只升不降）
+      apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=learned", {});
       // 不打断连击计数，等最终结果再判定；不自动跳题，等学生再选
       clearTimeout(window._quizAutoNext);
       return;
@@ -5715,6 +5717,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     feedback.style.color = "#ff4d4f";
     feedback.innerHTML = "<strong>❌ 不对哦~</strong><br>正确答案：<strong>" + correctText + "</strong>";
     Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
+    apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=learned", {});
     comboCount = 0;
     hideCombo();
     Review.add(correctWord.id);
@@ -8017,13 +8020,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           + '<td class="num">' + (g.lesson_count || 0) + '</td>'
           + '<td class="num"><span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
           + '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' + reportBarColor(pct) + '"></div></div>'
-          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' / ' + wordTotal + ' 词</div></td>'
+          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' · 掌握 ' + mastered + ' / ' + wordTotal + ' 词</div></td>'
           + '</tr>';
       });
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>拼读分组</th><th class="num">课时</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalLessons + ' 课时 · ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalLessons + ' 课时 · ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词 · 掌握 ' + totalMastered + ' 词</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载拼读报告失败</div>';
     }
