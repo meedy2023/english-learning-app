@@ -7983,7 +7983,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>词汇分类</th><th class="num">词数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词 · 掌握 ' + totalMastered + ' 词</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词 · 掌握 ' + totalMastered + ' 词</div>'
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:6px">词汇学习进度基于单词学习与词汇测验记录</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载小托福报告失败</div>';
     }
