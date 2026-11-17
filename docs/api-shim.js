@@ -416,9 +416,19 @@
       // ===== 自然拼读系列 =====
       if (api === "phonics") {
         return json({
-          groups: DATA.phonics.map((g) => ({
-            id: g.id, title: g.title, desc: g.desc, lesson_count: (g.lessons || []).length,
-          })),
+          groups: DATA.phonics.map((g) => {
+            // 统计该分组去重后的单词总数（与前端 phonicsGroupWords 逻辑一致）
+            const seen = {};
+            let wordCount = 0;
+            (g.lessons || []).forEach((l) => (l.words || []).forEach((w) => {
+              const key = String(w.w || "").toLowerCase();
+              if (key && !seen[key]) { seen[key] = 1; wordCount++; }
+            }));
+            return {
+              id: g.id, title: g.title, desc: g.desc, lesson_count: (g.lessons || []).length,
+              word_count: wordCount,
+            };
+          }),
         });
       }
       if (api.startsWith("phonics/")) {

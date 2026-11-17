@@ -7593,6 +7593,21 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 报告页当前选中年级（null=全部）
   var reportSelectedGrade = null;
 
+  // 读取外部模块（KET/小托福/拼读）单词学习进度：返回 { learned, mastered }
+  // scopeKey 形如 'toefl_高频核心·校园与日常' / 'ket_个人信息' / 'phonics_letters'
+  function extWordProgress(scopeKey) {
+    try {
+      const all = JSON.parse(localStorage.getItem('wordlearn_' + USER_ID) || '{}');
+      const bucket = all[scopeKey] || {};
+      let learned = 0, mastered = 0;
+      Object.keys(bucket).forEach(function (wid) {
+        if (bucket[wid] === 'mastered') mastered++;
+        else if (bucket[wid] === 'learned') learned++;
+      });
+      return { learned: learned, mastered: mastered };
+    } catch (e) { return { learned: 0, mastered: 0 }; }
+  }
+
   // 状态标签
   function statusLabel(learned, mastered, total) {
     if (mastered === total && total > 0) return '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#d4f5d4;color:#52c41a">全部掌握 ✓</span>';
@@ -7801,12 +7816,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         container.innerHTML = '<div style="text-align:center;color:#999;padding:32px;font-size:14px">暂无 KET 学习内容</div>';
         return;
       }
-      // 按类型分组统计
+      // 按类型分组统计（词汇类型汇总各词汇分类的单词学习进度）
       const byType = {};
       cats.forEach(c => {
-        if (!byType[c.type]) byType[c.type] = { count: 0, items: 0 };
+        if (!byType[c.type]) byType[c.type] = { count: 0, items: 0, learned: 0, mastered: 0 };
         byType[c.type].count++;
         byType[c.type].items += (c.count || 0);
+        // 词汇分类有单词学习，进度 scopeKey = 'ket_' + 分类名
+        if (c.type === '词汇') {
+          const p = extWordProgress('ket_' + c.category);
+          byType[c.type].learned += p.learned;
+          byType[c.type].mastered += p.mastered;
+        }
       });
       const typeMeta = { '词汇': '📖 词汇学习', '句型': '💬 句型练习', '语法': '📝 语法知识' };
       let rows = '';
@@ -7814,16 +7835,26 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Object.keys(byType).forEach(t => {
         const v = byType[t];
         totalItems += v.items;
+        const done = v.learned + v.mastered;
+        const pct = (v.items > 0) ? Math.round(done / v.items * 100) : 0;
+        let progressCell;
+        if (t === '词汇') {
+          progressCell = '<span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
+            + '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' + reportBarColor(pct) + '"></div></div>'
+            + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' · 掌握 ' + v.mastered + '</div>';
+        } else {
+          progressCell = '<span style="color:#999">—</span>';
+        }
         rows += '<tr>'
           + '<td><div class="cell-name">' + (typeMeta[t] || t) + '</div><div class="cell-sub">' + v.count + ' 个分类</div></td>'
           + '<td class="num">' + v.items + '</td>'
-          + '<td class="num"><span style="color:#999">—</span></td>'
+          + '<td class="num">' + progressCell + '</td>'
           + '</tr>';
       });
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>类型</th><th class="num">知识点数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">💡 KET 学习进度统计功能开发中，当前展示知识点概览</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">词汇学习进度基于单词学习记录；句型、语法以测验为主，进度暂不统计</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载 KET 报告失败</div>';
     }
@@ -7844,18 +7875,26 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
       let rows = '';
       let totalWords = 0;
+      let totalLearned = 0, totalMastered = 0;
       cats.forEach(c => {
         totalWords += (c.count || 0);
+        const p = extWordProgress('toefl_' + c.category);
+        const learned = p.learned, mastered = p.mastered;
+        totalLearned += learned; totalMastered += mastered;
+        const done = learned + mastered;
+        const pct = (c.count > 0) ? Math.round(done / c.count * 100) : 0;
         rows += '<tr>'
           + '<td><div class="cell-name">' + c.category + '</div></td>'
           + '<td class="num">' + (c.count || 0) + '</td>'
-          + '<td class="num"><span style="color:#999">—</span></td>'
+          + '<td class="num"><span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
+          + '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' + reportBarColor(pct) + '"></div></div>'
+          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' · 掌握 ' + mastered + '</div></td>'
           + '</tr>';
       });
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>词汇分类</th><th class="num">词数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">💡 小托福学习进度统计功能开发中，当前展示词汇概览（共 ' + totalWords + ' 词）</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词 · 掌握 ' + totalMastered + ' 词</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载小托福报告失败</div>';
     }
@@ -7877,18 +7916,28 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const icons = { letters: '🔤', short_vowels: '🐱', long_vowels: '🐝', consonant_blends: '🔠', vowel_teams: '🎶' };
       let rows = '';
       let totalLessons = 0;
+      let totalWords = 0, totalLearned = 0, totalMastered = 0;
       groups.forEach(g => {
         totalLessons += (g.lesson_count || 0);
+        const wordTotal = (g.word_count || 0);
+        totalWords += wordTotal;
+        const p = extWordProgress('phonics_' + g.id);
+        const learned = p.learned, mastered = p.mastered;
+        totalLearned += learned; totalMastered += mastered;
+        const done = learned + mastered;
+        const pct = (wordTotal > 0) ? Math.round(done / wordTotal * 100) : 0;
         rows += '<tr>'
           + '<td><div class="cell-name">' + (icons[g.id] || '🔤') + ' ' + g.title + '</div><div class="cell-sub">' + (g.desc || '') + '</div></td>'
           + '<td class="num">' + (g.lesson_count || 0) + '</td>'
-          + '<td class="num"><span style="color:#999">—</span></td>'
+          + '<td class="num"><span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
+          + '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' + reportBarColor(pct) + '"></div></div>'
+          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' / ' + wordTotal + ' 词</div></td>'
           + '</tr>';
       });
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>拼读分组</th><th class="num">课时</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">💡 拼读学习进度统计功能开发中，当前展示分组概览（共 ' + totalLessons + ' 课时）</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalLessons + ' 课时 · ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载拼读报告失败</div>';
     }
