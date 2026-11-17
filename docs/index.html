@@ -8505,7 +8505,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           qe.innerHTML =
             '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="startKetLearn()">🎯 单词学习</button>' +
             '<div style="display:flex;gap:8px">' +
-              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🎯 本类词汇测验</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🏆 本类词汇测验</button>' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
             '</div>' +
             '<div style="display:flex;gap:8px;margin-top:8px">' +
@@ -8531,7 +8531,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const qe = document.getElementById('ket-quiz-entry');
         if (qe) {
           qe.style.display = 'block';
-          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'sentence\')">🎯 本类句型测验</button>';
+          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'sentence\')">🏆 本类句型测验</button>';
         }
 
       } else if (type === '语法') {
@@ -8566,7 +8566,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const qe = document.getElementById('ket-quiz-entry');
         if (qe) {
           qe.style.display = 'block';
-          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'grammar\')">🎯 本语法点测验</button>';
+          qe.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px" onclick="startKetQuiz(\'grammar\')">🏆 本语法点测验</button>';
         }
       }
 
@@ -8885,7 +8885,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       qe.innerHTML =
         '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="startToeflLearn()">🎯 单词学习</button>' +
         '<div style="display:flex;gap:8px">' +
-          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🎯 本类词汇测验</button>' +
+          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本类词汇测验</button>' +
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflMatch()">🎴 消消乐</button>' +
         '</div>' +
         '<div style="display:flex;gap:8px;margin-top:8px">' +
