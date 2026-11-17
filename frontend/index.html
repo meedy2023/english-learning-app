@@ -1233,10 +1233,7 @@
   <!-- ======= 学习报告 ======= -->
   <div id="view-report" class="view">
     <button class="btn btn-secondary nav-back-btn" onclick="closeReport()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> 返回</button>
-    <div class="section-title">📊 学习报告</div>
-
-    <!-- 模块切换标签：课文 / KET / 小托福 / 拼读 -->
-    <div id="report-module-tabs" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"></div>
+    <div class="section-title" id="report-title">📊 学习报告</div>
 
     <!-- 课文报告：年级切换标签 -->
     <div id="report-grade-tabs" style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"></div>
@@ -7633,19 +7630,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function switchReportModule(mod) {
     reportModule = mod;
     renderReport();
-  }
-  // 报告页总入口：渲染模块 tab + 对应报告内容
+  }  // 报告页总入口：根据当前锁定模块渲染对应报告（不提供模块切换）
   function renderReport() {
-    // 渲染模块切换标签
+    // 不渲染模块切换标签：报告页进入即锁定单一模块（由 openReport 按来源视图定位）
     const tabsEl = document.getElementById('report-module-tabs');
-    tabsEl.innerHTML = '';
-    REPORT_MODULES.forEach(m => {
-      const b = document.createElement('button');
-      b.style.cssText = gradeTabCSS(m.label, reportModule === m.id);
-      b.textContent = m.icon + ' ' + m.label;
-      b.onclick = () => switchReportModule(m.id);
-      tabsEl.appendChild(b);
-    });
+    if (tabsEl) tabsEl.style.display = 'none';
+    // 报告页标题动态显示当前模块名
+    const titleEl = document.getElementById('report-title');
+    if (titleEl) {
+      const cur = REPORT_MODULES.find(m => m.id === reportModule);
+      titleEl.textContent = (cur ? cur.icon + ' ' : '📊 ') + (cur ? cur.label : '') + ' 学习报告';
+    }
     // 课文专属元素（年级标签 / 全局总览）仅在课文报告显示
     const gradeTabsEl = document.getElementById('report-grade-tabs');
     const overviewEl = document.getElementById('report-overview');
