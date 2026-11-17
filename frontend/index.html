@@ -6472,7 +6472,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (mode === 'en2cn') setTimeout(function() { speakWord(word.word); }, 100);
     if (mode === 'listen') setTimeout(function() { speakWord(word.word); }, 300);
 
-    const esc = function(s) { return (s || '').replace(/'/g, "\'"); };
+    const esc = function(s) { return String(s == null ? '' : s).replace(/'/g, "\\'"); };
 
     const area = document.getElementById('choice-learn-area');
     area.innerHTML = '<div class="cl-meta"><span class="keep">总计 ' + cl_words.length + ' 个单词</span></div>' +
@@ -6513,7 +6513,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function speakChoiceWord(mode, wordId) {
-    const w = cl_words.find(function(x) { return x.id === wordId; });
+    // onclick 传入的 wordId 是字符串；课文模块词 id 为数字，需转字符串比较，否则严格相等匹配失败
+    const w = cl_words.find(function(x) { return String(x.id) === String(wordId); });
     if (!w) return;
     // 无论哪种题型，「听发音」都播放英文单词发音
     speakWord(w.word);
