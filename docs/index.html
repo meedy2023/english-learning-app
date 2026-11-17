@@ -1013,7 +1013,7 @@
 <div class="topbar">
   <h1 id="topbar-title">📚 英语学习</h1>
   <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
-      <span id="report-btn" onclick="switchView('report')" title="学习报告" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">📊</span>
+      <span id="report-btn" onclick="openReport()" title="学习报告" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">📊</span>
       <span id="settings-btn" onclick="openSettings()" title="设置" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">⚙️</span>
       <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
       <span id="grade-display" style="display:none">三年级</span>
@@ -1195,7 +1195,7 @@
 
   <!-- ======= 学习报告 ======= -->
   <div id="view-report" class="view">
-    <button class="btn btn-secondary nav-back-btn" onclick="switchView('home')" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">←</span> 返回首页</button>
+    <button class="btn btn-secondary nav-back-btn" onclick="closeReport()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> 返回</button>
     <div class="section-title">📊 学习报告</div>
 
     <!-- 年级切换标签 -->
@@ -4563,6 +4563,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (settingsReturnTitle) {
       document.getElementById('topbar-title').textContent = settingsReturnTitle;
       settingsReturnTitle = null;
+    }
+  }
+
+  // ========== 学习报告页 ==========
+  // 进入报告前的页面上下文（与设置页逻辑一致：记录顶层视图 + 顶栏标题）
+  let reportReturnView = 'home';
+  let reportReturnTitle = null;
+  function openReport() {
+    if (currentView && currentView !== 'report') {
+      reportReturnView = currentView;
+      const _t = document.getElementById('topbar-title');
+      reportReturnTitle = _t ? _t.textContent : null;
+    }
+    // 消消乐进行中先看报告：暂停计时，返回时由 restoreMatchView 恢复
+    if (learnMode === 'match' && typeof Match !== 'undefined' && Match.stopTimer && !Match.finished) Match.stopTimer();
+    switchView('report');
+    loadReport();
+  }
+  function closeReport() {
+    switchView(reportReturnView || 'home');
+    // 站内子页面返回时，恢复进入报告前的准确标题
+    if (reportReturnTitle) {
+      document.getElementById('topbar-title').textContent = reportReturnTitle;
+      reportReturnTitle = null;
     }
   }
   function refreshSettingsInfo() {
