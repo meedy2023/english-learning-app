@@ -2753,7 +2753,8 @@ const API = ".";
       const vp = VOICE_PROFILES[voice] || { vcn: voice, pitch: 50, speed: 50 };
       // 真人节奏：按句型微调音调/语速，制造可感知的语调起伏（疑问升调、感叹加重、陈述平稳）
       const pitch = Math.max(0, Math.min(100, Math.round(vp.pitch + (pitchAdj || 0))));
-      const speed = Math.max(0, Math.min(100, Math.round(vp.speed * speechRate + (speedAdj || 0))));
+      // 语速统一由播放端 audio.playbackRate 控制；合成端用基准速度，仅保留句型节奏微调
+      const speed = Math.max(0, Math.min(100, Math.round(vp.speed + (speedAdj || 0))));
       (async () => {
       try {
       const { date, auth } = await this._signature();
@@ -3932,7 +3933,8 @@ const API = ".";
               .replace(/\? /g, "<break time='220ms'/>? ");
           }
         }
-        const ratePct = Math.round((speechRate - 1) * 100);
+        // 语速统一由播放端 audio.playbackRate 控制；合成端固定基准速度，避免双重变速
+        const ratePct = 0;
         const xmlLang = lang === 'zh-CN' ? 'zh-CN' : 'en-GB';
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
@@ -3974,6 +3976,8 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
   const audio = new Audio();
   window._activeAudio = audio;
   audio.src = url;
+  // 语速统一由播放端控制（合成端固定基准速度，避免双重变速）
+  try { audio.playbackRate = speechRate; } catch (e) {}
   const finish = () => {
     if (token !== window._audioToken) return;
     if (window._activeAudio === audio) window._activeAudio = null;
@@ -4108,6 +4112,8 @@ function playAudioBlob(blob, onEnd) {
     const audio = new Audio();
     window._activeAudio = audio;
     audio.src = url;
+    // 语速统一由播放端控制（合成端固定基准速度，避免双重变速）
+    try { audio.playbackRate = speechRate; } catch (e) {}
     // 播放前显式复位播放位置（防御：避免播放器停在结尾导致无法重播）
     try { audio.currentTime = 0; } catch (e) {}
     const finish = () => {
@@ -4253,7 +4259,7 @@ function playAudioBlob(blob, onEnd) {
           handle.kind = 'audio';
           handle.el = audio;
           handle.pause = () => { try { audio.pause(); } catch (e) {} };
-          handle.resume = () => { try { const p = audio.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
+          handle.resume = () => { try { audio.playbackRate = speechRate; const p = audio.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
           handle.stop = () => { try { audio.pause(); } catch (e) {} };
           opts.onReady && opts.onReady(audio);
         } else {
