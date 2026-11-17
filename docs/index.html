@@ -5775,6 +5775,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let cl_correct = 0;
   let cl_total = 0;
   let comboCount = 0;
+  let clExtCtx = null; // 外部模块（KET/小托福/拼读）调用时的返回上下文 {title, onBack, scopeKey}
 
   // ========== 连击反馈 ==========
   function showCombo(n) {
@@ -6378,15 +6379,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return out;
   }
 
-  function startChoiceLearn() {
-    if (!currentModule || currentWords.length === 0) {
+  function startChoiceLearn(extWords, extOpts) {
+    // 外部调用（KET/小托福/拼读）时，extWords 提供词表，extOpts 提供标题与返回回调
+    const isExt = !!(extWords && extWords.length);
+    if (!isExt && (!currentModule || currentWords.length === 0)) {
       toast('请先选择一个模块');
       switchView('home');
       return;
     }
     learnMode = 'choice';
-    learnRestoreFn = restoreChoiceView;
-    cl_words = [...currentWords];
+    // 外部调用时不设 restoreChoiceView，避免 switchView('learn') 时 restoreLearnView 把隐藏的 tab 栏/标题重新显示出来
+    learnRestoreFn = isExt ? null : restoreChoiceView;
+    cl_words = isExt ? toMatchWords(extWords) : [...currentWords];
+    if (cl_words.length < 2) { toast('单词太少，暂时学不了'); return; }
     cl_idx = 0;
     cl_correct = 0;
     cl_total = 0;
@@ -6403,11 +6408,24 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var _dA2 = document.getElementById('doodle-game-area');
     if (_dA2) _dA2.style.display = 'none';
     if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
-    document.getElementById('quiz-toggle-bar').style.display = '';
+    // 外部调用：隐藏课文专属的 tab 栏、模块标题与「返回首页」按钮，记录返回上下文
+    if (isExt) {
+      clExtCtx = { title: (extOpts && extOpts.title) || '🎯 单词学习', onBack: (extOpts && extOpts.onBack) || null, scopeKey: (extOpts && extOpts.scopeKey) || '', view: (extOpts && extOpts.view) || '' };
+      document.getElementById('quiz-toggle-bar').style.display = 'none';
+      document.getElementById('learn-module-title').style.display = 'none';
+      const _bh = document.getElementById('learn-back-home');
+      if (_bh) _bh.style.display = 'none';
+    } else {
+      clExtCtx = null;
+      document.getElementById('quiz-toggle-bar').style.display = '';
+      document.getElementById('learn-module-title').style.display = '';
+      const _bh = document.getElementById('learn-back-home');
+      if (_bh) _bh.style.display = '';
+    }
     const area = document.getElementById('choice-learn-area');
     area.style.display = 'block';
     switchView('learn');
-    document.getElementById('topbar-title').textContent = '🎯 开始学习';
+    document.getElementById('topbar-title').textContent = (clExtCtx && clExtCtx.title) || '🎯 开始学习';
     loadChoiceQuestion();
   }
 
@@ -6527,7 +6545,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       speakChinese('不对');
       comboCount = 0;
       hideCombo();
-      Review.add(word.id);
+      // 外部模块（KET/小托福/拼读）的单词 id 不在课文词表里，跳过错词本，避免污染
+      if (!clExtCtx) Review.add(word.id);
     }
 
     // 最后一题答完显示"查看成绩"，中间题自动跳转不显示下一题
@@ -6564,6 +6583,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   async function saveChoiceProgress(wordId, status) {
     status = status || 'learned';
+    // 外部模块（KET/小托福/拼读）学习：进度写入 localStorage，避免污染课文进度
+    if (clExtCtx && clExtCtx.scopeKey) {
+      try {
+        const key = 'wordlearn_' + USER_ID;
+        const all = JSON.parse(localStorage.getItem(key) || '{}');
+        if (!all[clExtCtx.scopeKey]) all[clExtCtx.scopeKey] = {};
+        all[clExtCtx.scopeKey][wordId] = status;
+        localStorage.setItem(key, JSON.stringify(all));
+      } catch(e) {}
+      return;
+    }
     try {
       await apiPOST('/api/progress/' + USER_ID + '/' + wordId + '?status=' + status, {});
     } catch(e) {}
@@ -6601,11 +6631,46 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#6c63ff">' + cl_total + '</div><div style="font-size:12px;color:#999">总题数</div></div>' +
         '</div>' +
       '</div>' +
-      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startChoiceLearn()">🔄 再来一轮</button>' +
-      '<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
-      '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">🏠</span> 返回首页</button>' +
+      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="clRestartLearn()">🔄 再来一轮</button>' +
+      clSummaryBackBtn() +
     '</div>';
     speakChinese(msgs);
+  }
+
+  // 再来一轮：保留当前词表与外部上下文重开
+  function clRestartLearn() {
+    if (clExtCtx) {
+      startChoiceLearn(cl_words, { title: clExtCtx.title, onBack: clExtCtx.onBack, scopeKey: clExtCtx.scopeKey, view: clExtCtx.view });
+    } else {
+      startChoiceLearn();
+    }
+  }
+
+  // 总结页返回按钮：外部调用返回各自分类页，课文返回单词表/首页
+  function clSummaryBackBtn() {
+    if (clExtCtx) {
+      return '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> 返回</button>';
+    }
+    return '<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
+      '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">🏠</span> 返回首页</button>';
+  }
+
+  // 外部模块学习结束，返回各自分类/分组页
+  function clBackToModule() {
+    const ctx = clExtCtx;
+    clExtCtx = null;
+    // 还原课文视图的 tab 栏、标题与返回按钮
+    document.getElementById('quiz-toggle-bar').style.display = '';
+    document.getElementById('learn-module-title').style.display = '';
+    const _bh = document.getElementById('learn-back-home');
+    if (_bh) _bh.style.display = '';
+    if (ctx && ctx.onBack) {
+      // 先切回对应模块视图，再执行返回函数（返回函数内部操作该模块的 DOM）
+      if (ctx.view) switchView(ctx.view);
+      ctx.onBack();
+    } else {
+      switchView('home');
+    }
   }
 
   function showLessonList() {
@@ -6614,211 +6679,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     showTextbookList();
   }
 
-  // ========== 通用「单词学习」组件（KET / 小托福 / 拼读 共用）==========
-  // 复用课文学习的三种题型（英译中 / 中译英 / 听音选词），独立全屏覆盖层，
-  // 不依赖课文视图，任意模块都能调用。学习进度写入 localStorage 供报告页统计。
-  const WordLearn = {
-    words: [],        // [{id, word, chinese}]
-    order: [],
-    idx: 0,
-    correct: 0,
-    total: 0,
-    scopeKey: '',     // 进度存储键，如 'ket_动物' / 'toefl_学术词汇' / 'phonics_short_vowels'
-    title: '',
-    onClose: null,
-
-    start(words, opts) {
-      opts = opts || {};
-      const list = toMatchWords(words);
-      if (list.length < 2) { toast('单词太少，暂时学不了'); return; }
-      this.words = list;
-      this.title = opts.title || '单词学习';
-      this.scopeKey = opts.scopeKey || '';
-      this.onClose = opts.onClose || null;
-      this.order = shuffle(list.map(w => w.id));
-      this.idx = 0; this.correct = 0; this.total = 0;
-      comboCount = 0; hideCombo();
-      this._ensureOverlay();
-      this._renderQuestion();
-    },
-
-    _ensureOverlay() {
-      let ov = document.getElementById('wordlearn-overlay');
-      if (!ov) {
-        ov = document.createElement('div');
-        ov.id = 'wordlearn-overlay';
-        ov.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#f5f6fa;z-index:9999;overflow-y:auto;max-width:480px;margin:0 auto';
-        document.body.appendChild(ov);
-      }
-      ov.style.display = 'block';
-      ov.innerHTML = '';
-    },
-
-    _headerHtml() {
-      const pct = Math.round((this.idx / this.order.length) * 100);
-      return '<div style="position:sticky;top:0;background:#fff;box-shadow:0 1px 6px rgba(0,0,0,.06);padding:14px 16px;z-index:10">'
-        + '<div style="display:flex;align-items:center;gap:10px">'
-        + '<button class="btn btn-secondary" onclick="WordLearn.close()" style="padding:8px 14px;font-size:14px;flex-shrink:0">← 返回</button>'
-        + '<div style="flex:1;text-align:center;font-size:16px;font-weight:700;color:#333;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + this.title + '</div>'
-        + '<span style="font-size:12px;color:#999;flex-shrink:0">' + this.idx + '/' + this.order.length + '</span>'
-        + '</div>'
-        + '<div style="height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:10px">'
-        + '<div style="height:100%;background:linear-gradient(90deg,#4f9fff,#6c63ff);width:' + pct + '%;border-radius:3px;transition:width .3s"></div>'
-        + '</div></div>';
-    },
-
-    _renderQuestion() {
-      if (this.idx >= this.order.length) { this._renderSummary(); return; }
-      clearTimeout(this._autoNext);
-      const wid = this.order[this.idx];
-      const word = this.words.find(w => w.id === wid);
-      if (!word) { this.idx++; this._renderQuestion(); return; }
-      const roll = Math.random();
-      const mode = roll < 0.34 ? 'en2cn' : (roll < 0.67 ? 'cn2en' : 'listen');
-      const others = this.words.filter(w => w.id !== wid);
-      const distractors = shuffle(others).slice(0, 3);
-      let options;
-      if (mode === 'en2cn') {
-        options = shuffle([{ text: word.chinese, correct: true }, ...distractors.map(d => ({ text: d.chinese, correct: false }))]);
-      } else {
-        options = shuffle([{ text: word.word, correct: true }, ...distractors.map(d => ({ text: d.word, correct: false }))]);
-      }
-      const prompt = mode === 'en2cn' ? '这个单词的中文是？' : (mode === 'listen' ? '听发音，选出你听到的单词' : '这个中文的英文是？');
-      const question = mode === 'en2cn' ? capitalize(word.word) : (mode === 'listen' ? '🔉 ???' : word.chinese);
-      if (mode === 'en2cn') setTimeout(() => speakWord(word.word), 100);
-      if (mode === 'listen') setTimeout(() => speakWord(word.word), 300);
-
-      this._cur = { word, mode };
-      const labels = ['A', 'B', 'C', 'D'];
-      const optHtml = options.map((o, i) =>
-        '<button class="wl-opt" data-i="' + i + '" style="width:100%;text-align:left;padding:14px 18px;font-size:16px;border-radius:12px;background:#fff;border:2px solid #e8eeff;color:#333;cursor:pointer;margin-bottom:10px">'
-        + '<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#f0f4ff;color:#6c63ff;font-size:13px;text-align:center;line-height:28px;font-weight:700;margin-right:10px">' + labels[i] + '</span>'
-        + '<span>' + o.text + '</span></button>'
-      ).join('');
-
-      const ov = document.getElementById('wordlearn-overlay');
-      ov.innerHTML = this._headerHtml()
-        + '<div style="padding:20px 16px 40px">'
-        + '<div style="text-align:center;margin-bottom:20px">'
-        + '<div style="font-size:40px;font-weight:800;color:#333;margin-bottom:6px">' + question + '</div>'
-        + '<button class="speak-btn" onclick="WordLearn.speak()" style="margin:0 auto">🔊 听发音</button>'
-        + '<div style="font-size:14px;color:#999;margin-top:8px">' + prompt + '</div>'
-        + '</div>'
-        + '<div>' + optHtml + '</div>'
-        + '<div id="wl-feedback" style="display:none;margin-top:8px;text-align:center;padding:14px;border-radius:12px;font-size:15px;line-height:1.5"></div>'
-        + '</div>';
-
-      ov.querySelectorAll('.wl-opt').forEach(btn => {
-        btn.onclick = () => this._answer(parseInt(btn.getAttribute('data-i'), 10), options, btn);
-      });
-      window.scrollTo(0, 0);
-    },
-
-    speak() {
-      if (this._cur) speakWord(this._cur.word.word);
-    },
-
-    _answer(optIdx, options, btnEl) {
-      const ov = document.getElementById('wordlearn-overlay');
-      ov.querySelectorAll('.wl-opt').forEach(b => b.style.pointerEvents = 'none');
-      this.total++;
-      const opt = options[optIdx];
-      const { word, mode } = this._cur;
-      const feedback = document.getElementById('wl-feedback');
-      const isCorrect = opt.correct;
-      if (isCorrect) {
-        this.correct++;
-        comboCount++;
-        showCombo(comboCount);
-        feedback.style.display = 'block';
-        feedback.style.background = '#f6ffed'; feedback.style.color = '#52c41a';
-        feedback.innerHTML = '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word));
-        btnEl.style.background = '#f6ffed'; btnEl.style.borderColor = '#52c41a'; btnEl.style.color = '#52c41a';
-        speakChinese('正确');
-        Points.earn('quiz_correct');
-        this._saveProgress(word.id, 'learned');
-      } else {
-        feedback.style.display = 'block';
-        feedback.style.background = '#fff2f0'; feedback.style.color = '#ff4d4f';
-        feedback.innerHTML = '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + (mode === 'en2cn' ? word.chinese : capitalize(word.word)) + '</strong>';
-        btnEl.style.background = '#fff2f0'; btnEl.style.borderColor = '#ff4d4f'; btnEl.style.color = '#ff4d4f';
-        // 高亮正确项
-        ov.querySelectorAll('.wl-opt').forEach(b => {
-          const txt = b.querySelector('span:last-child').textContent.trim();
-          const correctTxt = mode === 'en2cn' ? word.chinese : word.word;
-          if (txt === correctTxt) { b.style.background = '#f6ffed'; b.style.borderColor = '#52c41a'; b.style.color = '#52c41a'; }
-        });
-        speakChinese('不对');
-        comboCount = 0; hideCombo();
-      }
-      const isLast = (this.idx + 1) >= this.order.length;
-      if (isLast) {
-        feedback.innerHTML += '<div style="margin-top:14px"><button class="btn btn-primary" style="width:100%" onclick="WordLearn._renderSummary()">查看成绩 🎉</button></div>';
-      } else {
-        clearTimeout(this._autoNext);
-        this._autoNext = setTimeout(() => { this.idx++; this._renderQuestion(); }, isCorrect ? 1200 : 2600);
-      }
-    },
-
-    _saveProgress(wordId, status) {
-      if (!this.scopeKey) return;
-      try {
-        const key = 'wordlearn_' + USER_ID;
-        const all = JSON.parse(localStorage.getItem(key) || '{}');
-        if (!all[this.scopeKey]) all[this.scopeKey] = {};
-        all[this.scopeKey][wordId] = status;
-        localStorage.setItem(key, JSON.stringify(all));
-      } catch (e) {}
-    },
-
-    _renderSummary() {
-      clearTimeout(this._autoNext);
-      hideCombo();
-      const pct = this.total > 0 ? Math.round(this.correct / this.total * 100) : 0;
-      const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-      const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
-      if (pct === 100 && this.total > 0) Points.earn('quiz_perfect');
-      const ov = document.getElementById('wordlearn-overlay');
-      ov.innerHTML = this._headerHtml()
-        + '<div style="text-align:center;padding:40px 20px">'
-        + '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>'
-        + '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>'
-        + '<div style="font-size:15px;color:#999;margin-bottom:24px">' + this.correct + '/' + this.total + ' 题正确</div>'
-        + '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>'
-        + '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="WordLearn._restart()">🔄 再来一轮</button>'
-        + '<button class="btn btn-secondary" style="width:100%" onclick="WordLearn.close()">返回</button>'
-        + '</div>';
-      speakChinese(msgs);
-    },
-
-    _restart() {
-      this.order = shuffle(this.words.map(w => w.id));
-      this.idx = 0; this.correct = 0; this.total = 0;
-      comboCount = 0; hideCombo();
-      this._renderQuestion();
-    },
-
-    close() {
-      clearTimeout(this._autoNext);
-      hideCombo();
-      const ov = document.getElementById('wordlearn-overlay');
-      if (ov) { ov.style.display = 'none'; ov.innerHTML = ''; }
-      if (this.onClose) { const cb = this.onClose; this.onClose = null; cb(); }
-    }
-  };
-
   // ---- KET 单词学习入口 ----
   function startKetLearn() {
     const words = toMatchWords(ketCurrentItems);
     if (words.length < 2) { toast('本类单词太少，暂时学不了'); return; }
-    WordLearn.start(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || '') });
+    startChoiceLearn(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || ''), onBack: backToKetCategories, view: 'ket' });
   }
 
   // ---- 小托福单词学习入口 ----
   function startToeflLearn() {
     const words = toMatchWords(toeflCurrentItems);
     if (words.length < 2) { toast('本类单词太少，暂时学不了'); return; }
-    WordLearn.start(words, { title: '🎯 ' + (toeflCurrentCategory || '小托福') + ' 单词学习', scopeKey: 'toefl_' + (toeflCurrentCategory || '') });
+    startChoiceLearn(words, { title: '🎯 ' + (toeflCurrentCategory || '小托福') + ' 单词学习', scopeKey: 'toefl_' + (toeflCurrentCategory || ''), onBack: backToToeflCategories, view: 'toefl' });
   }
 
   // ---- 自然拼读单词学习入口 ----
@@ -6826,7 +6698,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); return; }
     const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
     if (words.length < 2) { toast('本组单词太少，暂时学不了'); return; }
-    WordLearn.start(words, { title: '🎯 ' + (phonicsCurrentGroup.title || '拼读') + ' 单词学习', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || '') });
+    startChoiceLearn(words, { title: '🎯 ' + (phonicsCurrentGroup.title || '拼读') + ' 单词学习', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), onBack: backToPhonicsGroups, view: 'phonics' });
   }
 
   // ========== 单词拼写重组（每个单元都能玩） ==========
