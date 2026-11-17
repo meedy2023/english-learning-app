@@ -1,5 +1,5 @@
 /* 英语学习小助手 Service Worker */
-const CACHE = 'english-app-v130';
+const CACHE = 'english-app-v131';
 const ASSETS = [
   './',
   './index.html',
@@ -13,6 +13,7 @@ const ASSETS = [
   './data/textbook.json',
   './data/ket.json',
   './data/phonics.json',
+  './data/toefl.json',
 ];
 
 self.addEventListener('install', (e) => {
