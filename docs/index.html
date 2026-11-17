@@ -5841,7 +5841,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let cl_order = [];
   let cl_correct = 0;
   let cl_total = 0;
-  let cl_correctIds = [];  // 本轮答对的词 id（整轮全对时统一升级为 mastered）
   let comboCount = 0;
   let clExtCtx = null; // 外部模块（KET/小托福/拼读）调用时的返回上下文 {title, onBack, scopeKey}
 
@@ -6473,7 +6472,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     cl_idx = 0;
     cl_correct = 0;
     cl_total = 0;
-    cl_correctIds = [];
     comboCount = 0;
     hideCombo();
     const ids = cl_words.map(w => w.id);
@@ -6602,12 +6600,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       clStyle(feedback, '#f6ffed', '#52c41a', '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word)));
       clStyleBtn(event.target, '#f6ffed', '#52c41a');
       Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
-      // 记录本轮答对的词；只有最后一题答完且整轮全对，才把本轮所有答对的词升级为 mastered
-      const answerKey = String(word.id);
-      if (cl_correctIds.indexOf(answerKey) < 0) cl_correctIds.push(answerKey);
-      const isLast = (cl_idx + 1) >= cl_order.length;
-      const isPerfect = isLast && (cl_correct === cl_total);
-      saveChoiceProgress(isPerfect ? cl_correctIds : answerKey, isPerfect ? 'mastered' : 'learned');
+      // 按词判定掌握：答对的词即标记 mastered（不再要求整轮全对，避免一题错导致全轮 0 掌握）
+      saveChoiceProgress(word.id, 'mastered');
     } else {
       clStyle(feedback, '#fff2f0', '#ff4d4f', '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + (mode === 'en2cn' ? word.chinese : capitalize(word.word)) + '</strong>');
       // 高亮正确答案
@@ -6627,10 +6621,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
       comboCount = 0;
       hideCombo();
-      // 重访答错的词不再算入本轮全对名单；已达成的 mastered 不回退
-      const wrongKey = String(word.id);
-      const wrongPos = cl_correctIds.indexOf(wrongKey);
-      if (wrongPos >= 0) cl_correctIds.splice(wrongPos, 1);
+      // 答错记为已学（曾掌握过的词依然保持 mastered，不因一次答错回退）
+      saveChoiceProgress(word.id, 'learned');
       // 外部模块（KET/小托福/拼读）的单词 id 不在课文词表里，跳过错词本，避免污染
       if (!clExtCtx) Review.add(word.id);
     }
@@ -6667,31 +6659,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     btn.style.color = color;
   }
 
+  // 外部模块（KET/小托福/拼读）进度写入 localStorage；状态只升不降，与后端 RANK 规则一致
+  function writeExtProgress(scopeKey, wordIds, status) {
+    try {
+      const key = 'wordlearn_' + USER_ID;
+      const all = JSON.parse(localStorage.getItem(key) || '{}');
+      const bucket = all[scopeKey] || (all[scopeKey] = {});
+      const RANK = { learned: 1, mastered: 2 };
+      (Array.isArray(wordIds) ? wordIds : [wordIds]).map(String).forEach(function (id) {
+        if ((RANK[status] || 0) >= (RANK[bucket[id]] || 0)) bucket[id] = status;
+      });
+      localStorage.setItem(key, JSON.stringify(all));
+    } catch (e) {}
+  }
+
   async function saveChoiceProgress(wordId, status) {
     status = status || 'learned';
-    // 支持批量升级整轮答对的词（id 统一转字符串，localStorage 的 key 只能是字符串）
-    const ids = (Array.isArray(wordId) ? wordId : [wordId]).map(String);
-    // 外部模块（KET/小托福/拼读）学习：进度写入 localStorage，避免污染课文进度
+    // 外部模块学习：进度写入 localStorage，避免污染课文进度
     if (clExtCtx && clExtCtx.scopeKey) {
-      try {
-        const key = 'wordlearn_' + USER_ID;
-        const all = JSON.parse(localStorage.getItem(key) || '{}');
-        if (!all[clExtCtx.scopeKey]) all[clExtCtx.scopeKey] = {};
-        const bucket = all[clExtCtx.scopeKey];
-        const RANK = { learned: 1, mastered: 2 };
-        ids.forEach(function (id) {
-          // 状态只升不降：已 mastered 的词后续答对也不回退为 learned（与后端进度规则一致）
-          if ((RANK[status] || 0) >= (RANK[bucket[id]] || 0)) bucket[id] = status;
-        });
-        localStorage.setItem(key, JSON.stringify(all));
-      } catch(e) {}
+      writeExtProgress(clExtCtx.scopeKey, wordId, status);
       return;
     }
-    for (const id of ids) {
-      try {
-        await apiPOST('/api/progress/' + USER_ID + '/' + id + '?status=' + status, {});
-      } catch(e) {}
-    }
+    try {
+      await apiPOST('/api/progress/' + USER_ID + '/' + wordId + '?status=' + status, {});
+    } catch(e) {}
   }
 
   function clNextQuestion() {
@@ -7949,7 +7940,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>类型</th><th class="num">知识点数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">词汇学习进度基于单词学习记录；句型、语法以测验为主，进度暂不统计</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">词汇学习进度基于单词学习与词汇测验记录；句型、语法以测验为主，进度暂不统计</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载 KET 报告失败</div>';
     }
@@ -8502,6 +8493,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let ketQuizIndex = 0;
   let ketQuizMode = '';
   let ketQuizSpeak = null;
+  let ketQuizScope = '';  // 词汇测验对应的进度 scope（ket_/toefl_ + 分类名）
   let ketGrammarExamples = [];
 
   function renderKetPagination(totalItems) {
@@ -8732,7 +8724,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function buildKetQuiz(shape, overrideSrc) {
     let src;
     if (overrideSrc) src = overrideSrc;
-    else if (shape === 'word') src = (ketCurrentItems || []).map(function (w) { return { en: w.word, zh: w.chinese }; });
+    else if (shape === 'word') src = (ketCurrentItems || []).map(function (w, i) {
+      return { en: w.word, zh: w.chinese, id: (w.id != null ? w.id : ('mw' + i + '_' + w.word)) };
+    });
     else if (shape === 'sentence') src = (ketCurrentItems || []).map(function (s) { return { en: s.english, zh: s.chinese }; });
     else if (shape === 'grammar') src = (ketGrammarExamples || []).map(function (ex) { return { en: ex, zh: null }; });
     else src = [];
@@ -8780,7 +8774,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         question: question,
         speak: speak,
         options: options,
-        answerLabel: answerLabel
+        answerLabel: answerLabel,
+        wordId: item.id != null ? item.id : null
       });
     });
     return queue.filter(function (q) { return q.options && q.options.length >= 2; });
@@ -8788,6 +8783,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function startKetQuiz(shape, overrideSrc, returnView) {
     ketQuizShape = shape || 'word';
+    ketQuizScope = ketQuizShape === 'word'
+      ? (returnView === 'toefl' ? 'toefl_' + (toeflCurrentCategory || '') : 'ket_' + (ketCurrentCategory || ''))
+      : '';
     ketQuizQueue = buildKetQuiz(ketQuizShape, overrideSrc);
     if (!ketQuizQueue || ketQuizQueue.length === 0) return;
     ketQuizIndex = 0;
@@ -8828,6 +8826,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     window.ketQuizResults = window.ketQuizResults || [];
     const isCorrect = opt.correct;
     window.ketQuizResults.push({ correct: isCorrect });
+    // 词汇测验成绩同步到对应模块报告：答对=掌握，答错=已学（句型/语法无单词，不写）
+    if (ketQuizScope && cur.wordId != null) writeExtProgress(ketQuizScope, cur.wordId, isCorrect ? 'mastered' : 'learned');
     const feedback = document.getElementById('ket-quiz-feedback');
     const nextBtn = document.getElementById('ket-quiz-next-btn');
 
@@ -9082,7 +9082,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 小托福测验：复用 KET 测验视图与逻辑，只换词表来源
   function startToeflQuiz() {
-    const src = (toeflCurrentItems || []).map(function (w) { return { en: w.word, zh: w.chinese }; });
+    const src = (toeflCurrentItems || []).map(function (w, i) {
+      return { en: w.word, zh: w.chinese, id: (w.id != null ? w.id : ('mw' + i + '_' + w.word)) };
+    });
     if (src.length === 0) { toast('本类还没有可测的词汇'); return; }
     startKetQuiz('word', src, 'toefl');
   }
