@@ -5179,6 +5179,87 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     zoo:'🦁', park:'🌳', photo:'📷', cap:'🧢', clothes:'👕', shoe:'👟', clock:'⏰', watch:'⌚',
     key:'🔑', phone:'📱', computer:'💻', tv:'📺', car:'🚗', bus:'🚌', train:'🚂', plane:'✈️',
     boat:'⛵', bike:'🚲', flag:'🚩', gift:'🎁', money:'💰', house:'🏠', rope:'🪢', knot:'🪢',
+    // 更抽象的/补充名词（第 2 批：按语义细化）
+    // 时间
+    day:'📅', today:'📅', morning:'🌅', afternoon:'🌇', evening:'🌆', night:'🌙', midnight:'🌃',
+    week:'🗓️', month:'🗓️', year:'🗓️', hour:'⏱️', minute:'⏱️', time:'⏰', half:'➗',
+    season:'🍂', spring:'🌸', summer:'☀️', autumn:'🍂', winter:'❄️', birthday:'🎂',
+    // 月份
+    september:'🗓️', october:'🗓️', november:'🗓️', june:'🗓️',
+    // 食物
+    food:'🍽️', fruit:'🍎', vegetable:'🥦', strawberry:'🍓', chicken:'🍗', salad:'🥗',
+    bean:'🫘', cucumber:'🥒', grape:'🍇', breakfast:'🍳', lunch:'🥪', dinner:'🍽️',
+    corn:'🌽', cupcake:'🧁', sandwich:'🥪', beef:'🥩', dumpling:'🥟', hot_dog:'🌭',
+    sushi:'🍣', soup:'🍲', chocolate:'🍫', cola:'🥤', chips:'🍟', biscuit:'🍪', oats:'🥣',
+    nut:'🥜', sugar:'🍬', bottle:'🍾', oil:'🫗', snack:'🍿', pie:'🥧', fries:'🍟',
+    ice_cream:'🍦', mooncake:'🥮', turkey:'🦃', meal:'🍽️', tea:'🍵', picnic:'🧺', harvest:'🌾',
+    // 衣物
+    t_shirt:'👕', shirt:'👕', skirt:'👗', shorts:'🩳', trousers:'👖', scarf:'🧣', sweater:'🧥',
+    coat:'🧥', dress:'👗', cap:'🧢', hat:'👒',
+    // 场所/建筑
+    city:'🏙️', town:'🏘️', road:'🛣️', street:'🛣️', beach:'🏖️', forest:'🌲', garden:'🏡',
+    yard:'🏡', field:'🌾', hill:'⛰️', library:'📚', cinema:'🎬', hospital:'🏥', supermarket:'🛒',
+    museum:'🏛️', restaurant:'🍽️', station:'🚉', police_station:'🚓', fire_station:'🚒',
+    classroom:'🏫', playground:'🛝', kitchen:'🍳', bathroom:'🛁', bedroom:'🛏️', living_room:'🛋️',
+    dining_room:'🍽️', camp:'⛺', land:'🌍', sky:'☁️', sunshine:'☀️', nature:'🌿',
+    // 交通工具
+    ship:'🚢', truck:'🚚', subway:'🚇', tram:'🚋', taxi:'🚕', high_speed_train:'🚄', lift:'🛗',
+    // 人物/职业
+    people:'👥', child:'🧒', children:'🧒', student:'🎓', doctor:'👨‍⚕️', fireman:'👨‍🚒',
+    farmer:'👨‍🌾', cook:'👨‍🍳', police:'👮', police_officer:'👮', painter:'👨‍🎨', scientist:'👩‍🔬',
+    writer:'✍️', worker:'👷', aunt:'👩', driver:'🚗', nurse:'👩‍⚕️', uncle:'👨', postman:'📮',
+    dancer:'💃', keeper:'🧑‍🌾', zookeeper:'🧑‍🌾', neighbour:'🧑‍🤝‍🧑', parent:'👨‍👩‍👦', skier:'⛷️',
+    hero:'🦸', player:'🏅', winner:'🏆', volunteer:'🤝', detective:'🕵️', king:'👑',
+    // 文具/学习/科目
+    card:'🃏', bookmark:'🔖', desk:'🖥️', homework:'📚', lesson:'📖', class:'🏫', subject:'📚',
+    maths:'➗', science:'🔬', art:'🎨', English:'🔠', history:'📜', test:'📝', note:'📝',
+    sentence:'💬', word:'🔤', story:'📖', book:'📚', storybook:'📖', picture_book:'📖',
+    newspaper:'📰', magazine:'📰', diary:'📔', poem:'📜',
+    // 动物
+    insect:'🐛', puppy:'🐶', dinosaur:'🦕', pet:'🐾', mantis:'🦗', animal:'🐾',
+    // 植物/自然
+    seed:'🌱', plant:'🌱', bamboo:'🎋', sunflower:'🌻', wheat:'🌾', cotton:'☁️', cabbage:'🥬',
+    grass:'🌱', leaf:'🍃', earth:'🌍', snowman:'⛄', raindrop:'💧', snowstorm:'🌨️',
+    // 乐器/音乐
+    piano:'🎹', guitar:'🎸', ukulele:'🪕', music:'🎵', song:'🎵', opera:'🎭', band:'🎸',
+    // 运动/活动
+    sport:'⚽', football:'⚽', basketball:'🏀', ping_pong:'🏓', volleyball:'🏐', exercise:'🏃',
+    race:'🏁', tai_chi:'🧘', rock_climbing:'🧗', swimming:'🏊', hobby:'🎨',
+    // 玩具/游戏/物品
+    kite:'🪁', robot:'🤖', toy:'🧸', ball:'⚽', puzzle:'🧩', game:'🎮', chessboard:'♟️',
+    balloon:'🎈', candle:'🕯️', lantern:'🏮', bell:'🔔', gift:'🎁', present:'🎁',
+    // 抽象但有约定俗成图标
+    dream:'💭', idea:'💡', question:'❓', problem:'❓', surprise:'🎉', party:'🎉', wish:'🌠',
+    heart:'❤️', love:'❤️', feeling:'💗', kindness:'💝', spirit:'✨', talent:'🌟', power:'💪',
+    magic:'🪄', mystery:'🕵️', clue:'🔍', adventure:'🧭', journey:'🧳', trip:'🧳', holiday:'🏖️',
+    skill:'🎯', goal:'🥅', plan:'📋', vote:'🗳️', survey:'📊', ability:'💪', challenge:'🏔️',
+    danger:'⚠️', difficulty:'🧗', medicine:'💊', pill:'💊', letter:'✉️', postcard:'💌',
+    // 天气/季节
+    weather:'🌤️', rain:'🌧️', wind:'🌬️', snow:'❄️', cloud:'☁️',
+    // 家庭/身体补充
+    body:'🧍', hair:'💇', face:'🙂', tooth:'🦷', toe:'🦶', foot:'🦶', leg:'🦵', arm:'💪',
+    // 生活物品
+    stone:'🪨', rock:'🪨', fire:'🔥', water:'💧', light:'💡', bottle:'🍾', plate:'🍽️',
+    dish:'🍽️', bowl:'🥣', tablecloth:'🧺', bed:'🛏️', door:'🚪', window:'🪟', stair:'🪜',
+    wheel:'⚙️', metal:'⚙️', plastic:'🧴', paper:'📄', brush:'🖌️', rope:'🪢', stick:'🥢',
+    umbrella:'☂️', clock:'⏰', watch:'⌚', flag:'🚩', box:'📦', carton:'📦', backpack:'🎒',
+    // 第 3 批：剩余可配图名词（专有/抽象但具象化）
+    name:'📛', twin:'👯', team:'🤝', country:'🌏', club:'🏠', floor:'🪵', rubbish:'🗑️',
+    job:'💼', helper:'🤝', report:'📄', place:'📍', centre:'🎯', step:'👣', model:'🧍',
+    life:'🌱', drama:'🎭', fair:'🎡', festival:'🎉', horn:'📯', dot:'🔘', hunt:'🔍',
+    culture:'🎎', end:'🏁', group:'👥', secret:'🤫', beginning:'🌅', seat:'💺', top:'🔝',
+    match:'🏆', metre:'📏', future:'🔮', housework:'🧹', disaster:'🌪️', mind:'🧠',
+    height:'📏', age:'🎂', training:'🏋️', film:'🎬', cart:'🛒', front:'⬆️', son:'👦',
+    action:'🎬', side:'↔️', form:'📋', type:'📁', fiction:'📚', fantasy:'🦄', west:'🌅',
+    nation:'🏳️', story:'📖', matter:'📄', Christmas:'🎄', dressmaker:'🧵', life:'🌱',
+    night_owl:'🦉', dance_show:'💃', snowstorm:'🌨️', lost_and_found:'🔍', afternoon_tea:'🍰',
+    chinese_knot:'🀄', tai_chi:'🧘', mid_autumn:'🌕', silk_road:'🐫', tang_dynasty:'🏯',
+    food_group:'🍽️', science_fiction:'🛸', to_do_list:'✅', care_home:'🏠', police_station:'🚓',
+    // 第 4 批：修正大小写 + 剩余可配图
+    colour:'🎨', cooking:'🍳', feet:'🦶', work:'💼', lot:'🔢', tick_tock:'⏱️',
+    activity:'🎯', english:'🔠', chore:'🧹', equator:'🌐', bang:'💥', cock_a_doodle_doo:'🐓',
+    root:'🌱', stem:'🌿', grain:'🌾', event:'🎪', christmas:'🎄', difference:'🔀',
+    id:'🪪', lunchtime:'🥪', horseback:'🐎', past:'⏪',
   };
   const WORD_TYPE_EMOJI = {
     noun:'📦', verb:'✋', adjective:'✨', adverb:'➡️', pronoun:'🙋', number:'🔢',
