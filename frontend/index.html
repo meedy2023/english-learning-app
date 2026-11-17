@@ -3865,6 +3865,15 @@ const API = ".";
       .replace(/\bSt\.?\s+(?=[A-Z])/g, 'Saint ');
   }
 
+  // 多音词发音纠正：词表里 live = /lɪv/（居住），但 TTS 引擎（讯飞/Edge）单独读该词时
+  // 常默认读成 /laɪv/（现场的/活的）。整词发音场景下用 Edge SSML <phoneme> 强制指定音标。
+  // 只对「整段文本恰好是该单词」生效，不动句子上下文（句子里 TTS 会按语境自行正确发音）。
+  const HOMOGRAPH_IPA = { live: 'lɪv' };
+  function homographIpa(text) {
+    const w = String(text == null ? '' : text).trim().toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, '');
+    return HOMOGRAPH_IPA[w] || null;
+  }
+
   function escapeXml(s) {
     return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
@@ -4219,7 +4228,11 @@ function playAudioBlob(blob, onEnd) {
     // 网络链路：讯飞 → Edge → 降级本机发音（silent=true 时不再提示，避免重复打扰）
     speakNetworkOnce(text, lang, cb, G, silent) {
       const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
-      const key = ttsCacheKey(text, lang, voice);
+      // 多音词（如 live=/lɪv/ 居住）：单独读时 TTS 易读成 /laɪv/（现场的）。
+      // 用 Edge SSML <phoneme> 强制音标；讯飞不支持音标，故多音词直接走 Edge。
+      // 缓存 key 加 homo 前缀，避免命中之前误读音频，也不污染普通发音缓存。
+      const ipa = (lang === 'en-US') ? homographIpa(text) : null;
+      const key = ipa ? ('homo|' + text + '|' + ipa) : ttsCacheKey(text, lang, voice);
       const cached = ttsCacheGet(key);
       if (cached) { playAudioBlob(cached, cb); return; }
       const toSystem = G(() => {
@@ -4231,6 +4244,13 @@ function playAudioBlob(blob, onEnd) {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); toSystem(); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob); playAudioBlob(blob, cb);
       });
+      if (ipa) {
+        EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
+          console.warn('多音词音标发音失败，降级本机发音', e2);
+          toSystem();
+        }), undefined, ipa);
+        return;
+      }
       XFYunTTS.synth(text, lang, okNode, G(() => {
         EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
           console.warn('网络发音失败，降级本机发音', e2);
