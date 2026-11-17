@@ -383,6 +383,43 @@
     .report-stat-num { font-size: 24px; font-weight: 700; color: #333; }
     .report-stat-label { font-size: 11px; color: #999; margin-top: 4px; }
 
+    /* ========== 学习报告表格 ========== */
+    .report-table-wrap {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      margin-bottom: 12px;
+    }
+    .report-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .report-table thead th {
+      background: #f5f7ff;
+      color: #8a8fb5;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      padding: 12px 16px;
+      white-space: nowrap;
+    }
+    .report-table thead th.num,
+    .report-table tbody td.num { text-align: right; }
+    .report-table tbody td {
+      padding: 14px 16px;
+      border-top: 1px solid #f2f2f7;
+      color: #333;
+      vertical-align: middle;
+    }
+    .report-table tbody tr { cursor: pointer; }
+    .report-table tbody tr:active { background: #f7f8ff; }
+    .report-table .cell-name { font-weight: 600; color: #333; }
+    .report-table .cell-sub { font-size: 12px; color: #999; margin-top: 2px; }
+    .report-table .cell-pct { color: #6c63ff; font-weight: 700; }
+    .report-table .cell-pct.done { color: #52c41a; }
+    .report-table .bar { height: 6px; background: #f0f4ff; border-radius: 3px; overflow: hidden; margin-top: 6px; }
+    .report-table .bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s; }
+    .report-table .cell-status { font-size: 11px; padding: 2px 8px; border-radius: 10px; white-space: nowrap; }
+
+
     /* ========== Toast ========== */
     .toast {
       position: fixed;
@@ -7485,6 +7522,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     loadReport();
   }
 
+  // 报告表格点击模块行：跳转到对应模块学习
+  function openReportModule(grade, mod) {
+    currentGrade = grade;
+    currentModule = mod;
+    openModule(mod);
+  }
+
   async function loadReport() {
     try {
       const data = await apiGET(`/api/progress/${USER_ID}`);
@@ -7543,13 +7587,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         tabsEl.appendChild(btn);
       });
 
-      // ========== 选中年级统计 + 模块列表 ==========
+      // ========== 选中年级统计 + 表格 ==========
       const statsEl = document.getElementById("report-grade-stats");
       const container = document.getElementById("report-modules");
       container.innerHTML = '';
 
       if (reportSelectedGrade && byGrade[reportSelectedGrade]) {
-        // 显示选中年级的详细统计
+        // 选中年级：顶部大数字 + 模块明细表格
         const gData = byGrade[reportSelectedGrade];
         const gPct = gData.tw > 0 ? Math.round(gData.tl / gData.tw * 100) : 0;
         statsEl.style.display = '';
@@ -7561,60 +7605,45 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           + '<div><b style="font-size:18px;color:#52c41a">' + gData.tm + '</b><br><span style="color:#999">已掌握</span></div>'
           + '<div><b style="font-size:18px;color:#333">' + gData.tw + '</b><br><span style="color:#999">总单词</span></div>'
           + '</div></div>';
-        // 模块列表（点击跳转 openModule）
-        Object.keys(gData.modules).sort().forEach(mod => {
+
+        // 模块明细表格（点击行跳转 openModule）
+        const mods = Object.keys(gData.modules).sort();
+        let rows = '';
+        mods.forEach(mod => {
           const p = gData.modules[mod];
           const mTotal = p.total || 0, mLearned = p.learned || 0, mMastered = p.mastered || 0;
           const mPct = mTotal > 0 ? Math.round(mLearned / mTotal * 100) : 0;
-          const pctBig = mPct >= 100
-            ? '<span style="color:#52c41a;font-weight:700">✓ ' + mPct + '%</span>'
-            : '<span style="color:#6c63ff;font-weight:700">' + mPct + '%</span>';
-          const div = document.createElement("div");
-          div.className = "report-card";
-          div.style.cursor = "pointer";
-          div.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-            + '<div style="font-weight:600;font-size:15px">' + mod + '</div>'
-            + '<div style="display:flex;align-items:center;gap:8px">'
-            + statusLabel(mLearned, mMastered, mTotal)
-            + '<span style="font-size:14px">' + pctBig + '</span></div></div>'
-            + '<div style="height:8px;background:#f0f4ff;border-radius:4px;overflow:hidden;margin-bottom:8px">'
-            + '<div style="height:100%;background:' + reportBarColor(mPct) + ';width:' + mPct + '%;border-radius:4px;transition:width 0.5s"></div></div>'
-            + '<div style="display:flex;gap:16px;font-size:12px;color:#666">'
-            + '<span>📖 已学 <b style="color:#333">' + mLearned + '</b></span>'
-            + '<span>⭐ 已掌握 <b style="color:#333">' + mMastered + '</b></span>'
-            + '<span>📚 共 <b style="color:#333">' + mTotal + '</b></span></div>';
-          div.onclick = (function(gg, mm) { return function() {
-            currentGrade = gg;
-            currentModule = mm;
-            openModule(mm);
-          }; })(reportSelectedGrade, mod);
-          container.appendChild(div);
+          rows += '<tr onclick="openReportModule(\'' + reportSelectedGrade + '\',\'' + mod.replace(/'/g, "\\'") + '\')">'
+            + '<td><div class="cell-name">' + mod + '</div></td>'
+            + '<td class="num">' + mLearned + '</td>'
+            + '<td class="num">' + mMastered + '</td>'
+            + '<td class="num">' + mTotal + '</td>'
+            + '<td class="num"><span class="cell-pct' + (mPct >= 100 ? ' done' : '') + '">' + mPct + '%</span>'
+            + '<div class="bar"><div class="bar-fill" style="width:' + mPct + '%;background:' + reportBarColor(mPct) + '"></div></div></td>'
+            + '</tr>';
         });
+        container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
+          + '<thead><tr><th>模块</th><th class="num">已学</th><th class="num">已掌握</th><th class="num">总单词</th><th class="num">进度</th></tr></thead>'
+          + '<tbody>' + rows + '</tbody></table></div>';
       } else {
-        // 未选或选"全部"：显示年级汇总卡片（点击进入该年级）
+        // 未选或选"全部"：年级汇总表格（点击行下钻到该年级）
         statsEl.style.display = 'none';
+        let rows = '';
         grades.forEach(g => {
           const gData = byGrade[g];
           const gPct = gData.tw > 0 ? Math.round(gData.tl / gData.tw * 100) : 0;
-          const card = document.createElement("div");
-          card.className = "report-card";
-          card.style.cursor = "pointer";
-          card.innerHTML = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'
-            + '<div style="display:flex;align-items:center;gap:8px">'
-            + '<span style="font-size:18px">' + (iconMap[g] || '📗') + '</span>'
-            + '<span style="font-weight:600;font-size:15px">' + g + '</span></div>'
-            + '<div style="display:flex;align-items:center;gap:8px">'
-            + statusLabel(gData.tl, gData.tm, gData.tw)
-            + '<span style="color:#6c63ff;font-weight:700;font-size:15px">' + gPct + '%</span></div></div>'
-            + '<div style="height:8px;background:#f0f4ff;border-radius:4px;overflow:hidden;margin-bottom:8px">'
-            + '<div style="height:100%;background:' + reportBarColor(gPct) + ';width:' + gPct + '%;border-radius:4px;transition:width 0.5s"></div></div>'
-            + '<div style="display:flex;gap:16px;font-size:12px;color:#666">'
-            + '<span>📖 已学 <b style="color:#333">' + gData.tl + '</b></span>'
-            + '<span>⭐ 已掌握 <b style="color:#333">' + gData.tm + '</b></span>'
-            + '<span>📚 共 <b style="color:#333">' + gData.tw + '</b></span></div>';
-          card.onclick = () => selectReportGrade(g, byGrade);
-          container.appendChild(card);
+          rows += '<tr onclick="selectReportGrade(\'' + g.replace(/'/g, "\\'") + '\')">'
+            + '<td><div class="cell-name">' + (iconMap[g] || '📗') + ' ' + g + '</div></td>'
+            + '<td class="num">' + gData.tl + '</td>'
+            + '<td class="num">' + gData.tm + '</td>'
+            + '<td class="num">' + gData.tw + '</td>'
+            + '<td class="num"><span class="cell-pct' + (gPct >= 100 ? ' done' : '') + '">' + gPct + '%</span>'
+            + '<div class="bar"><div class="bar-fill" style="width:' + gPct + '%;background:' + reportBarColor(gPct) + '"></div></div></td>'
+            + '</tr>';
         });
+        container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
+          + '<thead><tr><th>年级</th><th class="num">已学</th><th class="num">已掌握</th><th class="num">总单词</th><th class="num">进度</th></tr></thead>'
+          + '<tbody>' + rows + '</tbody></table></div>';
         if (grades.length === 0) {
           container.innerHTML = '<div style="text-align:center;color:#999;padding:32px;font-size:14px">暂无学习数据<br>选择一个年级开始学习吧！</div>';
         }
