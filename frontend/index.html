@@ -2231,8 +2231,9 @@ const API = ".";
       document.getElementById("learn-module-title").style.display = "none";
     }
     // 更新底部导航激活状态
-    var navName = (name === 'ket-quiz') ? 'ket' : name;
-    ['home', 'learn', 'ket', 'toefl', 'phonics'].forEach(function(v) {
+    // 底部导航已去掉「学习」入口；learn 视图高亮「年级」，表达学习是年级模块的下钻
+    var navName = (name === 'ket-quiz') ? 'ket' : (name === 'learn' ? 'home' : name);
+    ['home', 'ket', 'toefl', 'phonics'].forEach(function(v) {
       var el = document.getElementById('nav-' + v);
       if (el) {
         if (v === navName) el.classList.add('active');
@@ -7949,9 +7950,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   <div class="bottom-nav">
     <div id="nav-home" class="nav-item active" onclick="backToGrade()">
       <span class="nav-item-icon">🏠</span>年级
-    </div>
-    <div id="nav-learn" class="nav-item" onclick="switchView('learn')">
-      <span class="nav-item-icon">📖</span>学习
     </div>
     <div id="nav-ket" class="nav-item" onclick="switchView('ket')">
       <span class="nav-item-icon">📚</span>KET
