@@ -3909,14 +3909,9 @@ const API = ".";
           // 真人节奏：按标点给差异化停顿 + 句末语调（问号升调 contour、感叹加强、句号降调收束），
           // 停顿幅度明显大于普通模式，语调起伏明显，可被清晰感知。
           if (human) {
-            // 句末语调（Edge SSML prosody contour）：问号上扬、感叹句先升后落加重、陈述句自然收束
-            if (/\?\s*$/.test(text)) {
-              spoken = spoken.replace(/\?\s*$/, "<prosody contour='(0%,+10Hz)(100%,+35Hz)'>?</prosody>");
-            } else if (/!\s*$/.test(text)) {
-              spoken = spoken.replace(/!\s*$/, "<prosody contour='(0%,+20Hz)(60%,+15Hz)(100%,-15Hz)'>!</prosody>");
-            } else if (/[.;:]\s*$/.test(text)) {
-              spoken = spoken.replace(/([.;:])\s*$/, "<prosody contour='(0%,+5Hz)(100%,-12Hz)'>$1</prosody>");
-            }
+            // 必须先做标点停顿替换，最后再注入句末 contour：
+            // contour 参数用逗号分隔 (0%,+20Hz)，若先注入会被下面的 /,/g 误伤成 <break>，
+            // 生成非法 SSML（属性值内嵌标签），导致语调错乱/异常重音。
             spoken = spoken
               .replace(/,\s*/g, "<break time='260ms'/> ")
               .replace(/;\s*/g, "<break time='360ms'/> ")
@@ -3924,6 +3919,15 @@ const API = ".";
               .replace(/([.])\s+/g, "<break time='520ms'/>$1 ")
               .replace(/([!])\s+/g, "<break time='580ms'/>$1 ")
               .replace(/([?])\s+/g, "<break time='640ms'/>$1 ");
+            // 句末语调：问号上扬、感叹句先升后落、陈述句自然收束。
+            // \s*$ 捕获并原样保留尾随空白；注入后 contour 内的逗号不再被任何规则处理。
+            if (/\?\s*$/.test(text)) {
+              spoken = spoken.replace(/\?(\s*)$/, "<prosody contour='(0%,+10Hz)(100%,+35Hz)'>?</prosody>$1");
+            } else if (/!\s*$/.test(text)) {
+              spoken = spoken.replace(/!(\s*)$/, "<prosody contour='(0%,+20Hz)(60%,+15Hz)(100%,-15Hz)'>!</prosody>$1");
+            } else if (/[.;:]\s*$/.test(text)) {
+              spoken = spoken.replace(/([.;:])(\s*)$/, "<prosody contour='(0%,+5Hz)(100%,-12Hz)'>$1</prosody>$2");
+            }
           } else {
             // 普通模式：固定标点停顿
             spoken = spoken
