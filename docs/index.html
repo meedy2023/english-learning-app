@@ -6466,7 +6466,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     '</div>' +
     '<div style="text-align:center;margin-bottom:8px">' +
       '<div style="font-size:40px;font-weight:800;color:#333;margin-bottom:4px">' + question + '</div>' +
-      '<button class="speak-btn" onclick="speakChoiceWord(\'' + esc(mode) + '\',' + wordId + ')" style="margin:0 auto">🔊 听发音</button>' +
+      '<button class="speak-btn" onclick="speakChoiceWord(\'' + esc(mode) + '\',\'' + esc(wordId) + '\')" style="margin:0 auto">🔊 听发音</button>' +
       '<div style="font-size:14px;color:#999;margin-top:4px">' + prompt + '</div>' +
     '</div>' +
     '<div id="choice-options" style="display:flex;flex-direction:column;gap:10px;margin-top:16px"></div>' +
