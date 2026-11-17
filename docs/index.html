@@ -5841,6 +5841,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let cl_order = [];
   let cl_correct = 0;
   let cl_total = 0;
+  let cl_correctIds = [];  // 本轮答对的词 id（整轮全对时统一升级为 mastered）
   let comboCount = 0;
   let clExtCtx = null; // 外部模块（KET/小托福/拼读）调用时的返回上下文 {title, onBack, scopeKey}
 
@@ -6472,6 +6473,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     cl_idx = 0;
     cl_correct = 0;
     cl_total = 0;
+    cl_correctIds = [];
     comboCount = 0;
     hideCombo();
     const ids = cl_words.map(w => w.id);
@@ -6600,10 +6602,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       clStyle(feedback, '#f6ffed', '#52c41a', '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word)));
       clStyleBtn(event.target, '#f6ffed', '#52c41a');
       Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
-      // 全对时标记 mastered，否则 learned
+      // 记录本轮答对的词；只有最后一题答完且整轮全对，才把本轮所有答对的词升级为 mastered
+      const answerKey = String(word.id);
+      if (cl_correctIds.indexOf(answerKey) < 0) cl_correctIds.push(answerKey);
       const isLast = (cl_idx + 1) >= cl_order.length;
       const isPerfect = isLast && (cl_correct === cl_total);
-      saveChoiceProgress(word.id, isPerfect ? 'mastered' : 'learned');
+      saveChoiceProgress(isPerfect ? cl_correctIds : answerKey, isPerfect ? 'mastered' : 'learned');
     } else {
       clStyle(feedback, '#fff2f0', '#ff4d4f', '<strong>❌ 不对哦~</strong><br>正确答案：<strong>' + (mode === 'en2cn' ? word.chinese : capitalize(word.word)) + '</strong>');
       // 高亮正确答案
@@ -6623,6 +6627,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
       comboCount = 0;
       hideCombo();
+      // 重访答错的词不再算入本轮全对名单；已达成的 mastered 不回退
+      const wrongKey = String(word.id);
+      const wrongPos = cl_correctIds.indexOf(wrongKey);
+      if (wrongPos >= 0) cl_correctIds.splice(wrongPos, 1);
       // 外部模块（KET/小托福/拼读）的单词 id 不在课文词表里，跳过错词本，避免污染
       if (!clExtCtx) Review.add(word.id);
     }
@@ -6661,20 +6669,29 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   async function saveChoiceProgress(wordId, status) {
     status = status || 'learned';
+    // 支持批量升级整轮答对的词（id 统一转字符串，localStorage 的 key 只能是字符串）
+    const ids = (Array.isArray(wordId) ? wordId : [wordId]).map(String);
     // 外部模块（KET/小托福/拼读）学习：进度写入 localStorage，避免污染课文进度
     if (clExtCtx && clExtCtx.scopeKey) {
       try {
         const key = 'wordlearn_' + USER_ID;
         const all = JSON.parse(localStorage.getItem(key) || '{}');
         if (!all[clExtCtx.scopeKey]) all[clExtCtx.scopeKey] = {};
-        all[clExtCtx.scopeKey][wordId] = status;
+        const bucket = all[clExtCtx.scopeKey];
+        const RANK = { learned: 1, mastered: 2 };
+        ids.forEach(function (id) {
+          // 状态只升不降：已 mastered 的词后续答对也不回退为 learned（与后端进度规则一致）
+          if ((RANK[status] || 0) >= (RANK[bucket[id]] || 0)) bucket[id] = status;
+        });
         localStorage.setItem(key, JSON.stringify(all));
       } catch(e) {}
       return;
     }
-    try {
-      await apiPOST('/api/progress/' + USER_ID + '/' + wordId + '?status=' + status, {});
-    } catch(e) {}
+    for (const id of ids) {
+      try {
+        await apiPOST('/api/progress/' + USER_ID + '/' + id + '?status=' + status, {});
+      } catch(e) {}
+    }
   }
 
   function clNextQuestion() {
