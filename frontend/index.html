@@ -1153,8 +1153,8 @@
       <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
     </div>
     <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevQuizQuestion()">← 上一题</button>
-      <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipQuiz()">跳过</button>
+      <button class="btn btn-secondary btn-sm" id="quiz-prev-btn" style="flex:1" onclick="prevQuizQuestion()">← 上一题</button>
+      <button class="btn btn-secondary btn-sm" id="quiz-skip-btn" style="flex:1" onclick="skipQuiz()">跳过 →</button>
     </div>
     <div id="quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="quiz-num">1</span> / <span id="quiz-total">0</span> 题</div>
   </div>
@@ -1397,8 +1397,8 @@
     <button class="btn btn-primary" id="ket-quiz-next-btn" onclick="nextKetQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
   </div>
   <div style="display:flex;gap:8px;margin-top:12px">
-    <button class="btn btn-secondary btn-sm" style="flex:1" onclick="prevKetQuizQuestion()">← 上一题</button>
-    <button class="btn btn-secondary btn-sm" style="flex:1" onclick="skipKetQuiz()">跳过</button>
+    <button class="btn btn-secondary btn-sm" id="ket-quiz-prev-btn" style="flex:1" onclick="prevKetQuizQuestion()">← 上一题</button>
+    <button class="btn btn-secondary btn-sm" id="ket-quiz-skip-btn" style="flex:1" onclick="skipKetQuiz()">跳过 →</button>
   </div>
   <div id="ket-quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="ket-quiz-num">1</span> / <span id="ket-quiz-total">0</span> 题</div>
 </div>
@@ -2156,6 +2156,20 @@ const API = ".";
     if (_lmt) _lmt.style.display = 'none';
   }
 
+  // 底部导航高亮映射：learn 视图像征性高亮「年级」；ket-quiz 视图按测验来源区分 KET / 小托福
+  function updateBottomNav(name) {
+    var navName = name;
+    if (name === 'ket-quiz') navName = (window._ketQuizReturnView === 'toefl') ? 'toefl' : 'ket';
+    else if (name === 'learn') navName = 'home';
+    ['home', 'ket', 'toefl', 'phonics'].forEach(function(v) {
+      var el = document.getElementById('nav-' + v);
+      if (el) {
+        if (v === navName) el.classList.add('active');
+        else el.classList.remove('active');
+      }
+    });
+  }
+
   function switchView(name) {
     // 学习页面内点击学习导航，不重复切换
     if (name === 'learn' && currentView === 'learn') return;
@@ -2207,16 +2221,8 @@ const API = ".";
       document.getElementById("quiz-toggle-bar").style.display = "none";
       document.getElementById("learn-module-title").style.display = "none";
     }
-    // 更新底部导航激活状态
-    // 底部导航已去掉「学习」入口；learn 视图高亮「年级」，表达学习是年级模块的下钻
-    var navName = (name === 'ket-quiz') ? 'ket' : (name === 'learn' ? 'home' : name);
-    ['home', 'ket', 'toefl', 'phonics'].forEach(function(v) {
-      var el = document.getElementById('nav-' + v);
-      if (el) {
-        if (v === navName) el.classList.add('active');
-        else el.classList.remove('active');
-      }
-    });
+    // 更新底部导航激活状态（ket-quiz 视图按测验来源区分 KET / 小托福）
+    updateBottomNav(name);
     // 从其他视图（设置页 / 积分页等）切回学习视图时，恢复进入前的子层级
     if (name === "learn") restoreLearnView();
   }
@@ -5569,6 +5575,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
     document.getElementById("quiz-num").textContent = currentQuizIndex + 1;
     document.getElementById("quiz-total").textContent = quizOrder.length;
+    // 分页边界：第一题隐藏「上一题」，最后一题隐藏「跳过 →」
+    const quizPrevBtn = document.getElementById("quiz-prev-btn");
+    const quizSkipBtn = document.getElementById("quiz-skip-btn");
+    if (quizPrevBtn) quizPrevBtn.style.visibility = (currentQuizIndex > 0) ? 'visible' : 'hidden';
+    if (quizSkipBtn) quizSkipBtn.style.visibility = (currentQuizIndex < quizOrder.length - 1) ? 'visible' : 'hidden';
 
     // 生成4个选项
     const others = currentWords.filter(x => x.id !== wordId);
@@ -8633,6 +8644,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById('ket-quiz-word').textContent = q.question;
     document.getElementById('ket-quiz-num').textContent = ketQuizIndex + 1;
     document.getElementById('ket-quiz-total').textContent = ketQuizQueue.length;
+    // 分页边界：第一题隐藏「上一题」，最后一题隐藏「跳过 →」
+    const prevBtn = document.getElementById('ket-quiz-prev-btn');
+    const skipBtn = document.getElementById('ket-quiz-skip-btn');
+    if (prevBtn) prevBtn.style.visibility = (ketQuizIndex > 0) ? 'visible' : 'hidden';
+    if (skipBtn) skipBtn.style.visibility = (ketQuizIndex < ketQuizQueue.length - 1) ? 'visible' : 'hidden';
     if (q.speak) setTimeout(function () { speakWord(q.speak); }, 150);
 
     document.getElementById('ket-quiz-options').innerHTML = q.options.map(function (o, i) {
@@ -8745,6 +8761,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
     document.getElementById('view-' + ret).classList.add('active');
     document.getElementById('topbar-title').textContent = ret === 'toefl' ? '🎓 小托福' : '📚 KET 学习';
+    updateBottomNav(ret);  // 返回时同步底部导航高亮（KET / 小托福）
     document.getElementById('grade-display').style.display = 'none';
     if (ret === 'toefl') {
       if (typeof toeflPlanActive !== 'undefined' && toeflPlanActive) {
