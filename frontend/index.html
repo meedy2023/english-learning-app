@@ -7410,22 +7410,36 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var diffHtml = Object.keys(this.DIFF).map(function (k) {
         var d = self.DIFF[k];
         var on = (s.diff === k);
-        return '<button class="btn ' + (on ? 'btn-primary' : 'btn-secondary') + '" style="flex:1;padding:14px 8px;font-size:14px" onclick="PK.setDiff(\'' + k + '\')">' +
+        return '<button type="button" onclick="PK.setDiff(\'' + k + '\')" style="flex:1;min-width:0;padding:14px 6px;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;transition:transform .12s,box-shadow .12s;' +
+          (on ? 'background:linear-gradient(135deg,#5aa0ff,#a668f5);color:#fff;box-shadow:0 6px 16px rgba(122,92,240,.35)' : 'background:#f0eef7;color:#7a74a8') + '">' +
           (on ? '✓ ' : '') + d.label + '</button>';
       }).join('');
       document.getElementById('pk-setup').innerHTML =
-        '<div style="text-align:center;padding:24px 12px">' +
-          '<div style="font-size:64px;margin-bottom:12px">⚔️</div>' +
-          '<div style="font-size:22px;font-weight:800;color:#333;margin-bottom:8px">单词 PK 对战</div>' +
-          '<div style="font-size:14px;color:#999;margin-bottom:24px;line-height:1.6">' + s.title + '<br>和电脑比一比，或发起挑战让朋友答同样的题！</div>' +
-          '<div style="font-size:14px;color:#666;margin-bottom:10px;font-weight:600">选择难度</div>' +
-          '<div style="display:flex;gap:10px;margin-bottom:12px">' + diffHtml + '</div>' +
-          '<div style="font-size:12px;color:#bbb;margin-bottom:28px">共 ' + Math.min(s.words.length, 10) + ' 题 · 每题 ' + this.TIME + ' 秒 · 答对 10 分，剩余 5 秒以上再加 1 分</div>' +
-          '<div style="display:flex;gap:10px;margin-bottom:10px">' +
-            '<button class="btn btn-secondary" style="flex:1;padding:14px" onclick="PK.back()">返回</button>' +
-            '<button class="btn btn-primary" style="flex:2;padding:14px;font-size:16px" onclick="PK.begin()">开始对战</button>' +
+        '<div style="position:relative;max-width:460px;margin:4px auto 0;padding:32px 24px 28px;border-radius:24px;overflow:hidden;' +
+          'background:linear-gradient(158deg,#eef1ff 0%,#e9e5ff 46%,#f2ecff 100%);' +
+          'border:1px solid rgba(255,255,255,.8);box-shadow:0 14px 40px rgba(108,99,255,.16)">' +
+          '<span style="position:absolute;top:66px;left:28px;font-size:20px;opacity:.7;transform:rotate(-18deg)">✨</span>' +
+          '<span style="position:absolute;top:112px;right:30px;font-size:18px;opacity:.65">⚡</span>' +
+          '<span style="position:absolute;bottom:172px;right:54px;font-size:14px;opacity:.5">✨</span>' +
+          '<span style="position:absolute;bottom:86px;left:34px;font-size:13px;opacity:.45">⚡</span>' +
+          '<div style="position:relative;z-index:1;text-align:center">' +
+            '<div style="position:relative;width:94px;height:94px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;' +
+              'background:radial-gradient(circle at 35% 28%,#ffffff 0%,#e4e1ff 46%,#cdc3f5 100%);' +
+              'border-radius:50%;box-shadow:0 8px 22px rgba(108,99,255,.3),inset 0 2px 8px rgba(255,255,255,.95)">' +
+              '<span style="font-size:54px;line-height:1;filter:drop-shadow(0 3px 4px rgba(80,60,160,.3))">🛡️</span>' +
+              '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-44%) scale(.62);filter:drop-shadow(0 2px 3px rgba(60,40,120,.55))">⚔️</span>' +
+            '</div>' +
+            '<div style="font-size:24px;font-weight:800;color:#2f2a55;margin-bottom:12px">单词 PK 对战</div>' +
+            '<div style="font-size:13.5px;color:#8b86ab;line-height:1.75;margin-bottom:22px">' + esc(s.title) + '<br>和电脑比一比，或发起挑战让朋友答同样的题！</div>' +
+            '<div style="font-size:14px;color:#5a5478;font-weight:700;margin-bottom:12px">选择难度</div>' +
+            '<div style="display:flex;gap:12px;margin-bottom:14px">' + diffHtml + '</div>' +
+            '<div style="font-size:12px;color:#a7a2c0;margin-bottom:24px">共 ' + Math.min(s.words.length, 10) + ' 题 · 每题 ' + this.TIME + ' 秒 · 答对 10 分，剩余 5 秒以上再加 1 分</div>' +
+            '<div style="display:flex;gap:12px;margin-bottom:14px">' +
+              '<button type="button" onclick="PK.back()" style="flex:1;padding:15px 8px;border:1px solid #dcd6f0;border-radius:14px;background:rgba(255,255,255,.8);color:#5a5478;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer">返回</button>' +
+              '<button type="button" onclick="PK.begin()" style="flex:2;padding:15px 8px;border:none;border-radius:14px;background:linear-gradient(135deg,#4f9fff,#7a5cf0);color:#fff;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 8px 20px rgba(99,110,245,.35)">开始对战</button>' +
+            '</div>' +
+            '<button type="button" onclick="PK.startChallengeFromSetup()" style="width:100%;padding:15px 8px;border:none;border-radius:14px;background:linear-gradient(135deg,#b163f0,#8b46d4);color:#fff;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 8px 20px rgba(160,86,220,.32)">👥 发起同步挑战（和朋友一起答题）</button>' +
           '</div>' +
-          '<button class="btn btn-primary" style="width:100%;padding:12px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="PK.startChallengeFromSetup()">📤 发起同步挑战（和朋友一起答题）</button>' +
         '</div>';
       ['pk-game', 'pk-result'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
       document.getElementById('pk-setup').style.display = 'block';
