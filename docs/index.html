@@ -7319,7 +7319,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<div style="background:linear-gradient(135deg,#fff7e6,#fff0f0);border-radius:16px;padding:20px;margin-bottom:18px">' +
             '<div style="font-size:14px;color:#888;margin-bottom:8px">' + esc(s.title) + '</div>' +
             '<div style="font-size:14px;color:#666;margin-bottom:6px">共 <b style="font-size:26px;color:#fa8c16">' + ((s.presetQueue && s.presetQueue.length) || 10) + '</b> 题 · 每题 ' + this.TIME + ' 秒</div>' +
-            '<div style="font-size:13px;color:#999">答对得分，答得越快分越高</div>' +
+            '<div style="font-size:13px;color:#999">答对每题 10 分，剩余 5 秒以上再加 1 分</div>' +
           '</div>' +
           '<div style="font-size:12px;color:#bbb;margin-bottom:20px">准备好再点开始，倒计时从点击后启动</div>' +
           '<div style="display:flex;gap:10px">' +
@@ -7420,7 +7420,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<div style="font-size:14px;color:#999;margin-bottom:24px;line-height:1.6">' + s.title + '<br>和电脑比一比，或发起挑战让朋友答同样的题！</div>' +
           '<div style="font-size:14px;color:#666;margin-bottom:10px;font-weight:600">选择难度</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:12px">' + diffHtml + '</div>' +
-          '<div style="font-size:12px;color:#bbb;margin-bottom:28px">共 ' + Math.min(s.words.length, 10) + ' 题 · 每题 ' + this.TIME + ' 秒 · 答对得分，越快越高</div>' +
+          '<div style="font-size:12px;color:#bbb;margin-bottom:28px">共 ' + Math.min(s.words.length, 10) + ' 题 · 每题 ' + this.TIME + ' 秒 · 答对 10 分，剩余 5 秒以上再加 1 分</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:10px">' +
             '<button class="btn btn-secondary" style="flex:1;padding:14px" onclick="PK.back()">返回</button>' +
             '<button class="btn btn-primary" style="flex:2;padding:14px;font-size:16px" onclick="PK.begin()">开始对战</button>' +
@@ -7548,7 +7548,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var gain = 0;
       if (correct) {
         s.combo++; s.myCorrect++;
-        gain = 10 + Math.ceil(left) * 2 + Math.min(s.combo - 1, 5) * 2;
+        gain = 10 + (left >= 5 ? 1 : 0);
         s.my += gain;
         writeExtProgress(s.scopeKey, q.word.id, 'mastered');
         Celebrate.answerCorrect();
@@ -7587,7 +7587,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var gain = 0;
       if (correct) {
         s.aiCombo++;
-        gain = 10 + Math.max(0, Math.ceil(this.TIME - react)) * 2 + Math.min(s.aiCombo - 1, 5) * 2;
+        gain = 10 + (Math.max(0, this.TIME - react) >= 5 ? 1 : 0);
         s.ai += gain;
       } else {
         s.aiCombo = 0;
@@ -7652,7 +7652,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (win) { try { Celebrate.victory(); } catch (e) {} }
         else if (!draw) { try { Celebrate.defeat(); } catch (e) {} }
         // 平局不播胜负音乐
-        speakChinese(msg);
         return;
       }
 
@@ -7679,7 +7678,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<button class="btn btn-secondary nav-back-btn" style="width:100%;padding:12px" onclick="PK.back()">返回</button>' +
         '</div>';
       Celebrate.result(acc);  // 答完结算：按本人正确率播放胜利/失利音乐
-      speakChinese('你答完了，得' + s.my + '分，把比分发给朋友比一比吧');
     },
 
     // 同步对战再答一次同一套题（题目完全一致）
@@ -7852,7 +7850,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           mineHtml +
           '<button class="btn btn-secondary nav-back-btn" style="width:100%;padding:13px" onclick="PK.back()">返回</button>' +
         '</div>';
-      speakChinese(mine ? verdict : '朋友发来了比分，快答同一套题来比一比吧');
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
