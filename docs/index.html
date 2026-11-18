@@ -1451,7 +1451,7 @@
 
 <!-- ======= 单词 PK 对战（人机） ======= -->
 <div id="view-pk" class="view">
-  <button class="btn btn-secondary nav-back-btn" onclick="pkBack()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回</span></button>
+  <button class="btn btn-secondary nav-back-btn" onclick="PK.back()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回</span></button>
   <div id="pk-setup"></div>
   <div id="pk-game" style="display:none"></div>
   <div id="pk-result" style="display:none"></div>
@@ -6821,10 +6821,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     startChoiceLearn(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || ''), onBack: backToKetCategoryDetail, view: 'ket' });
   }
 
-  function startKetPk() {
+  function startKetPk(challenge) {
     const words = toMatchWords(ketCurrentItems);
     if (words.length < 2) { toast('本类单词太少，玩不了 PK'); return; }
-    PK.start(words, { title: (ketCurrentCategory || 'KET') + ' 词汇', scopeKey: 'ket_' + (ketCurrentCategory || ''), backFn: backToKetCategoryDetail, view: 'ket' });
+    const opts = { title: (ketCurrentCategory || 'KET') + ' 词汇', scopeKey: 'ket_' + (ketCurrentCategory || ''), backFn: backToKetCategoryDetail, view: 'ket' };
+    if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
 
   // ---- 小托福单词学习入口 ----
@@ -6834,17 +6835,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     startChoiceLearn(words, { title: '🎯 ' + (toeflCurrentCategory || '小托福') + ' 单词学习', scopeKey: 'toefl_' + (toeflCurrentCategory || ''), onBack: backToToeflCategories, view: 'toefl' });
   }
 
-  function startToeflPk() {
+  function startToeflPk(challenge) {
     const words = toMatchWords(toeflCurrentItems);
     if (words.length < 2) { toast('本类单词太少，玩不了 PK'); return; }
     const inPlan = (typeof toeflPlanActive !== 'undefined' && toeflPlanActive);
-    PK.start(words, {
+    const opts = {
       title: (toeflCurrentCategory || '小托福') + ' 词汇',
       scopeKey: 'toefl_' + (toeflCurrentCategory || ''),
       backFn: backToToeflCategories,
       view: 'toefl',
       backLabel: inPlan ? '返回计划' : '返回本类'
-    });
+    };
+    if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
 
   // ---- 自然拼读单词学习入口 ----
@@ -6855,16 +6857,52 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     startChoiceLearn(words, { title: '🎯 ' + (phonicsCurrentGroup.title || '拼读') + ' 单词学习', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), onBack: backToPhonicsGroups, view: 'phonics' });
   }
 
-  function startPhonicsPk() {
+  function startPhonicsPk(challenge) {
     if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); return; }
     const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
     if (words.length < 2) { toast('本组单词太少，玩不了 PK'); return; }
-    PK.start(words, { title: (phonicsCurrentGroup.title || '拼读') + ' 词汇', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), backFn: backToPhonicsGroups, view: 'phonics', backLabel: '返回本组' });
+    const opts = { title: (phonicsCurrentGroup.title || '拼读') + ' 词汇', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), backFn: backToPhonicsGroups, view: 'phonics', backLabel: '返回本组' };
+    if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
 
-  // ========== 单词 PK 对战（人机） ==========
+  // ========== 单词 PK 对战（人机 + 挑战码异步对战） ==========
   // 词库复用各模块当前词表；答对/答错按 scopeKey 写回 wordlearn_（只升不降），与单词学习口径一致。
   // 战绩单独存 wordpk_<USER_ID>，按模块（ket/toefl/phonics）隔离，不污染掌握统计。
+  // 挑战码：把发起方的整套题目精简编码进链接，发起方甩出基准分，应战方答完全相同的题来超越。
+
+  // 带种子的伪随机数（mulberry32）：让一局出题可复现（发起方固定种子出题）
+  function pkRng(seed) {
+    var a = seed >>> 0;
+    return function () {
+      a = (a + 0x6D2B79F5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function pkShuffle(arr, rng) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(rng() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  // unicode 安全的 base64url 编解码（挑战码放进 URL 查询参数）
+  function pkEncode(obj) {
+    try {
+      return btoa(unescape(encodeURIComponent(JSON.stringify(obj))))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    } catch (e) { return ''; }
+  }
+  function pkDecode(code) {
+    try {
+      var s = String(code).replace(/-/g, '+').replace(/_/g, '/');
+      while (s.length % 4) s += '=';
+      return JSON.parse(decodeURIComponent(escape(atob(s))));
+    } catch (e) { return null; }
+  }
+
   var PK = {
     TIME: 10,   // 每题作答秒数
     DIFF: {
@@ -6897,6 +6935,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     // ---- 入口 ----
+    // mode: 'ai' 人机对战 | 'create' 发起挑战（自己先答出基准分）| 'accept' 应战（打开挑战码）
     start: function (words, opts) {
       var list = toMatchWords(words || []);
       if (list.length < 2) { toast('单词太少，玩不了 PK'); return; }
@@ -6904,6 +6943,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       opts = opts || {};
       this.state = {
         words: list,
+        mode: opts.mode || 'ai',
+        seed: opts.seed || 0,
+        challengerScore: opts.challengerScore || 0,
+        challengerCorrect: opts.challengerCorrect || 0,
+        presetQueue: opts.queue || null,
         view: opts.view || 'home',
         scopeKey: opts.scopeKey || '',
         title: opts.title || '单词 PK',
@@ -6917,8 +6961,58 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       };
       navLearnModule = this.state.view;   // 底部导航按来源模块高亮
       switchView('pk');
-      this.renderSetup();
+      var bl = document.getElementById('pk-back-label');
+      if (bl) bl.textContent = this.backLabelText();
+      var tt = document.getElementById('topbar-title');
+      if (tt && this.state.mode === 'create') tt.textContent = '⚔️ 发起挑战';
+      if (tt && this.state.mode === 'accept') tt.textContent = '⚔️ 应战 PK';
+      if (this.state.mode === 'ai') this.renderSetup();
+      else this.begin();
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    // 从模块页 / 设置页发起挑战：先掷定种子，直接开始答题（无实时 AI 对手）
+    startChallenge: function (words, opts) {
+      opts = opts || {};
+      opts.mode = 'create';
+      opts.seed = (Math.floor(Math.random() * 4294967295) || 1) >>> 0;
+      this.start(words, opts);
+      toast('答完后把挑战码发给朋友来超越你！');
+    },
+    startChallengeFromSetup: function () {
+      var s = this.state;
+      if (!s) return;
+      this.startChallenge(s.words, {
+        view: s.view, scopeKey: s.scopeKey, title: s.title,
+        backFn: s.backFn, backLabel: s.backLabel
+      });
+    },
+
+    // 应战：从挑战码载荷进入，直接复用发起方的整套题目（词/题型/选项完全相同）
+    acceptChallenge: function (p) {
+      var queue = null;
+      if (p && p.queue && p.queue.length) {
+        queue = p.queue.map(function (q) {
+          return {
+            word: { id: q.w[0], word: q.w[1], chinese: q.w[2] },
+            mode: q.m,
+            options: (q.o || []).map(function (t, i) { return { text: t, correct: (i === q.c) }; })
+          };
+        });
+      }
+      var words = queue ? queue.map(function (q) { return q.word; }) : (p && p.words);
+      if (!words || words.length < 2) { toast('挑战码无效'); return; }
+      this.start(words, {
+        mode: 'accept',
+        challengerScore: p.score || 0,
+        challengerCorrect: p.correct || 0,
+        view: p.view || 'home',
+        scopeKey: p.scope || '',
+        title: (p.title || '单词 PK') + ' · 挑战',
+        backFn: null,
+        backLabel: '返回首页',
+        queue: queue
+      });
     },
 
     stop: function () {
@@ -6933,7 +7027,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.stop();
       var s = this.state;
       this.state = null;
-      if (!s) { switchView('home'); return; }
+      if (!s || s.mode === 'accept') { switchView('home'); updateBottomNav('home'); return; }
       switchView(s.view);
       if (s.backFn) s.backFn(); else updateBottomNav(s.view);
     },
@@ -6941,6 +7035,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     backLabelText: function () {
       var s = this.state;
       if (!s) return '返回';
+      if (s.mode === 'accept') return '返回首页';
       if (s.view === 'ket' && typeof ketCategoryBackLabel === 'function') return ketCategoryBackLabel();
       return s.backLabel || '返回';
     },
@@ -6963,14 +7058,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<div style="text-align:center;padding:24px 12px">' +
           '<div style="font-size:64px;margin-bottom:12px">⚔️</div>' +
           '<div style="font-size:22px;font-weight:800;color:#333;margin-bottom:8px">单词 PK 对战</div>' +
-          '<div style="font-size:14px;color:#999;margin-bottom:28px;line-height:1.6">' + s.title + '<br>和电脑比一比，看谁答得又快又准！</div>' +
+          '<div style="font-size:14px;color:#999;margin-bottom:24px;line-height:1.6">' + s.title + '<br>和电脑比一比，或发起挑战让朋友答同样的题！</div>' +
           '<div style="font-size:14px;color:#666;margin-bottom:10px;font-weight:600">选择难度</div>' +
           '<div style="display:flex;gap:10px;margin-bottom:12px">' + diffHtml + '</div>' +
           '<div style="font-size:12px;color:#bbb;margin-bottom:28px">共 ' + Math.min(s.words.length, 10) + ' 题 · 每题 ' + this.TIME + ' 秒 · 答对得分，越快越高</div>' +
-          '<div style="display:flex;gap:10px">' +
+          '<div style="display:flex;gap:10px;margin-bottom:10px">' +
             '<button class="btn btn-secondary" style="flex:1;padding:14px" onclick="PK.back()">返回</button>' +
             '<button class="btn btn-primary" style="flex:2;padding:14px;font-size:16px" onclick="PK.begin()">开始对战</button>' +
           '</div>' +
+          '<button class="btn btn-primary" style="width:100%;padding:12px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="PK.startChallengeFromSetup()">📤 发起挑战（答同题 PK 朋友）</button>' +
         '</div>';
       ['pk-game', 'pk-result'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
       document.getElementById('pk-setup').style.display = 'block';
@@ -6979,21 +7075,31 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     setDiff: function (k) { if (this.state) { this.state.diff = k; this.renderSetup(); } },
 
     // ---- 开始对战：构建题目队列 ----
+    // 人机模式每局重掷随机种子；挑战模式沿用固定种子，保证双方题目/选项完全一致
     begin: function () {
       var s = this.state;
       if (!s) return;
-      var pool = shuffle(s.words.slice()).slice(0, 10);
-      s.queue = pool.map(function (w) {
-        var roll = Math.random();
-        var mode = roll < 0.34 ? 'en2cn' : (roll < 0.67 ? 'cn2en' : 'listen');
-        var others = s.words.filter(function (x) { return String(x.id) !== String(w.id); });
-        var distract = shuffle(others).slice(0, 3);
-        var options = mode === 'en2cn'
-          ? shuffle([{ text: w.chinese, correct: true }].concat(distract.map(function (d) { return { text: d.chinese, correct: false }; })))
-          : shuffle([{ text: w.word, correct: true }].concat(distract.map(function (d) { return { text: d.word, correct: false }; })));
-        return { word: w, mode: mode, options: options };
-      });
+      if (s.presetQueue && s.presetQueue.length) {
+        // 应战模式：直接使用挑战码里携带的题目，保证与发起方完全一致
+        s.queue = s.presetQueue;
+      } else {
+        if (s.mode === 'ai' || !s.seed) s.seed = (Math.floor(Math.random() * 4294967295) || 1) >>> 0;
+        var rng = pkRng(s.seed);
+        var pool = pkShuffle(s.words.slice(), rng).slice(0, 10);
+        s.queue = pool.map(function (w) {
+          var roll = rng();
+          var mode = roll < 0.34 ? 'en2cn' : (roll < 0.67 ? 'cn2en' : 'listen');
+          var others = s.words.filter(function (x) { return String(x.id) !== String(w.id); });
+          var distract = pkShuffle(others, rng).slice(0, 3);
+          var options = mode === 'en2cn'
+            ? pkShuffle([{ text: w.chinese, correct: true }].concat(distract.map(function (d) { return { text: d.chinese, correct: false }; })), rng)
+            : pkShuffle([{ text: w.word, correct: true }].concat(distract.map(function (d) { return { text: d.word, correct: false }; })), rng);
+          return { word: w, mode: mode, options: options };
+        });
+      }
       s.idx = 0; s.my = 0; s.ai = 0; s.combo = 0; s.aiCombo = 0; s.myCorrect = 0;
+      var bl = document.getElementById('pk-back-label');
+      if (bl) bl.textContent = this.backLabelText();
       document.getElementById('pk-setup').style.display = 'none';
       document.getElementById('pk-result').style.display = 'none';
       document.getElementById('pk-game').style.display = 'block';
@@ -7047,9 +7153,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
 
       s.ticker = setInterval(function () { PK.tick(); }, 120);
-      var cfg = this.DIFF[s.diff];
-      var react = cfg.react[0] + Math.random() * (cfg.react[1] - cfg.react[0]);
-      s.aiTimer = setTimeout(function () { PK.aiAnswer(react); }, react * 1000);
+      // 仅人机对战需要实时 AI 对手；挑战模式无对手定时器，玩家作答后直接进入下一题
+      if (s.mode === 'ai') {
+        var cfg = this.DIFF[s.diff];
+        var react = cfg.react[0] + Math.random() * (cfg.react[1] - cfg.react[0]);
+        s.aiTimer = setTimeout(function () { PK.aiAnswer(react); }, react * 1000);
+      }
     },
 
     tick: function () {
@@ -7065,14 +7174,22 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     scoreBar: function () {
       var s = this.state;
+      var oppLabel, oppScore, oppColor, oppBg;
+      if (s.mode === 'accept') {
+        oppLabel = '🏁 要超越 ' + s.challengerScore; oppScore = s.challengerScore; oppColor = '#fa8c16'; oppBg = '#fff7e6';
+      } else if (s.mode === 'create') {
+        oppLabel = '⏳ 待朋友应战'; oppScore = '—'; oppColor = '#999'; oppBg = '#f5f5f5';
+      } else {
+        oppLabel = '🤖 电脑'; oppScore = s.ai; oppColor = '#ff6b6b'; oppBg = '#fff0f0';
+      }
       return '<div style="display:flex;gap:10px;margin-bottom:14px">' +
         '<div style="flex:1;text-align:center;background:#eef4ff;border-radius:12px;padding:10px">' +
           '<div style="font-size:13px;color:#4f9fff;font-weight:600">🙋 我</div>' +
           '<div id="pk-my-score" style="font-size:26px;font-weight:800;color:#4f9fff">' + s.my + '</div>' +
         '</div>' +
-        '<div style="flex:1;text-align:center;background:#fff0f0;border-radius:12px;padding:10px">' +
-          '<div style="font-size:13px;color:#ff6b6b;font-weight:600">🤖 电脑</div>' +
-          '<div id="pk-ai-score" style="font-size:26px;font-weight:800;color:#ff6b6b">' + s.ai + '</div>' +
+        '<div style="flex:1;text-align:center;background:' + oppBg + ';border-radius:12px;padding:10px">' +
+          '<div style="font-size:13px;color:' + oppColor + ';font-weight:600">' + oppLabel + '</div>' +
+          '<div id="pk-ai-score" style="font-size:26px;font-weight:800;color:' + oppColor + '">' + oppScore + '</div>' +
         '</div>' +
       '</div>';
     },
@@ -7143,15 +7260,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var s = this.state;
       if (!s) return;
       var my = document.getElementById('pk-my-score');
-      var ai = document.getElementById('pk-ai-score');
       if (my) my.textContent = s.my;
-      if (ai) ai.textContent = s.ai;
+      if (s.mode === 'ai') {
+        var ai = document.getElementById('pk-ai-score');
+        if (ai) ai.textContent = s.ai;
+      }
     },
 
-    // ---- 双方都作答后进入下一题 ----
+    // ---- 题间流转：AI 模式需双方作答；挑战模式玩家作答后即进入下一题 ----
     checkBothDone: function () {
       var s = this.state;
-      if (!s || !s.locked || !s.aiDone) return;
+      if (!s || !s.locked) return;
+      if (s.mode === 'ai' && !s.aiDone) return;
       var st = document.getElementById('pk-status');
       if (st) st.innerHTML = '本题结束，正在进入下一题…';
       var self = this;
@@ -7163,29 +7283,124 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var s = this.state;
       if (!s) return;
       this.stop();
-      this.recordResult(s.view, s.my, s.ai, s.myCorrect, s.queue.length);
-      var stat = this.statFor(s.view);
-      var win = s.my > s.ai, draw = s.my === s.ai;
-      var emoji = win ? '🏆' : (draw ? '🤝' : '💪');
-      var msg = win ? '你赢了！太厉害了！' : (draw ? '平局！再来一局分胜负！' : '差一点，再来一局！');
-      var color = win ? '#52c41a' : (draw ? '#fa8c16' : '#ff6b6b');
       document.getElementById('pk-game').style.display = 'none';
       var area = document.getElementById('pk-result');
       area.style.display = 'block';
+
+      // 发起方：先答出基准分，生成挑战码发给朋友
+      if (s.mode === 'create') {
+        area.innerHTML =
+          '<div style="text-align:center;padding:24px 12px">' +
+            '<div style="font-size:64px;margin-bottom:8px">📤</div>' +
+            '<div style="font-size:22px;font-weight:800;color:#333;margin-bottom:12px">挑战已就绪！</div>' +
+            '<div style="font-size:14px;color:#888;margin-bottom:18px;line-height:1.6">你答对 ' + s.myCorrect + '/' + s.queue.length + ' 题，得了 <b style="color:#4f9fff;font-size:18px">' + s.my + '</b> 分<br>把挑战码发给朋友，让他答同样的题来超越你！</div>' +
+            '<div style="background:#f7f9ff;border:1px dashed #c7d4ff;border-radius:12px;padding:12px;margin-bottom:14px">' +
+              '<div style="font-size:12px;color:#999;margin-bottom:6px;text-align:left">挑战码</div>' +
+              '<textarea id="pk-code-box" readonly rows="3" style="width:100%;box-sizing:border-box;font-size:12px;color:#555;border:none;background:transparent;resize:none;word-break:break-all">' + this.challengeCode() + '</textarea>' +
+            '</div>' +
+            '<div style="display:flex;gap:10px;margin-bottom:10px">' +
+              '<button class="btn btn-secondary" style="flex:1;padding:13px" onclick="PK.copyChallenge(\'code\')">📋 复制挑战码</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:13px" onclick="PK.copyChallenge(\'url\')">🔗 复制挑战链接</button>' +
+            '</div>' +
+            (navigator.share ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.shareChallenge()">📤 分享给朋友</button>' : '') +
+            '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="PK.back()">返回</button>' +
+          '</div>';
+        speakChinese('挑战已生成，发给朋友来超越你的分数吧');
+        return;
+      }
+
+      // 应战方 / 人机：正常胜负结算
+      var oppScore = s.mode === 'accept' ? s.challengerScore : s.ai;
+      this.recordResult(s.view, s.my, oppScore, s.myCorrect, s.queue.length);
+      var stat = this.statFor(s.view);
+      var win = s.my > oppScore, draw = s.my === oppScore;
+      var emoji = win ? '🏆' : (draw ? '🤝' : '💪');
+      var msg = win ? (s.mode === 'accept' ? '挑战成功！你赢了！' : '你赢了！太厉害了！')
+        : (draw ? '平局！再来一局分胜负！' : (s.mode === 'accept' ? '挑战失败，再来一次！' : '差一点，再来一局！'));
+      var color = win ? '#52c41a' : (draw ? '#fa8c16' : '#ff6b6b');
+      var oppLabel = s.mode === 'accept' ? '🏁 挑战者' : '🤖 电脑';
+      var oppBg = s.mode === 'accept' ? '#fff7e6' : '#fff0f0';
+      var oppColor = s.mode === 'accept' ? '#fa8c16' : '#ff6b6b';
       area.innerHTML =
         '<div style="text-align:center;padding:28px 12px">' +
           '<div style="font-size:72px;margin-bottom:12px">' + emoji + '</div>' +
           '<div style="font-size:24px;font-weight:800;color:' + color + ';margin-bottom:20px">' + msg + '</div>' +
           '<div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px">' +
             '<div style="background:#eef4ff;border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:#4f9fff">我</div><div style="font-size:32px;font-weight:800;color:#4f9fff">' + s.my + '</div></div>' +
-            '<div style="background:#fff0f0;border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:#ff6b6b">电脑</div><div style="font-size:32px;font-weight:800;color:#ff6b6b">' + s.ai + '</div></div>' +
+            '<div style="background:' + oppBg + ';border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:' + oppColor + '">' + oppLabel + '</div><div style="font-size:32px;font-weight:800;color:' + oppColor + '">' + oppScore + '</div></div>' +
           '</div>' +
           '<div style="font-size:14px;color:#888;margin-bottom:24px">答对 ' + s.myCorrect + '/' + s.queue.length + ' 题 · 最高分 ' + stat.highScore + ' · 当前连胜 ' + stat.streak + '</div>' +
-          '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.begin()">🔄 再来一局</button>' +
+          (s.mode === 'ai' ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.begin()">🔄 再来一局</button>' : '') +
+          (s.mode === 'accept' ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.rematch()">⚔️ 再战这局</button>' : '') +
           '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="PK.back()">返回</button>' +
         '</div>';
       if (win) { try { Celebrate.confetti(100); } catch (e) {} }
       speakChinese(msg);
+    },
+
+    // 应战方再战同一套题（相同种子，题目完全一致）
+    rematch: function () {
+      var s = this.state;
+      if (!s || s.mode !== 'accept') return;
+      s.my = 0; s.combo = 0; s.myCorrect = 0; s.idx = 0;
+      document.getElementById('pk-result').style.display = 'none';
+      document.getElementById('pk-game').style.display = 'block';
+      this.renderQuestion();
+    },
+
+    // ---- 挑战码：把固定题目 + 基准分编码进链接，朋友打开答同样的题 ----
+    challengeCode: function () {
+      var s = this.state;
+      if (!s || s.mode !== 'create') return '';
+      // v2：直接携带精简后的整套题目（w=词三元组, m=题型, o=选项文本, c=正确项索引）
+      // 这样应战方无需依赖本地词库，答到的题与发起方逐字一致
+      return pkEncode({
+        v: 2,
+        scope: s.scopeKey,
+        view: s.view,
+        title: s.title,
+        queue: s.queue.map(function (q) {
+          return {
+            w: [q.word.id, q.word.word, q.word.chinese],
+            m: q.mode,
+            o: q.options.map(function (o) { return o.text; }),
+            c: q.options.map(function (o) { return !!o.correct; }).indexOf(true)
+          };
+        }),
+        score: s.my,
+        correct: s.myCorrect,
+        total: s.queue.length,
+        by: USER_ID
+      });
+    },
+    challengeUrl: function () {
+      var code = this.challengeCode();
+      if (!code) return '';
+      var base = location.href.split('?')[0].split('#')[0];
+      return base + '?pk=' + code;
+    },
+    copyChallenge: function (kind) {
+      var text = kind === 'url' ? this.challengeUrl() : this.challengeCode();
+      if (!text) { toast('挑战码生成失败'); return; }
+      var done = function () { toast(kind === 'url' ? '挑战链接已复制，发给朋友吧' : '挑战码已复制，发给朋友吧'); };
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(done).catch(function () { PK._fallbackCopy(text, done); });
+        } else { this._fallbackCopy(text, done); }
+      } catch (e) { this._fallbackCopy(text, done); }
+    },
+    _fallbackCopy: function (text, done) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { toast('复制失败，请手动复制挑战码'); }
+      document.body.removeChild(ta);
+    },
+    shareChallenge: function () {
+      if (!navigator.share) { this.copyChallenge('url'); return; }
+      navigator.share({ title: '单词 PK 挑战', text: '来答同一套题，挑战我的分数！', url: this.challengeUrl() }).catch(function () {});
     }
   };
 
@@ -8524,6 +8739,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startPhonicsPk()">⚔️ 单词 PK</button>' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startPhonicsMatch()">🎴 单词消消乐</button>' +
             '</div>' +
+            '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startPhonicsPk(true)">📤 发起挑战（甩给朋友答同题）</button>' +
             '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startPhonicsDoodle()">✍️ 本组随手拼（看中文写英文）</button>';
         } else {
           pme.style.display = 'none';
@@ -8930,6 +9146,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🏆 本类词汇测验</button>' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startKetPk()">⚔️ 单词 PK</button>' +
             '</div>' +
+            '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startKetPk(true)">📤 发起挑战（甩给朋友答同题）</button>' +
             '<div style="display:flex;gap:8px;margin-top:8px">' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startKetDoodle()">✍️ 随手拼</button>' +
@@ -9374,6 +9591,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本类词汇测验</button>' +
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk()">⚔️ 单词 PK</button>' +
         '</div>' +
+        '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk(true)">📤 发起挑战（甩给朋友答同题）</button>' +
         '<div style="display:flex;gap:8px;margin-top:8px">' +
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflMatch()">🎴 消消乐</button>' +
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflDoodle()">✍️ 随手拼</button>' +
@@ -9604,6 +9822,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本天词汇测验</button>'
         + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk()">⚔️ 单词 PK</button>'
       + '</div>'
+      + '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk(true)">📤 发起挑战（甩给朋友答同题）</button>'
       + '<div style="display:flex;gap:8px;margin-top:8px">'
         + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflPlanMatch()">🎴 消消乐</button>'
         + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflPlanDoodle()">✍️ 随手拼</button>'
@@ -9691,9 +9910,24 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   document.getElementById('grade-display').style.display = 'none';
   loadGrades();
 
-  // 从「单词消消乐」等页面带 ?grade= 返回时，自动进入该年级首页
+  // 朋友打开「挑战链接」（?pk=挑战码）时，解析出发起方同一套题，自动进入应战
+  (function autoEnterPkChallenge() {
+    try {
+      var code = new URLSearchParams(location.search).get('pk');
+      if (!code) return;
+      var p = pkDecode(code);
+      if (!p || p.v !== 2 || !p.queue || p.queue.length < 2) { toast('挑战码无效或已损坏'); return; }
+      window._pkChallengeActive = true;
+      // 清掉地址栏里的长参数，避免刷新重复进入
+      try { history.replaceState(null, '', location.pathname); } catch (e) {}
+      setTimeout(function () { PK.acceptChallenge(p); }, 120);
+    } catch (e) {}
+  })();
+
+  // 从「单词消消乐」等页面带 ?grade= 返回时，自动进入该年级首页（有挑战码时让位给应战）
   (function autoEnterGradeFromUrl() {
     try {
+      if (window._pkChallengeActive) return;
       var g = new URLSearchParams(location.search).get('grade');
       if (g && ['三年级', '四年级', '五年级'].indexOf(g) >= 0) {
         setTimeout(function () { openGrade(g); }, 80);
