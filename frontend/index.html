@@ -805,7 +805,7 @@
     .spell-done .sd-emoji { font-size: 46px; }
     .spell-done .sd-title { font-size: 17px; font-weight: 800; color: #3d3a86; margin-top: 6px; }
     .spell-done .sd-sub { font-size: 13px; color: #7a829a; margin-top: 6px; line-height: 1.6; }
-    /* ---- 单词随手拼（看中文写英文，键盘 / 手写两种模式） ---- */
+    /* ---- 单词随手拼（看中文写英文，键盘输入） ---- */
     .do-card {
       background: #fffdfa; border: 1px solid #fbeadb; border-radius: 24px;
       padding: 26px 18px 18px; box-shadow: 0 8px 28px rgba(255, 159, 67, 0.10);
@@ -823,7 +823,7 @@
       transition: transform .12s;
     }
     .do-speak:active { transform: scale(.92); }
-    /* 卡片底部：极简文字入口（返回 / 切换输入方式），不占主视觉 */
+    /* 卡片底部：极简文字入口（返回），不占主视觉 */
     .do-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 16px; }
     .do-link {
       background: none; border: none; padding: 2px 0;
@@ -831,16 +831,6 @@
     }
     .do-link:active { opacity: .55; }
     .do-hint { font-size: 12.5px; color: #a08a6a; margin-top: 6px; }
-    .do-modes { display: flex; gap: 8px; justify-content: center; margin-top: 12px; }
-    .do-mode {
-      flex: 1; max-width: 170px; padding: 9px 10px; border-radius: 999px;
-      border: 1.5px solid #ffe0b8; background: #fffaf3; color: #d4801a;
-      font-size: 13px; font-weight: 700; cursor: pointer; transition: all .15s;
-    }
-    .do-mode.on {
-      background: linear-gradient(135deg, #ffb347, #ff8a3d); color: #fff;
-      border-color: transparent; box-shadow: 0 4px 14px rgba(255, 145, 60, .3);
-    }
     .do-input-wrap { margin-top: 18px; }
     .do-input {
       width: 100%; box-sizing: border-box; padding: 17px 16px;
@@ -859,19 +849,6 @@
       60% { transform: translateX(-4px); }
       80% { transform: translateX(4px); }
     }
-    .do-hand-wrap { margin-top: 14px; }
-    .do-canvas-box { position: relative; border: 2px dashed #ffd7a8; border-radius: 14px; background: #fffdf8; overflow: hidden; }
-    .do-canvas { display: block; width: 100%; height: 180px; touch-action: none; cursor: crosshair; }
-    .do-canvas-tip {
-      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; color: #d8bb95; pointer-events: none;
-    }
-    .do-hand-tools { display: flex; gap: 7px; margin-top: 8px; }
-    .do-tool {
-      flex: 1; padding: 9px 6px; border-radius: 10px; border: 1px solid #ffe0b8;
-      background: #fffaf3; color: #d4801a; font-size: 13px; font-weight: 700; cursor: pointer;
-    }
-    .do-tool:active { transform: scale(.96); }
     .do-fb {
       margin-top: 12px; padding: 12px 14px; border-radius: 12px;
       font-size: 14px; line-height: 1.6; animation: fb-pop-in .25s ease;
@@ -879,16 +856,6 @@
     .do-fb.ok { background: #f1f9ee; color: #227a12; }
     .do-fb.bad { background: #fdf3f2; color: #a8071a; }
     .do-fb.info { background: #fdf8ea; color: #8a6100; }
-    .do-self { display: flex; gap: 8px; margin-top: 10px; }
-    .do-self .btn { flex: 1; padding: 10px 8px; font-size: 13.5px; }
-    .do-reveal {
-      margin-top: 14px; padding: 16px 14px 14px; border-radius: 14px; text-align: center;
-      background: #f2f7ff; border: 2px solid #b7d4ff; animation: fb-pop-in .28s ease-out;
-    }
-    .do-reveal-word { font-size: 28px; font-weight: 800; color: #2b3a67; letter-spacing: 1.5px; }
-    .do-reveal-ph { font-size: 13px; color: #6b7290; margin-top: 3px; }
-    .do-reveal-cn { font-size: 15px; color: #444c66; font-weight: 600; margin-top: 6px; }
-    .do-reveal-tip { font-size: 12.5px; color: #7a829a; margin-top: 10px; }
     .do-acts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; margin-top: 12px; }
     .do-act {
       padding: 10px 6px; border-radius: 10px; border: 1px solid #ffe0b8;
@@ -7149,22 +7116,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     Spell.start(fresh === true);
   }
 
-  // ========== 单词随手拼（看中文写英文：键盘 / 手写两种模式） ==========
+  // ========== 单词随手拼（看中文写英文：键盘输入） ==========
   var Doodle = {
     scope: null,        // {type,label,key,mountId,backLabel,words,hide}
     queue: [],          // 打乱后的题目
     idx: 0,
-    mode: 'keys',       // keys | hand
-    phase: 'ask',       // ask | ok | reveal
+    phase: 'ask',       // ask | ok
     done: {},           // 已写对的单词（小写）
     tries: 0,
     hint: false,
     input: '',
     fb: null,
-    strokes: [],        // 手写笔画：[[{x,y}...], ...]
     _hidden: [],
     _wantFocus: false,
-    _ctx: null, _cw: 0, _ch: 0,
 
     start(opts) {
       const words = (opts.words || []).map(function (w) {
@@ -7183,8 +7147,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       };
       this.queue = shuffle(words.slice());
       this.clearAdvance();
-      this.idx = 0; this.done = {}; this.mode = 'keys'; this.phase = 'ask';
-      this.tries = 0; this.hint = false; this.input = ''; this.fb = null; this.strokes = [];
+      this.idx = 0; this.done = {}; this.phase = 'ask';
+      this.tries = 0; this.hint = false; this.input = ''; this.fb = null;
       if (this.scope.hide.length) this.hideSiblings(this.scope.hide);
       const mount = document.getElementById(this.scope.mountId);
       if (mount) mount.style.display = 'block';
@@ -7199,8 +7163,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       }
       this.clearAdvance();
       this.scope = null; this.queue = []; this.idx = 0; this.done = {};
-      this.strokes = []; this.fb = null; this.phase = 'ask'; this.input = '';
-      this._ctx = null;
+      this.fb = null; this.phase = 'ask'; this.input = '';
     },
 
     back() {
@@ -7325,134 +7288,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.scheduleNext(2400);      // 答错：留出看清拼写的时间后自动下一题
     },
 
-    // ---- 手写模式 ----
-    revealHand() {
-      const w = this.current();
-      if (!w) return;
-      if (!this.strokes.length) {
-        // 没写笔迹：给页面内可见的提示（不依赖一闪而过的 toast），并滚到画布
-        this.fb = { type: 'bad', html: '✍️ 先在方框里写出这个单词，再点「写完了」对答案' };
-        this.render();
-        this.scrollToCard(true);
-        return;
-      }
-      this.phase = 'reveal';
-      this.fb = null;   // 答案卡自带说明，避免重复
-      this.render();    // render 会把手写画布就地替换成答案卡
-      this.scrollToCard(false);
-      try { speakWord(w.word); } catch (e) {}
-    },
-
-    // 把答案卡（或画布）滚到视口中间，保证点完按钮立即看到结果
-    scrollToCard(toCanvas) {
-      setTimeout(function () {
-        const el = toCanvas
-          ? (document.querySelector('.do-canvas-box') || document.getElementById('do-reveal'))
-          : (document.getElementById('do-reveal') || document.querySelector('.do-canvas-box'));
-        if (!el || !el.scrollIntoView) return;
-        try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }
-        catch (e) { try { el.scrollIntoView(); } catch (e2) {} }
-      }, 80);
-    },
-
-    selfJudge(ok) {
-      const w = this.current();
-      if (!w) return;
-      if (ok) { this.phase = 'ask'; this.correct(w); return; }
-      this.phase = 'ask';
-      this.strokes = [];
-      this.fb = { type: 'info', html: '没关系～再写一遍，可以点 🔊 听发音跟着读' };
-      this.render();
-      this.scrollToCard(true);
-      try { speakWord(w.word); } catch (e) {}
-    },
-
-    initCanvas() {
-      const cv = document.getElementById('do-canvas');
-      if (!cv || !cv.getContext) return;
-      const rect = cv.getBoundingClientRect ? cv.getBoundingClientRect() : { width: 320, height: 180 };
-      const cw = Math.max(200, Math.round(rect.width || 320));
-      const ch = Math.round(rect.height || 180);
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      cv.width = Math.round(cw * dpr);
-      cv.height = Math.round(ch * dpr);
-      const ctx = cv.getContext('2d');
-      if (!ctx) return;              // jsdom 等无 canvas 环境直接跳过
-      ctx.scale(dpr, dpr);
-      ctx.lineWidth = 3.2;
-      ctx.lineCap = 'round';
-      ctx.lineJoin = 'round';
-      ctx.strokeStyle = '#3d3a86';
-      this._ctx = ctx; this._cw = cw; this._ch = ch;
-      this.redraw();
-      const self = this;
-      let drawing = false;
-      const pos = function (e) {
-        const r = cv.getBoundingClientRect();
-        return { x: e.clientX - r.left, y: e.clientY - r.top };
-      };
-      cv.addEventListener('pointerdown', function (e) {
-        if (self.phase === 'ok') return;
-        e.preventDefault();
-        drawing = true;
-        try { cv.setPointerCapture(e.pointerId); } catch (err) {}
-        self.strokes.push([pos(e)]);
-        self.redraw();
-      });
-      cv.addEventListener('pointermove', function (e) {
-        if (!drawing) return;
-        e.preventDefault();
-        const s = self.strokes[self.strokes.length - 1];
-        if (!s) return;
-        s.push(pos(e));
-        self.redraw();
-      });
-      const end = function (e) { drawing = false; try { cv.releasePointerCapture(e.pointerId); } catch (err) {} };
-      cv.addEventListener('pointerup', end);
-      cv.addEventListener('pointercancel', end);
-      cv.addEventListener('pointerleave', function () { drawing = false; });
-    },
-
-    redraw() {
-      const ctx = this._ctx;
-      if (!ctx) return;
-      ctx.clearRect(0, 0, this._cw || 400, this._ch || 200);
-      (this.strokes || []).forEach(function (stroke) {
-        if (!stroke || !stroke.length) return;
-        ctx.beginPath();
-        ctx.moveTo(stroke[0].x, stroke[0].y);
-        for (let i = 1; i < stroke.length; i++) ctx.lineTo(stroke[i].x, stroke[i].y);
-        if (stroke.length === 1) ctx.lineTo(stroke[0].x + 0.1, stroke[0].y + 0.1);
-        ctx.stroke();
-      });
-      const tip = document.getElementById('do-canvas-tip');
-      if (tip) tip.style.display = (this.strokes && this.strokes.length) ? 'none' : '';
-    },
-
-    clearInk() { this.strokes = []; this.redraw(); },
-    undoInk() {
-      if (!this.strokes || !this.strokes.length) { toast('还没有写任何笔画'); return; }
-      this.strokes.pop();
-      this.redraw();
-    },
-
     // ---- 导航 ----
-    switchMode(m) {
-      if (this.mode === m) return;
-      this.mode = m;
-      this.clearAdvance();
-      this.phase = 'ask';
-      this.strokes = [];
-      this.fb = null;
-      this._wantFocus = false;
-      this.render();
-    },
-
     resetQ() {
       this.clearAdvance();
       this._badFlash = false;
       this.phase = 'ask'; this.tries = 0; this.hint = false;
-      this.input = ''; this.fb = null; this.strokes = [];
+      this.input = ''; this.fb = null;
       this.render();
     },
 
@@ -7512,50 +7353,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const answer = String(w.word);
       const letters = answer.replace(/[^A-Za-z]/g, '').length;
       const solved = this.phase === 'ok';
-      const isHand = this.mode === 'hand';
 
       let hintText = '共 ' + letters + ' 个字母' + (w.phonetic ? ' · ' + escDoodle(w.phonetic) : '');
       if (this.hint) hintText += ' · 首字母 <b>' + escDoodle(answer.slice(0, 1).toUpperCase()) + '</b>';
 
       // 答题区（写对后由反馈条统一呈现结果）
-      let bodyHtml = '';
-      if (isHand && this.phase === 'reveal') {
-        // 手写对答案：就地替换画布为大字答案卡，保证在视口内立即可见
-        bodyHtml =
-          '<div class="do-reveal" id="do-reveal">' +
-            '<div class="do-reveal-word">' + escDoodle(answer) + '</div>' +
-            (w.phonetic ? '<div class="do-reveal-ph">' + escDoodle(w.phonetic) + '</div>' : '') +
-            '<div class="do-reveal-cn">' + escDoodle(w.chinese) + '</div>' +
-            '<button class="speak-btn" style="margin-top:10px" type="button" onclick="Doodle.speak()">🔊 听发音</button>' +
-            '<div class="do-reveal-tip">对照你刚才写的，写的一样吗？</div>' +
-            '<div class="do-self">' +
-              '<button class="btn btn-primary" type="button" onclick="Doodle.selfJudge(true)">✅ 我写对了</button>' +
-              '<button class="btn btn-secondary" type="button" onclick="Doodle.selfJudge(false)">❌ 再写一次</button>' +
-            '</div>' +
-          '</div>';
-      } else if (isHand) {
-        bodyHtml =
-          '<div class="do-hand-wrap">' +
-            '<div class="do-canvas-box">' +
-              '<canvas class="do-canvas" id="do-canvas"></canvas>' +
-              '<div class="do-canvas-tip" id="do-canvas-tip">用手指或鼠标在这里写英文单词</div>' +
-            '</div>' +
-            '<div class="do-hand-tools">' +
-              '<button class="do-tool" type="button" onclick="Doodle.clearInk()">🧽 清除</button>' +
-              '<button class="do-tool" type="button" onclick="Doodle.undoInk()">↩️ 撤销</button>' +
-              '<button class="do-tool" type="button" onclick="Doodle.revealHand()">✅ 写完了</button>' +
-            '</div>' +
-          '</div>';
-      } else {
-        bodyHtml =
-          '<div class="do-input-wrap">' +
-            '<input id="do-input" class="do-input' + (this._badFlash ? ' bad' : '') + '" type="text" autocomplete="off" autocorrect="off" ' +
-              'autocapitalize="none" spellcheck="false" placeholder="直接用键盘输入，回车提交" value="' + escDoodle(this.input) + '" ' +
-              (solved || this._advPending ? 'readonly ' : '') +
-              'oninput="Doodle.onInput(this.value)" ' +
-              'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Doodle.submit();}">' +
-          '</div>';
-      }
+      const bodyHtml =
+        '<div class="do-input-wrap">' +
+          '<input id="do-input" class="do-input' + (this._badFlash ? ' bad' : '') + '" type="text" autocomplete="off" autocorrect="off" ' +
+            'autocapitalize="none" spellcheck="false" placeholder="直接用键盘输入，回车提交" value="' + escDoodle(this.input) + '" ' +
+            (solved || this._advPending ? 'readonly ' : '') +
+            'oninput="Doodle.onInput(this.value)" ' +
+            'onkeydown="if(event.key===\'Enter\'){event.preventDefault();Doodle.submit();}">' +
+        '</div>';
 
       // 反馈
       let fbHtml = '';
@@ -7563,13 +7373,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         fbHtml = '<div class="do-fb ' + this.fb.type + '">' + this.fb.html + '</div>';
       }
 
-      // 底部只留两枚不起眼的小文字入口：返回 / 切换输入方式
+      // 底部只留一个不起眼的小文字入口：返回
       const footHtml =
         '<div class="do-foot">' +
           '<button class="do-link" type="button" onclick="Doodle.back()">← ' + escDoodle(this.scope.backLabel) + '</button>' +
-          '<button class="do-link" type="button" onclick="Doodle.switchMode(\'' + (isHand ? 'keys' : 'hand') + '\')">' +
-            (isHand ? '⌨️ 用键盘输入' : '✍️ 用手写输入') +
-          '</button>' +
         '</div>';
 
       mount.innerHTML =
@@ -7584,8 +7391,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           footHtml +
         '</div>';
 
-      if (isHand) this.initCanvas();
-      if (!isHand && !solved && !this._advPending) {
+      if (!solved && !this._advPending) {
         const inp = document.getElementById('do-input');
         if (inp) { try { inp.focus(); const n = inp.value.length; inp.setSelectionRange(n, n); } catch (e) {} }
       }
