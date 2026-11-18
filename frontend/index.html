@@ -2156,15 +2156,34 @@ const API = ".";
     if (_lmt) _lmt.style.display = 'none';
   }
 
-  // 底部导航高亮映射：learn 视图像征性高亮「年级」；ket-quiz 视图按测验来源区分 KET / 小托福
+  // ===== 底部导航高亮 =====
+  // 规则：年级/课文学习/测验/错词复习 → 「年级」；KET、小托福、拼读及其二级页面 → 各自模块。
+  // 三个外部模块复用课文的 learn 视图做单词学习，需按真实来源模块高亮，不能再统一落到「年级」。
+  var navLearnModule = 'home';   // learn 视图的真实来源：home(课文) / ket / toefl / phonics
+  var bottomNavModule = 'home';  // 当前高亮项；设置等无独立入口的页面沿用进入前的模块
+  function navModuleForView(view) {
+    if (view === 'learn') return navLearnModule;
+    if (view === 'ket-quiz') return window._ketQuizReturnView === 'toefl' ? 'toefl' : 'ket';
+    if (view === 'report') {
+      if (reportModule === 'ket') return 'ket';
+      if (reportModule === 'toefl') return 'toefl';
+      if (reportModule === 'phonics') return 'phonics';
+      return 'home';
+    }
+    // 进入顶层模块/首页即重置 learn 视图来源，避免之后从年级进入课文学习时高亮残留
+    if (view === 'ket' || view === 'toefl' || view === 'phonics') { navLearnModule = 'home'; return view; }
+    if (view === 'home' || view === 'grade' || view === 'quiz' || view === 'review') { navLearnModule = 'home'; return 'home'; }
+    // settings 等无独立导航项的页面保持原高亮
+    return bottomNavModule;
+  }
   function updateBottomNav(name) {
-    var navName = name;
-    if (name === 'ket-quiz') navName = (window._ketQuizReturnView === 'toefl') ? 'toefl' : 'ket';
-    else if (name === 'learn') navName = 'home';
+    var m = navModuleForView(name);
+    if (m !== 'home' && m !== 'ket' && m !== 'toefl' && m !== 'phonics') m = 'home';
+    bottomNavModule = m;
     ['home', 'ket', 'toefl', 'phonics'].forEach(function(v) {
       var el = document.getElementById('nav-' + v);
       if (el) {
-        if (v === navName) el.classList.add('active');
+        if (v === m) el.classList.add('active');
         else el.classList.remove('active');
       }
     });
@@ -6450,6 +6469,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function startChoiceLearn(extWords, extOpts) {
     // 外部调用（KET/小托福/拼读）时，extWords 提供词表，extOpts 提供标题与返回回调
     const isExt = !!(extWords && extWords.length);
+    // 记录 learn 视图真实来源，供底部导航高亮使用（KET / 小托福 / 拼读 / 课文）
+    var _extNav = (extOpts && extOpts.view) || '';
+    navLearnModule = (isExt && (_extNav === 'ket' || _extNav === 'toefl' || _extNav === 'phonics')) ? _extNav : 'home';
     if (!isExt && (!currentModule || currentWords.length === 0)) {
       toast('请先选择一个模块');
       switchView('home');
@@ -7567,6 +7589,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   ];
   function switchReportModule(mod) {
     reportModule = mod;
+    updateBottomNav('report');   // 报告切换模块时同步高亮对应底部导航
     renderReport();
   }  // 报告页总入口：根据当前锁定模块渲染对应报告（不提供模块切换）
   function renderReport() {
