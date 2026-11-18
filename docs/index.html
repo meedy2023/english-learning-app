@@ -5063,6 +5063,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '</div>' +
       '<button class="btn btn-primary" style="width:100%" onclick="switchView(\'home\')">完成，返回首页</button>' +
       '</div>';
+    Celebrate.result(pct);  // 答完结算：胜利/失利音乐
     Review.refreshEntry();
   }
 
@@ -5826,7 +5827,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (skipBtn) skipBtn.parentElement.style.display = "none";
     // 隐藏题号提示
     document.getElementById("quiz-hint").style.display = "none";
-    speakChinese(msgs);
+    Celebrate.result(pct);  // 答完结算：胜利/失利音乐代替语音播报
   }
 
   function speakQuizWord() {
@@ -6091,6 +6092,74 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 单词学习答错提示音乐：柔和下行三音（G4-E4-C4）
     answerWrong() {
       this._tone([392, 329.63, 261.63], 0.1, 'sine', 0.16, 0.28);
+    },
+
+    // 结算音乐通用播放：notes = [[频率, 起始秒, 时长秒], ...]，主音 + 高八度泛音叠加
+    _melody: function (notes, type, peak) {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        var ctx = this._ac || (this._ac = new AC());
+        if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
+        var base = ctx.currentTime + 0.03;
+        peak = peak || 0.18;
+        for (var i = 0; i < notes.length; i++) {
+          var f = notes[i][0], st = notes[i][1] || 0, dur = notes[i][2] || 0.3;
+          var t = base + st;
+          var o = ctx.createOscillator(), g = ctx.createGain();
+          o.type = type || 'triangle'; o.frequency.value = f;
+          g.gain.setValueAtTime(0, t);
+          g.gain.linearRampToValueAtTime(peak, t + 0.02);
+          g.gain.setValueAtTime(peak, t + Math.max(0.03, dur - 0.1));
+          g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+          o.connect(g); g.connect(ctx.destination);
+          o.start(t); o.stop(t + dur + 0.03);
+          // 高八度正弦泛音，音色更饱满
+          var o2 = ctx.createOscillator(), g2 = ctx.createGain();
+          o2.type = 'sine'; o2.frequency.value = f * 2;
+          g2.gain.setValueAtTime(0, t);
+          g2.gain.linearRampToValueAtTime(peak * 0.28, t + 0.02);
+          g2.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.8);
+          o2.connect(g2); g2.connect(ctx.destination);
+          o2.start(t); o2.stop(t + dur);
+        }
+      } catch (e) {}
+    },
+
+    // 胜利音乐：明亮上行大三和弦琶音 + 高音收尾（约 1.3 秒）
+    victory: function () {
+      this._melody([
+        [523.25, 0.00, 0.24], // C5
+        [659.25, 0.14, 0.24], // E5
+        [783.99, 0.28, 0.24], // G5
+        [1046.5, 0.42, 0.44], // C6
+        [783.99, 0.68, 0.18], // G5
+        [1046.5, 0.80, 0.52]  // C6 收尾
+      ], 'triangle', 0.2);
+    },
+
+    // 失利音乐：柔和下行小调旋律，鼓励性质、不刺耳（约 1.2 秒）
+    defeat: function () {
+      this._melody([
+        [440.00, 0.00, 0.28], // A4
+        [392.00, 0.22, 0.28], // G4
+        [349.23, 0.44, 0.28], // F4
+        [261.63, 0.66, 0.58]  // C4 收尾
+      ], 'sine', 0.16);
+    },
+
+    // 平局音乐：平稳同度双音
+    draw: function () {
+      this._melody([
+        [523.25, 0.00, 0.34],
+        [523.25, 0.26, 0.52]
+      ], 'sine', 0.15);
+    },
+
+    // 结算音乐统一入口：按正确率判定（≥60% 胜利，否则失利）
+    result: function (pct) {
+      if (pct >= 60) this.victory();
+      else this.defeat();
     }
   };
 
@@ -6768,7 +6837,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="clRestartLearn()">🔄 再来一轮</button>' +
       clSummaryBackBtn() +
     '</div>';
-    speakChinese(msgs);
+    Celebrate.result(pct);  // 答完结算：胜利/失利音乐代替语音播报
   }
 
   // 再来一轮：保留当前词表与外部上下文重开
@@ -7546,7 +7615,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.begin()">🔄 再来一局</button>' +
             '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="PK.back()">返回</button>' +
           '</div>';
-        if (win) { try { Celebrate.confetti(100); } catch (e) {} }
+        if (win) { try { Celebrate.victory(); } catch (e) {} }
+        else if (!draw) { try { Celebrate.defeat(); } catch (e) {} }
+        // 平局不播胜负音乐
         speakChinese(msg);
         return;
       }
@@ -7573,6 +7644,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<button class="btn btn-secondary" style="width:100%;padding:12px;margin-bottom:10px" onclick="PK.rematch()">🔄 再答一次</button>' +
           '<button class="btn btn-secondary nav-back-btn" style="width:100%;padding:12px" onclick="PK.back()">返回</button>' +
         '</div>';
+      Celebrate.result(acc);  // 答完结算：按本人正确率播放胜利/失利音乐
       speakChinese('你答完了，得' + s.my + '分，把比分发给朋友比一比吧');
     },
 
@@ -7726,7 +7798,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<div style="background:#f6f0ff;border-radius:14px;padding:14px 22px"><div style="font-size:13px;color:#a55eea">👥 朋友</div><div style="font-size:34px;font-weight:800;color:#a55eea">' + friend.s + '</div><div style="font-size:12px;color:#999">答对 ' + friend.c + '/' + friend.t + '</div></div>' +
           '</div>' +
           '<div style="font-size:22px;font-weight:800;color:' + vcolor + ';margin-bottom:20px">' + verdict + '</div>';
-        if (win) { try { Celebrate.confetti(80); } catch (e) {} }
+        if (win) { try { Celebrate.victory(); } catch (e) {} }
+        else if (!draw) { try { Celebrate.defeat(); } catch (e) {} }
+        // 平局不播胜负音乐
       } else {
         mineHtml =
           '<div style="background:#f6f0ff;border-radius:14px;padding:18px;margin:18px 0">' +
@@ -9799,6 +9873,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">再测一次</button>' +
       '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="backToKetCategory()" type="button" aria-label="返回分类">← ' + (window._ketQuizReturnView === 'toefl' ? '返回' : ketCategoryBackLabel()) + '</button>' +
       '</div>';
+    Celebrate.result(pct);  // 答完结算：胜利/失利音乐
   }
 
   function backToKetCategory() {
