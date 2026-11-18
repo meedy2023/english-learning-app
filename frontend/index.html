@@ -2218,6 +2218,8 @@ const API = ".";
     currentView = name;
     // 离开 PK 页时清理对战计时器，避免后台继续跑
     if (name !== 'pk' && typeof PK !== 'undefined' && PK.state) PK.stop();
+    // 离开 PK 视图时兜底恢复顶栏（二维码等待页曾隐藏）
+    if (name !== 'pk' && typeof PK !== 'undefined' && PK._restoreTopbar) PK._restoreTopbar();
     // 离开学习页/报告页（切到首页、各模块主页、设置等）时，清理外部模块单词学习的返回上下文，
     // 避免 clExtCtx 残留导致后续报告模块定位误判（报告页返回学习页需保留，故 report 不清理）
     if (name !== 'learn' && name !== 'report') clExtCtx = null;
@@ -7221,6 +7223,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         ticker: null, aiTimer: null, nextTimer: null
       };
       navLearnModule = this.state.view;   // 底部导航按来源模块高亮
+      this._restoreTopbar();   // 每次进入先恢复顶栏，create 模式随后自行隐藏
       switchView('pk');
       var bl = document.getElementById('pk-back-label');
       if (bl) bl.textContent = this.backLabelText();
@@ -7351,6 +7354,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById('pk-result').style.display = 'none';
       var area = document.getElementById('pk-setup');
       area.style.display = 'block';
+      // 二维码等待页按设计隐藏全局蓝色顶栏（标题+右上角图标），返回胶囊上移贴顶
+      this._hideTopbarForQr();
       var url = this.challengeUrl();
       area.innerHTML =
         '<div style="position:relative;max-width:460px;margin:4px auto 0;padding:26px 22px 24px;border-radius:24px;overflow:hidden;' +
@@ -7389,6 +7394,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '</div>';
       try { Qr.draw(document.getElementById('pk-qr-canvas'), url); } catch (e) {}
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    // 二维码等待页：隐藏全局顶栏（标题+图标），返回胶囊上移贴顶
+    _hideTopbarForQr: function () {
+      var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'none';
+      var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '16px';
+    },
+    // 恢复全局顶栏与返回胶囊位置（离开二维码页时统一调用）
+    _restoreTopbar: function () {
+      var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'flex';
+      var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '78px';
     },
 
     stop: function () {
@@ -7470,6 +7486,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     begin: function () {
       var s = this.state;
       if (!s) return;
+      this._restoreTopbar();   // 离开二维码页进入答题，恢复顶栏
       if (s.mode === 'ai') s.queue = [];   // 人机每局重新出题
       this.buildQueue();
       s.idx = 0; s.my = 0; s.ai = 0; s.combo = 0; s.aiCombo = 0; s.myCorrect = 0;
