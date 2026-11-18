@@ -1097,7 +1097,10 @@
             <div class="match-title">🎴 单词消消乐</div>
             <div class="match-sub" id="match-sub">本单元 · 每局 8 个单词</div>
           </div>
-          <button class="match-restart" onclick="Match.restart()">🔄 重开</button>
+          <div style="display:flex;gap:8px;align-items:center">
+            <button class="match-restart nav-back-btn" id="match-back-btn-top" onclick="Match.backOut()" type="button" aria-label="返回" style="background:#fff0f0;color:#d4380d">← 返回</button>
+            <button class="match-restart" onclick="Match.restart()" type="button" aria-label="重开">🔄 重开</button>
+          </div>
         </div>
         <div class="match-hud">
           <div class="match-stat"><span>本局</span><b id="match-round">0/0</b></div>
@@ -1371,7 +1374,7 @@
       <!-- 分类列表由 JS 动态生成 -->
     </div>
     <div id="ket-content-area" style="display:none">
-      <button class="btn btn-secondary nav-back-btn" onclick="backToKetCategories()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
+      <button class="btn btn-secondary nav-back-btn" onclick="ketNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
         <span class="nav-back-ico" aria-hidden="true">←</span> 返回分类
       </button>
       <div id="ket-content-title" style="font-size:18px;font-weight:600;margin-bottom:16px"></div>
@@ -1409,7 +1412,7 @@
     <!-- 分类列表由 JS 动态生成 -->
   </div>
   <div id="toefl-content-area" style="display:none">
-    <button class="btn btn-secondary nav-back-btn" onclick="backToToeflCategories()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
+    <button class="btn btn-secondary nav-back-btn" onclick="toeflNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类">
       <span class="nav-back-ico" aria-hidden="true">←</span> 返回分类
     </button>
     <div id="toefl-content-title" style="font-size:18px;font-weight:600;margin-bottom:8px"></div>
@@ -1420,7 +1423,7 @@
     <div id="toefl-content-list"></div>
   </div>
   <div id="toefl-plan-area" style="display:none">
-    <button class="btn btn-secondary nav-back-btn" onclick="exitToeflPlan()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回计划列表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
+    <button class="btn btn-secondary nav-back-btn" onclick="toeflPlanNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回计划列表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
     <div id="toefl-plan-header"></div>
     <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
     <div id="toefl-plan-entry" style="margin-bottom:12px"></div>
@@ -1435,7 +1438,7 @@
   <div id="view-phonics" class="view">
     <div id="phonics-group-list" style="margin-top:8px"></div>
     <div id="phonics-lesson-area" style="display:none">
-      <button class="btn btn-secondary nav-back-btn" onclick="backToPhonicsGroups()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分组"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分组</button>
+      <button class="btn btn-secondary nav-back-btn" onclick="phonicsNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分组"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分组</button>
       <div id="phonics-lesson-title" style="font-size:18px;font-weight:700;margin-bottom:16px"></div>
       <div id="phonics-match-entry" style="display:none;margin:-4px 0 12px"></div>
       <div id="phonics-match-area" style="display:none"></div>
@@ -6101,6 +6104,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     scopeKey() { return (this.scope && this.scope.key) || currentModule; },
     isUnit() { return !this.scope || this.scope.type === 'unit'; },
     unitLabel() { return (this.scope && this.scope.unitLabel) || '本单元'; },
+    // 返回上一级节点页面的按钮文案：随游戏所属模块变化
+    backLabel() {
+      if (this.isUnit()) return '返回单词表';
+      var t = this.scope && this.scope.type;
+      if (t === 'ket') return (typeof ketCategoryBackLabel === 'function') ? ketCategoryBackLabel() : '返回分类';
+      if (t === 'toefl') return '返回本类';
+      if (t === 'toefl-plan') return '返回本天';
+      if (t === 'phonics') return '返回本组';
+      return '返回';
+    },
 
     storeKey() { return 'match_cleared_' + USER_ID + '_' + this.scopeKey(); },
 
@@ -6184,11 +6197,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '总计 ' + pool.length + ' 个 · 每局 ' + this.PER_ROUND + ' 个';
       var unitLabel = document.getElementById('match-unit-label');
       if (unitLabel) unitLabel.textContent = this.unitLabel();
-      var backBtn = document.getElementById('match-back-btn');
-      if (backBtn) {
-        backBtn.textContent = this.isUnit() ? '返回单词表'
-          : (this.scope && this.scope.type === 'ket' ? ketCategoryBackLabel() : '退出消消乐');
-      }
+      var backLabel = this.backLabel();
+      var backBtns = [document.getElementById('match-back-btn'), document.getElementById('match-back-btn-top')];
+      backBtns.forEach(function (b) { if (b) b.textContent = backLabel; });
 
       this.renderBoard();
       this.updateHud();
@@ -7446,6 +7457,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function escDoodle(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
+
+  // 分类/分组节点页顶部的「返回」：若当前正打开该节点下的消消乐/随手拼，
+  // 则先退出游戏回到本节点页（而非直接跳到分类列表）——与单词学习/测验的上一级语义一致。
+  function exitActiveGame(scopeType) {
+    if (typeof Match !== 'undefined' && Match.scope && Match.scope.type === scopeType) { Match.backOut(); return true; }
+    if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type === scopeType) { Doodle.back(); return true; }
+    return false;
+  }
+  // 各模块节点页顶部返回：游戏进行中先退回本节点页，否则执行原有的返回列表逻辑
+  function ketNodeBack() { if (exitActiveGame('ket')) return; backToKetCategories(); }
+  function toeflNodeBack() { if (exitActiveGame('toefl')) return; backToToeflCategories(); }
+  function toeflPlanNodeBack() { if (exitActiveGame('toefl-plan')) return; exitToeflPlan(); }
+  function phonicsNodeBack() { if (exitActiveGame('phonics')) return; backToPhonicsGroups(); }
 
   // ---- 单元：随手拼 ----
   function startDoodle() {
