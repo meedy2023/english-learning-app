@@ -22,6 +22,9 @@ docs/diag.html
 # Piper TTS model (local generation tool, not needed at runtime)
 piper_model/
 
+# Node test-only deps (not needed at runtime)
+node_modules/
+
 # Chrome CDP test profiles (transient)
 .cdp_score*/
 .chrome-tmp/
