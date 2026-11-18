@@ -6,7 +6,7 @@
   const _origFetch = window.fetch ? window.fetch.bind(window) : null;
 
   // ---------- 数据容器 ----------
-  const DATA = { words: [], textbook: {}, ket: {}, phonics: [], toefl: {} };
+  const DATA = { words: [], textbook: {}, ket: {}, phonics: [], toefl: {}, toeflPlan: null };
   let _ready = null;
 
   function loadData() {
@@ -17,13 +17,15 @@
       fetch("./data/ket.json").then((r) => r.json()),
       fetch("./data/phonics.json").then((r) => r.json()).catch(() => []),
       fetch("./data/toefl.json").then((r) => r.json()).catch(() => ({})),
+      fetch("./data/toefl-plan.json").then((r) => r.json()).catch(() => null),
     ])
-      .then(([w, t, k, p, tj]) => {
+      .then(([w, t, k, p, tj, tp]) => {
         DATA.words = Array.isArray(w) ? w : w.words || [];
         DATA.textbook = t || {};
         DATA.ket = k || {};
         DATA.phonics = p || [];
         DATA.toefl = tj || {};
+        DATA.toeflPlan = tp || null;
       })
       .catch((e) => {
         console.error("[静态版] 数据加载失败：", e);
@@ -411,6 +413,15 @@
         const c = params.get("category");
         const list = (DATA.toefl["词汇"] && DATA.toefl["词汇"]["分类"] && DATA.toefl["词汇"]["分类"][c]) || [];
         return json({ words: list });
+      }
+      // 40天核心词汇计划：整份 / 按天查询
+      if (api === "toefl/plan") return json(DATA.toeflPlan || { title: "", stages: [] });
+      if (api === "toefl/plan/day") {
+        const n = parseInt(params.get("day"), 10);
+        const plan = DATA.toeflPlan || { stages: [] };
+        let found = null;
+        (plan.stages || []).forEach((st) => (st.days || []).forEach((d) => { if (d.day === n) found = d; }));
+        return json({ day: found });
       }
 
       // ===== 自然拼读系列 =====

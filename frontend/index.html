@@ -1452,6 +1452,15 @@
     <div id="toefl-doodle-area" style="display:none"></div>
     <div id="toefl-content-list"></div>
   </div>
+  <div id="toefl-plan-area" style="display:none">
+    <button class="btn btn-secondary nav-back-btn" onclick="exitToeflPlan()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回计划列表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
+    <div id="toefl-plan-header"></div>
+    <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
+    <div id="toefl-plan-entry" style="margin-bottom:12px"></div>
+    <div id="toefl-plan-match-area" style="display:none"></div>
+    <div id="toefl-plan-doodle-area" style="display:none"></div>
+    <div id="toefl-plan-words"></div>
+  </div>
 </div>
 
   <!-- ======= 自然拼读 ======= -->
@@ -8926,8 +8935,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById('topbar-title').textContent = ret === 'toefl' ? '🎓 小托福' : '📚 KET 学习';
     document.getElementById('grade-display').style.display = 'none';
     if (ret === 'toefl') {
-      document.getElementById('toefl-category-list').style.display = 'none';
-      document.getElementById('toefl-content-area').style.display = 'block';
+      if (typeof toeflPlanActive !== 'undefined' && toeflPlanActive) {
+        if (typeof renderToeflPlanDay === 'function') renderToeflPlanDay();
+      } else {
+        document.getElementById('toefl-category-list').style.display = 'none';
+        document.getElementById('toefl-content-area').style.display = 'block';
+      }
     } else {
       document.getElementById('ket-category-list').style.display = 'none';
       document.getElementById('ket-content-area').style.display = 'block';
@@ -8959,10 +8972,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       toeflCategories = data.categories || [];
       const container = document.getElementById('toefl-category-list');
       container.innerHTML = '';
-      if (toeflCategories.length === 0) {
-        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:#999;padding:40px">小托福词汇正在准备中，敬请期待</div>';
-        return;
-      }
+      // 40天核心词汇计划入口（每天作为一页浏览）
+      const planCard = document.createElement('div');
+      planCard.className = 'module-card';
+      planCard.style.gridColumn = '1 / -1';
+      planCard.style.background = 'linear-gradient(135deg,#eef2ff,#faf5ff)';
+      planCard.innerHTML = '<div class="module-name">📅 40天核心词汇计划</div>'
+        + '<div class="module-count">第一阶段基础词 · 第二阶段进阶词 · 共 40 天 400 词</div>';
+      planCard.onclick = () => openToeflPlan();
+      container.appendChild(planCard);
+      if (toeflCategories.length === 0) return;
       toeflCategories.forEach(cat => {
         const card = document.createElement('div');
         card.className = 'module-card';
@@ -8981,6 +9000,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function restoreToeflView() {
+    if (typeof toeflPlanActive !== 'undefined' && toeflPlanActive) {
+      // 计划模式下重新进入小托福视图：恢复到计划页当前天
+      if (typeof renderToeflPlanDay === 'function' && typeof toeflPlanDays !== 'undefined' && toeflPlanDays.length) {
+        renderToeflPlanDay();
+      } else if (typeof showToeflPlanView === 'function') {
+        showToeflPlanView();
+      }
+      return;
+    }
     const catList = document.getElementById('toefl-category-list');
     const contentArea = document.getElementById('toefl-content-area');
     if (toeflCurrentCategory && contentArea) {
@@ -9043,6 +9071,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function backToToeflCategories() {
+    if (typeof toeflPlanActive !== 'undefined' && toeflPlanActive) {
+      // 40天计划发起的学习/测验：返回计划页当天，而非分类列表
+      if (typeof Match !== 'undefined' && Match.exit) Match.exit();
+      if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit') Doodle.exit();
+      if (typeof renderToeflPlanDay === 'function') renderToeflPlanDay();
+      return;
+    }
     toeflCurrentCategory = '';
     if (typeof Match !== 'undefined' && Match.exit) Match.exit();
     if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit') Doodle.exit();
@@ -9124,6 +9159,143 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       backLabel: '返回词汇列表',
       words: words,
       hide: ['toefl-content-list', 'toefl-quiz-entry']
+    });
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ========== 小托福 40天核心词汇计划 ==========
+  // 每天作为一个「页」浏览，词汇练习复用课文选择的通用组件与 KET 测验/消消乐/随手拼。
+  var toeflPlanData = null;      // 缓存整份计划 {title, stages}
+  var toeflPlanDays = [];        // 扁平化后的 40 天 [{stage, day, title, words}]
+  var toeflPlanDayIdx = 0;       // 当前天索引
+  var toeflPlanActive = false;   // 是否处于计划浏览（含其发起的练习）
+
+  // 计划页显示状态：隐藏分类列表与分类内容区，显示计划区
+  function showToeflPlanView() {
+    var cat = document.getElementById('toefl-category-list');
+    var content = document.getElementById('toefl-content-area');
+    var plan = document.getElementById('toefl-plan-area');
+    if (cat) cat.style.display = 'none';
+    if (content) content.style.display = 'none';
+    if (plan) plan.style.display = 'block';
+  }
+
+  function toeflPlanFlat() {
+    var out = [];
+    (toeflPlanData && toeflPlanData.stages || []).forEach(function (st) {
+      (st.days || []).forEach(function (d) {
+        out.push({ stage: st.name, stageRange: st.range, day: d.day, title: d.title, words: d.words || [] });
+      });
+    });
+    return out;
+  }
+
+  async function openToeflPlan() {
+    try {
+      if (!toeflPlanData) toeflPlanData = await apiGET('/api/toefl/plan');
+      toeflPlanDays = toeflPlanFlat();
+      if (!toeflPlanDays.length) { toast('40天计划暂无内容'); return; }
+      toeflPlanActive = true;
+      toeflPlanDayIdx = 0;
+      showToeflPlanView();
+      renderToeflPlanDay();
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (e) {
+      console.error('加载40天计划失败:', e);
+      toast('40天计划加载失败');
+    }
+  }
+
+  function exitToeflPlan() {
+    toeflPlanActive = false;
+    try { if (typeof Match !== 'undefined' && Match.exit) Match.exit(); } catch (e) {}
+    try { if (typeof Doodle !== 'undefined' && Doodle.exit) Doodle.exit(); } catch (e) {}
+    var plan = document.getElementById('toefl-plan-area');
+    if (plan) plan.style.display = 'none';
+    toeflCurrentCategory = '';
+    toeflCurrentItems = [];
+    restoreToeflView();
+  }
+
+  function renderToeflPlanDay() {
+    if (!toeflPlanDays.length) return;
+    var d = toeflPlanDays[toeflPlanDayIdx];
+    // 灌入既有变量，让 startToeflLearn / startToeflQuiz 等原样复用
+    toeflCurrentItems = d.words;
+    toeflCurrentCategory = '40天计划 Day' + d.day + ' ' + d.title;
+    showToeflPlanView();
+
+    var total = toeflPlanDays.length;
+    document.getElementById('toefl-plan-header').innerHTML =
+      '<div style="font-size:16px;font-weight:700;color:#6c63ff">📅 ' + (toeflPlanData.title || '40天核心词汇计划') + '</div>'
+      + '<div style="font-size:13px;color:#999;margin-top:2px">' + d.stage + '（' + d.stageRange + '）</div>'
+      + '<div style="font-size:20px;font-weight:700;margin-top:8px">Day ' + d.day + ' · ' + d.title + '</div>'
+      + '<div style="font-size:13px;color:#888;margin-top:2px">第 ' + (toeflPlanDayIdx + 1) + ' / ' + total + ' 天 · 本页 ' + d.words.length + ' 词</div>';
+
+    document.getElementById('toefl-plan-nav').innerHTML =
+      '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)"' + (toeflPlanDayIdx <= 0 ? ' disabled' : '') + '>← 上一天</button>'
+      + '<span style="font-size:13px;color:#999;padding:0 6px">Day ' + d.day + '/' + total + '</span>'
+      + '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)"' + (toeflPlanDayIdx >= total - 1 ? ' disabled' : '') + '>下一天 →</button>';
+
+    document.getElementById('toefl-plan-entry').innerHTML =
+      '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px" onclick="startToeflLearn()">🎯 本天单词学习</button>'
+      + '<div style="display:flex;gap:8px">'
+        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本天词汇测验</button>'
+        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflPlanMatch()">🎴 消消乐</button>'
+      + '</div>'
+      + '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflPlanDoodle()">✍️ 随手拼</button>';
+
+    document.getElementById('toefl-plan-words').innerHTML = d.words.map(function (w, i) {
+      return '<div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
+        + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">'
+          + '<span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">' + (i + 1) + '</span>'
+          + '<span style="font-size:20px;font-weight:600;color:#333">' + w.word + '</span>'
+          + toeflLevelBadge(w.level)
+          + '<button class="speak-btn" onclick="speakWord(\'' + esc(w.word) + '\')" style="padding:6px 14px;font-size:13px;margin-left:auto">🔊 朗读</button>'
+          + '<button class="ra-btn" onclick="raToggleKet(this, \'' + esc(w.word) + '\')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>'
+        + '</div>'
+        + '<div style="font-size:14px;color:#666;margin-top:6px">' + w.chinese + '</div>'
+      + '</div>';
+    }).join('');
+  }
+
+  function toeflPlanGo(delta) {
+    var next = toeflPlanDayIdx + delta;
+    if (next < 0 || next >= toeflPlanDays.length) return;
+    toeflPlanDayIdx = next;
+    renderToeflPlanDay();
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 计划页消消乐：复用 Match，挂载到计划区，隐藏当天内容
+  function startToeflPlanMatch() {
+    var words = toMatchWords(toeflCurrentItems);
+    if (words.length < 2) { toast('本天单词太少，玩不了消消乐'); return; }
+    Match.exit();
+    Match.scope = {
+      type: 'toefl-plan', words: words,
+      key: 'toefl_' + toeflCurrentCategory,
+      mount: document.getElementById('toefl-plan-match-area'),
+      unitLabel: 'Day' + toeflPlanDays[toeflPlanDayIdx].day
+    };
+    Match.hideSiblings(['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-words']);
+    Match.start({});
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // 计划页随手拼：复用 Doodle，挂载到计划区
+  function startToeflPlanDoodle() {
+    var words = toMatchWords(toeflCurrentItems);
+    if (!words.length) { toast('本天还没有可练的单词'); return; }
+    Doodle.exit();
+    if (typeof Match !== 'undefined' && Match.exit) Match.exit();
+    Doodle.start({
+      type: 'toefl-plan', label: 'Day' + toeflPlanDays[toeflPlanDayIdx].day,
+      key: 'toefl_' + toeflCurrentCategory,
+      mountId: 'toefl-plan-doodle-area',
+      backLabel: '返回本天',
+      words: words,
+      hide: ['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-words']
     });
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }

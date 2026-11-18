@@ -1,0 +1,2257 @@
+{
+  "title": "40天核心词汇计划",
+  "stages": [
+    {
+      "name": "第一阶段 · 基础词",
+      "range": "Day 1—18",
+      "days": [
+        {
+          "day": 1,
+          "title": "学校与课堂",
+          "words": [
+            {
+              "word": "classroom",
+              "chinese": "教室",
+              "level": "基础"
+            },
+            {
+              "word": "assignment",
+              "chinese": "作业",
+              "level": "基础"
+            },
+            {
+              "word": "attendance",
+              "chinese": "出勤",
+              "level": "基础"
+            },
+            {
+              "word": "grade",
+              "chinese": "成绩",
+              "level": "基础"
+            },
+            {
+              "word": "homework",
+              "chinese": "家庭作业",
+              "level": "基础"
+            },
+            {
+              "word": "lesson",
+              "chinese": "课程",
+              "level": "基础"
+            },
+            {
+              "word": "notebook",
+              "chinese": "笔记本",
+              "level": "基础"
+            },
+            {
+              "word": "quiz",
+              "chinese": "小测验",
+              "level": "基础"
+            },
+            {
+              "word": "recess",
+              "chinese": "课间",
+              "level": "基础"
+            },
+            {
+              "word": "teacher",
+              "chinese": "老师",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 2,
+          "title": "考试与评价",
+          "words": [
+            {
+              "word": "exam",
+              "chinese": "考试",
+              "level": "基础"
+            },
+            {
+              "word": "score",
+              "chinese": "分数",
+              "level": "基础"
+            },
+            {
+              "word": "pass",
+              "chinese": "通过",
+              "level": "基础"
+            },
+            {
+              "word": "fail",
+              "chinese": "不及格",
+              "level": "基础"
+            },
+            {
+              "word": "correct",
+              "chinese": "正确的",
+              "level": "基础"
+            },
+            {
+              "word": "answer",
+              "chinese": "答案",
+              "level": "基础"
+            },
+            {
+              "word": "question",
+              "chinese": "问题",
+              "level": "基础"
+            },
+            {
+              "word": "explain",
+              "chinese": "解释",
+              "level": "基础"
+            },
+            {
+              "word": "example",
+              "chinese": "例子",
+              "level": "基础"
+            },
+            {
+              "word": "result",
+              "chinese": "结果",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 3,
+          "title": "图书馆与学习",
+          "words": [
+            {
+              "word": "library",
+              "chinese": "图书馆",
+              "level": "基础"
+            },
+            {
+              "word": "borrow",
+              "chinese": "借",
+              "level": "基础"
+            },
+            {
+              "word": "return",
+              "chinese": "归还",
+              "level": "基础"
+            },
+            {
+              "word": "reference",
+              "chinese": "参考",
+              "level": "基础"
+            },
+            {
+              "word": "research",
+              "chinese": "研究",
+              "level": "基础"
+            },
+            {
+              "word": "project",
+              "chinese": "项目",
+              "level": "基础"
+            },
+            {
+              "word": "report",
+              "chinese": "报告",
+              "level": "基础"
+            },
+            {
+              "word": "summary",
+              "chinese": "摘要",
+              "level": "基础"
+            },
+            {
+              "word": "outline",
+              "chinese": "提纲",
+              "level": "基础"
+            },
+            {
+              "word": "review",
+              "chinese": "复习",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 4,
+          "title": "校园生活",
+          "words": [
+            {
+              "word": "campus",
+              "chinese": "校园",
+              "level": "基础"
+            },
+            {
+              "word": "semester",
+              "chinese": "学期",
+              "level": "基础"
+            },
+            {
+              "word": "schedule",
+              "chinese": "日程表",
+              "level": "基础"
+            },
+            {
+              "word": "club",
+              "chinese": "社团",
+              "level": "基础"
+            },
+            {
+              "word": "practice",
+              "chinese": "练习",
+              "level": "基础"
+            },
+            {
+              "word": "rehearse",
+              "chinese": "排练",
+              "level": "基础"
+            },
+            {
+              "word": "tournament",
+              "chinese": "比赛",
+              "level": "基础"
+            },
+            {
+              "word": "team",
+              "chinese": "队伍",
+              "level": "基础"
+            },
+            {
+              "word": "coach",
+              "chinese": "教练",
+              "level": "基础"
+            },
+            {
+              "word": "event",
+              "chinese": "活动",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 5,
+          "title": "日常起居",
+          "words": [
+            {
+              "word": "breakfast",
+              "chinese": "早餐",
+              "level": "基础"
+            },
+            {
+              "word": "routine",
+              "chinese": "作息",
+              "level": "基础"
+            },
+            {
+              "word": "chore",
+              "chinese": "家务",
+              "level": "基础"
+            },
+            {
+              "word": "schedule",
+              "chinese": "安排",
+              "level": "基础"
+            },
+            {
+              "word": "errand",
+              "chinese": "跑腿",
+              "level": "基础"
+            },
+            {
+              "word": "laundry",
+              "chinese": "洗衣",
+              "level": "基础"
+            },
+            {
+              "word": "grocery",
+              "chinese": "食品杂货",
+              "level": "基础"
+            },
+            {
+              "word": "recipe",
+              "chinese": "食谱",
+              "level": "基础"
+            },
+            {
+              "word": "ingredient",
+              "chinese": "食材",
+              "level": "基础"
+            },
+            {
+              "word": "meal",
+              "chinese": "一餐",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 6,
+          "title": "出行交通",
+          "words": [
+            {
+              "word": "destination",
+              "chinese": "目的地",
+              "level": "基础"
+            },
+            {
+              "word": "direction",
+              "chinese": "方向",
+              "level": "基础"
+            },
+            {
+              "word": "passenger",
+              "chinese": "乘客",
+              "level": "基础"
+            },
+            {
+              "word": "passenger",
+              "chinese": "旅客",
+              "level": "基础"
+            },
+            {
+              "word": "route",
+              "chinese": "路线",
+              "level": "基础"
+            },
+            {
+              "word": "traffic",
+              "chinese": "交通",
+              "level": "基础"
+            },
+            {
+              "word": "vehicle",
+              "chinese": "交通工具",
+              "level": "基础"
+            },
+            {
+              "word": "commute",
+              "chinese": "通勤",
+              "level": "基础"
+            },
+            {
+              "word": "ticket",
+              "chinese": "票",
+              "level": "基础"
+            },
+            {
+              "word": "platform",
+              "chinese": "站台",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 7,
+          "title": "购物消费",
+          "words": [
+            {
+              "word": "customer",
+              "chinese": "顾客",
+              "level": "基础"
+            },
+            {
+              "word": "budget",
+              "chinese": "预算",
+              "level": "基础"
+            },
+            {
+              "word": "price",
+              "chinese": "价格",
+              "level": "基础"
+            },
+            {
+              "word": "discount",
+              "chinese": "折扣",
+              "level": "基础"
+            },
+            {
+              "word": "receipt",
+              "chinese": "收据",
+              "level": "基础"
+            },
+            {
+              "word": "refund",
+              "chinese": "退款",
+              "level": "基础"
+            },
+            {
+              "word": "quality",
+              "chinese": "质量",
+              "level": "基础"
+            },
+            {
+              "word": "compare",
+              "chinese": "比较",
+              "level": "基础"
+            },
+            {
+              "word": "purchase",
+              "chinese": "购买",
+              "level": "基础"
+            },
+            {
+              "word": "sale",
+              "chinese": "销售",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 8,
+          "title": "预约服务",
+          "words": [
+            {
+              "word": "appointment",
+              "chinese": "预约",
+              "level": "基础"
+            },
+            {
+              "word": "reservation",
+              "chinese": "预订",
+              "level": "基础"
+            },
+            {
+              "word": "available",
+              "chinese": "可预约的",
+              "level": "基础"
+            },
+            {
+              "word": "confirm",
+              "chinese": "确认",
+              "level": "基础"
+            },
+            {
+              "word": "cancel",
+              "chinese": "取消",
+              "level": "基础"
+            },
+            {
+              "word": "delay",
+              "chinese": "延迟",
+              "level": "基础"
+            },
+            {
+              "word": "postpone",
+              "chinese": "推迟",
+              "level": "基础"
+            },
+            {
+              "word": "notify",
+              "chinese": "通知",
+              "level": "基础"
+            },
+            {
+              "word": "request",
+              "chinese": "请求",
+              "level": "基础"
+            },
+            {
+              "word": "service",
+              "chinese": "服务",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 9,
+          "title": "高频动词1",
+          "words": [
+            {
+              "word": "analyze",
+              "chinese": "分析",
+              "level": "基础"
+            },
+            {
+              "word": "arrange",
+              "chinese": "安排",
+              "level": "基础"
+            },
+            {
+              "word": "communicate",
+              "chinese": "交流",
+              "level": "基础"
+            },
+            {
+              "word": "compare",
+              "chinese": "比较",
+              "level": "基础"
+            },
+            {
+              "word": "complete",
+              "chinese": "完成",
+              "level": "基础"
+            },
+            {
+              "word": "consider",
+              "chinese": "考虑",
+              "level": "基础"
+            },
+            {
+              "word": "describe",
+              "chinese": "描述",
+              "level": "基础"
+            },
+            {
+              "word": "discover",
+              "chinese": "发现",
+              "level": "基础"
+            },
+            {
+              "word": "identify",
+              "chinese": "识别",
+              "level": "基础"
+            },
+            {
+              "word": "improve",
+              "chinese": "改善",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 10,
+          "title": "高频动词2",
+          "words": [
+            {
+              "word": "observe",
+              "chinese": "观察",
+              "level": "基础"
+            },
+            {
+              "word": "participate",
+              "chinese": "参与",
+              "level": "基础"
+            },
+            {
+              "word": "predict",
+              "chinese": "预测",
+              "level": "基础"
+            },
+            {
+              "word": "prepare",
+              "chinese": "准备",
+              "level": "基础"
+            },
+            {
+              "word": "recognize",
+              "chinese": "认出",
+              "level": "基础"
+            },
+            {
+              "word": "require",
+              "chinese": "需要",
+              "level": "基础"
+            },
+            {
+              "word": "solve",
+              "chinese": "解决",
+              "level": "基础"
+            },
+            {
+              "word": "summarize",
+              "chinese": "总结",
+              "level": "基础"
+            },
+            {
+              "word": "provide",
+              "chinese": "提供",
+              "level": "基础"
+            },
+            {
+              "word": "achieve",
+              "chinese": "达成",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 11,
+          "title": "高频形容词1",
+          "words": [
+            {
+              "word": "accurate",
+              "chinese": "准确的",
+              "level": "基础"
+            },
+            {
+              "word": "available",
+              "chinese": "可用的",
+              "level": "基础"
+            },
+            {
+              "word": "basic",
+              "chinese": "基础的",
+              "level": "基础"
+            },
+            {
+              "word": "complex",
+              "chinese": "复杂的",
+              "level": "基础"
+            },
+            {
+              "word": "constant",
+              "chinese": "持续的",
+              "level": "基础"
+            },
+            {
+              "word": "effective",
+              "chinese": "有效的",
+              "level": "基础"
+            },
+            {
+              "word": "essential",
+              "chinese": "必要的",
+              "level": "基础"
+            },
+            {
+              "word": "frequent",
+              "chinese": "频繁的",
+              "level": "基础"
+            },
+            {
+              "word": "obvious",
+              "chinese": "明显的",
+              "level": "基础"
+            },
+            {
+              "word": "positive",
+              "chinese": "积极的",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 12,
+          "title": "高频形容词2",
+          "words": [
+            {
+              "word": "ancient",
+              "chinese": "古代的",
+              "level": "基础"
+            },
+            {
+              "word": "diverse",
+              "chinese": "多样的",
+              "level": "基础"
+            },
+            {
+              "word": "global",
+              "chinese": "全球的",
+              "level": "基础"
+            },
+            {
+              "word": "immediate",
+              "chinese": "立即的",
+              "level": "基础"
+            },
+            {
+              "word": "natural",
+              "chinese": "自然的",
+              "level": "基础"
+            },
+            {
+              "word": "original",
+              "chinese": "原始的",
+              "level": "基础"
+            },
+            {
+              "word": "potential",
+              "chinese": "潜在的",
+              "level": "基础"
+            },
+            {
+              "word": "specific",
+              "chinese": "具体的",
+              "level": "基础"
+            },
+            {
+              "word": "traditional",
+              "chinese": "传统的",
+              "level": "基础"
+            },
+            {
+              "word": "critical",
+              "chinese": "关键的",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 13,
+          "title": "高频副词1",
+          "words": [
+            {
+              "word": "actually",
+              "chinese": "实际上",
+              "level": "基础"
+            },
+            {
+              "word": "approximately",
+              "chinese": "大约",
+              "level": "基础"
+            },
+            {
+              "word": "carefully",
+              "chinese": "仔细地",
+              "level": "基础"
+            },
+            {
+              "word": "clearly",
+              "chinese": "清楚地",
+              "level": "基础"
+            },
+            {
+              "word": "completely",
+              "chinese": "完全地",
+              "level": "基础"
+            },
+            {
+              "word": "constantly",
+              "chinese": "不断地",
+              "level": "基础"
+            },
+            {
+              "word": "currently",
+              "chinese": "目前",
+              "level": "基础"
+            },
+            {
+              "word": "directly",
+              "chinese": "直接地",
+              "level": "基础"
+            },
+            {
+              "word": "eventually",
+              "chinese": "最终",
+              "level": "基础"
+            },
+            {
+              "word": "frequently",
+              "chinese": "经常",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 14,
+          "title": "高频副词2",
+          "words": [
+            {
+              "word": "generally",
+              "chinese": "通常",
+              "level": "基础"
+            },
+            {
+              "word": "immediately",
+              "chinese": "立刻",
+              "level": "基础"
+            },
+            {
+              "word": "naturally",
+              "chinese": "自然地",
+              "level": "基础"
+            },
+            {
+              "word": "occasionally",
+              "chinese": "偶尔",
+              "level": "基础"
+            },
+            {
+              "word": "originally",
+              "chinese": "最初",
+              "level": "基础"
+            },
+            {
+              "word": "particularly",
+              "chinese": "尤其",
+              "level": "基础"
+            },
+            {
+              "word": "previously",
+              "chinese": "先前",
+              "level": "基础"
+            },
+            {
+              "word": "regularly",
+              "chinese": "定期",
+              "level": "基础"
+            },
+            {
+              "word": "suddenly",
+              "chinese": "突然",
+              "level": "基础"
+            },
+            {
+              "word": "typically",
+              "chinese": "典型地",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 15,
+          "title": "连接与逻辑",
+          "words": [
+            {
+              "word": "however",
+              "chinese": "然而",
+              "level": "基础"
+            },
+            {
+              "word": "therefore",
+              "chinese": "因此",
+              "level": "基础"
+            },
+            {
+              "word": "moreover",
+              "chinese": "此外",
+              "level": "基础"
+            },
+            {
+              "word": "although",
+              "chinese": "尽管",
+              "level": "基础"
+            },
+            {
+              "word": "because",
+              "chinese": "因为",
+              "level": "基础"
+            },
+            {
+              "word": "unless",
+              "chinese": "除非",
+              "level": "基础"
+            },
+            {
+              "word": "meanwhile",
+              "chinese": "同时",
+              "level": "基础"
+            },
+            {
+              "word": "in",
+              "chinese": "addition 另外",
+              "level": "基础"
+            },
+            {
+              "word": "for",
+              "chinese": "example 例如",
+              "level": "基础"
+            },
+            {
+              "word": "as",
+              "chinese": "a result 结果",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 16,
+          "title": "情感与态度",
+          "words": [
+            {
+              "word": "curious",
+              "chinese": "好奇的",
+              "level": "基础"
+            },
+            {
+              "word": "confident",
+              "chinese": "自信的",
+              "level": "基础"
+            },
+            {
+              "word": "anxious",
+              "chinese": "焦虑的",
+              "level": "基础"
+            },
+            {
+              "word": "excited",
+              "chinese": "兴奋的",
+              "level": "基础"
+            },
+            {
+              "word": "frustrated",
+              "chinese": "沮丧的",
+              "level": "基础"
+            },
+            {
+              "word": "determined",
+              "chinese": "坚定的",
+              "level": "基础"
+            },
+            {
+              "word": "impressed",
+              "chinese": "印象深的",
+              "level": "基础"
+            },
+            {
+              "word": "skeptical",
+              "chinese": "怀疑的",
+              "level": "基础"
+            },
+            {
+              "word": "enthusiastic",
+              "chinese": "热情的",
+              "level": "基础"
+            },
+            {
+              "word": "puzzled",
+              "chinese": "困惑的",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 17,
+          "title": "人物与社会",
+          "words": [
+            {
+              "word": "ancestor",
+              "chinese": "祖先",
+              "level": "基础"
+            },
+            {
+              "word": "citizen",
+              "chinese": "公民",
+              "level": "基础"
+            },
+            {
+              "word": "generation",
+              "chinese": "一代人",
+              "level": "基础"
+            },
+            {
+              "word": "neighbor",
+              "chinese": "邻居",
+              "level": "基础"
+            },
+            {
+              "word": "population",
+              "chinese": "人口",
+              "level": "基础"
+            },
+            {
+              "word": "society",
+              "chinese": "社会",
+              "level": "基础"
+            },
+            {
+              "word": "community",
+              "chinese": "社区",
+              "level": "基础"
+            },
+            {
+              "word": "custom",
+              "chinese": "风俗",
+              "level": "基础"
+            },
+            {
+              "word": "tradition",
+              "chinese": "传统",
+              "level": "基础"
+            },
+            {
+              "word": "volunteer",
+              "chinese": "志愿者",
+              "level": "基础"
+            }
+          ]
+        },
+        {
+          "day": 18,
+          "title": "基础抽象词",
+          "words": [
+            {
+              "word": "ability",
+              "chinese": "能力",
+              "level": "基础"
+            },
+            {
+              "word": "approach",
+              "chinese": "方法",
+              "level": "基础"
+            },
+            {
+              "word": "aspect",
+              "chinese": "方面",
+              "level": "基础"
+            },
+            {
+              "word": "benefit",
+              "chinese": "好处",
+              "level": "基础"
+            },
+            {
+              "word": "concept",
+              "chinese": "概念",
+              "level": "基础"
+            },
+            {
+              "word": "factor",
+              "chinese": "因素",
+              "level": "基础"
+            },
+            {
+              "word": "purpose",
+              "chinese": "目的",
+              "level": "基础"
+            },
+            {
+              "word": "resource",
+              "chinese": "资源",
+              "level": "基础"
+            },
+            {
+              "word": "situation",
+              "chinese": "情况",
+              "level": "基础"
+            },
+            {
+              "word": "tendency",
+              "chinese": "趋势",
+              "level": "基础"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "第二阶段 · 进阶词",
+      "range": "Day 19—40",
+      "days": [
+        {
+          "day": 19,
+          "title": "生命科学1",
+          "words": [
+            {
+              "word": "organism",
+              "chinese": "生物体",
+              "level": "进阶"
+            },
+            {
+              "word": "species",
+              "chinese": "物种",
+              "level": "进阶"
+            },
+            {
+              "word": "habitat",
+              "chinese": "栖息地",
+              "level": "进阶"
+            },
+            {
+              "word": "ecosystem",
+              "chinese": "生态系统",
+              "level": "进阶"
+            },
+            {
+              "word": "predator",
+              "chinese": "捕食者",
+              "level": "进阶"
+            },
+            {
+              "word": "prey",
+              "chinese": "猎物",
+              "level": "进阶"
+            },
+            {
+              "word": "evolve",
+              "chinese": "进化",
+              "level": "进阶"
+            },
+            {
+              "word": "adapt",
+              "chinese": "适应",
+              "level": "进阶"
+            },
+            {
+              "word": "migrate",
+              "chinese": "迁徙",
+              "level": "进阶"
+            },
+            {
+              "word": "hibernate",
+              "chinese": "冬眠",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 20,
+          "title": "生命科学2",
+          "words": [
+            {
+              "word": "photosynthesis",
+              "chinese": "光合作用",
+              "level": "进阶"
+            },
+            {
+              "word": "pollination",
+              "chinese": "授粉",
+              "level": "进阶"
+            },
+            {
+              "word": "bacteria",
+              "chinese": "细菌",
+              "level": "进阶"
+            },
+            {
+              "word": "virus",
+              "chinese": "病毒",
+              "level": "进阶"
+            },
+            {
+              "word": "cell",
+              "chinese": "细胞",
+              "level": "进阶"
+            },
+            {
+              "word": "gene",
+              "chinese": "基因",
+              "level": "进阶"
+            },
+            {
+              "word": "inherit",
+              "chinese": "遗传",
+              "level": "进阶"
+            },
+            {
+              "word": "immunity",
+              "chinese": "免疫",
+              "level": "进阶"
+            },
+            {
+              "word": "symptom",
+              "chinese": "症状",
+              "level": "进阶"
+            },
+            {
+              "word": "vaccine",
+              "chinese": "疫苗",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 21,
+          "title": "生命科学3",
+          "words": [
+            {
+              "word": "nutrition",
+              "chinese": "营养",
+              "level": "进阶"
+            },
+            {
+              "word": "metabolism",
+              "chinese": "新陈代谢",
+              "level": "进阶"
+            },
+            {
+              "word": "biodiversity",
+              "chinese": "生物多样性",
+              "level": "进阶"
+            },
+            {
+              "word": "camouflage",
+              "chinese": "伪装",
+              "level": "进阶"
+            },
+            {
+              "word": "parasite",
+              "chinese": "寄生虫",
+              "level": "进阶"
+            },
+            {
+              "word": "domestic",
+              "chinese": "驯化的",
+              "level": "进阶"
+            },
+            {
+              "word": "fertile",
+              "chinese": "可育的",
+              "level": "进阶"
+            },
+            {
+              "word": "predator",
+              "chinese": "天敌",
+              "level": "进阶"
+            },
+            {
+              "word": "reproduce",
+              "chinese": "繁殖",
+              "level": "进阶"
+            },
+            {
+              "word": "specimen",
+              "chinese": "标本",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 22,
+          "title": "地球科学1",
+          "words": [
+            {
+              "word": "erosion",
+              "chinese": "侵蚀",
+              "level": "进阶"
+            },
+            {
+              "word": "sediment",
+              "chinese": "沉积物",
+              "level": "进阶"
+            },
+            {
+              "word": "glacier",
+              "chinese": "冰川",
+              "level": "进阶"
+            },
+            {
+              "word": "volcano",
+              "chinese": "火山",
+              "level": "进阶"
+            },
+            {
+              "word": "earthquake",
+              "chinese": "地震",
+              "level": "进阶"
+            },
+            {
+              "word": "landslide",
+              "chinese": "滑坡",
+              "level": "进阶"
+            },
+            {
+              "word": "continent",
+              "chinese": "大陆",
+              "level": "进阶"
+            },
+            {
+              "word": "tectonic",
+              "chinese": "板块的",
+              "level": "进阶"
+            },
+            {
+              "word": "fossil",
+              "chinese": "化石",
+              "level": "进阶"
+            },
+            {
+              "word": "mineral",
+              "chinese": "矿物",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 23,
+          "title": "地球科学2",
+          "words": [
+            {
+              "word": "fossil",
+              "chinese": "fuel 化石燃料",
+              "level": "进阶"
+            },
+            {
+              "word": "renewable",
+              "chinese": "可再生的",
+              "level": "进阶"
+            },
+            {
+              "word": "drought",
+              "chinese": "干旱",
+              "level": "进阶"
+            },
+            {
+              "word": "flood",
+              "chinese": "洪水",
+              "level": "进阶"
+            },
+            {
+              "word": "rainfall",
+              "chinese": "降水量",
+              "level": "进阶"
+            },
+            {
+              "word": "climate",
+              "chinese": "气候",
+              "level": "进阶"
+            },
+            {
+              "word": "ocean",
+              "chinese": "current 洋流",
+              "level": "进阶"
+            },
+            {
+              "word": "tide",
+              "chinese": "潮汐",
+              "level": "进阶"
+            },
+            {
+              "word": "latitude",
+              "chinese": "纬度",
+              "level": "进阶"
+            },
+            {
+              "word": "altitude",
+              "chinese": "海拔",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 24,
+          "title": "天文物理1",
+          "words": [
+            {
+              "word": "planet",
+              "chinese": "行星",
+              "level": "进阶"
+            },
+            {
+              "word": "orbit",
+              "chinese": "轨道",
+              "level": "进阶"
+            },
+            {
+              "word": "gravity",
+              "chinese": "重力",
+              "level": "进阶"
+            },
+            {
+              "word": "eclipse",
+              "chinese": "日食/月食",
+              "level": "进阶"
+            },
+            {
+              "word": "galaxy",
+              "chinese": "星系",
+              "level": "进阶"
+            },
+            {
+              "word": "comet",
+              "chinese": "彗星",
+              "level": "进阶"
+            },
+            {
+              "word": "meteor",
+              "chinese": "流星",
+              "level": "进阶"
+            },
+            {
+              "word": "universe",
+              "chinese": "宇宙",
+              "level": "进阶"
+            },
+            {
+              "word": "telescope",
+              "chinese": "望远镜",
+              "level": "进阶"
+            },
+            {
+              "word": "nebula",
+              "chinese": "星云",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 25,
+          "title": "天文物理2",
+          "words": [
+            {
+              "word": "wavelength",
+              "chinese": "波长",
+              "level": "进阶"
+            },
+            {
+              "word": "radiation",
+              "chinese": "辐射",
+              "level": "进阶"
+            },
+            {
+              "word": "frequency",
+              "chinese": "频率",
+              "level": "进阶"
+            },
+            {
+              "word": "energy",
+              "chinese": "能量",
+              "level": "进阶"
+            },
+            {
+              "word": "kinetic",
+              "chinese": "动力的",
+              "level": "进阶"
+            },
+            {
+              "word": "friction",
+              "chinese": "摩擦",
+              "level": "进阶"
+            },
+            {
+              "word": "vacuum",
+              "chinese": "真空",
+              "level": "进阶"
+            },
+            {
+              "word": "conductor",
+              "chinese": "导体",
+              "level": "进阶"
+            },
+            {
+              "word": "insulator",
+              "chinese": "绝缘体",
+              "level": "进阶"
+            },
+            {
+              "word": "magnet",
+              "chinese": "磁体",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 26,
+          "title": "理化基础",
+          "words": [
+            {
+              "word": "compound",
+              "chinese": "化合物",
+              "level": "进阶"
+            },
+            {
+              "word": "element",
+              "chinese": "元素",
+              "level": "进阶"
+            },
+            {
+              "word": "molecule",
+              "chinese": "分子",
+              "level": "进阶"
+            },
+            {
+              "word": "atom",
+              "chinese": "原子",
+              "level": "进阶"
+            },
+            {
+              "word": "reaction",
+              "chinese": "反应",
+              "level": "进阶"
+            },
+            {
+              "word": "acid",
+              "chinese": "酸",
+              "level": "进阶"
+            },
+            {
+              "word": "dissolve",
+              "chinese": "溶解",
+              "level": "进阶"
+            },
+            {
+              "word": "evaporate",
+              "chinese": "蒸发",
+              "level": "进阶"
+            },
+            {
+              "word": "condense",
+              "chinese": "凝结",
+              "level": "进阶"
+            },
+            {
+              "word": "corrode",
+              "chinese": "腐蚀",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 27,
+          "title": "材料与环境",
+          "words": [
+            {
+              "word": "alloy",
+              "chinese": "合金",
+              "level": "进阶"
+            },
+            {
+              "word": "fiber",
+              "chinese": "纤维",
+              "level": "进阶"
+            },
+            {
+              "word": "ceramic",
+              "chinese": "陶瓷",
+              "level": "进阶"
+            },
+            {
+              "word": "toxic",
+              "chinese": "有毒的",
+              "level": "进阶"
+            },
+            {
+              "word": "pollution",
+              "chinese": "污染",
+              "level": "进阶"
+            },
+            {
+              "word": "atmosphere",
+              "chinese": "大气",
+              "level": "进阶"
+            },
+            {
+              "word": "greenhouse",
+              "chinese": "温室",
+              "level": "进阶"
+            },
+            {
+              "word": "recycle",
+              "chinese": "回收",
+              "level": "进阶"
+            },
+            {
+              "word": "contaminate",
+              "chinese": "污染",
+              "level": "进阶"
+            },
+            {
+              "word": "sustainable",
+              "chinese": "可持续的",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 28,
+          "title": "人文历史1",
+          "words": [
+            {
+              "word": "civilization",
+              "chinese": "文明",
+              "level": "进阶"
+            },
+            {
+              "word": "ancient",
+              "chinese": "古代的",
+              "level": "进阶"
+            },
+            {
+              "word": "dynasty",
+              "chinese": "朝代",
+              "level": "进阶"
+            },
+            {
+              "word": "empire",
+              "chinese": "帝国",
+              "level": "进阶"
+            },
+            {
+              "word": "archaeology",
+              "chinese": "考古学",
+              "level": "进阶"
+            },
+            {
+              "word": "artifact",
+              "chinese": "文物",
+              "level": "进阶"
+            },
+            {
+              "word": "manuscript",
+              "chinese": "手稿",
+              "level": "进阶"
+            },
+            {
+              "word": "century",
+              "chinese": "世纪",
+              "level": "进阶"
+            },
+            {
+              "word": "revolution",
+              "chinese": "革命",
+              "level": "进阶"
+            },
+            {
+              "word": "migration",
+              "chinese": "移民",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 29,
+          "title": "人文历史2",
+          "words": [
+            {
+              "word": "economy",
+              "chinese": "经济",
+              "level": "进阶"
+            },
+            {
+              "word": "commerce",
+              "chinese": "商业",
+              "level": "进阶"
+            },
+            {
+              "word": "agriculture",
+              "chinese": "农业",
+              "level": "进阶"
+            },
+            {
+              "word": "industry",
+              "chinese": "工业",
+              "level": "进阶"
+            },
+            {
+              "word": "labor",
+              "chinese": "劳动力",
+              "level": "进阶"
+            },
+            {
+              "word": "democracy",
+              "chinese": "民主",
+              "level": "进阶"
+            },
+            {
+              "word": "philosophy",
+              "chinese": "哲学",
+              "level": "进阶"
+            },
+            {
+              "word": "religion",
+              "chinese": "宗教",
+              "level": "进阶"
+            },
+            {
+              "word": "ritual",
+              "chinese": "仪式",
+              "level": "进阶"
+            },
+            {
+              "word": "society",
+              "chinese": "社会",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 30,
+          "title": "艺术",
+          "words": [
+            {
+              "word": "portrait",
+              "chinese": "肖像",
+              "level": "进阶"
+            },
+            {
+              "word": "sculpture",
+              "chinese": "雕塑",
+              "level": "进阶"
+            },
+            {
+              "word": "canvas",
+              "chinese": "画布",
+              "level": "进阶"
+            },
+            {
+              "word": "pigment",
+              "chinese": "颜料",
+              "level": "进阶"
+            },
+            {
+              "word": "abstract",
+              "chinese": "抽象的",
+              "level": "进阶"
+            },
+            {
+              "word": "realistic",
+              "chinese": "写实的",
+              "level": "进阶"
+            },
+            {
+              "word": "exhibition",
+              "chinese": "展览",
+              "level": "进阶"
+            },
+            {
+              "word": "gallery",
+              "chinese": "画廊",
+              "level": "进阶"
+            },
+            {
+              "word": "architecture",
+              "chinese": "建筑",
+              "level": "进阶"
+            },
+            {
+              "word": "aesthetic",
+              "chinese": "审美的",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 31,
+          "title": "音乐与文学",
+          "words": [
+            {
+              "word": "melody",
+              "chinese": "旋律",
+              "level": "进阶"
+            },
+            {
+              "word": "rhythm",
+              "chinese": "节奏",
+              "level": "进阶"
+            },
+            {
+              "word": "harmony",
+              "chinese": "和声",
+              "level": "进阶"
+            },
+            {
+              "word": "instrument",
+              "chinese": "乐器",
+              "level": "进阶"
+            },
+            {
+              "word": "composer",
+              "chinese": "作曲家",
+              "level": "进阶"
+            },
+            {
+              "word": "performance",
+              "chinese": "演出",
+              "level": "进阶"
+            },
+            {
+              "word": "audience",
+              "chinese": "观众",
+              "level": "进阶"
+            },
+            {
+              "word": "literature",
+              "chinese": "文学",
+              "level": "进阶"
+            },
+            {
+              "word": "poetry",
+              "chinese": "诗歌",
+              "level": "进阶"
+            },
+            {
+              "word": "genre",
+              "chinese": "体裁",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 32,
+          "title": "数学逻辑1",
+          "words": [
+            {
+              "word": "calculate",
+              "chinese": "计算",
+              "level": "进阶"
+            },
+            {
+              "word": "estimate",
+              "chinese": "估算",
+              "level": "进阶"
+            },
+            {
+              "word": "ratio",
+              "chinese": "比率",
+              "level": "进阶"
+            },
+            {
+              "word": "percentage",
+              "chinese": "百分比",
+              "level": "进阶"
+            },
+            {
+              "word": "average",
+              "chinese": "平均值",
+              "level": "进阶"
+            },
+            {
+              "word": "statistics",
+              "chinese": "统计",
+              "level": "进阶"
+            },
+            {
+              "word": "probability",
+              "chinese": "概率",
+              "level": "进阶"
+            },
+            {
+              "word": "geometry",
+              "chinese": "几何",
+              "level": "进阶"
+            },
+            {
+              "word": "measure",
+              "chinese": "测量",
+              "level": "进阶"
+            },
+            {
+              "word": "quantity",
+              "chinese": "数量",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 33,
+          "title": "数学逻辑2",
+          "words": [
+            {
+              "word": "approximate",
+              "chinese": "近似",
+              "level": "进阶"
+            },
+            {
+              "word": "contrast",
+              "chinese": "对照",
+              "level": "进阶"
+            },
+            {
+              "word": "proportion",
+              "chinese": "比例",
+              "level": "进阶"
+            },
+            {
+              "word": "sequence",
+              "chinese": "序列",
+              "level": "进阶"
+            },
+            {
+              "word": "variable",
+              "chinese": "变量",
+              "level": "进阶"
+            },
+            {
+              "word": "sum",
+              "chinese": "总和",
+              "level": "进阶"
+            },
+            {
+              "word": "difference",
+              "chinese": "差",
+              "level": "进阶"
+            },
+            {
+              "word": "multiple",
+              "chinese": "倍数",
+              "level": "进阶"
+            },
+            {
+              "word": "equivalent",
+              "chinese": "等价的",
+              "level": "进阶"
+            },
+            {
+              "word": "interval",
+              "chinese": "区间",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 34,
+          "title": "学术动作词1",
+          "words": [
+            {
+              "word": "hypothesis",
+              "chinese": "假设",
+              "level": "进阶"
+            },
+            {
+              "word": "theory",
+              "chinese": "理论",
+              "level": "进阶"
+            },
+            {
+              "word": "evidence",
+              "chinese": "证据",
+              "level": "进阶"
+            },
+            {
+              "word": "conclusion",
+              "chinese": "结论",
+              "level": "进阶"
+            },
+            {
+              "word": "analysis",
+              "chinese": "分析",
+              "level": "进阶"
+            },
+            {
+              "word": "survey",
+              "chinese": "调查",
+              "level": "进阶"
+            },
+            {
+              "word": "experiment",
+              "chinese": "实验",
+              "level": "进阶"
+            },
+            {
+              "word": "observe",
+              "chinese": "观察",
+              "level": "进阶"
+            },
+            {
+              "word": "demonstrate",
+              "chinese": "证明",
+              "level": "进阶"
+            },
+            {
+              "word": "indicate",
+              "chinese": "表明",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 35,
+          "title": "学术动作词2",
+          "words": [
+            {
+              "word": "suggest",
+              "chinese": "表明",
+              "level": "进阶"
+            },
+            {
+              "word": "imply",
+              "chinese": "暗示",
+              "level": "进阶"
+            },
+            {
+              "word": "define",
+              "chinese": "定义",
+              "level": "进阶"
+            },
+            {
+              "word": "classify",
+              "chinese": "分类",
+              "level": "进阶"
+            },
+            {
+              "word": "illustrate",
+              "chinese": "说明",
+              "level": "进阶"
+            },
+            {
+              "word": "summarize",
+              "chinese": "概括",
+              "level": "进阶"
+            },
+            {
+              "word": "evaluate",
+              "chinese": "评估",
+              "level": "进阶"
+            },
+            {
+              "word": "assume",
+              "chinese": "假定",
+              "level": "进阶"
+            },
+            {
+              "word": "establish",
+              "chinese": "建立",
+              "level": "进阶"
+            },
+            {
+              "word": "contradict",
+              "chinese": "反驳",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 36,
+          "title": "说明文功能词",
+          "words": [
+            {
+              "word": "primary",
+              "chinese": "主要的",
+              "level": "进阶"
+            },
+            {
+              "word": "significant",
+              "chinese": "重要的",
+              "level": "进阶"
+            },
+            {
+              "word": "relatively",
+              "chinese": "相对",
+              "level": "进阶"
+            },
+            {
+              "word": "particularly",
+              "chinese": "尤其",
+              "level": "进阶"
+            },
+            {
+              "word": "virtually",
+              "chinese": "几乎",
+              "level": "进阶"
+            },
+            {
+              "word": "merely",
+              "chinese": "仅仅",
+              "level": "进阶"
+            },
+            {
+              "word": "rather",
+              "chinese": "相当",
+              "level": "进阶"
+            },
+            {
+              "word": "hence",
+              "chinese": "因此",
+              "level": "进阶"
+            },
+            {
+              "word": "thus",
+              "chinese": "因此",
+              "level": "进阶"
+            },
+            {
+              "word": "whereas",
+              "chinese": "然而",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 37,
+          "title": "行为与心理",
+          "words": [
+            {
+              "word": "cognitive",
+              "chinese": "认知的",
+              "level": "进阶"
+            },
+            {
+              "word": "perceive",
+              "chinese": "感知",
+              "level": "进阶"
+            },
+            {
+              "word": "instinct",
+              "chinese": "本能",
+              "level": "进阶"
+            },
+            {
+              "word": "motivate",
+              "chinese": "激励",
+              "level": "进阶"
+            },
+            {
+              "word": "reinforce",
+              "chinese": "强化",
+              "level": "进阶"
+            },
+            {
+              "word": "reinforce",
+              "chinese": "加强",
+              "level": "进阶"
+            },
+            {
+              "word": "incentive",
+              "chinese": "动机",
+              "level": "进阶"
+            },
+            {
+              "word": "behavior",
+              "chinese": "行为",
+              "level": "进阶"
+            },
+            {
+              "word": "personality",
+              "chinese": "个性",
+              "level": "进阶"
+            },
+            {
+              "word": "intelligence",
+              "chinese": "智力",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 38,
+          "title": "经济与商业",
+          "words": [
+            {
+              "word": "productivity",
+              "chinese": "生产力",
+              "level": "进阶"
+            },
+            {
+              "word": "supply",
+              "chinese": "供给",
+              "level": "进阶"
+            },
+            {
+              "word": "demand",
+              "chinese": "需求",
+              "level": "进阶"
+            },
+            {
+              "word": "inflation",
+              "chinese": "通胀",
+              "level": "进阶"
+            },
+            {
+              "word": "profit",
+              "chinese": "利润",
+              "level": "进阶"
+            },
+            {
+              "word": "invest",
+              "chinese": "投资",
+              "level": "进阶"
+            },
+            {
+              "word": "resource",
+              "chinese": "资源",
+              "level": "进阶"
+            },
+            {
+              "word": "incentive",
+              "chinese": "激励",
+              "level": "进阶"
+            },
+            {
+              "word": "market",
+              "chinese": "市场",
+              "level": "进阶"
+            },
+            {
+              "word": "consumption",
+              "chinese": "消费",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 39,
+          "title": "科技与工程",
+          "words": [
+            {
+              "word": "device",
+              "chinese": "装置",
+              "level": "进阶"
+            },
+            {
+              "word": "mechanism",
+              "chinese": "机制",
+              "level": "进阶"
+            },
+            {
+              "word": "efficient",
+              "chinese": "高效的",
+              "level": "进阶"
+            },
+            {
+              "word": "automated",
+              "chinese": "自动化的",
+              "level": "进阶"
+            },
+            {
+              "word": "component",
+              "chinese": "组件",
+              "level": "进阶"
+            },
+            {
+              "word": "integrate",
+              "chinese": "整合",
+              "level": "进阶"
+            },
+            {
+              "word": "modify",
+              "chinese": "修改",
+              "level": "进阶"
+            },
+            {
+              "word": "optimize",
+              "chinese": "优化",
+              "level": "进阶"
+            },
+            {
+              "word": "prototype",
+              "chinese": "原型",
+              "level": "进阶"
+            },
+            {
+              "word": "innovate",
+              "chinese": "创新",
+              "level": "进阶"
+            }
+          ]
+        },
+        {
+          "day": 40,
+          "title": "综合复习高频",
+          "words": [
+            {
+              "word": "demonstrate",
+              "chinese": "展示",
+              "level": "进阶"
+            },
+            {
+              "word": "consequently",
+              "chinese": "因此",
+              "level": "进阶"
+            },
+            {
+              "word": "furthermore",
+              "chinese": "此外",
+              "level": "进阶"
+            },
+            {
+              "word": "nevertheless",
+              "chinese": "尽管如此",
+              "level": "进阶"
+            },
+            {
+              "word": "approximately",
+              "chinese": "大约",
+              "level": "进阶"
+            },
+            {
+              "word": "significant",
+              "chinese": "显著的",
+              "level": "进阶"
+            },
+            {
+              "word": "fundamental",
+              "chinese": "基本的",
+              "level": "进阶"
+            },
+            {
+              "word": "additional",
+              "chinese": "额外的",
+              "level": "进阶"
+            },
+            {
+              "word": "subsequently",
+              "chinese": "随后",
+              "level": "进阶"
+            },
+            {
+              "word": "alternative",
+              "chinese": "替代的",
+              "level": "进阶"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
