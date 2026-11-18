@@ -1424,6 +1424,7 @@
     <div id="toefl-plan-header"></div>
     <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
     <div id="toefl-plan-entry" style="margin-bottom:12px"></div>
+    <div id="toefl-plan-passage"></div>
     <div id="toefl-plan-match-area" style="display:none"></div>
     <div id="toefl-plan-doodle-area" style="display:none"></div>
     <div id="toefl-plan-words"></div>
@@ -8995,10 +8996,51 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var out = [];
     (toeflPlanData && toeflPlanData.stages || []).forEach(function (st) {
       (st.days || []).forEach(function (d) {
-        out.push({ stage: st.name, stageRange: st.range, day: d.day, title: d.title, words: d.words || [] });
+        out.push({ stage: st.name, stageRange: st.range, day: d.day, title: d.title, words: d.words || [], passage: d.passage || null });
       });
     });
     return out;
+  }
+
+  // 把当天词汇在短文中高亮（按词干匹配词形变化，长词优先，过滤过短虚词）
+  function toeflPlanHighlight(text, words) {
+    if (!text) return '';
+    var stems = [];
+    (words || []).forEach(function (w) {
+      String(w.word || '').toLowerCase().split(/\s+/).forEach(function (part) {
+        part = part.replace(/[^a-z-]/g, '');
+        if (part.length < 3) return;  // 过滤 in/for/as 等虚词，避免满屏高亮
+        var stem = part.replace(/(ies|ing|ed|es|s)$/, '');
+        if (stem.length < 3) stem = part;
+        if (stems.indexOf(stem) < 0) stems.push(stem);
+      });
+    });
+    stems.sort(function (a, b) { return b.length - a.length; });
+    return String(text).replace(/([A-Za-z][A-Za-z'-]*)/g, function (m) {
+      var low = m.toLowerCase();
+      for (var i = 0; i < stems.length; i++) {
+        var st = stems[i];
+        if (low === st || (low.indexOf(st) === 0 && low.length - st.length <= 3)) {
+          return '<strong style="color:#c0392b;background:#fff3cd;padding:0 2px;border-radius:3px">' + m + '</strong>';
+        }
+      }
+      return m;
+    });
+  }
+
+  function toeflPlanSpeakPassage() {
+    if (!toeflPlanDays.length) return;
+    var p = toeflPlanDays[toeflPlanDayIdx].passage;
+    if (p && p.en) TTS.speak(p.en, 'en-US');
+  }
+
+  function toeflPlanToggleZh() {
+    var zh = document.getElementById('toefl-plan-passage-zh');
+    var btn = document.getElementById('toefl-plan-zh-toggle');
+    if (!zh) return;
+    var showing = zh.style.display !== 'none';
+    zh.style.display = showing ? 'none' : 'block';
+    if (btn) btn.textContent = showing ? '显示中文翻译 ▾' : '隐藏中文翻译 ▴';
   }
 
   async function openToeflPlan() {
@@ -9062,6 +9104,28 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       + '</div>'
       + '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflPlanDoodle()">✍️ 随手拼</button>';
 
+    // 预读短文：把当天词汇放进短文中，先读短文再学单词
+    var passageArea = document.getElementById('toefl-plan-passage');
+    if (passageArea) {
+      if (d.passage && d.passage.en) {
+        var highlighted = toeflPlanHighlight(d.passage.en, d.words);
+        passageArea.innerHTML =
+          '<div style="background:linear-gradient(135deg,#fffaf0,#fff6e8);border:1px solid #ffe3b8;border-radius:14px;padding:16px;margin-bottom:14px">'
+          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
+            + '<div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:#b8860b">📖 预读短文 <span style="font-size:11px;font-weight:400;color:#c9a355">（加粗词为当天词汇）</span></div>'
+            + '<button class="speak-btn" onclick="toeflPlanSpeakPassage()" style="padding:6px 14px;font-size:13px">🔊 朗读全文</button>'
+          + '</div>'
+          + '<div id="toefl-plan-passage-en" style="font-size:15px;line-height:1.9;color:#3a2f1a">' + highlighted + '</div>'
+          + '<button id="toefl-plan-zh-toggle" class="btn btn-secondary btn-sm" onclick="toeflPlanToggleZh()" style="margin-top:10px;font-size:12px">显示中文翻译 ▾</button>'
+          + '<div id="toefl-plan-passage-zh" style="display:none;margin-top:10px;padding-top:10px;border-top:1px dashed #f0d9a8;font-size:14px;line-height:1.8;color:#7a6240">'
+            + (d.passage.zh || '')
+          + '</div>'
+        + '</div>';
+      } else {
+        passageArea.innerHTML = '';
+      }
+    }
+
     document.getElementById('toefl-plan-words').innerHTML = d.words.map(function (w, i) {
       return '<div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
         + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">'
@@ -9095,7 +9159,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       mount: document.getElementById('toefl-plan-match-area'),
       unitLabel: 'Day' + toeflPlanDays[toeflPlanDayIdx].day
     };
-    Match.hideSiblings(['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-words']);
+    Match.hideSiblings(['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-passage', 'toefl-plan-words']);
     Match.start({});
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -9112,7 +9176,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       mountId: 'toefl-plan-doodle-area',
       backLabel: '返回本天',
       words: words,
-      hide: ['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-words']
+      hide: ['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-passage', 'toefl-plan-words']
     });
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
