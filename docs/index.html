@@ -6553,7 +6553,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const esc = function(s) { return String(s == null ? '' : s).replace(/'/g, "\\'"); };
 
     const area = document.getElementById('choice-learn-area');
-    area.innerHTML = '<div class="cl-meta"><span class="keep">总计 ' + cl_words.length + ' 个单词</span></div>' +
+    // 外部模块（KET/小托福/拼读，含40天计划）做题过程中提供返回按钮，随时返回来源页
+    const clBackBar = clExtCtx
+      ? '<div style="margin-bottom:10px"><button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + ((typeof toeflPlanActive !== 'undefined' && toeflPlanActive) ? '返回计划' : '返回') + '</button></div>'
+      : '';
+    area.innerHTML = clBackBar +
+      '<div class="cl-meta"><span class="keep">总计 ' + cl_words.length + ' 个单词</span></div>' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
       '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden">' +
         '<div style="height:100%;background:linear-gradient(90deg,#4f9fff,#6c63ff);width:' + pct + '%;border-radius:3px;transition:width .3s"></div>' +
@@ -9232,10 +9237,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       + '<div style="font-size:20px;font-weight:700;margin-top:8px">Day ' + d.day + ' · ' + d.title + '</div>'
       + '<div style="font-size:13px;color:#888;margin-top:2px">第 ' + (toeflPlanDayIdx + 1) + ' / ' + total + ' 天 · 本页 ' + d.words.length + ' 词</div>';
 
+    var prevDayBtn = toeflPlanDayIdx > 0
+      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)">← 上一天</button>'
+      : '<span style="flex:1"></span>';
+    var nextDayBtn = toeflPlanDayIdx < total - 1
+      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)">下一天 →</button>'
+      : '<span style="flex:1"></span>';
     document.getElementById('toefl-plan-nav').innerHTML =
-      '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)"' + (toeflPlanDayIdx <= 0 ? ' disabled' : '') + '>← 上一天</button>'
+      prevDayBtn
       + '<span style="font-size:13px;color:#999;padding:0 6px">Day ' + d.day + '/' + total + '</span>'
-      + '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)"' + (toeflPlanDayIdx >= total - 1 ? ' disabled' : '') + '>下一天 →</button>';
+      + nextDayBtn;
 
     document.getElementById('toefl-plan-entry').innerHTML =
       '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px" onclick="startToeflLearn()">🎯 本天单词学习</button>'
