@@ -1238,6 +1238,8 @@
         </div>
       </div>
     </div>
+    <!-- PK 对战战绩（按当前报告模块展示） -->
+    <div id="report-pk-area" style="margin-top:16px"></div>
     <!-- 全局年级小计（已移除，避免与上方年级汇总卡片重复） -->
     <div id="report-all-grades-summary" style="display:none"></div>
   </div>
@@ -1446,6 +1448,14 @@
       <div id="phonics-lesson-list"></div>
     </div>
   </div>
+
+<!-- ======= 单词 PK 对战（人机） ======= -->
+<div id="view-pk" class="view">
+  <button class="btn btn-secondary nav-back-btn" onclick="pkBack()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回</span></button>
+  <div id="pk-setup"></div>
+  <div id="pk-game" style="display:none"></div>
+  <div id="pk-result" style="display:none"></div>
+</div>
 
 </div>
 
@@ -2167,6 +2177,8 @@ const API = ".";
   function navModuleForView(view) {
     if (view === 'learn') return navLearnModule;
     if (view === 'ket-quiz') return window._ketQuizReturnView === 'toefl' ? 'toefl' : 'ket';
+    // PK 对战视图按发起模块高亮底部导航
+    if (view === 'pk') return (typeof PK !== 'undefined' && PK.state && PK.state.view) ? PK.state.view : bottomNavModule;
     if (view === 'report') {
       if (reportModule === 'ket') return 'ket';
       if (reportModule === 'toefl') return 'toefl';
@@ -2200,6 +2212,8 @@ const API = ".";
       if (_lbh) _lbh.style.top = '84px';
     }
     currentView = name;
+    // 离开 PK 页时清理对战计时器，避免后台继续跑
+    if (name !== 'pk' && typeof PK !== 'undefined' && PK.state) PK.stop();
     // 离开学习页/报告页（切到首页、各模块主页、设置等）时，清理外部模块单词学习的返回上下文，
     // 避免 clExtCtx 残留导致后续报告模块定位误判（报告页返回学习页需保留，故 report 不清理）
     if (name !== 'learn' && name !== 'report') clExtCtx = null;
@@ -2215,7 +2229,7 @@ const API = ".";
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", toefl: "🎓 小托福", phonics: "🔤 自然拼读", settings: "⚙️ 设置" };
+    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", toefl: "🎓 小托福", phonics: "🔤 自然拼读", pk: "⚔️ 单词 PK", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
@@ -4697,7 +4711,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 此时 currentView 为 'learn'，需用 clExtCtx.view 定位真实来源模块。
     // 仅当确实停留在学习页(currentView==='learn')时才采用 clExtCtx.view，
     // 避免用户经底部导航跳离学习页后 clExtCtx 残留导致报告模块误判。
-    const src = (currentView === 'learn' && clExtCtx && clExtCtx.view) || reportReturnView || currentView;
+    const src = (currentView === 'learn' && clExtCtx && clExtCtx.view) || (currentView === 'pk' && typeof PK !== 'undefined' && PK.state && PK.state.view) || reportReturnView || currentView;
     if (src === 'ket' || src === 'ket-quiz') reportModule = 'ket';
     else if (src === 'toefl') reportModule = 'toefl';
     else if (src === 'phonics') reportModule = 'phonics';
@@ -6807,11 +6821,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     startChoiceLearn(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || ''), onBack: backToKetCategoryDetail, view: 'ket' });
   }
 
+  function startKetPk() {
+    const words = toMatchWords(ketCurrentItems);
+    if (words.length < 2) { toast('本类单词太少，玩不了 PK'); return; }
+    PK.start(words, { title: (ketCurrentCategory || 'KET') + ' 词汇', scopeKey: 'ket_' + (ketCurrentCategory || ''), backFn: backToKetCategoryDetail, view: 'ket' });
+  }
+
   // ---- 小托福单词学习入口 ----
   function startToeflLearn() {
     const words = toMatchWords(toeflCurrentItems);
     if (words.length < 2) { toast('本类单词太少，暂时学不了'); return; }
     startChoiceLearn(words, { title: '🎯 ' + (toeflCurrentCategory || '小托福') + ' 单词学习', scopeKey: 'toefl_' + (toeflCurrentCategory || ''), onBack: backToToeflCategories, view: 'toefl' });
+  }
+
+  function startToeflPk() {
+    const words = toMatchWords(toeflCurrentItems);
+    if (words.length < 2) { toast('本类单词太少，玩不了 PK'); return; }
+    const inPlan = (typeof toeflPlanActive !== 'undefined' && toeflPlanActive);
+    PK.start(words, {
+      title: (toeflCurrentCategory || '小托福') + ' 词汇',
+      scopeKey: 'toefl_' + (toeflCurrentCategory || ''),
+      backFn: backToToeflCategories,
+      view: 'toefl',
+      backLabel: inPlan ? '返回计划' : '返回本类'
+    });
   }
 
   // ---- 自然拼读单词学习入口 ----
@@ -6821,6 +6854,340 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (words.length < 2) { toast('本组单词太少，暂时学不了'); return; }
     startChoiceLearn(words, { title: '🎯 ' + (phonicsCurrentGroup.title || '拼读') + ' 单词学习', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), onBack: backToPhonicsGroups, view: 'phonics' });
   }
+
+  function startPhonicsPk() {
+    if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); return; }
+    const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
+    if (words.length < 2) { toast('本组单词太少，玩不了 PK'); return; }
+    PK.start(words, { title: (phonicsCurrentGroup.title || '拼读') + ' 词汇', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), backFn: backToPhonicsGroups, view: 'phonics', backLabel: '返回本组' });
+  }
+
+  // ========== 单词 PK 对战（人机） ==========
+  // 词库复用各模块当前词表；答对/答错按 scopeKey 写回 wordlearn_（只升不降），与单词学习口径一致。
+  // 战绩单独存 wordpk_<USER_ID>，按模块（ket/toefl/phonics）隔离，不污染掌握统计。
+  var PK = {
+    TIME: 10,   // 每题作答秒数
+    DIFF: {
+      easy:   { label: '轻松', acc: 0.60, react: [3.6, 5.0] },
+      normal: { label: '标准', acc: 0.80, react: [2.5, 3.6] },
+      hard:   { label: '挑战', acc: 0.95, react: [1.4, 2.4] }
+    },
+    state: null,
+
+    // ---- 战绩存取 ----
+    statsKey: function () { return 'wordpk_' + USER_ID; },
+    loadStats: function () {
+      try { return JSON.parse(localStorage.getItem(this.statsKey()) || '{}'); } catch (e) { return {}; }
+    },
+    statFor: function (view) {
+      var all = this.loadStats();
+      return all[view] || { games: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, highScore: 0, correct: 0, total: 0 };
+    },
+    recordResult: function (view, my, ai, correct, total) {
+      var all = this.loadStats();
+      var s = all[view] || { games: 0, wins: 0, losses: 0, draws: 0, streak: 0, bestStreak: 0, highScore: 0, correct: 0, total: 0 };
+      s.games++;
+      s.correct += correct; s.total += total;
+      if (my > ai) { s.wins++; s.streak++; if (s.streak > s.bestStreak) s.bestStreak = s.streak; }
+      else if (my < ai) { s.losses++; s.streak = 0; }
+      else { s.draws++; }
+      if (my > s.highScore) s.highScore = my;
+      all[view] = s;
+      try { localStorage.setItem(this.statsKey(), JSON.stringify(all)); } catch (e) {}
+    },
+
+    // ---- 入口 ----
+    start: function (words, opts) {
+      var list = toMatchWords(words || []);
+      if (list.length < 2) { toast('单词太少，玩不了 PK'); return; }
+      this.stop();
+      opts = opts || {};
+      this.state = {
+        words: list,
+        view: opts.view || 'home',
+        scopeKey: opts.scopeKey || '',
+        title: opts.title || '单词 PK',
+        backLabel: opts.backLabel || '返回',
+        backFn: opts.backFn || null,
+        diff: 'normal',
+        queue: [], idx: 0,
+        my: 0, ai: 0, combo: 0, aiCombo: 0, myCorrect: 0,
+        locked: false, aiDone: false, deadline: 0,
+        ticker: null, aiTimer: null, nextTimer: null
+      };
+      navLearnModule = this.state.view;   // 底部导航按来源模块高亮
+      switchView('pk');
+      this.renderSetup();
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+
+    stop: function () {
+      var s = this.state;
+      if (!s) return;
+      if (s.ticker) { clearInterval(s.ticker); s.ticker = null; }
+      if (s.aiTimer) { clearTimeout(s.aiTimer); s.aiTimer = null; }
+      if (s.nextTimer) { clearTimeout(s.nextTimer); s.nextTimer = null; }
+    },
+
+    back: function () {
+      this.stop();
+      var s = this.state;
+      this.state = null;
+      if (!s) { switchView('home'); return; }
+      switchView(s.view);
+      if (s.backFn) s.backFn(); else updateBottomNav(s.view);
+    },
+
+    backLabelText: function () {
+      var s = this.state;
+      if (!s) return '返回';
+      if (s.view === 'ket' && typeof ketCategoryBackLabel === 'function') return ketCategoryBackLabel();
+      return s.backLabel || '返回';
+    },
+
+    // ---- 难度选择页 ----
+    renderSetup: function () {
+      var s = this.state;
+      if (!s) return;
+      document.getElementById('topbar-title').textContent = '⚔️ ' + s.title;
+      var bl = document.getElementById('pk-back-label');
+      if (bl) bl.textContent = this.backLabelText();
+      var self = this;
+      var diffHtml = Object.keys(this.DIFF).map(function (k) {
+        var d = self.DIFF[k];
+        var on = (s.diff === k);
+        return '<button class="btn ' + (on ? 'btn-primary' : 'btn-secondary') + '" style="flex:1;padding:14px 8px;font-size:14px" onclick="PK.setDiff(\'' + k + '\')">' +
+          (on ? '✓ ' : '') + d.label + '</button>';
+      }).join('');
+      document.getElementById('pk-setup').innerHTML =
+        '<div style="text-align:center;padding:24px 12px">' +
+          '<div style="font-size:64px;margin-bottom:12px">⚔️</div>' +
+          '<div style="font-size:22px;font-weight:800;color:#333;margin-bottom:8px">单词 PK 对战</div>' +
+          '<div style="font-size:14px;color:#999;margin-bottom:28px;line-height:1.6">' + s.title + '<br>和电脑比一比，看谁答得又快又准！</div>' +
+          '<div style="font-size:14px;color:#666;margin-bottom:10px;font-weight:600">选择难度</div>' +
+          '<div style="display:flex;gap:10px;margin-bottom:12px">' + diffHtml + '</div>' +
+          '<div style="font-size:12px;color:#bbb;margin-bottom:28px">共 ' + Math.min(s.words.length, 10) + ' 题 · 每题 ' + this.TIME + ' 秒 · 答对得分，越快越高</div>' +
+          '<div style="display:flex;gap:10px">' +
+            '<button class="btn btn-secondary" style="flex:1;padding:14px" onclick="PK.back()">返回</button>' +
+            '<button class="btn btn-primary" style="flex:2;padding:14px;font-size:16px" onclick="PK.begin()">开始对战</button>' +
+          '</div>' +
+        '</div>';
+      ['pk-game', 'pk-result'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+      document.getElementById('pk-setup').style.display = 'block';
+    },
+
+    setDiff: function (k) { if (this.state) { this.state.diff = k; this.renderSetup(); } },
+
+    // ---- 开始对战：构建题目队列 ----
+    begin: function () {
+      var s = this.state;
+      if (!s) return;
+      var pool = shuffle(s.words.slice()).slice(0, 10);
+      s.queue = pool.map(function (w) {
+        var roll = Math.random();
+        var mode = roll < 0.34 ? 'en2cn' : (roll < 0.67 ? 'cn2en' : 'listen');
+        var others = s.words.filter(function (x) { return String(x.id) !== String(w.id); });
+        var distract = shuffle(others).slice(0, 3);
+        var options = mode === 'en2cn'
+          ? shuffle([{ text: w.chinese, correct: true }].concat(distract.map(function (d) { return { text: d.chinese, correct: false }; })))
+          : shuffle([{ text: w.word, correct: true }].concat(distract.map(function (d) { return { text: d.word, correct: false }; })));
+        return { word: w, mode: mode, options: options };
+      });
+      s.idx = 0; s.my = 0; s.ai = 0; s.combo = 0; s.aiCombo = 0; s.myCorrect = 0;
+      document.getElementById('pk-setup').style.display = 'none';
+      document.getElementById('pk-result').style.display = 'none';
+      document.getElementById('pk-game').style.display = 'block';
+      this.renderQuestion();
+    },
+
+    // ---- 渲染当前题 ----
+    renderQuestion: function () {
+      var s = this.state;
+      if (!s) return;
+      this.stop();
+      if (s.idx >= s.queue.length) { this.finish(); return; }
+      var q = s.queue[s.idx];
+      s.locked = false; s.aiDone = false;
+      s.deadline = Date.now() + this.TIME * 1000;
+
+      var esc = function (t) { return String(t == null ? '' : t).replace(/'/g, "\\'"); };
+      var prompt = q.mode === 'en2cn' ? '这个单词的中文是？' : (q.mode === 'listen' ? '听发音，选出对应的英文单词' : '这个中文的英文是？');
+      var head = q.mode === 'en2cn' ? capitalize(q.word.word) : (q.mode === 'listen' ? '🔉 ' + q.word.chinese : q.word.chinese);
+
+      var area = document.getElementById('pk-game');
+      area.innerHTML =
+        this.scoreBar() +
+        '<div id="pk-status" style="text-align:center;font-size:13px;color:#888;margin-bottom:10px">第 ' + (s.idx + 1) + ' / ' + s.queue.length + ' 题</div>' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
+          '<div style="flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden"><div id="pk-time-fill" style="height:100%;width:100%;background:linear-gradient(90deg,#52c41a,#faad14);border-radius:3px"></div></div>' +
+          '<span id="pk-time-num" style="font-size:12px;color:#999;width:34px;text-align:right">' + this.TIME + 's</span>' +
+        '</div>' +
+        '<div style="text-align:center;margin-bottom:8px">' +
+          '<div style="font-size:38px;font-weight:800;color:#333;margin-bottom:6px">' + head + '</div>' +
+          '<button class="speak-btn" onclick="speakWord(\'' + esc(q.word.word) + '\')" style="margin:0 auto">🔊 听发音</button>' +
+          '<div style="font-size:14px;color:#999;margin-top:6px">' + prompt + '</div>' +
+        '</div>' +
+        '<div id="pk-options" style="display:flex;flex-direction:column;gap:10px;margin-top:16px"></div>' +
+        '<div id="pk-feedback" style="display:none;margin-top:12px;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.6"></div>';
+
+      var box = document.getElementById('pk-options');
+      var labels = ['A', 'B', 'C', 'D'];
+      q.options.forEach(function (opt, i) {
+        var btn = document.createElement('button');
+        btn.className = 'choice-opt-btn';
+        btn.style.cssText = 'width:100%;text-align:left;padding:14px 18px;font-size:16px;border-radius:12px;background:white;border:2px solid #e8eeff;color:#333;cursor:pointer;transition:all .15s';
+        btn.innerHTML = '<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#f0f4ff;color:#6c63ff;font-size:13px;text-align:center;line-height:28px;font-weight:700;margin-right:10px;flex-shrink:0">' + labels[i] + '</span><span>' + opt.text + '</span>';
+        btn.onclick = (function (o) { return function () { PK.answer(o); }; })(opt);
+        box.appendChild(btn);
+      });
+
+      if (q.mode === 'listen' || q.mode === 'en2cn') {
+        var word = q.word.word;
+        setTimeout(function () { if (PK.state === s && !s.locked) speakWord(word); }, 250);
+      }
+
+      s.ticker = setInterval(function () { PK.tick(); }, 120);
+      var cfg = this.DIFF[s.diff];
+      var react = cfg.react[0] + Math.random() * (cfg.react[1] - cfg.react[0]);
+      s.aiTimer = setTimeout(function () { PK.aiAnswer(react); }, react * 1000);
+    },
+
+    tick: function () {
+      var s = this.state;
+      if (!s || s.locked) return;
+      var left = (s.deadline - Date.now()) / 1000;
+      if (left <= 0) { this.answer(null, true); return; }
+      var fill = document.getElementById('pk-time-fill');
+      var num = document.getElementById('pk-time-num');
+      if (fill) fill.style.width = (left / this.TIME * 100) + '%';
+      if (num) num.textContent = Math.ceil(left) + 's';
+    },
+
+    scoreBar: function () {
+      var s = this.state;
+      return '<div style="display:flex;gap:10px;margin-bottom:14px">' +
+        '<div style="flex:1;text-align:center;background:#eef4ff;border-radius:12px;padding:10px">' +
+          '<div style="font-size:13px;color:#4f9fff;font-weight:600">🙋 我</div>' +
+          '<div id="pk-my-score" style="font-size:26px;font-weight:800;color:#4f9fff">' + s.my + '</div>' +
+        '</div>' +
+        '<div style="flex:1;text-align:center;background:#fff0f0;border-radius:12px;padding:10px">' +
+          '<div style="font-size:13px;color:#ff6b6b;font-weight:600">🤖 电脑</div>' +
+          '<div id="pk-ai-score" style="font-size:26px;font-weight:800;color:#ff6b6b">' + s.ai + '</div>' +
+        '</div>' +
+      '</div>';
+    },
+
+    // ---- 玩家作答 ----
+    answer: function (opt, timeout) {
+      var s = this.state;
+      if (!s || s.locked) return;
+      s.locked = true;
+      if (s.ticker) { clearInterval(s.ticker); s.ticker = null; }
+      var q = s.queue[s.idx];
+      var correct = !!(opt && opt.correct);
+      var left = Math.max(0, (s.deadline - Date.now()) / 1000);
+      var gain = 0;
+      if (correct) {
+        s.combo++; s.myCorrect++;
+        gain = 10 + Math.ceil(left) * 2 + Math.min(s.combo - 1, 5) * 2;
+        s.my += gain;
+        writeExtProgress(s.scopeKey, q.word.id, 'mastered');
+        Celebrate.answerCorrect();
+      } else {
+        s.combo = 0;
+        writeExtProgress(s.scopeKey, q.word.id, 'learned');
+        Celebrate.answerWrong();
+      }
+      var btns = document.querySelectorAll('#pk-options .choice-opt-btn');
+      var correctText = q.options.filter(function (o) { return o.correct; })[0].text;
+      btns.forEach(function (b) {
+        b.style.pointerEvents = 'none';
+        var t = b.querySelector('span:last-child').textContent.trim();
+        if (t === correctText) { b.style.background = '#f6ffed'; b.style.borderColor = '#52c41a'; b.style.color = '#52c41a'; }
+        else if (opt && t === opt.text && !correct) { b.style.background = '#fff2f0'; b.style.borderColor = '#ff4d4f'; b.style.color = '#ff4d4f'; }
+      });
+      var fb = document.getElementById('pk-feedback');
+      if (fb) {
+        fb.style.display = 'block';
+        fb.style.background = correct ? '#f6ffed' : '#fff2f0';
+        fb.style.color = correct ? '#52c41a' : '#ff4d4f';
+        fb.innerHTML = (correct ? '✅ 答对！+' + gain + ' 分' : (timeout ? '⏰ 时间到！' : '❌ 答错了')) +
+          '<br><span style="font-size:12px;color:#999">正确答案：' + correctText + '</span>';
+      }
+      this.updateScores();
+      this.checkBothDone();
+    },
+
+    // ---- AI 作答 ----
+    aiAnswer: function (react) {
+      var s = this.state;
+      if (!s || s.aiDone) return;
+      s.aiDone = true;
+      var cfg = this.DIFF[s.diff];
+      var correct = Math.random() < cfg.acc;
+      var gain = 0;
+      if (correct) {
+        s.aiCombo++;
+        gain = 10 + Math.max(0, Math.ceil(this.TIME - react)) * 2 + Math.min(s.aiCombo - 1, 5) * 2;
+        s.ai += gain;
+      } else {
+        s.aiCombo = 0;
+      }
+      this.updateScores();
+      var st = document.getElementById('pk-status');
+      if (st && s.locked) st.innerHTML = '本题结束，正在进入下一题…';
+      this.checkBothDone();
+    },
+
+    updateScores: function () {
+      var s = this.state;
+      if (!s) return;
+      var my = document.getElementById('pk-my-score');
+      var ai = document.getElementById('pk-ai-score');
+      if (my) my.textContent = s.my;
+      if (ai) ai.textContent = s.ai;
+    },
+
+    // ---- 双方都作答后进入下一题 ----
+    checkBothDone: function () {
+      var s = this.state;
+      if (!s || !s.locked || !s.aiDone) return;
+      var st = document.getElementById('pk-status');
+      if (st) st.innerHTML = '本题结束，正在进入下一题…';
+      var self = this;
+      s.nextTimer = setTimeout(function () { s.idx++; self.renderQuestion(); }, 1300);
+    },
+
+    // ---- 结算 ----
+    finish: function () {
+      var s = this.state;
+      if (!s) return;
+      this.stop();
+      this.recordResult(s.view, s.my, s.ai, s.myCorrect, s.queue.length);
+      var stat = this.statFor(s.view);
+      var win = s.my > s.ai, draw = s.my === s.ai;
+      var emoji = win ? '🏆' : (draw ? '🤝' : '💪');
+      var msg = win ? '你赢了！太厉害了！' : (draw ? '平局！再来一局分胜负！' : '差一点，再来一局！');
+      var color = win ? '#52c41a' : (draw ? '#fa8c16' : '#ff6b6b');
+      document.getElementById('pk-game').style.display = 'none';
+      var area = document.getElementById('pk-result');
+      area.style.display = 'block';
+      area.innerHTML =
+        '<div style="text-align:center;padding:28px 12px">' +
+          '<div style="font-size:72px;margin-bottom:12px">' + emoji + '</div>' +
+          '<div style="font-size:24px;font-weight:800;color:' + color + ';margin-bottom:20px">' + msg + '</div>' +
+          '<div style="display:flex;gap:12px;justify-content:center;margin-bottom:24px">' +
+            '<div style="background:#eef4ff;border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:#4f9fff">我</div><div style="font-size:32px;font-weight:800;color:#4f9fff">' + s.my + '</div></div>' +
+            '<div style="background:#fff0f0;border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:#ff6b6b">电脑</div><div style="font-size:32px;font-weight:800;color:#ff6b6b">' + s.ai + '</div></div>' +
+          '</div>' +
+          '<div style="font-size:14px;color:#888;margin-bottom:24px">答对 ' + s.myCorrect + '/' + s.queue.length + ' 题 · 最高分 ' + stat.highScore + ' · 当前连胜 ' + stat.streak + '</div>' +
+          '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.begin()">🔄 再来一局</button>' +
+          '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="PK.back()">返回</button>' +
+        '</div>';
+      if (win) { try { Celebrate.confetti(100); } catch (e) {} }
+      speakChinese(msg);
+    }
+  };
 
   // ========== 单词拼写重组（每个单元都能玩） ==========
   // 玩法：给出本单元某个单词的中文与打乱的字母块，用户点击字母按顺序拼出原单词，
@@ -7643,6 +8010,35 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     else if (reportModule === 'ket') loadKetReport();
     else if (reportModule === 'toefl') loadToeflReport();
     else if (reportModule === 'phonics') loadPhonicsReport();
+    // PK 对战战绩（各模块独立，课文报告不显示）
+    renderPkReport();
+  }
+
+  // 报告页 PK 战绩区：按当前报告模块读取 wordpk_<USER_ID> 对应分组
+  function renderPkReport() {
+    const area = document.getElementById('report-pk-area');
+    if (!area) return;
+    if (reportModule === 'lesson' || typeof PK === 'undefined') { area.innerHTML = ''; return; }
+    const s = PK.statFor(reportModule);
+    if (!s.games) { area.innerHTML = ''; return; }
+    const winRate = s.games > 0 ? Math.round(s.wins / s.games * 100) : 0;
+    const acc = s.total > 0 ? Math.round(s.correct / s.total * 100) : 0;
+    area.innerHTML =
+      '<div class="report-card" style="padding:16px">' +
+        '<div style="font-size:15px;font-weight:700;color:#6c63ff;margin-bottom:14px">⚔️ PK 对战战绩</div>' +
+        '<div style="display:flex;gap:8px;text-align:center;margin-bottom:14px">' +
+          '<div style="flex:1"><div style="font-size:24px;font-weight:800;color:#52c41a">' + s.wins + '</div><div style="font-size:12px;color:#999">胜</div></div>' +
+          '<div style="flex:1"><div style="font-size:24px;font-weight:800;color:#ff4d4f">' + s.losses + '</div><div style="font-size:12px;color:#999">负</div></div>' +
+          '<div style="flex:1"><div style="font-size:24px;font-weight:800;color:#faad14">' + s.draws + '</div><div style="font-size:12px;color:#999">平</div></div>' +
+          '<div style="flex:1"><div style="font-size:24px;font-weight:800;color:#6c63ff">' + winRate + '%</div><div style="font-size:12px;color:#999">胜率</div></div>' +
+        '</div>' +
+        '<div style="display:flex;gap:8px;text-align:center;padding-top:12px;border-top:1px solid #f0f0f0">' +
+          '<div style="flex:1"><div style="font-size:17px;font-weight:700;color:#333">' + s.highScore + '</div><div style="font-size:12px;color:#999">最高分</div></div>' +
+          '<div style="flex:1"><div style="font-size:17px;font-weight:700;color:#333">' + s.bestStreak + '</div><div style="font-size:12px;color:#999">最高连胜</div></div>' +
+          '<div style="flex:1"><div style="font-size:17px;font-weight:700;color:#333">' + s.streak + '</div><div style="font-size:12px;color:#999">当前连胜</div></div>' +
+          '<div style="flex:1"><div style="font-size:17px;font-weight:700;color:#333">' + acc + '%</div><div style="font-size:12px;color:#999">答题正确率</div></div>' +
+        '</div>' +
+      '</div>';
   }
 
   // 报告表格点击模块行：跳转到对应模块学习
@@ -8124,7 +8520,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (words.length >= 2) {
           pme.style.display = 'block';
           pme.innerHTML = '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="startPhonicsLearn()">🎯 本组单词学习（' + words.length + ' 个）</button>' +
-            '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startPhonicsMatch()">🎴 本组单词消消乐（' + words.length + ' 个）</button>' +
+            '<div style="display:flex;gap:8px">' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startPhonicsPk()">⚔️ 单词 PK</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startPhonicsMatch()">🎴 单词消消乐</button>' +
+            '</div>' +
             '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startPhonicsDoodle()">✍️ 本组随手拼（看中文写英文）</button>';
         } else {
           pme.style.display = 'none';
@@ -8529,10 +8928,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="startKetLearn()">🎯 单词学习</button>' +
             '<div style="display:flex;gap:8px">' +
               '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startKetQuiz(\'word\')">🏆 本类词汇测验</button>' +
-              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startKetPk()">⚔️ 单词 PK</button>' +
             '</div>' +
             '<div style="display:flex;gap:8px;margin-top:8px">' +
-              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startKetDoodle()">✍️ 随手拼（看中文写英文）</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startKetMatch()">🎴 消消乐</button>' +
+              '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startKetDoodle()">✍️ 随手拼</button>' +
             '</div>' +
             '<div id="ket-reading-entry" style="display:none;margin-top:8px">' +
               '<button class="btn btn-primary" id="ket-reading-btn" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="toggleKetReading()">📖 短文阅读</button>' +
@@ -8972,9 +9372,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="startToeflLearn()">🎯 单词学习</button>' +
         '<div style="display:flex;gap:8px">' +
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本类词汇测验</button>' +
-          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflMatch()">🎴 消消乐</button>' +
+          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk()">⚔️ 单词 PK</button>' +
         '</div>' +
         '<div style="display:flex;gap:8px;margin-top:8px">' +
+          '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflMatch()">🎴 消消乐</button>' +
           '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflDoodle()">✍️ 随手拼</button>' +
         '</div>';
     } catch (e) {
@@ -9201,9 +9602,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px" onclick="startToeflLearn()">🎯 本天单词学习</button>'
       + '<div style="display:flex;gap:8px">'
         + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本天词汇测验</button>'
-        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflPlanMatch()">🎴 消消乐</button>'
+        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk()">⚔️ 单词 PK</button>'
       + '</div>'
-      + '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflPlanDoodle()">✍️ 随手拼</button>';
+      + '<div style="display:flex;gap:8px;margin-top:8px">'
+        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflPlanMatch()">🎴 消消乐</button>'
+        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflPlanDoodle()">✍️ 随手拼</button>'
+      + '</div>';
 
     // 预读短文：把当天词汇放进短文中，先读短文再学单词
     var passageArea = document.getElementById('toefl-plan-passage');
