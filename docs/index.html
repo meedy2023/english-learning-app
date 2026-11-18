@@ -7353,21 +7353,39 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       area.style.display = 'block';
       var url = this.challengeUrl();
       area.innerHTML =
-        '<div style="text-align:center;padding:22px 12px">' +
-          '<div style="font-size:52px;margin-bottom:6px">📤</div>' +
-          '<div style="font-size:22px;font-weight:800;color:#333;margin-bottom:8px">挑战已就绪！</div>' +
-          '<div style="font-size:13px;color:#999;margin-bottom:16px;line-height:1.6">' + esc(s.title) + ' · 共 ' + s.queue.length + ' 题<br>让朋友扫码，你俩答同一套题，各答各的</div>' +
-          '<div style="display:inline-block;background:#fff;border:2px solid #e8eeff;border-radius:16px;padding:14px;margin-bottom:8px;cursor:zoom-in" onclick="PK.showQr()" title="点击放大">' +
-            '<canvas id="pk-qr-canvas" style="display:block;width:240px;height:240px;image-rendering:pixelated"></canvas>' +
+        '<div style="position:relative;max-width:460px;margin:4px auto 0;padding:26px 22px 24px;border-radius:24px;overflow:hidden;' +
+          'background:linear-gradient(165deg,#ece8ff 0%,#e2e9ff 42%,#dbe6ff 72%,#eef2ff 100%);' +
+          'border:1px solid rgba(255,255,255,.85);box-shadow:0 14px 40px rgba(108,99,255,.18)">' +
+          '<div style="position:absolute;left:-20%;right:-20%;bottom:-46px;height:210px;opacity:.5;pointer-events:none;' +
+            'background:repeating-linear-gradient(90deg,rgba(122,108,245,.45) 0 2px,transparent 2px 46px),repeating-linear-gradient(0deg,rgba(122,108,245,.35) 0 2px,transparent 2px 34px);' +
+            'transform:perspective(220px) rotateX(62deg);transform-origin:bottom center"></div>' +
+          '<div style="position:absolute;left:-40px;top:40%;width:150px;height:180px;pointer-events:none;' +
+            'background:radial-gradient(ellipse at right center,rgba(90,160,255,.35),transparent 70%)"></div>' +
+          '<div style="position:absolute;right:-40px;top:38%;width:150px;height:180px;pointer-events:none;' +
+            'background:radial-gradient(ellipse at left center,rgba(178,92,240,.32),transparent 70%)"></div>' +
+          '<span style="position:absolute;top:96px;left:24px;font-size:18px;opacity:.8">⚡</span>' +
+          '<span style="position:absolute;top:150px;right:26px;font-size:16px;opacity:.7">✨</span>' +
+          '<div style="position:relative;z-index:1;text-align:center">' +
+            '<div style="position:relative;width:150px;height:88px;margin:0 auto 8px">' +
+              '<div style="position:absolute;left:12px;top:20px;width:40px;height:52px;border-radius:8px;background:linear-gradient(135deg,#7fb0ff,#4f7fe0);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;transform:rotate(-16deg);box-shadow:0 4px 12px rgba(79,127,224,.35)">A</div>' +
+              '<div style="position:absolute;right:12px;top:20px;width:40px;height:52px;border-radius:8px;background:linear-gradient(135deg,#ffc978,#f28c3c);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;transform:rotate(16deg);box-shadow:0 4px 12px rgba(242,140,60,.35)">VS</div>' +
+              '<div style="position:absolute;left:50%;top:0;transform:translateX(-50%);font-size:66px;line-height:1;filter:drop-shadow(0 6px 8px rgba(180,130,40,.35))">🏆</div>' +
+            '</div>' +
+            '<div style="font-size:23px;font-weight:800;color:#2f2a55;margin-bottom:10px">挑词竞技徽章！</div>' +
+            '<div style="font-size:13px;color:#7d78a0;line-height:1.7;margin-bottom:18px">' + esc(s.title) + ' · 共 ' + s.queue.length + ' 题<br>让朋友扫码，你俩答同一套题，各答各的</div>' +
+            '<div style="display:inline-block;border-radius:18px;padding:3px;margin-bottom:8px;cursor:zoom-in;background:linear-gradient(135deg,#38c6f4,#7a6cf5 55%,#b25cf0);box-shadow:0 8px 22px rgba(122,108,245,.28)" onclick="PK.showQr()" title="点击放大">' +
+              '<div style="background:#fff;border-radius:15px;padding:12px">' +
+                '<canvas id="pk-qr-canvas" style="display:block;width:240px;height:240px;image-rendering:pixelated"></canvas>' +
+              '</div>' +
+            '</div>' +
+            '<div style="font-size:12px;color:#8b86ab;margin-bottom:16px">📱 朋友扫码迎战，点击二维码可放大</div>' +
+            '<div style="display:flex;gap:10px;margin-bottom:12px">' +
+              '<button type="button" onclick="PK.copyChallenge(\'url\')" style="flex:1;padding:13px 8px;border:1px solid rgba(255,255,255,.9);border-radius:13px;background:rgba(255,255,255,.72);color:#6c63ff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">🔗 复制链接</button>' +
+              '<button type="button" onclick="PK.shareChallenge()" style="flex:1;padding:13px 8px;border:1px solid rgba(255,255,255,.9);border-radius:13px;background:rgba(255,255,255,.72);color:#6c63ff;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer">📤 分享</button>' +
+            '</div>' +
+            '<div style="background:rgba(255,255,255,.66);border:1px solid rgba(255,255,255,.85);border-radius:13px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:#6b6690;line-height:1.6">双方各自点「开始」后同时开答；朋友还没扫码也没关系，计时从你点开始时启动</div>' +
+            '<button type="button" onclick="PK.begin()" style="width:100%;padding:15px;border:none;border-radius:14px;background:linear-gradient(135deg,#5aa0ff,#7a5cf0);color:#fff;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 8px 22px rgba(99,110,245,.38)">▶️ 我开始答题</button>' +
           '</div>' +
-          '<div style="font-size:12px;color:#bbb;margin-bottom:14px">📱 朋友扫码迎战 · 点击二维码可放大</div>' +
-          '<div style="display:flex;gap:8px;margin-bottom:12px">' +
-            '<button class="btn btn-secondary" style="flex:1;padding:12px" onclick="PK.copyChallenge(\'url\')">🔗 复制链接</button>' +
-            (navigator.share ? '<button class="btn btn-secondary" style="flex:1;padding:12px" onclick="PK.shareChallenge()">📤 分享</button>' : '') +
-          '</div>' +
-          '<div style="background:#f0f7ff;border-radius:12px;padding:12px;margin-bottom:12px;font-size:12px;color:#5a7fb5;line-height:1.6">双方各自点「开始」后同时开答；朋友还没扫码也没关系，计时从你点开始时启动</div>' +
-          '<button class="btn btn-primary" style="width:100%;padding:14px;font-size:16px;margin-bottom:10px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="PK.begin()">▶️ 我开始答题</button>' +
-          '<button class="btn btn-secondary nav-back-btn" style="width:100%;padding:12px" onclick="PK.back()">返回</button>' +
         '</div>';
       try { Qr.draw(document.getElementById('pk-qr-canvas'), url); } catch (e) {}
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
