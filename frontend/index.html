@@ -1385,7 +1385,7 @@
 
 <!-- ======= KET 测验 ======= -->
 <div id="view-ket-quiz" class="view">
-  <button class="btn btn-secondary nav-back-btn" onclick="backToKetCategory()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回分类"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
+  <button class="btn btn-secondary nav-back-btn" id="ket-quiz-back-btn" onclick="backToKetCategory()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回分类"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
   <div class="quiz-card">
     <div class="quiz-prompt" id="ket-quiz-prompt">这个单词的中文是？</div>
     <div class="quiz-word" id="ket-quiz-word">word</div>
@@ -6185,7 +6185,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var unitLabel = document.getElementById('match-unit-label');
       if (unitLabel) unitLabel.textContent = this.unitLabel();
       var backBtn = document.getElementById('match-back-btn');
-      if (backBtn) backBtn.textContent = this.isUnit() ? '返回单词表' : '退出消消乐';
+      if (backBtn) {
+        backBtn.textContent = this.isUnit() ? '返回单词表'
+          : (this.scope && this.scope.type === 'ket' ? ketCategoryBackLabel() : '退出消消乐');
+      }
 
       this.renderBoard();
       this.updateHud();
@@ -6555,8 +6558,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     const area = document.getElementById('choice-learn-area');
     // 外部模块（KET/小托福/拼读，含40天计划）做题过程中提供返回按钮，随时返回来源页
+    var clBackLabel = (clExtCtx && clExtCtx.view === 'ket') ? ketCategoryBackLabel()
+      : ((typeof toeflPlanActive !== 'undefined' && toeflPlanActive) ? '返回计划' : '返回');
     const clBackBar = clExtCtx
-      ? '<div style="margin-bottom:10px"><button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + ((typeof toeflPlanActive !== 'undefined' && toeflPlanActive) ? '返回计划' : '返回') + '</button></div>'
+      ? '<div style="margin-bottom:10px"><button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + clBackLabel + '</button></div>'
       : '';
     area.innerHTML = clBackBar +
       '<div class="cl-meta"><span class="keep">总计 ' + cl_words.length + ' 个单词</span></div>' +
@@ -6753,7 +6758,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 总结页返回按钮：外部调用返回各自分类页，课文返回单词表/首页
   function clSummaryBackBtn() {
     if (clExtCtx) {
-      return '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> 返回</button>';
+      var _clBack = clExtCtx.view === 'ket' ? ketCategoryBackLabel() : '返回';
+      return '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + _clBack + '</button>';
     }
     return '<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
       '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">🏠</span> 返回首页</button>';
@@ -6787,7 +6793,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function startKetLearn() {
     const words = toMatchWords(ketCurrentItems);
     if (words.length < 2) { toast('本类单词太少，暂时学不了'); return; }
-    startChoiceLearn(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || ''), onBack: backToKetCategories, view: 'ket' });
+    startChoiceLearn(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || ''), onBack: backToKetCategoryDetail, view: 'ket' });
   }
 
   // ---- 小托福单词学习入口 ----
@@ -7499,7 +7505,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       label: '本类',
       key: 'ket_' + (ketCurrentCategory || ''),
       mountId: 'ket-doodle-area',
-      backLabel: '返回词汇列表',
+      backLabel: ketCategoryBackLabel(),
       words: words,
       hide: ['ket-content-list', 'ket-quiz-entry', 'ket-pagination']
     });
@@ -8299,7 +8305,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const pag = document.getElementById('ket-pagination');
     if (list) list.style.display = 'none';
     if (pag) pag.style.display = 'none';
-    if (btn) btn.textContent = '← 返回词汇列表';
+    if (btn) btn.textContent = '← ' + ketCategoryBackLabel();
   }
 
   function closeKetReading() {
@@ -8473,6 +8479,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       ketCurrentPage = 1;
       ketCurrentType = type;
       ketCurrentCategory = category;
+      document.getElementById('topbar-title').textContent = ketCategoryTitle();
       const quizEntry = document.getElementById('ket-quiz-entry');
       if (quizEntry) quizEntry.style.display = 'none';
       
@@ -8570,12 +8577,36 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function backToKetCategories() {
     ketCurrentCategory = '';
+    document.getElementById('topbar-title').textContent = '📚 KET 学习';
     Match.exit();                 // 返回分类时收起消消乐面板
     closeKetReading();            // 返回分类时收起短文阅读
     document.getElementById('ket-category-list').style.display = 'grid';
     document.getElementById('ket-content-area').style.display = 'none';
     const qe = document.getElementById('ket-quiz-entry');
     if (qe) qe.style.display = 'none';
+  }
+
+  // KET 二级页面的统一返回：回到「当前具体分类页」，而不是 classification 列表
+  function ketCategoryTitle() {
+    if (!ketCurrentCategory) return '📚 KET 学习';
+    const prefix = ketCurrentType === '词汇' ? '📖 ' : ketCurrentType === '句型' ? '💬 ' : ketCurrentType === '语法' ? '📝 ' : '';
+    return prefix + ketCurrentCategory;
+  }
+  function ketCategoryBackLabel() {
+    return ketCurrentCategory ? '返回 ' + ketCurrentCategory : '返回分类';
+  }
+  function backToKetCategoryDetail() {
+    try { Match.exit(); } catch (e) {}
+    try { closeKetReading(); } catch (e) {}
+    if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();
+    window._ketQuizReturnView = 'ket';   // 测验返回时按 KET 分类处理
+    if (currentView !== 'ket') {
+      switchView('ket');                 // loadKetCategories() 内会 restoreKetView() 恢复该分类内容
+    } else {
+      restoreKetView();
+      updateBottomNav('ket');
+    }
+    document.getElementById('topbar-title').textContent = ketCategoryTitle();
   }
 
   // ========== KET 测验（词汇/句型/语法 通用） ==========
@@ -8652,6 +8683,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     window._ketQuizReturnView = returnView || 'ket';   // 记录来源：ket 或 toefl
     comboCount = 0;
     hideCombo();
+    // 返回按钮显示来源分类名（如「← 返回 个人信息」）；小托福来源保持通用文案
+    var _quizBack = document.getElementById('ket-quiz-back-btn');
+    if (_quizBack) {
+      _quizBack.innerHTML = '<span class="nav-back-ico" aria-hidden="true">←</span> '
+        + (returnView === 'toefl' ? '返回' : ketCategoryBackLabel());
+    }
     switchView('ket-quiz');
     loadKetQuizQuestion();
   }
@@ -8774,7 +8811,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
       '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
       '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">再测一次</button>' +
-      '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="backToKetCategory()" type="button" aria-label="返回分类">返回分类</button>' +
+      '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="backToKetCategory()" type="button" aria-label="返回分类">← ' + (window._ketQuizReturnView === 'toefl' ? '返回' : ketCategoryBackLabel()) + '</button>' +
       '</div>';
   }
 
@@ -8783,7 +8820,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     currentView = ret;
     document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
     document.getElementById('view-' + ret).classList.add('active');
-    document.getElementById('topbar-title').textContent = ret === 'toefl' ? '🎓 小托福' : '📚 KET 学习';
+    document.getElementById('topbar-title').textContent = ret === 'toefl' ? '🎓 小托福' : ketCategoryTitle();
     updateBottomNav(ret);  // 返回时同步底部导航高亮（KET / 小托福）
     document.getElementById('grade-display').style.display = 'none';
     if (ret === 'toefl') {
