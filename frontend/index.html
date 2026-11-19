@@ -7580,10 +7580,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    // 二维码等待页：隐藏全局顶栏（标题+图标）与 tab 栏，保持极简；返回胶囊上移贴顶
+    // 二维码等待页：隐藏全局顶栏（标题+图标）保持极简；返回胶囊上移贴顶。
+    // tab 栏：仅年级学习页面(view=home)发起的好友PK与其它 tab 一致、保留可自由切换；
+    //         其它模块(KET/小托福/拼读)的好友PK仍隐藏 tab 栏，维持原极简设计不变。
     _hideTopbarForQr: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'none';
-      var tabBar = document.querySelector('#view-pk .tab-bar'); if (tabBar) tabBar.style.display = 'none';
+      var tabBar = document.querySelector('#view-pk .tab-bar');
+      var s = this.state;
+      if (tabBar) tabBar.style.display = (s && s.view === 'home') ? '' : 'none';
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '16px';
     },
     // 恢复全局顶栏、tab 栏与返回胶囊位置（离开二维码页时统一调用）
