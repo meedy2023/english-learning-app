@@ -1464,7 +1464,7 @@
 
 <!-- ======= 单词 PK 对战（人机） ======= -->
 <div id="view-pk" class="view">
-  <button class="btn btn-secondary nav-back-btn" onclick="PK.back()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回首页</span></button>
+  <button class="btn btn-secondary nav-back-btn" onclick="PK.back()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回</span></button>
   <div class="tab-bar" style="margin-bottom:16px">
     <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
     <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
@@ -7117,9 +7117,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const opts = {
       title: (moduleLabel(currentModule) || currentModule || '本单元') + ' 词汇',
       scopeKey: 'unit_' + (currentModule || ''),
-      backFn: null,
+      backFn: showWordList,
       view: 'home',
-      backLabel: '返回首页'
+      backLabel: '返回词表'
     };
     if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
@@ -7493,7 +7493,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var tt = document.getElementById('topbar-title');
       if (tt) tt.textContent = '⚔️ 应战 PK';
       var bl = document.getElementById('pk-back-label');
-      if (bl) bl.textContent = '返回首页';
+      if (bl) bl.textContent = '返回';
       document.getElementById('pk-game').style.display = 'none';
       document.getElementById('pk-result').style.display = 'none';
       var area = document.getElementById('pk-setup');
@@ -7580,14 +7580,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    // 二维码等待页：仍隐藏全局顶栏（标题+右上角图标）保持极简，但保留 tab 栏，和其它 tab 一样可自由切换
+    // 二维码等待页：隐藏全局顶栏（标题+图标）与 tab 栏，保持极简；返回胶囊上移贴顶
     _hideTopbarForQr: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'none';
+      var tabBar = document.querySelector('#view-pk .tab-bar'); if (tabBar) tabBar.style.display = 'none';
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '16px';
     },
-    // 恢复全局顶栏与返回胶囊位置（离开二维码页时统一调用）；tab 栏始终保留
+    // 恢复全局顶栏、tab 栏与返回胶囊位置（离开二维码页时统一调用）
     _restoreTopbar: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'flex';
+      var tabBar = document.querySelector('#view-pk .tab-bar'); if (tabBar) tabBar.style.display = '';
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '78px';
     },
 
@@ -8038,7 +8040,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var tt = document.getElementById('topbar-title');
       if (tt) tt.textContent = '📊 比分对比';
       var bl = document.getElementById('pk-back-label');
-      if (bl) bl.textContent = '返回首页';
+      if (bl) bl.textContent = '返回';
       document.getElementById('pk-game').style.display = 'none';
       document.getElementById('pk-setup').style.display = 'none';
       var area = document.getElementById('pk-result');
