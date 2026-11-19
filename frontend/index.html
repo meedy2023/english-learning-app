@@ -4888,14 +4888,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.saveData(d);
       this.refreshEntry();
     },
-    due() {
-      const d = this.getData();
-      const today = this.todayStr();
-      return Object.keys(d).filter(function (id) { return d[id].nextReview <= today; });
-    },
     count() { return Object.keys(this.getData()).length; },
     all() { return Object.keys(this.getData()); },
     // 当前年级的错词 id（用词表把 wordId → grade 映射后过滤）；词表未加载时返回 null
+    // 错词本不限制复习时间：只要进过错词本就算，不按 nextReview 到期过滤
     idsForGrade(grade) {
       if (!Array.isArray(allWordsCache)) return null;
       const self = this;
@@ -4904,14 +4900,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const w = allWordsCache.find(function (x) { return String(x.id) === String(id); });
         return w && (!grade || w.grade === grade);
       });
-    },
-    // 当前年级「已到期」的错词 id
-    dueIdsForGrade(grade) {
-      const ids = this.idsForGrade(grade);
-      if (ids === null) return null;
-      const d = this.getData();
-      const today = this.todayStr();
-      return ids.filter(function (id) { return d[id].nextReview <= today; });
     },
     refreshEntry() {
       const el = document.getElementById('review-entry');
@@ -4926,32 +4914,23 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const totalN = ids === null ? this.count() : ids.length;
       if (totalN === 0) { el.style.display = 'none'; return; }
       el.style.display = 'flex';
-      const dueIds = this.dueIdsForGrade(grade);
-      const dueN = dueIds === null ? this.due().length : dueIds.length;
       const badge = document.getElementById('review-entry-badge');
-      if (badge) badge.textContent = '待复习 ' + dueN + ' 个';
+      if (badge) badge.textContent = '待复习 ' + totalN + ' 个';
     }
   };
 
   function openReview() {
-    // 只复习「当前年级」的错词，且只复习到期的（按艾宾浩斯曲线调度）
+    // 复习「当前年级」全部错词，不限制复习时间
     const grade = currentGrade || '';
-    const dueInGrade = Review.dueIdsForGrade(grade);
-    const totalInGrade = Review.idsForGrade(grade);
-    const gradeTotal = totalInGrade === null ? Review.count() : totalInGrade.length;
-    const due = dueInGrade === null ? Review.due() : dueInGrade;
-    if (gradeTotal === 0) {
+    const inGrade = Review.idsForGrade(grade);
+    const ids = inGrade === null ? Review.all() : inGrade;
+    if (ids.length === 0) {
       toast('当前年级错词本是空的，先去学习吧！');
-      return;
-    }
-    if (due.length === 0) {
-      // 当前年级有错词，但都还没到复习时间
-      toast('今天没有到复习时间的错词，先休息一下吧！');
       return;
     }
     getAllWords().then(function (all) {
       const words = [];
-      due.forEach(function (id) {
+      ids.forEach(function (id) {
         const w = all.find(function (x) { return String(x.id) === String(id); });
         if (w) words.push(w);
       });
@@ -5133,8 +5112,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const pct = rvTotal > 0 ? Math.round(rvCorrect / rvTotal * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = pct >= 90 ? '复习得太棒了！' : pct >= 70 ? '复习得很不错！' : pct >= 50 ? '继续加油，会记住的！' : '没关系，明天再巩固一次！';
-    const _remainIds = Review.dueIdsForGrade(currentGrade || '');
-    const remain = _remainIds === null ? Review.due().length : _remainIds.length;
+    const _remainIds = Review.idsForGrade(currentGrade || '');
+    const remain = _remainIds === null ? Review.count() : _remainIds.length;
     const area = document.getElementById('review-area');
     area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
