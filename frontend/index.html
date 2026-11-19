@@ -221,6 +221,11 @@
       transition: transform 0.1s;
     }
     .word-item:active { transform: scale(0.98); }
+    /* 年级单词表：每行底部加半透明分割线，增强立体层次感 */
+    .word-item.word-row {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.10);
+    }
     .word-item-left { display: flex; flex-direction: column; }
     .word-item-word { font-size: 17px; font-weight: 600; color: #333; }
     .word-item-phonetic { font-size: 12px; color: #aaa; margin-top: 2px; font-family: 'Georgia', serif; }
@@ -5380,7 +5385,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     for (const w of currentWords) {
       const status = wordStatuses[w.id] || "new";
       const item = document.createElement("div");
-      item.className = "word-item";
+      item.className = "word-item word-row";
       // 图文双通道：列表小图标（emoji 兜底）
       const vis = wordVisual(w);
       const visChar = vis && vis.type === 'emoji' ? vis.char : '';
