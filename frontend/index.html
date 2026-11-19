@@ -1087,6 +1087,8 @@
       <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
       <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
       <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="startHomePk()"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="startHomePk(true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
     </div>
     <div class="word-list" id="word-list"></div>
     <div id="word-detail-area" style="display:none"></div>
@@ -1146,6 +1148,8 @@
       <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
       <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
       <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="startHomePk()"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="startHomePk(true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
     </div>
     <div class="quiz-card">
       <div class="quiz-prompt" id="quiz-prompt">这个单词的中文是什么意思？</div>
@@ -6937,6 +6941,23 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
     if (words.length < 2) { toast('本组单词太少，玩不了 PK'); return; }
     const opts = { title: (phonicsCurrentGroup.title || '拼读') + ' 词汇', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), backFn: backToPhonicsGroups, view: 'phonics', backLabel: '返回本组' };
+    if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
+  }
+
+  // ---- 年级课本（home）单词 PK 入口：复用当前单元词库 currentWords ----
+  function startHomePk(challenge) {
+    if (!currentModule || !currentWords || currentWords.length < 2) {
+      toast('请先选择一个单元（单词太少也玩不了 PK）');
+      return;
+    }
+    const words = toMatchWords(currentWords);
+    const opts = {
+      title: (moduleLabel(currentModule) || currentModule || '本单元') + ' 词汇',
+      scopeKey: 'unit_' + (currentModule || ''),
+      backFn: showWordList,
+      view: 'home',
+      backLabel: '返回词表'
+    };
     if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
 
