@@ -1465,6 +1465,17 @@
 <!-- ======= 单词 PK 对战（人机） ======= -->
 <div id="view-pk" class="view">
   <button class="btn btn-secondary nav-back-btn" onclick="PK.back()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回</span></button>
+  <div class="tab-bar" style="margin-bottom:16px">
+    <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="startHomePk()"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="startHomePk(true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
+  </div>
   <div id="pk-setup"></div>
   <div id="pk-game" style="display:none"></div>
   <div id="pk-result" style="display:none"></div>
@@ -7101,6 +7112,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       toast('请先选择一个单元（单词太少也玩不了 PK）');
       return;
     }
+    setActiveTab(challenge ? 'homepkfriend' : 'homepk');
     const words = toMatchWords(currentWords);
     const opts = {
       title: (moduleLabel(currentModule) || currentModule || '本单元') + ' 词汇',
@@ -7568,14 +7580,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    // 二维码等待页：隐藏全局顶栏（标题+图标），返回胶囊上移贴顶
+    // 二维码等待页：隐藏全局顶栏（标题+图标）与 tab 栏，保持极简；返回胶囊上移贴顶
     _hideTopbarForQr: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'none';
+      var tabBar = document.querySelector('#view-pk .tab-bar'); if (tabBar) tabBar.style.display = 'none';
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '16px';
     },
-    // 恢复全局顶栏与返回胶囊位置（离开二维码页时统一调用）
+    // 恢复全局顶栏、tab 栏与返回胶囊位置（离开二维码页时统一调用）
     _restoreTopbar: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'flex';
+      var tabBar = document.querySelector('#view-pk .tab-bar'); if (tabBar) tabBar.style.display = '';
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '78px';
     },
 
