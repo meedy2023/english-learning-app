@@ -2491,7 +2491,7 @@ const API = ".";
       
       for (const unit of currentLessonData) {
         const unitCard = document.createElement('div');
-        unitCard.className = 'word-item';
+        unitCard.className = 'word-item word-row';
         unitCard.innerHTML = `
           <div class="word-item-left">
             <div class="word-item-word">${unit.unit}</div>
@@ -9744,7 +9744,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     
     if (ketCurrentType === '词汇') {
       container.innerHTML = pageItems.map((w, i) => `
-        <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+        <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;border-bottom:1px solid rgba(0,0,0,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.10)">
           <div style="font-size:20px;font-weight:600;color:#4f9fff;margin-bottom:8px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;row-gap:8px">
             <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
             <span style="margin-right:8px">${w.word}</span>
@@ -9763,7 +9763,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       `).join('');
     } else if (ketCurrentType === '句型') {
       container.innerHTML = pageItems.map((s, i) => `
-        <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+        <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;border-bottom:1px solid rgba(0,0,0,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.10)">
           <div style="font-size:18px;font-weight:600;color:#4f9fff;margin-bottom:8px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;row-gap:8px">
             <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
             <span style="margin-right:8px">${s.english}</span>
@@ -9852,7 +9852,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         ketGrammarExamples = grammar.例句 || [];
 
         let html = `
-          <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+          <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;border-bottom:1px solid rgba(0,0,0,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.10)">
             <div style="font-size:16px;font-weight:600;color:#d48806;margin-bottom:8px">📖 规则</div>
             <div style="font-size:14px;color:#666;line-height:1.6">${grammar.规则 || ''}</div>
           </div>
@@ -10301,7 +10301,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       return;
     }
     container.innerHTML = pageItems.map((w, i) => `
-      <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">
+      <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;border-bottom:1px solid rgba(0,0,0,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.10)">
         <div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:6px">
           <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
           <span style="font-size:20px;font-weight:600;color:#333">${w.word}</span>
@@ -10523,7 +10523,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
 
     document.getElementById('toefl-plan-words').innerHTML = d.words.map(function (w, i) {
-      return '<div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08)">'
+      return '<div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:white;border-radius:12px;border-bottom:1px solid rgba(0,0,0,0.5);box-shadow:0 2px 6px rgba(0,0,0,0.10)">'
         + '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:6px">'
           + '<span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">' + (i + 1) + '</span>'
           + '<span style="font-size:20px;font-weight:600;color:#333">' + w.word + '</span>'
