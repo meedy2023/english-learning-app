@@ -5261,6 +5261,1058 @@
           }
         ]
       }
+    },
+    "七年级": {
+      "上册": {
+        "Starter Welcome to junior high!": [
+          {
+            "unit": "Starter Welcome to junior high! (Start up)",
+            "content": [
+              {
+                "role": "Ms Li",
+                "text": "Welcome to junior high, everyone!",
+                "translation": "欢迎大家来到初中！"
+              },
+              {
+                "role": "Lingling",
+                "text": "Thank you, Ms Li. I'm Lingling.",
+                "translation": "谢谢您，李老师。我是玲玲。"
+              },
+              {
+                "role": "Daming",
+                "text": "I'm Daming. This is my new classroom.",
+                "translation": "我是大明。这是我的新教室。"
+              },
+              {
+                "role": "Ms Li",
+                "text": "Let's get to know each other. What is your name?",
+                "translation": "让我们互相认识一下。你叫什么名字？"
+              },
+              {
+                "role": "Amy",
+                "text": "My name is Amy. I like music and reading.",
+                "translation": "我叫艾米。我喜欢音乐和阅读。"
+              },
+              {
+                "role": "Sam",
+                "text": "I'm Sam. I want to join the sports club.",
+                "translation": "我是山姆。我想加入体育社团。"
+              },
+              {
+                "role": "Ms Li",
+                "text": "Great! Our school has a library, a gym and a big playground.",
+                "translation": "很好！我们学校有图书馆、体育馆和大操场。"
+              }
+            ]
+          },
+          {
+            "unit": "Starter Welcome to junior high! (Speed up)",
+            "content": [
+              {
+                "role": "Lingling",
+                "text": "Look at the school timetable.",
+                "translation": "看这张课程表。"
+              },
+              {
+                "role": "Daming",
+                "text": "We have English, maths and science this term.",
+                "translation": "这学期我们有英语、数学和科学。"
+              },
+              {
+                "role": "Lingling",
+                "text": "What is your favourite subject?",
+                "translation": "你最喜欢的科目是什么？"
+              },
+              {
+                "role": "Daming",
+                "text": "English. And we wear school uniforms every day.",
+                "translation": "英语。而且我们每天穿校服。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Let's make a wishing tree with our dreams.",
+                "translation": "让我们用梦想做一棵许愿树。"
+              },
+              {
+                "role": "Daming",
+                "text": "Good idea! I hope we all have a great journey here.",
+                "translation": "好主意！希望我们在这里都有美好的旅程。"
+              }
+            ]
+          }
+        ],
+        "Unit 1 A new start": [
+          {
+            "unit": "Unit 1 A new start (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Today is the first lesson of the new term.",
+                "translation": "今天是新学期的第一课。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I am a little nervous but very excited.",
+                "translation": "我有点紧张，但很兴奋。"
+              },
+              {
+                "role": "Teacher",
+                "text": "A new start is a new journey. Do you have a plan?",
+                "translation": "新的开始就是新的旅程。你有计划吗？"
+              },
+              {
+                "role": "Daming",
+                "text": "Yes. My goal is to learn English well.",
+                "translation": "有。我的目标是把英语学好。"
+              },
+              {
+                "role": "Teacher",
+                "text": "What will you do to reach your goal?",
+                "translation": "你打算怎样实现目标？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I will listen carefully and remember new words.",
+                "translation": "我会认真听讲，记住新单词。"
+              },
+              {
+                "role": "Daming",
+                "text": "And I will never give up when it is difficult.",
+                "translation": "遇到困难时我绝不放弃。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Wonderful! Knowledge and hope will help you.",
+                "translation": "太好了！知识和希望会帮助你。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 1 A new start (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "Why do you look so happy today?",
+                "translation": "你今天为什么看起来这么开心？"
+              },
+              {
+                "role": "Sam",
+                "text": "Because it is the beginning of a new term.",
+                "translation": "因为这是新学期的开始。"
+              },
+              {
+                "role": "Amy",
+                "text": "What is special about it?",
+                "translation": "有什么特别的？"
+              },
+              {
+                "role": "Sam",
+                "text": "I can learn new things and meet my friends again.",
+                "translation": "我可以学新东西，还能再见到朋友。"
+              },
+              {
+                "role": "Amy",
+                "text": "That's meaningful. I set a goal, too.",
+                "translation": "这很有意义。我也定了目标。"
+              },
+              {
+                "role": "Sam",
+                "text": "Great! Let's study together and be brave.",
+                "translation": "太好了！我们一起学习，勇敢前行。"
+              }
+            ]
+          }
+        ],
+        "Unit 2 More than fun": [
+          {
+            "unit": "Unit 2 More than fun (Start up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "What do you do for fun, Amy?",
+                "translation": "艾米，你有什么爱好？"
+              },
+              {
+                "role": "Amy",
+                "text": "I like music. I can play the erhu.",
+                "translation": "我喜欢音乐。我会拉二胡。"
+              },
+              {
+                "role": "Daming",
+                "text": "Cool! Is there a band at our school?",
+                "translation": "真酷！我们学校有乐队吗？"
+              },
+              {
+                "role": "Amy",
+                "text": "Yes. I want to join it and perform on stage.",
+                "translation": "有。我想加入并在台上表演。"
+              },
+              {
+                "role": "Sam",
+                "text": "I love an exciting story. It is a great adventure.",
+                "translation": "我喜欢刺激的故事。那是一次很棒的冒险。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I enjoy painting and singing. They bring me joy.",
+                "translation": "我喜欢绘画和唱歌。它们给我带来快乐。"
+              },
+              {
+                "role": "Daming",
+                "text": "Hobbies make our life interesting.",
+                "translation": "爱好让我们的生活有趣。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 2 More than fun (Speed up)",
+            "content": [
+              {
+                "role": "Sam",
+                "text": "Can you play an instrument?",
+                "translation": "你会演奏乐器吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I can play the piano a little.",
+                "translation": "我会弹一点钢琴。"
+              },
+              {
+                "role": "Sam",
+                "text": "I collect stamps. Do you collect anything?",
+                "translation": "我集邮。你收集东西吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes, I collect storybooks.",
+                "translation": "是的，我收集故事书。"
+              },
+              {
+                "role": "Sam",
+                "text": "That's interesting! Are you a fan of stories?",
+                "translation": "真有趣！你是故事迷吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Of course. Reading is so much fun.",
+                "translation": "当然。阅读太有趣了。"
+              }
+            ]
+          }
+        ],
+        "Unit 3 Family ties": [
+          {
+            "unit": "Unit 3 Family ties (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Family ties are very important. Tell us about your family.",
+                "translation": "家庭纽带非常重要。说说你的家庭。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I have a close family. We care for each other.",
+                "translation": "我有一个亲密的家。我们互相关心。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Who do you love most?",
+                "translation": "你最爱谁？"
+              },
+              {
+                "role": "Daming",
+                "text": "My father. His love is silent but strong.",
+                "translation": "我父亲。他的爱无声却深沉。"
+              },
+              {
+                "role": "Amy",
+                "text": "I have a brother and a little sister. We play together.",
+                "translation": "我有一个哥哥和一个妹妹。我们一起玩。"
+              },
+              {
+                "role": "Sam",
+                "text": "My grandparents live with us. I respect them.",
+                "translation": "我的祖父母和我们住在一起。我尊敬他们。"
+              },
+              {
+                "role": "Lingling",
+                "text": "My parents always support me when I have difficulties.",
+                "translation": "我遇到困难时父母总是支持我。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Good. A family is a team of love.",
+                "translation": "很好。家庭是一个爱的团队。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 3 Family ties (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "Is your uncle a member of your family?",
+                "translation": "你叔叔是你家的一员吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes, and my aunt and cousin, too.",
+                "translation": "是的，还有我姑姑和表哥。"
+              },
+              {
+                "role": "Amy",
+                "text": "Do you understand each other well?",
+                "translation": "你们彼此理解吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes. We talk and share our feelings.",
+                "translation": "是的。我们聊天，分享感受。"
+              },
+              {
+                "role": "Amy",
+                "text": "That's wonderful. Family love is precious.",
+                "translation": "太好了。亲情很珍贵。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I agree. I love my family very much.",
+                "translation": "我同意。我非常爱我的家人。"
+              }
+            ]
+          }
+        ],
+        "Unit 4 Time to celebrate": [
+          {
+            "unit": "Unit 4 Time to celebrate (Start up)",
+            "content": [
+              {
+                "role": "Lingling",
+                "text": "The Spring Festival is my favourite festival.",
+                "translation": "春节是我最喜欢的节日。"
+              },
+              {
+                "role": "Daming",
+                "text": "Why do you like it?",
+                "translation": "你为什么喜欢它？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Because it is a time for family reunion.",
+                "translation": "因为这是家人团聚的时刻。"
+              },
+              {
+                "role": "Teacher",
+                "text": "What do you usually do to celebrate?",
+                "translation": "你们通常怎么庆祝？"
+              },
+              {
+                "role": "Amy",
+                "text": "We have a big dinner and watch fireworks.",
+                "translation": "我们吃丰盛的晚餐，看烟花。"
+              },
+              {
+                "role": "Sam",
+                "text": "We get lucky money and wear new clothes.",
+                "translation": "我们收红包，穿新衣服。"
+              },
+              {
+                "role": "Daming",
+                "text": "It is an important Chinese tradition.",
+                "translation": "这是中国重要的传统。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Every culture has its own customs. What a wonderful world!",
+                "translation": "每种文化都有自己的习俗。多精彩的世界！"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 4 Time to celebrate (Speed up)",
+            "content": [
+              {
+                "role": "Sam",
+                "text": "Is your birthday a special day?",
+                "translation": "你的生日是特别的日子吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes. We have a party and eat a cake.",
+                "translation": "是的。我们开聚会，吃蛋糕。"
+              },
+              {
+                "role": "Sam",
+                "text": "Do you get gifts?",
+                "translation": "你会收到礼物吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes, and I feel lucky and thankful.",
+                "translation": "会，我感到幸运和感激。"
+              },
+              {
+                "role": "Sam",
+                "text": "It is a happy memory for me, too.",
+                "translation": "对我也来说是美好的回忆。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Celebrations bring families together.",
+                "translation": "庆祝活动让家人团聚。"
+              }
+            ]
+          }
+        ],
+        "Unit 5 The power of plants": [
+          {
+            "unit": "Unit 5 The power of plants (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Look at this plant. Do you know its power?",
+                "translation": "看这株植物。你知道它的力量吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "It can produce oxygen and clean the air.",
+                "translation": "它能产生氧气，净化空气。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Correct. What else do plants need?",
+                "translation": "正确。植物还需要什么？"
+              },
+              {
+                "role": "Daming",
+                "text": "They need water, sunlight and good soil.",
+                "translation": "它们需要水、阳光和肥沃的土壤。"
+              },
+              {
+                "role": "Amy",
+                "text": "The seed grows into a tree with green leaves.",
+                "translation": "种子长成有绿叶的大树。"
+              },
+              {
+                "role": "Sam",
+                "text": "Forests are the lungs of the earth.",
+                "translation": "森林是地球之肺。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Amazing! Plants keep our environment alive.",
+                "translation": "太神奇了！植物让我们的环境充满生机。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 5 The power of plants (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "Why is the garden so green?",
+                "translation": "花园为什么这么绿？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Because the plants get enough water.",
+                "translation": "因为植物得到足够的水。"
+              },
+              {
+                "role": "Amy",
+                "text": "Can a leaf make food for the plant?",
+                "translation": "叶子能为植物制造食物吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes, with the help of sunlight.",
+                "translation": "可以，在阳光的帮助下。"
+              },
+              {
+                "role": "Amy",
+                "text": "Nature is really powerful.",
+                "translation": "大自然真的很有力量。"
+              },
+              {
+                "role": "Lingling",
+                "text": "That's why we must protect every tree.",
+                "translation": "所以我们必须保护每一棵树。"
+              }
+            ]
+          }
+        ],
+        "Unit 6 Fantastic friends": [
+          {
+            "unit": "Unit 6 Fantastic friends (Start up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "Do you know the dodo?",
+                "translation": "你知道渡渡鸟吗？"
+              },
+              {
+                "role": "Sam",
+                "text": "Yes. It is dead now. That's surprising.",
+                "translation": "知道。它现在灭绝了。真令人惊讶。"
+              },
+              {
+                "role": "Lingling",
+                "text": "We must protect fantastic animals like pigeons.",
+                "translation": "我们必须保护像鸽子这样奇妙的动物。"
+              },
+              {
+                "role": "Amy",
+                "text": "Pigeons are clever and can find their way home.",
+                "translation": "鸽子很聪明，能找到回家的路。"
+              },
+              {
+                "role": "Daming",
+                "text": "My dog is my best friend. It is loyal.",
+                "translation": "我的狗是我最好的朋友。它很忠诚。"
+              },
+              {
+                "role": "Sam",
+                "text": "Animals are kind and helpful to people.",
+                "translation": "动物对人类友善又有帮助。"
+              },
+              {
+                "role": "Teacher",
+                "text": "A friend in need is a friend indeed. Animals can be great friends, too.",
+                "translation": "患难见真情。动物也能成为好朋友。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 6 Fantastic friends (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "What a lovely cat! Can I touch it?",
+                "translation": "多可爱的猫！我能摸摸它吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Sure. It is very friendly and smart.",
+                "translation": "当然。它很友好又机灵。"
+              },
+              {
+                "role": "Amy",
+                "text": "I want a pet, too.",
+                "translation": "我也想要一只宠物。"
+              },
+              {
+                "role": "Lingling",
+                "text": "You should be brave and take care of it.",
+                "translation": "你应该勇敢并照顾它。"
+              },
+              {
+                "role": "Amy",
+                "text": "I will. Animals need our love.",
+                "translation": "我会的。动物需要我们的爱。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Great! Let's protect all animals together.",
+                "translation": "太好了！我们一起保护所有动物。"
+              }
+            ]
+          }
+        ]
+      },
+      "下册": {
+        "Unit 1 The secrets of happiness": [
+          {
+            "unit": "Unit 1 The secrets of happiness (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "What is the secret of happiness?",
+                "translation": "幸福的秘诀是什么？"
+              },
+              {
+                "role": "Lingling",
+                "text": "For me, it is spending time with my family.",
+                "translation": "对我来说，是和家人共度时光。"
+              },
+              {
+                "role": "Daming",
+                "text": "I feel happy when I help others.",
+                "translation": "帮助别人时我感到快乐。"
+              },
+              {
+                "role": "Amy",
+                "text": "A warm smile and a kind word can bring joy.",
+                "translation": "温暖的微笑和善意的话语能带来快乐。"
+              },
+              {
+                "role": "Sam",
+                "text": "I am thankful for the simple things in life.",
+                "translation": "我感激生活中简单的事物。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Happiness comes from the heart, not from money.",
+                "translation": "幸福来自内心，而非金钱。"
+              },
+              {
+                "role": "Lingling",
+                "text": "So we should treasure every happy moment.",
+                "translation": "所以我们应珍惜每个快乐时刻。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Well said. Share your happiness and it grows.",
+                "translation": "说得好。分享快乐，快乐会倍增。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 1 The secrets of happiness (Speed up)",
+            "content": [
+              {
+                "role": "Sam",
+                "text": "Why are you so cheerful today?",
+                "translation": "你今天为什么这么开心？"
+              },
+              {
+                "role": "Amy",
+                "text": "Because I helped an old man this morning.",
+                "translation": "因为今天早上我帮助了一位老人。"
+              },
+              {
+                "role": "Sam",
+                "text": "How did you feel?",
+                "translation": "你感觉怎样？"
+              },
+              {
+                "role": "Amy",
+                "text": "I felt warm and satisfied inside.",
+                "translation": "我内心感到温暖和满足。"
+              },
+              {
+                "role": "Sam",
+                "text": "Kindness really brings happiness.",
+                "translation": "善良真的带来幸福。"
+              },
+              {
+                "role": "Amy",
+                "text": "Yes. Let's do more good things together.",
+                "translation": "是的。我们一起做更多好事吧。"
+              }
+            ]
+          }
+        ],
+        "Unit 2 Go for it!": [
+          {
+            "unit": "Unit 2 Go for it! (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "If you want to succeed, you must go for it!",
+                "translation": "要想成功，就必须努力争取！"
+              },
+              {
+                "role": "Daming",
+                "text": "I failed the race last time.",
+                "translation": "上次比赛我失败了。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Failure is not the end. What did you learn?",
+                "translation": "失败不是终点。你学到了什么？"
+              },
+              {
+                "role": "Daming",
+                "text": "I learned that I need more practice and effort.",
+                "translation": "我学到我需要更多练习和努力。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I set an aim and keep trying every day.",
+                "translation": "我定了目标，每天都坚持尝试。"
+              },
+              {
+                "role": "Sam",
+                "text": "When it is difficult, I tell myself to be fearless.",
+                "translation": "困难时我告诉自己要无所畏惧。"
+              },
+              {
+                "role": "Teacher",
+                "text": "With courage and determination, you will improve.",
+                "translation": "有勇气和决心，你就会进步。"
+              },
+              {
+                "role": "Daming",
+                "text": "Thanks. I won't give up. I'll persist!",
+                "translation": "谢谢。我不会放弃。我会坚持！"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 2 Go for it! (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "Do you want to win the game?",
+                "translation": "你想赢得比赛吗？"
+              },
+              {
+                "role": "Sam",
+                "text": "Of course! But winning is not everything.",
+                "translation": "当然！但赢不是一切。"
+              },
+              {
+                "role": "Amy",
+                "text": "What is more important?",
+                "translation": "那什么更重要？"
+              },
+              {
+                "role": "Sam",
+                "text": "Trying your best and working as a team.",
+                "translation": "尽最大努力，团队协作。"
+              },
+              {
+                "role": "Amy",
+                "text": "That's a great achievement already.",
+                "translation": "那已经是很大的成就了。"
+              },
+              {
+                "role": "Sam",
+                "text": "Right. I feel strong and confident now.",
+                "translation": "对。我现在感到强大而自信。"
+              }
+            ]
+          }
+        ],
+        "Unit 3 Food matters": [
+          {
+            "unit": "Unit 3 Food matters (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Food matters for our health. What do you eat for breakfast?",
+                "translation": "饮食关乎健康。你早餐吃什么？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I usually have milk, bread and an egg.",
+                "translation": "我通常喝牛奶，吃面包和鸡蛋。"
+              },
+              {
+                "role": "Daming",
+                "text": "I like noodles for lunch.",
+                "translation": "我午饭喜欢吃面条。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Do you eat enough vegetables and fruit?",
+                "translation": "你吃足够的蔬菜和水果吗？"
+              },
+              {
+                "role": "Amy",
+                "text": "Yes. They are good for my health.",
+                "translation": "是的。它们对我的健康有益。"
+              },
+              {
+                "role": "Sam",
+                "text": "I don't eat too much meat or sugar.",
+                "translation": "我不吃太多肉或糖。"
+              },
+              {
+                "role": "Teacher",
+                "text": "A balanced diet keeps us strong. Don't be hungry or thirsty too long.",
+                "translation": "均衡饮食让我们强壮。别饿着或渴太久。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 3 Food matters (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "This soup tastes delicious!",
+                "translation": "这汤尝起来很美味！"
+              },
+              {
+                "role": "Lingling",
+                "text": "Thank you. Here is the recipe.",
+                "translation": "谢谢。这是食谱。"
+              },
+              {
+                "role": "Amy",
+                "text": "What is in it?",
+                "translation": "里面有什么？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Rice, vegetables and a little meat.",
+                "translation": "米饭、蔬菜和一点肉。"
+              },
+              {
+                "role": "Amy",
+                "text": "It's healthy and tasty.",
+                "translation": "既健康又好吃。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Good food gives us good nutrition.",
+                "translation": "好的食物给我们好的营养。"
+              }
+            ]
+          }
+        ],
+        "Unit 4 The art of having fun": [
+          {
+            "unit": "Unit 4 The art of having fun (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Everyone needs recreation. How do you have fun?",
+                "translation": "每个人都需要娱乐。你怎么玩？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I read storybooks in my leisure time.",
+                "translation": "我在空闲时间读故事书。"
+              },
+              {
+                "role": "Daming",
+                "text": "I play sport with my friends on the weekend.",
+                "translation": "我周末和朋友做运动。"
+              },
+              {
+                "role": "Amy",
+                "text": "I went to a concert. The music was wonderful.",
+                "translation": "我去了音乐会。音乐很棒。"
+              },
+              {
+                "role": "Sam",
+                "text": "I like movies and games. They amuse me.",
+                "translation": "我喜欢电影和游戏。它们让我开心。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Hobbies are a great pastime. Are you curious about new things?",
+                "translation": "爱好是很好的消遣。你对新事物好奇吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes. Art helps me be creative.",
+                "translation": "是的。艺术让我有创造力。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Good. Relax and enjoy life, but work hard, too.",
+                "translation": "很好。放松享受生活，但也要努力学习。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 4 The art of having fun (Speed up)",
+            "content": [
+              {
+                "role": "Sam",
+                "text": "What did you do last weekend?",
+                "translation": "你上周末做了什么？"
+              },
+              {
+                "role": "Amy",
+                "text": "I painted a picture and skated with friends.",
+                "translation": "我画了画，还和朋友滑冰。"
+              },
+              {
+                "role": "Sam",
+                "text": "That sounds like fun!",
+                "translation": "听起来很好玩！"
+              },
+              {
+                "role": "Amy",
+                "text": "It was. We laughed a lot.",
+                "translation": "是的。我们笑得很开心。"
+              },
+              {
+                "role": "Sam",
+                "text": "I watched a funny movie at home.",
+                "translation": "我在家看了一部有趣的电影。"
+              },
+              {
+                "role": "Amy",
+                "text": "Entertainment makes life colourful.",
+                "translation": "娱乐让生活多姿多彩。"
+              }
+            ]
+          }
+        ],
+        "Unit 5 Amazing nature": [
+          {
+            "unit": "Unit 5 Amazing nature (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Nature is full of amazing places. Have you seen a waterfall?",
+                "translation": "大自然有惊人的美景。你看过瀑布吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes. The water fell from a high mountain.",
+                "translation": "看过。水从高山上倾泻而下。"
+              },
+              {
+                "role": "Daming",
+                "text": "I visited a big forest. The air was fresh.",
+                "translation": "我参观了一片大森林。空气很清新。"
+              },
+              {
+                "role": "Amy",
+                "text": "I saw a wide river and a blue ocean.",
+                "translation": "我看到了宽阔的河流和蓝色的大海。"
+              },
+              {
+                "role": "Sam",
+                "text": "The desert is dry, but it is beautiful, too.",
+                "translation": "沙漠很干燥，但也很美。"
+              },
+              {
+                "role": "Teacher",
+                "text": "The scenery is breathtaking. We must preserve it.",
+                "translation": "风景令人屏息。我们必须保护它。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes. Let's protect the environment and wild animals.",
+                "translation": "是的。让我们保护环境和野生动物。"
+              },
+              {
+                "role": "Teacher",
+                "text": "The earth is our home. Discover it and love it.",
+                "translation": "地球是我们的家。去发现它，热爱它。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 5 Amazing nature (Speed up)",
+            "content": [
+              {
+                "role": "Amy",
+                "text": "What is the climate like in the mountains?",
+                "translation": "山里的气候怎样？"
+              },
+              {
+                "role": "Lingling",
+                "text": "It is cool and the landscape is green.",
+                "translation": "很凉爽，景观绿意盎然。"
+              },
+              {
+                "role": "Amy",
+                "text": "Are there wild animals there?",
+                "translation": "那里有野生动物吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes, many. They live freely in nature.",
+                "translation": "有，很多。它们在大自然中自由生活。"
+              },
+              {
+                "role": "Amy",
+                "text": "It sounds wonderful. I want to go there.",
+                "translation": "听起来很棒。我想去那里。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Me too. Let's explore it one day.",
+                "translation": "我也是。我们有一天去探索吧。"
+              }
+            ]
+          }
+        ],
+        "Unit 6 Hitting the road": [
+          {
+            "unit": "Unit 6 Hitting the road (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "We are going on a trip. Are you ready to hit the road?",
+                "translation": "我们要去旅行了。准备好上路了吗？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Yes! I have my ticket, map and luggage.",
+                "translation": "准备好了！我有票、地图和行李。"
+              },
+              {
+                "role": "Daming",
+                "text": "Our destination is Beijing.",
+                "translation": "我们的目的地是北京。"
+              },
+              {
+                "role": "Amy",
+                "text": "What sights are we going to visit?",
+                "translation": "我们要参观哪些景点？"
+              },
+              {
+                "role": "Sam",
+                "text": "The Great Wall, the Palace Museum and Tian'anmen Square.",
+                "translation": "长城、故宫和天安门广场。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Our guide will show us around. Don't lose your passport.",
+                "translation": "导游会带我们游览。别弄丢护照。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I want to buy some souvenirs, too.",
+                "translation": "我也想买些纪念品。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Great! Plan well and enjoy the journey.",
+                "translation": "太好了！计划周全，享受旅程。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 6 Hitting the road (Speed up)",
+            "content": [
+              {
+                "role": "Sam",
+                "text": "How do we get to the station?",
+                "translation": "我们怎么去车站？"
+              },
+              {
+                "role": "Daming",
+                "text": "We can take the underground.",
+                "translation": "我们可以坐地铁。"
+              },
+              {
+                "role": "Sam",
+                "text": "How long is the journey?",
+                "translation": "旅程有多久？"
+              },
+              {
+                "role": "Daming",
+                "text": "About two hours by train.",
+                "translation": "坐火车大约两小时。"
+              },
+              {
+                "role": "Sam",
+                "text": "Where will we stay?",
+                "translation": "我们住哪里？"
+              },
+              {
+                "role": "Daming",
+                "text": "In a hotel near the city centre.",
+                "translation": "在市中心附近的一家宾馆。"
+              },
+              {
+                "role": "Sam",
+                "text": "I'm sure it will be a great adventure.",
+                "translation": "我相信这会是一次很棒的冒险。"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

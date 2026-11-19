@@ -224,6 +224,21 @@ WORD_TO_LESSON_MODULE = {
     '六下4': ("Unit 4 Let's be creative!", '六年级下册'),
     '六下5': ('Unit 5 Reach for the stars', '六年级下册'),
     '六下6': ('Unit 6 High flyers', '六年级下册'),
+    # 七年级上册（外研版新标准2024新版：Starter + Unit 1~6）
+    '七上0': ('Starter Welcome to junior high!', '七年级上册'),
+    '七上1': ('Unit 1 A new start', '七年级上册'),
+    '七上2': ('Unit 2 More than fun', '七年级上册'),
+    '七上3': ('Unit 3 Family ties', '七年级上册'),
+    '七上4': ('Unit 4 Time to celebrate', '七年级上册'),
+    '七上5': ('Unit 5 The power of plants', '七年级上册'),
+    '七上6': ('Unit 6 Fantastic friends', '七年级上册'),
+    # 七年级下册（外研版新标准2025新版：Unit 1~6）
+    '七下1': ('Unit 1 The secrets of happiness', '七年级下册'),
+    '七下2': ('Unit 2 Go for it!', '七年级下册'),
+    '七下3': ('Unit 3 Food matters', '七年级下册'),
+    '七下4': ('Unit 4 The art of having fun', '七年级下册'),
+    '七下5': ('Unit 5 Amazing nature', '七年级下册'),
+    '七下6': ('Unit 6 Hitting the road', '七年级下册'),
 }
 
 
