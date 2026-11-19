@@ -6313,6 +6313,876 @@
           }
         ]
       }
+    },
+    "八年级": {
+      "上册": {
+        "Unit 1 This is me": [
+          {
+            "unit": "Unit 1 This is me (Start up)",
+            "content": [
+              {
+                "role": "Ms Li",
+                "text": "Welcome back, everyone! Let's talk about ourselves.",
+                "translation": "欢迎大家回来！我们来谈谈自己。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I'm Lingling. I'm tall and I have long straight hair.",
+                "translation": "我是玲玲。我个子高，留着长直发。"
+              },
+              {
+                "role": "Daming",
+                "text": "I'm Daming. I'm a bit shy, but I like making friends.",
+                "translation": "我是大明。我有点害羞，但我喜欢交朋友。"
+              },
+              {
+                "role": "Amy",
+                "text": "I'm outgoing and I love painting. I'm proud of my hobby.",
+                "translation": "我很外向，喜欢绘画。我为我的爱好感到自豪。"
+              },
+              {
+                "role": "Sam",
+                "text": "I'm humorous and I like collecting stamps.",
+                "translation": "我很幽默，喜欢集邮。"
+              },
+              {
+                "role": "Ms Li",
+                "text": "Great! Everyone is unique. What is your strength?",
+                "translation": "很好！每个人都是独特的。你的优点是什么？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I'm a good listener. I want to improve my English, too.",
+                "translation": "我善于倾听。我也想提高我的英语。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 1 This is me (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "How would you describe yourself in three words?",
+                "translation": "你会用三个词怎么描述自己？"
+              },
+              {
+                "role": "Amy",
+                "text": "Friendly, patient and helpful.",
+                "translation": "友好、有耐心、乐于助人。"
+              },
+              {
+                "role": "Sam",
+                "text": "I'd say brave, curious and humorous.",
+                "translation": "我会说勇敢、好奇和幽默。"
+              },
+              {
+                "role": "Daming",
+                "text": "I want to be more confident this term.",
+                "translation": "这学期我想变得更自信。"
+              },
+              {
+                "role": "Amy",
+                "text": "Me too. Let's help each other.",
+                "translation": "我也是。我们互相帮助吧。"
+              }
+            ]
+          }
+        ],
+        "Unit 2 Getting along": [
+          {
+            "unit": "Unit 2 Getting along (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Today we'll talk about getting along with others.",
+                "translation": "今天我们聊聊如何与人相处。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I get along well with my classmates. We trust each other.",
+                "translation": "我和同学相处得很好。我们互相信任。"
+              },
+              {
+                "role": "Daming",
+                "text": "My friend and I had a small argument last week.",
+                "translation": "上周我和朋友发生了小争吵。"
+              },
+              {
+                "role": "Teacher",
+                "text": "What did you do then?",
+                "translation": "那你们怎么做的？"
+              },
+              {
+                "role": "Daming",
+                "text": "I apologized and we forgave each other.",
+                "translation": "我道了歉，我们互相原谅了。"
+              },
+              {
+                "role": "Amy",
+                "text": "Good friends listen and share their feelings.",
+                "translation": "好朋友会倾听并分享感受。"
+              },
+              {
+                "role": "Teacher",
+                "text": "That's right. Respect and kindness are important.",
+                "translation": "对。尊重和善良很重要。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 2 Getting along (Speed up)",
+            "content": [
+              {
+                "role": "Sam",
+                "text": "Sometimes I find it hard to get along with my neighbour.",
+                "translation": "有时我发现和邻居相处很难。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Try to understand them and compromise.",
+                "translation": "试着理解他们并做出让步。"
+              },
+              {
+                "role": "Sam",
+                "text": "But I want them to respect me.",
+                "translation": "但我希望他们尊重我。"
+              },
+              {
+                "role": "Amy",
+                "text": "Respect goes both ways. Be honest and kind.",
+                "translation": "尊重是相互的。要诚实和善良。"
+              },
+              {
+                "role": "Sam",
+                "text": "Thanks. I'll talk to them calmly.",
+                "translation": "谢谢。我会冷静地和他们谈谈。"
+              }
+            ]
+          }
+        ],
+        "Unit 3 Make it happen!": [
+          {
+            "unit": "Unit 3 Make it happen! (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "What do you want to achieve this term?",
+                "translation": "这学期你想实现什么目标？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I want to make great progress in maths.",
+                "translation": "我想在数学上取得很大进步。"
+              },
+              {
+                "role": "Daming",
+                "text": "My goal is to win the running competition.",
+                "translation": "我的目标是赢得跑步比赛。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Goals need hard effort. Never give up.",
+                "translation": "目标需要努力。永不放弃。"
+              },
+              {
+                "role": "Amy",
+                "text": "I want to learn to paint better. It's a challenge.",
+                "translation": "我想把画画得更好。这是个挑战。"
+              },
+              {
+                "role": "Sam",
+                "text": "I believe anything is possible if you're determined.",
+                "translation": "我相信只要有决心，一切皆有可能。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Take small steps and stay focused.",
+                "translation": "一小步一小步来，保持专注。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 3 Make it happen! (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "I find it difficult to reach my goal.",
+                "translation": "我发现很难达到目标。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Don't fear difficulty. Practise every day.",
+                "translation": "别怕困难。每天练习。"
+              },
+              {
+                "role": "Daming",
+                "text": "But I make mistakes.",
+                "translation": "但我会犯错。"
+              },
+              {
+                "role": "Amy",
+                "text": "Mistakes help you improve. Believe in yourself.",
+                "translation": "错误帮助你进步。相信你自己。"
+              },
+              {
+                "role": "Daming",
+                "text": "Thanks. I'll keep going.",
+                "translation": "谢谢。我会坚持下去。"
+              }
+            ]
+          }
+        ],
+        "Unit 4 Digital life": [
+          {
+            "unit": "Unit 4 Digital life (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Digital life is part of our daily life.",
+                "translation": "数字生活是我们日常的一部分。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I use the Internet to search for information.",
+                "translation": "我用互联网搜索信息。"
+              },
+              {
+                "role": "Daming",
+                "text": "I chat with friends online and send messages.",
+                "translation": "我在网上和朋友聊天、发消息。"
+              },
+              {
+                "role": "Amy",
+                "text": "Online shopping is very convenient.",
+                "translation": "网上购物很方便。"
+              },
+              {
+                "role": "Sam",
+                "text": "But be careful. Protect your password and privacy.",
+                "translation": "但要小心。保护你的密码和隐私。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Right. Don't get addicted to games.",
+                "translation": "对。不要对游戏上瘾。"
+              },
+              {
+                "role": "Lingling",
+                "text": "We should keep a balance between study and play.",
+                "translation": "我们应该在学习和玩耍之间保持平衡。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 4 Digital life (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "My smartphone is old. I want to download a new app.",
+                "translation": "我的手机旧了。我想下载一个新应用。"
+              },
+              {
+                "role": "Amy",
+                "text": "Which app?",
+                "translation": "哪个应用？"
+              },
+              {
+                "role": "Daming",
+                "text": "One for learning English. I can upload my voice.",
+                "translation": "一个学英语的。我可以上传我的语音。"
+              },
+              {
+                "role": "Sam",
+                "text": "Sounds useful. Don't stare at the screen too long.",
+                "translation": "听起来很有用。别盯屏幕太久。"
+              },
+              {
+                "role": "Daming",
+                "text": "I won't. I'll click here to start.",
+                "translation": "我不会的。我点这里开始。"
+              }
+            ]
+          }
+        ],
+        "Unit 5 Play by the rules?": [
+          {
+            "unit": "Unit 5 Play by the rules? (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Today's topic: play by the rules.",
+                "translation": "今天的主题：遵守规则。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Rules help us stay fair and safe.",
+                "translation": "规则让我们保持公平和安全。"
+              },
+              {
+                "role": "Daming",
+                "text": "In the match, the referee made a fair decision.",
+                "translation": "比赛中，裁判做出了公平的决定。"
+              },
+              {
+                "role": "Amy",
+                "text": "Our team scored and won the medal.",
+                "translation": "我们队得分并赢得了奖牌。"
+              },
+              {
+                "role": "Sam",
+                "text": "If you break the rules, it's unfair to others.",
+                "translation": "如果你违反规则，对别人就不公平。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Exactly. Even if you lose, accept the result.",
+                "translation": "没错。即使输了，也要接受结果。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Team spirit matters more than winning.",
+                "translation": "团队精神比赢更重要。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 5 Play by the rules? (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "Do you think the competition was fair?",
+                "translation": "你觉得比赛公平吗？"
+              },
+              {
+                "role": "Sam",
+                "text": "Yes. Everyone followed the rules.",
+                "translation": "是的。每个人都遵守了规则。"
+              },
+              {
+                "role": "Daming",
+                "text": "But one player wanted to cheat.",
+                "translation": "但有个选手想作弊。"
+              },
+              {
+                "role": "Amy",
+                "text": "That's not sportsmanlike. We cheered for fair play.",
+                "translation": "那不是运动员该有的样子。我们为公平竞赛欢呼。"
+              },
+              {
+                "role": "Sam",
+                "text": "Training and discipline make a good sportsman.",
+                "translation": "训练和纪律造就优秀的运动员。"
+              }
+            ]
+          }
+        ],
+        "Unit 6 When disaster strikes": [
+          {
+            "unit": "Unit 6 When disaster strikes (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "We're learning about disasters and safety.",
+                "translation": "我们在学习灾难与安全知识。"
+              },
+              {
+                "role": "Lingling",
+                "text": "An earthquake can be very dangerous.",
+                "translation": "地震可能非常危险。"
+              },
+              {
+                "role": "Daming",
+                "text": "During a flood, we must move to higher ground.",
+                "translation": "发洪水时，我们必须转移到高处。"
+              },
+              {
+                "role": "Amy",
+                "text": "If there's a fire, stay calm and escape quickly.",
+                "translation": "如果发生火灾，要冷静并迅速逃离。"
+              },
+              {
+                "role": "Sam",
+                "text": "We got a typhoon warning yesterday.",
+                "translation": "我们昨天收到了台风警报。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Good. Safety comes first. Prepare an emergency kit.",
+                "translation": "很好。安全第一。准备一个应急包。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Many volunteers helped rescue people.",
+                "translation": "许多志愿者帮助营救人们。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 6 When disaster strikes (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "What should we do in an emergency?",
+                "translation": "紧急情况我们该怎么做？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Keep calm and call for help.",
+                "translation": "保持冷静并呼救。"
+              },
+              {
+                "role": "Daming",
+                "text": "And protect ourselves first.",
+                "translation": "还要先保护好自己。"
+              },
+              {
+                "role": "Amy",
+                "text": "Yes. Firefighters rescued many people and they survived.",
+                "translation": "是的。消防员救了很多人，他们幸存了下来。"
+              },
+              {
+                "role": "Sam",
+                "text": "After the disaster, they rebuilt their homes.",
+                "translation": "灾难后，他们重建了家园。"
+              }
+            ]
+          }
+        ]
+      },
+      "下册": {
+        "Unit 1 Career talks": [
+          {
+            "unit": "Unit 1 Career talks (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Let's talk about careers. What do you want to be?",
+                "translation": "我们谈谈职业。你想做什么？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I want to be a doctor and help sick people.",
+                "translation": "我想当医生，帮助病人。"
+              },
+              {
+                "role": "Daming",
+                "text": "My father is a driver and my mother is a nurse.",
+                "translation": "我爸爸是司机，妈妈是护士。"
+              },
+              {
+                "role": "Amy",
+                "text": "I'd like to be an artist. I love painting.",
+                "translation": "我想当艺术家。我热爱绘画。"
+              },
+              {
+                "role": "Sam",
+                "text": "A pilot flies a plane. That's a cool job.",
+                "translation": "飞行员驾驶飞机。那是很酷的工作。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Every job is important. You need skills and experience.",
+                "translation": "每种工作都很重要。你需要技能和经验。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I'll study hard for my future career.",
+                "translation": "我会为将来的职业努力学习。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 1 Career talks (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "I had an interview for a part-time job.",
+                "translation": "我参加了一份兼职工作的面试。"
+              },
+              {
+                "role": "Amy",
+                "text": "How did it go?",
+                "translation": "怎么样？"
+              },
+              {
+                "role": "Daming",
+                "text": "I think I did well. They asked about my skills.",
+                "translation": "我觉得还不错。他们问了我的技能。"
+              },
+              {
+                "role": "Sam",
+                "text": "Good luck! A good salary is nice, but interest matters more.",
+                "translation": "祝你好运！高薪固然好，但兴趣更重要。"
+              },
+              {
+                "role": "Daming",
+                "text": "I agree. I want a job I enjoy.",
+                "translation": "我同意。我想要一份我喜欢的工作。"
+              }
+            ]
+          }
+        ],
+        "Unit 2 Growing pains and gains": [
+          {
+            "unit": "Unit 2 Growing pains and gains (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Growing up brings pains and gains.",
+                "translation": "成长带来烦恼与收获。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Sometimes I feel anxious before exams.",
+                "translation": "有时考试前我感到焦虑。"
+              },
+              {
+                "role": "Daming",
+                "text": "I make mistakes, but I learn from them.",
+                "translation": "我会犯错，但我从中学习。"
+              },
+              {
+                "role": "Amy",
+                "text": "I want to be more independent.",
+                "translation": "我想变得更独立。"
+              },
+              {
+                "role": "Sam",
+                "text": "My mood changes quickly these days.",
+                "translation": "这些天我的情绪变化很快。"
+              },
+              {
+                "role": "Teacher",
+                "text": "That's normal for teenagers. Talk to your parents.",
+                "translation": "这对青少年很正常。和父母谈谈。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Good advice. Communication helps a lot.",
+                "translation": "好建议。沟通很有帮助。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 2 Growing pains and gains (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "I feel pressure from school sometimes.",
+                "translation": "我有时感到来自学校的压力。"
+              },
+              {
+                "role": "Amy",
+                "text": "Me too. I listen to music to relax.",
+                "translation": "我也是。我听音乐放松。"
+              },
+              {
+                "role": "Sam",
+                "text": "How do you deal with it?",
+                "translation": "你怎么应对？"
+              },
+              {
+                "role": "Lingling",
+                "text": "I accept myself and stay positive.",
+                "translation": "我接受自己并保持积极。"
+              },
+              {
+                "role": "Daming",
+                "text": "Thanks. I have more confidence now.",
+                "translation": "谢谢。我现在更有信心了。"
+              }
+            ]
+          }
+        ],
+        "Unit 3 What makes a great team?": [
+          {
+            "unit": "Unit 3 What makes a great team? (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "What makes a great team?",
+                "translation": "什么造就一个优秀的团队？"
+              },
+              {
+                "role": "Lingling",
+                "text": "Every member should cooperate and share ideas.",
+                "translation": "每个成员都应该合作并分享想法。"
+              },
+              {
+                "role": "Daming",
+                "text": "We need a good leader and clear roles.",
+                "translation": "我们需要好的领导和清晰的角色。"
+              },
+              {
+                "role": "Amy",
+                "text": "We discuss problems and respect different opinions.",
+                "translation": "我们讨论问题，尊重不同意见。"
+              },
+              {
+                "role": "Sam",
+                "text": "Sometimes we disagree, but we support each other.",
+                "translation": "有时我们意见不合，但我们互相支持。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Right. Trust and responsibility build a strong team.",
+                "translation": "对。信任和责任铸就强大的团队。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Together we can finish any project.",
+                "translation": "一起我们就能完成任何项目。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 3 What makes a great team? (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "Our team won the competition.",
+                "translation": "我们队赢了比赛。"
+              },
+              {
+                "role": "Amy",
+                "text": "We are winners because we worked together.",
+                "translation": "我们是赢家，因为我们一起努力。"
+              },
+              {
+                "role": "Sam",
+                "text": "I shared my ideas and everyone listened.",
+                "translation": "我分享了想法，大家都倾听了。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Value each member and encourage one another.",
+                "translation": "重视每个成员，互相鼓励。"
+              },
+              {
+                "role": "Teacher",
+                "text": "That's the spirit of teamwork.",
+                "translation": "这就是团队精神。"
+              }
+            ]
+          }
+        ],
+        "Unit 4 Helping out": [
+          {
+            "unit": "Unit 4 Helping out (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Helping out makes our community better.",
+                "translation": "帮忙让我们的社区更美好。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I'm a volunteer at the community centre.",
+                "translation": "我是社区中心的志愿者。"
+              },
+              {
+                "role": "Daming",
+                "text": "We raise money for charity to help poor children.",
+                "translation": "我们为慈善筹款帮助贫困儿童。"
+              },
+              {
+                "role": "Amy",
+                "text": "Last weekend we cleaned the park.",
+                "translation": "上周末我们打扫了公园。"
+              },
+              {
+                "role": "Sam",
+                "text": "I helped the elderly and donated books.",
+                "translation": "我帮助了老人并捐了书。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Kindness is meaningful and rewarding.",
+                "translation": "善良是有意义且有回报的。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I'm willing to help anyone in need.",
+                "translation": "我乐意帮助任何有需要的人。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 4 Helping out (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "What can we do for the environment?",
+                "translation": "我们能为环境做些什么？"
+              },
+              {
+                "role": "Amy",
+                "text": "Plant trees and don't drop rubbish.",
+                "translation": "植树，不乱扔垃圾。"
+              },
+              {
+                "role": "Sam",
+                "text": "We can also help disabled people.",
+                "translation": "我们还可以帮助残疾人。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Even small help makes a big difference.",
+                "translation": "即使是小小的帮助也很重要。"
+              },
+              {
+                "role": "Daming",
+                "text": "You're right. Generosity starts with us.",
+                "translation": "你说得对。慷慨从我们做起。"
+              }
+            ]
+          }
+        ],
+        "Unit 5 Looking into nature": [
+          {
+            "unit": "Unit 5 Looking into nature (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "Today we look into nature.",
+                "translation": "今天我们探索大自然。"
+              },
+              {
+                "role": "Lingling",
+                "text": "A nature reserve protects wildlife and habitats.",
+                "translation": "自然保护区保护野生动物和栖息地。"
+              },
+              {
+                "role": "Daming",
+                "text": "Scientists do research on different species.",
+                "translation": "科学家对不同物种进行研究。"
+              },
+              {
+                "role": "Amy",
+                "text": "I observed birds and made a discovery.",
+                "translation": "我观察鸟类并有了发现。"
+              },
+              {
+                "role": "Sam",
+                "text": "Many plants and insects live in the forest.",
+                "translation": "许多植物和昆虫生活在森林里。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Nature is full of clever creatures and patterns.",
+                "translation": "大自然充满聪明的生物和模式。"
+              },
+              {
+                "role": "Lingling",
+                "text": "I'm curious about the ocean and mountains.",
+                "translation": "我对海洋和山脉很好奇。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 5 Looking into nature (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "What did you learn from the experiment?",
+                "translation": "你从实验中学到了什么？"
+              },
+              {
+                "role": "Amy",
+                "text": "I learned how plants grow.",
+                "translation": "我了解了植物如何生长。"
+              },
+              {
+                "role": "Sam",
+                "text": "I want to do research on dolphins.",
+                "translation": "我想研究海豚。"
+              },
+              {
+                "role": "Lingling",
+                "text": "They are clever and friendly.",
+                "translation": "它们聪明又友好。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Keep curious and observe carefully.",
+                "translation": "保持好奇，仔细观察。"
+              }
+            ]
+          }
+        ],
+        "Unit 6 Living with nature": [
+          {
+            "unit": "Unit 6 Living with nature (Start up)",
+            "content": [
+              {
+                "role": "Teacher",
+                "text": "How can we live with nature?",
+                "translation": "我们如何与自然共处？"
+              },
+              {
+                "role": "Lingling",
+                "text": "We should protect the earth and reduce pollution.",
+                "translation": "我们应该保护地球，减少污染。"
+              },
+              {
+                "role": "Daming",
+                "text": "Recycle paper and use less plastic.",
+                "translation": "回收纸张，少用塑料。"
+              },
+              {
+                "role": "Amy",
+                "text": "Save energy and use solar power.",
+                "translation": "节约能源，使用太阳能。"
+              },
+              {
+                "role": "Sam",
+                "text": "Global warming is a threat to nature.",
+                "translation": "全球变暖是对自然的威胁。"
+              },
+              {
+                "role": "Teacher",
+                "text": "We must live in harmony with nature.",
+                "translation": "我们必须与自然和谐共处。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Sustainable development is good for our future.",
+                "translation": "可持续发展对我们的未来有好处。"
+              }
+            ]
+          },
+          {
+            "unit": "Unit 6 Living with nature (Speed up)",
+            "content": [
+              {
+                "role": "Daming",
+                "text": "What can I do to help?",
+                "translation": "我能做什么来帮忙？"
+              },
+              {
+                "role": "Amy",
+                "text": "Save water and reuse paper.",
+                "translation": "节约用水，纸张再利用。"
+              },
+              {
+                "role": "Lingling",
+                "text": "Don't drop rubbish and protect endangered animals.",
+                "translation": "不乱扔垃圾，保护濒危动物。"
+              },
+              {
+                "role": "Sam",
+                "text": "Prevent extinction and go green.",
+                "translation": "防止物种灭绝，环保出行。"
+              },
+              {
+                "role": "Teacher",
+                "text": "Be responsible for the earth we share.",
+                "translation": "对我们共享的地球负责任。"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
 }

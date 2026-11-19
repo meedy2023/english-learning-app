@@ -1,5 +1,5 @@
 // api-shim.js
-// 纯静态版：支持多年级（三年级/四年级/五年级/六年级/七年级），用本地 JSON 模拟 FastAPI 后端接口。
+// 纯静态版：支持多年级（三年级/四年级/五年级/六年级/七年级/八年级），用本地 JSON 模拟 FastAPI 后端接口。
 (function () {
   "use strict";
 
@@ -96,7 +96,7 @@
     );
   }
 
-  // ---------- 单词模块→课文映射（三、四、五、六、七年级） ----------
+  // ---------- 单词模块→课文映射（三、四、五、六、七、八年级） ----------
   const WORD_TO_LESSON = {
     // 三年级上册（2024新版：Welcome + Unit 1~6）
     "三上0": ["Welcome to school", "三年级上册"],
@@ -154,6 +154,20 @@
     "七下4": ["Unit 4 The art of having fun", "七年级下册"],
     "七下5": ["Unit 5 Amazing nature", "七年级下册"],
     "七下6": ["Unit 6 Hitting the road", "七年级下册"],
+    // 八年级上册（外研版新标准2025秋新版：Unit 1~6）
+    "八上1": ["Unit 1 This is me", "八年级上册"],
+    "八上2": ["Unit 2 Getting along", "八年级上册"],
+    "八上3": ["Unit 3 Make it happen!", "八年级上册"],
+    "八上4": ["Unit 4 Digital life", "八年级上册"],
+    "八上5": ["Unit 5 Play by the rules?", "八年级上册"],
+    "八上6": ["Unit 6 When disaster strikes", "八年级上册"],
+    // 八年级下册（外研版新标准2026春新版：Unit 1~6）
+    "八下1": ["Unit 1 Career talks", "八年级下册"],
+    "八下2": ["Unit 2 Growing pains and gains", "八年级下册"],
+    "八下3": ["Unit 3 What makes a great team?", "八年级下册"],
+    "八下4": ["Unit 4 Helping out", "八年级下册"],
+    "八下5": ["Unit 5 Looking into nature", "八年级下册"],
+    "八下6": ["Unit 6 Living with nature", "八年级下册"],
   };
 
   // ---------- 课文模块列表 ----------

@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>英语学习小助手</title>
-  <meta name="description" content="外研社英语三～七年级，1516 个单词、62 个单元。发音、测验、消消乐、拼写闯关，打开就能学，免费无需登录。">
+  <meta name="description" content="外研社英语三～八年级，1756 个单词、74 个单元。发音、测验、消消乐、拼写闯关，打开就能学，免费无需登录。">
   <meta property="og:type" content="website">
   <meta property="og:title" content="英语学习小助手 · 小学英语单词闯关">
-  <meta property="og:description" content="外研社英语三～七年级，1516 个单词、62 个单元，打开就能学。">
+  <meta property="og:description" content="外研社英语三～八年级，1756 个单词、74 个单元，打开就能学。">
   <meta property="og:image" content="https://meedy2023.github.io/english-learning-app/share-cover.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -1360,7 +1360,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📖 教材版本</div>
-          <div class="settings-row-sub">外研社三年级～七年级，2024 新版</div>
+          <div class="settings-row-sub">外研社三年级～八年级，2024 新版</div>
         </div>
       </div>
       <div class="settings-row">
@@ -2278,7 +2278,7 @@ const API = ".";
   // ========== 课文学习功能 ==========
   // 单词模块到课文模块的映射（包含学期信息）
   // 上N → Module N (三年级上册)
-  // 单词模块 → 课文模块+年级（三、四、五、六、七年级）
+  // 单词模块 → 课文模块+年级（三、四、五、六、七、八年级）
   const WORD_TO_LESSON = {
     // 三年级上册（2024新版：Welcome + Unit 1~6）
     '三上0': { module: 'Welcome to school', grade: '三年级上册' },
@@ -2350,6 +2350,20 @@ const API = ".";
     '七下4': { module: 'Unit 4 The art of having fun', grade: '七年级下册' },
     '七下5': { module: 'Unit 5 Amazing nature', grade: '七年级下册' },
     '七下6': { module: 'Unit 6 Hitting the road', grade: '七年级下册' },
+    // 八年级上册（外研版新标准2025秋新版：Unit 1~6）
+    '八上1': { module: 'Unit 1 This is me', grade: '八年级上册' },
+    '八上2': { module: 'Unit 2 Getting along', grade: '八年级上册' },
+    '八上3': { module: 'Unit 3 Make it happen!', grade: '八年级上册' },
+    '八上4': { module: 'Unit 4 Digital life', grade: '八年级上册' },
+    '八上5': { module: 'Unit 5 Play by the rules?', grade: '八年级上册' },
+    '八上6': { module: 'Unit 6 When disaster strikes', grade: '八年级上册' },
+    // 八年级下册（外研版新标准2026春新版：Unit 1~6）
+    '八下1': { module: 'Unit 1 Career talks', grade: '八年级下册' },
+    '八下2': { module: 'Unit 2 Growing pains and gains', grade: '八年级下册' },
+    '八下3': { module: 'Unit 3 What makes a great team?', grade: '八年级下册' },
+    '八下4': { module: 'Unit 4 Helping out', grade: '八年级下册' },
+    '八下5': { module: 'Unit 5 Looking into nature', grade: '八年级下册' },
+    '八下6': { module: 'Unit 6 Living with nature', grade: '八年级下册' },
   };
 
   // 单元显示名：「模块键 + 单元名」，如 五上1 What's on your plate?
@@ -5116,13 +5130,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const grid = document.getElementById('grade-grid');
       grid.innerHTML = '';
       // 年级图标
-      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '🎓', '七年级': '🏅'};
+      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '🎓', '七年级': '🏅', '八年级': '🏆'};
       const descMap = {
         '三年级': '外研社三年级上册/下册',
         '四年级': '外研社四年级上册/下册',
         '五年级': '外研社五年级上册/下册',
         '六年级': '外研社六年级上册/下册',
-        '七年级': '外研社七年级上册/下册'
+        '七年级': '外研社七年级上册/下册',
+        '八年级': '外研社八年级上册/下册'
       };
       for (const grade of data.grades) {
         const btn = document.createElement('div');
@@ -5179,6 +5194,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <span class="grade-info">
             <div class="grade-name">七年级</div>
             <div class="grade-desc">外研社七年级上册/下册</div>
+          </span>
+          <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
+        </div>
+        <div class="grade-btn" onclick="openGrade('八年级')">
+          <span class="grade-icon">🏆</span>
+          <span class="grade-info">
+            <div class="grade-name">八年级</div>
+            <div class="grade-desc">外研社八年级上册/下册</div>
           </span>
           <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
         </div>
@@ -8859,8 +8882,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         byGrade[g].tm += p.mastered || 0;
         byGrade[g].modules[m] = p;
       }
-      // 按年级固定顺序排序（三→四→五→六→七），避免默认字符串排序导致「五年级」排在「四年级」前
-      const GRADE_ORDER = ['三年级', '四年级', '五年级', '六年级', '七年级'];
+      // 按年级固定顺序排序（三→四→五→六→七→八），避免默认字符串排序导致「五年级」排在「四年级」前
+      const GRADE_ORDER = ['三年级', '四年级', '五年级', '六年级', '七年级', '八年级'];
       const grades = Object.keys(byGrade).sort((a, b) => {
         const ia = GRADE_ORDER.indexOf(a), ib = GRADE_ORDER.indexOf(b);
         if (ia !== -1 && ib !== -1) return ia - ib;
@@ -8868,7 +8891,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (ib !== -1) return 1;
         return a.localeCompare(b, 'zh');
       });
-      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '🎓', '七年级': '🏅'};
+      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '🎓', '七年级': '🏅', '八年级': '🏆'};
 
       // ========== 年级切换标签 ==========
       const tabsEl = document.getElementById("report-grade-tabs");
@@ -10507,7 +10530,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try {
       if (window._pkChallengeActive) return;
       var g = new URLSearchParams(location.search).get('grade');
-      if (g && ['三年级', '四年级', '五年级', '六年级', '七年级'].indexOf(g) >= 0) {
+      if (g && ['三年级', '四年级', '五年级', '六年级', '七年级', '八年级'].indexOf(g) >= 0) {
         setTimeout(function () { openGrade(g); }, 80);
       }
     } catch (e) {}
