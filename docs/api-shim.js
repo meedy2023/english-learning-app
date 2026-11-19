@@ -1,5 +1,5 @@
 // api-shim.js
-// 纯静态版：支持多年级（三年级/四年级/五年级），用本地 JSON 模拟 FastAPI 后端接口。
+// 纯静态版：支持多年级（三年级/四年级/五年级/六年级），用本地 JSON 模拟 FastAPI 后端接口。
 (function () {
   "use strict";
 
@@ -96,7 +96,7 @@
     );
   }
 
-  // ---------- 单词模块→课文映射（三个年级） ----------
+  // ---------- 单词模块→课文映射（三、四、五、六年级） ----------
   const WORD_TO_LESSON = {
     // 三年级上册（2024新版：Welcome + Unit 1~6）
     "三上0": ["Welcome to school", "三年级上册"],
@@ -125,6 +125,20 @@
     "五下1": ["Unit 1 Growing up", "五年级下册"], "五下2": ["Unit 2 You can make a difference", "五年级下册"],
     "五下3": ["Unit 3 We love reading", "五年级下册"], "五下4": ["Unit 4 Back in time", "五年级下册"],
     "五下5": ["Unit 5 Work it out", "五年级下册"], "五下6": ["Unit 6 Then and now", "五年级下册"],
+    // 六年级上册（2024新版：Unit 1~6）
+    "六上1": ["Unit 1 What do you do with money?", "六年级上册"],
+    "六上2": ["Unit 2 What's your opinion?", "六年级上册"],
+    "六上3": ["Unit 3 Wonderful nature", "六年级上册"],
+    "六上4": ["Unit 4 We can do it!", "六年级上册"],
+    "六上5": ["Unit 5 Health matters", "六年级上册"],
+    "六上6": ["Unit 6 See the world", "六年级上册"],
+    // 六年级下册（2024新版：Unit 1~6）
+    "六下1": ["Unit 1 Play by the rules", "六年级下册"],
+    "六下2": ["Unit 2 In the face of disasters", "六年级下册"],
+    "六下3": ["Unit 3 Wild animals", "六年级下册"],
+    "六下4": ["Unit 4 Let's be creative!", "六年级下册"],
+    "六下5": ["Unit 5 Reach for the stars", "六年级下册"],
+    "六下6": ["Unit 6 High flyers", "六年级下册"],
   };
 
   // ---------- 课文模块列表 ----------
@@ -267,7 +281,7 @@
 
     try {
       // ===== 多年级新增接口 =====
-      if (api === "grades") return json(getGrades());
+      if (api === "grades") return json({ grades: getGrades() });
       // /api/modules?grade_label=三年级
       if (api === "modules") {
         const grade = params.get("grade") || null;
