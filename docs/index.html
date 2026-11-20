@@ -1453,6 +1453,7 @@
     <div id="toefl-plan-header"></div>
     <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
     <div id="toefl-plan-entry" style="margin-bottom:12px"></div>
+    <div id="toefl-plan-feature-stage" style="display:none;margin-top:12px"></div>
     <div id="toefl-plan-passage"></div>
     <div id="toefl-plan-match-area" style="display:none"></div>
     <div id="toefl-plan-doodle-area" style="display:none"></div>
@@ -7165,16 +7166,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   };
   // 就地切换时保留功能按钮组（它就是 tab），不能随游戏启动被隐藏
   function extFeatureIsEntryId(id) {
-    return id === 'ket-quiz-entry' || id === 'toefl-quiz-entry' || id === 'phonics-match-entry';
+    return id === 'ket-quiz-entry' || id === 'toefl-quiz-entry' || id === 'phonics-match-entry' || id === 'toefl-plan-entry';
   }
   function extFeatureStageId(module) {
     return module === 'ket' ? 'ket-feature-stage'
       : module === 'toefl' ? 'toefl-feature-stage'
+      : module === 'toefl-plan' ? 'toefl-plan-feature-stage'
       : 'phonics-feature-stage';
   }
   function extFeatureListIds(module) {
     if (module === 'ket') return ['ket-content-list', 'ket-pagination'];
     if (module === 'toefl') return ['toefl-content-list', 'toefl-pagination'];
+    if (module === 'toefl-plan') return ['toefl-plan-passage', 'toefl-plan-words'];
     return ['phonics-lesson-list'];
   }
   function extFeatureMark(module, key) {
@@ -7262,6 +7265,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       else if (key === 'challenge') startToeflPk(true);
       else if (key === 'match') startToeflMatch();
       else if (key === 'doodle') startToeflDoodle();
+    } else if (module === 'toefl-plan') {
+      if (key === 'choice') startToeflLearn();
+      else if (key === 'quiz') startToeflQuiz();
+      else if (key === 'pk') startToeflPk(false);
+      else if (key === 'challenge') startToeflPk(true);
+      else if (key === 'match') startToeflPlanMatch();
+      else if (key === 'doodle') startToeflPlanDoodle();
     } else if (module === 'phonics') {
       if (key === 'choice') startPhonicsLearn();
       else if (key === 'pk') startPhonicsPk(false);
@@ -10633,6 +10643,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function exitToeflPlan() {
+    try { extFeatureRestore(); } catch (e) {}
     toeflPlanActive = false;
     try { if (typeof Match !== 'undefined' && Match.exit) Match.exit(); } catch (e) {}
     try { if (typeof Doodle !== 'undefined' && Doodle.exit) Doodle.exit(); } catch (e) {}
@@ -10670,15 +10681,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       + nextDayBtn;
 
     document.getElementById('toefl-plan-entry').innerHTML =
-      '<button class="btn btn-primary" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px" onclick="startToeflLearn()">🎯 本天单词学习</button>'
+      '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px" onclick="extFeatureGo(\'toefl-plan\',\'choice\')">🎯 本天单词学习</button>'
       + '<div style="display:flex;gap:8px">'
-        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px" onclick="startToeflQuiz()">🏆 本天词汇测验</button>'
-        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="startToeflPk()">⚔️ 单词 PK</button>'
+        + '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="flex:1;padding:12px;font-size:15px" onclick="extFeatureGo(\'toefl-plan\',\'quiz\')">🏆 本天词汇测验</button>'
+        + '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'toefl-plan\',\'pk\')">⚔️ 单词 PK</button>'
       + '</div>'
-      + '<button class="btn btn-primary" style="width:100%;padding:13px 8px;margin-top:8px;border:none;border-radius:14px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(120,90,220,.3)" onclick="startToeflPk(true)"><span style="display:inline-flex;align-items:center;justify-content:center;gap:9px"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:12px;font-weight:900;font-style:italic;box-shadow:0 2px 7px rgba(60,30,120,.28)">VS</span><span>发起同步挑战（和朋友一起答题）</span></span></button>'
+      + '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="width:100%;padding:13px 8px;margin-top:8px;border:none;border-radius:14px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(120,90,220,.3)" onclick="extFeatureGo(\'toefl-plan\',\'challenge\')"><span style="display:inline-flex;align-items:center;justify-content:center;gap:9px"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:12px;font-weight:900;font-style:italic;box-shadow:0 2px 7px rgba(60,30,120,.28)">VS</span><span>发起同步挑战（和朋友一起答题）</span></span></button>'
       + '<div style="display:flex;gap:8px;margin-top:8px">'
-        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="startToeflPlanMatch()">🎴 消消乐</button>'
-        + '<button class="btn btn-primary" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="startToeflPlanDoodle()">✍️ 随手拼</button>'
+        + '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl-plan\',\'match\')">🎴 消消乐</button>'
+        + '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl-plan\',\'doodle\')">✍️ 随手拼</button>'
       + '</div>';
 
     // 预读短文：把当天词汇放进短文中，先读短文再学单词
@@ -10718,6 +10729,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function toeflPlanGo(delta) {
+    try { extFeatureRestore(); } catch (e) {}
     var next = toeflPlanDayIdx + delta;
     if (next < 0 || next >= toeflPlanDays.length) return;
     toeflPlanDayIdx = next;
@@ -10736,7 +10748,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       mount: document.getElementById('toefl-plan-match-area'),
       unitLabel: 'Day' + toeflPlanDays[toeflPlanDayIdx].day
     };
-    Match.hideSiblings(['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-passage', 'toefl-plan-words']);
+    Match.hideSiblings(['toefl-plan-passage', 'toefl-plan-words']);
     Match.start({});
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -10753,7 +10765,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       mountId: 'toefl-plan-doodle-area',
       backLabel: '返回本天',
       words: words,
-      hide: ['toefl-plan-header', 'toefl-plan-nav', 'toefl-plan-entry', 'toefl-plan-passage', 'toefl-plan-words']
+      hide: ['toefl-plan-passage', 'toefl-plan-words']
     });
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
