@@ -9608,13 +9608,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const words = phonicsGroupWords(group);
         if (words.length >= 2) {
           pme.style.display = 'block';
-          pme.innerHTML = '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'phonics\',\'choice\')">🎯 本组单词学习（' + words.length + ' 个）</button>' +
-            '<div style="display:flex;gap:8px">' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'phonics\',\'pk\')">⚔️ 单词 PK</button>' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'phonics\',\'match\')">🎴 单词消消乐</button>' +
-            '</div>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="width:100%;padding:13px 8px;margin-top:8px;border:none;border-radius:14px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(120,90,220,.3)" onclick="extFeatureGo(\'phonics\',\'challenge\')"><span style="display:inline-flex;align-items:center;justify-content:center;gap:9px"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:12px;font-weight:900;font-style:italic;box-shadow:0 2px 7px rgba(60,30,120,.28)">VS</span><span>发起同步挑战（和朋友一起答题）</span></span></button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="width:100%;padding:12px;font-size:15px;margin-top:8px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'phonics\',\'doodle\')">✍️ 本组随手拼（看中文写英文）</button>';
+          pme.innerHTML =
+          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'phonics\',\'choice\')">🎯 单词学习</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'phonics\',\'pk\')">⚔️ 单词PK</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'phonics\',\'match\')">🎴 消消乐</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'phonics\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'phonics\',\'doodle\')">✍️ 随手拼</button>'
+          '</div>';
         } else {
           pme.style.display = 'none';
           pme.innerHTML = '';
@@ -10020,19 +10021,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (qe) {
           qe.style.display = 'block';
           qe.innerHTML =
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'ket\',\'choice\')">🎯 单词学习</button>' +
-            '<div style="display:flex;gap:8px">' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="flex:1;padding:12px;font-size:15px" onclick="extFeatureGo(\'ket\',\'quiz\',\'word\')">🏆 本类词汇测验</button>' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'ket\',\'pk\')">⚔️ 单词 PK</button>' +
-            '</div>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="width:100%;padding:13px 8px;margin-top:8px;border:none;border-radius:14px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(120,90,220,.3)" onclick="extFeatureGo(\'ket\',\'challenge\')"><span style="display:inline-flex;align-items:center;justify-content:center;gap:9px"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:12px;font-weight:900;font-style:italic;box-shadow:0 2px 7px rgba(60,30,120,.28)">VS</span><span>发起同步挑战（和朋友一起答题）</span></span></button>' +
-            '<div style="display:flex;gap:8px;margin-top:8px">' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'ket\',\'match\')">🎴 消消乐</button>' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'ket\',\'doodle\')">✍️ 随手拼</button>' +
-            '</div>' +
-            '<div id="ket-reading-entry" style="display:none;margin-top:8px">' +
-              '<button class="btn btn-primary ext-feature-btn" data-extkey="reading" id="ket-reading-btn" style="width:100%;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="extFeatureGo(\'ket\',\'reading\')">📖 短文阅读</button>' +
-            '</div>';
+          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'ket\',\'choice\')">🎯 单词学习</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;" onclick="extFeatureGo(\'ket\',\'quiz\',\'word\')">🏆 词汇测验</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'ket\',\'pk\')">⚔️ 单词PK</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'ket\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'ket\',\'match\')">🎴 消消乐</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'ket\',\'doodle\')">✍️ 随手拼</button>' +
+            '<div id="ket-reading-entry" style="display:none"><button class="btn btn-primary ext-feature-btn" data-extkey="reading" id="ket-reading-btn" style="width:100%;height:100%;padding:10px 3px;font-size:13px;border-radius:10px;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="extFeatureGo(\'ket\',\'reading\')">📖 短文阅读</button></div>'
+          '</div>';
           refreshKetReadingEntry(category);
         }
         // 切换分类/重开时收起上一局的消消乐面板与上一轮短文
@@ -10468,16 +10465,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const qe = document.getElementById('toefl-quiz-entry');
       qe.style.display = 'block';
       qe.innerHTML =
-        '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'toefl\',\'choice\')">🎯 单词学习</button>' +
-        '<div style="display:flex;gap:8px">' +
-          '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="flex:1;padding:12px;font-size:15px" onclick="extFeatureGo(\'toefl\',\'quiz\')">🏆 本类词汇测验</button>' +
-          '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'toefl\',\'pk\')">⚔️ 单词 PK</button>' +
-        '</div>' +
-        '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="width:100%;padding:13px 8px;margin-top:8px;border:none;border-radius:14px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(120,90,220,.3)" onclick="extFeatureGo(\'toefl\',\'challenge\')"><span style="display:inline-flex;align-items:center;justify-content:center;gap:9px"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:12px;font-weight:900;font-style:italic;box-shadow:0 2px 7px rgba(60,30,120,.28)">VS</span><span>发起同步挑战（和朋友一起答题）</span></span></button>' +
-        '<div style="display:flex;gap:8px;margin-top:8px">' +
-          '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl\',\'match\')">🎴 消消乐</button>' +
-          '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl\',\'doodle\')">✍️ 随手拼</button>' +
-        '</div>';
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'toefl\',\'choice\')">🎯 单词学习</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;" onclick="extFeatureGo(\'toefl\',\'quiz\')">🏆 词汇测验</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'toefl\',\'pk\')">⚔️ 单词PK</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'toefl\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl\',\'match\')">🎴 消消乐</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl\',\'doodle\')">✍️ 随手拼</button>'
+      '</div>';
     } catch (e) {
       console.error('加载小托福词汇失败:', e);
       toast('加载失败');
@@ -10712,19 +10707,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       + nextDayBtn;
 
     document.getElementById('toefl-plan-entry').innerHTML =
-      '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="width:100%;padding:12px;font-size:15px;margin-bottom:8px" onclick="extFeatureGo(\'toefl-plan\',\'choice\')">🎯 本天单词学习</button>'
-      + '<div style="display:flex;gap:8px">'
-        + '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="flex:1;padding:12px;font-size:15px" onclick="extFeatureGo(\'toefl-plan\',\'quiz\')">🏆 本天词汇测验</button>'
-        + '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'toefl-plan\',\'pk\')">⚔️ 单词 PK</button>'
-      + '</div>'
-      + '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="width:100%;padding:13px 8px;margin-top:8px;border:none;border-radius:14px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:14px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 6px 18px rgba(120,90,220,.3)" onclick="extFeatureGo(\'toefl-plan\',\'challenge\')"><span style="display:inline-flex;align-items:center;justify-content:center;gap:9px"><span style="display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:12px;font-weight:900;font-style:italic;box-shadow:0 2px 7px rgba(60,30,120,.28)">VS</span><span>发起同步挑战（和朋友一起答题）</span></span></button>'
-      + '<div style="display:flex;gap:8px;margin-top:8px">'
-        + '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl-plan\',\'match\')">🎴 消消乐</button>'
-        + '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="flex:1;padding:12px;font-size:15px;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl-plan\',\'doodle\')">✍️ 随手拼</button>'
-      + '</div>';
-
-    // 预读短文：把当天词汇放进短文中，先读短文再学单词
-    var passageArea = document.getElementById('toefl-plan-passage');
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'toefl-plan\',\'choice\')">🎯 单词学习</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="quiz" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;" onclick="extFeatureGo(\'toefl-plan\',\'quiz\')">🏆 词汇测验</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'toefl-plan\',\'pk\')">⚔️ 单词PK</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'toefl-plan\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl-plan\',\'match\')">🎴 消消乐</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl-plan\',\'doodle\')">✍️ 随手拼</button>'
+      '</div>';
     if (passageArea) {
       if (d.passage && d.passage.en) {
         var highlighted = toeflPlanHighlight(d.passage.en, d.words);
