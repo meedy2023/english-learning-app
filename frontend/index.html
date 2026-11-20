@@ -5981,6 +5981,37 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }, 0);
   }
 
+  // ===== 点击「跳过/上一题/下一题」时锁定视口，根治连续切题页面上移 =====
+  // 上面的 stabilizeQuizScroll 只在题卡被顶栏遮挡时才纠正，处理不了「轻微但逐步累积」的上移，
+  // 且 setTimeout(0) 常被浏览器「点击按钮→聚焦按钮→把按钮滚入视口」的默认行为覆盖。
+  // 这里改为在 pointerdown（按钮聚焦、页面默认滚动发生之前）记录 scrollY，
+  // 切题重绘完成后精确还原，视口始终不动。事件委托只挂一次，覆盖所有页面与就地内嵌模式。
+  var _navScrollLock = null;
+  document.addEventListener('pointerdown', function (e) {
+    try {
+      var t = e.target;
+      while (t && t !== document && t.tagName !== 'BUTTON') t = t.parentNode;
+      if (!t || t.tagName !== 'BUTTON') return;
+      var oc = t.getAttribute('onclick') || '';
+      var id = t.id || '';
+      var isNavBtn =
+        /\b(skipQuiz|skipKetQuiz|reviewSkipQuestion|clSkipQuestion|Spell\.skip|prevQuizQuestion|prevKetQuizQuestion|prevReviewQuestion|prevChoiceQuestion|Spell\.prev|nextQuizQuestion|nextKetQuizQuestion|nextReviewQuestion|clNextQuestion|Spell\.next)\s*\(/.test(oc) ||
+        /(^|-)(quiz|rv|cl)-(skip|prev|next)-btn$/.test(id) ||
+        id === 'review-next-btn';
+      if (!isNavBtn) return;
+      var lock = { y: (window.pageYOffset || document.documentElement.scrollTop || 0) };
+      _navScrollLock = lock;
+      function restore() {
+        if (_navScrollLock !== lock) return;   // 已被后续点击取代，交给新锁处理
+        var cur = window.pageYOffset || document.documentElement.scrollTop || 0;
+        if (Math.abs(cur - lock.y) > 1) window.scrollTo(0, lock.y);
+      }
+      setTimeout(restore, 0);                                            // 切题同步重绘后
+      requestAnimationFrame(function () { requestAnimationFrame(restore); }); // 覆盖 focus/平滑滚动延迟
+      setTimeout(function () { if (_navScrollLock === lock) _navScrollLock = null; }, 500);
+    } catch (err) {}
+  }, true);
+
   function loadQuizQuestion() {
     if (currentQuizIndex >= quizOrder.length) {
       showQuizSummary();
