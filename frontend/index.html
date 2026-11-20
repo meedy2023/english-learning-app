@@ -10736,11 +10736,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function toeflPlanGo(delta) {
-    try { extFeatureRestore(); } catch (e) {}
     var next = toeflPlanDayIdx + delta;
     if (next < 0 || next >= toeflPlanDays.length) return;
+    // 切天保留当前就地 tab：记录 key，用新一天词表重新进入，不回默认首页
+    var keepKey = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan')
+      ? EXT_FEATURE.key : null;
+    try { extFeatureRestore(); } catch (e) {}
     toeflPlanDayIdx = next;
     renderToeflPlanDay();
+    if (keepKey) {
+      try { extFeatureGo('toefl-plan', keepKey); } catch (e) {}
+    }
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
