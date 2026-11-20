@@ -7257,12 +7257,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     st.style.display = 'block';
     extFeatureHideList(module, true);
     // 所有就地 tab 顶部统一返回按钮：KET/小托福→返回本类，拼读→返回本组，40天计划→返回本天
-    var _inlineBackLabel = module === 'toefl-plan' ? '返回本天'
-      : (module === 'phonics' ? '返回本组' : '返回本类');
-    var _inlineBack = document.createElement('div');
-    _inlineBack.style.cssText = 'margin-bottom:10px';
-    _inlineBack.innerHTML = '<button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="extFeatureRestore()" type="button" aria-label="' + _inlineBackLabel + '"><span class="nav-back-ico" aria-hidden="true">←</span> ' + _inlineBackLabel + '</button>';
-    st.appendChild(_inlineBack);
+    // 短文阅读例外：功能按钮打开后自身变成「返回 分类名」并提供收起，已有返回入口，不再重复显示统一按钮
+    if (!(module === 'ket' && key === 'reading')) {
+      var _inlineBackLabel = module === 'toefl-plan' ? '返回本天'
+        : (module === 'phonics' ? '返回本组' : '返回本类');
+      var _inlineBack = document.createElement('div');
+      _inlineBack.style.cssText = 'margin-bottom:10px';
+      _inlineBack.innerHTML = '<button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="extFeatureRestore()" type="button" aria-label="' + _inlineBackLabel + '"><span class="nav-back-ico" aria-hidden="true">←</span> ' + _inlineBackLabel + '</button>';
+      st.appendChild(_inlineBack);
+    }
     // 需要独立 view 的功能：把该 view 嵌入承载容器（脱离 .view 全局互斥）
     if (viewName) {
       var view = document.getElementById('view-' + viewName);
