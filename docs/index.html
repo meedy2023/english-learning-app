@@ -9910,7 +9910,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }).join(' ');
   }
 
-  // 生成并渲染本类连续短文到就地 stage（一段连贯英文 + 中文翻译开关）
+  // 生成并渲染本类短文到就地 stage
   function renderToeflCategoryReading() {
     var area = document.getElementById('toefl-feature-stage');
     if (!area) return false;
@@ -9919,38 +9919,33 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (!withEx.length) return false;
     var stems = toeflBuildStems(items);
     // 均匀取样，覆盖不同词，最多 12 句
-    var maxSent = 12;
-    var step = Math.max(1, Math.floor(withEx.length / maxSent));
+    var maxLines = 12;
+    var step = Math.max(1, Math.floor(withEx.length / maxLines));
     var picked = [];
-    for (var i = 0; i < withEx.length && picked.length < maxSent; i += step) picked.push(withEx[i]);
+    for (var i = 0; i < withEx.length && picked.length < maxLines; i += step) picked.push(withEx[i]);
     var sentences = picked.map(function (w) {
-      var en = String(w.example).trim();
-      if (!/[.!?]["'）〃]?$/.test(en)) en += '.';
-      return { en: en, zh: String(w.chinese || '').trim(), word: String(w.word || '').trim() };
+      return { en: String(w.example).trim(), zh: String(w.chinese || '') };
     });
-    // 一段连续英文短文：句子间空格相连
-    var para = sentences.map(function (s) { return s.en; }).join(' ');
-    // 中文翻译：数据仅含词义，按短文顺序整理为本类词汇释义对照
-    var zhParts = sentences.map(function (s) {
-      return s.word + (s.zh ? '（' + s.zh + '）' : '');
-    });
-    var zhText = '参考译文（按短文顺序对照本类词汇）：' + zhParts.join('、') + '。';
-    readingContent = [{ text: para }];
+    readingContent = sentences;
+    var linesHtml = sentences.map(function (line, idx) {
+      return '<div class="lr-line" data-idx="' + idx + '" style="padding:10px 12px;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px;border-radius:10px">'
+        + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+          + '<span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">' + (idx + 1) + '</span>'
+          + '<span class="lr-text" onclick="LessonReader.jump(' + idx + ')" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">' + toeflReadingWordsHtml(line.en, stems) + '</span>'
+          + '<button class="speak-btn" onclick="speakReadingLine(\'' + esc(line.en) + '\')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>'
+          + '<button class="ra-btn" onclick="raToggleKet(this, \'' + esc(line.en) + '\')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>'
+        + '</div>'
+        + '<div style="font-size:13px;color:#999;padding-left:28px">词义：' + escapeHtml(line.zh) + '</div>'
+      + '</div>';
+    }).join('');
     area.innerHTML = '<div style="padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba">'
       + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
         + '<div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ' + escapeHtml(toeflCurrentCategory || '') + '<span style="font-size:11px;font-weight:400;color:#c9a355">（高亮词为本类词汇）</span></div>'
-        + '<button class="btn btn-secondary" id="toefl-zh-toggle-btn" type="button" onclick="toggleToeflReadingZh()" style="padding:6px 14px;font-size:13px;border-radius:999px">🇨🇳 显示中文翻译</button>'
       + '</div>'
-      + '<div class="lr-line" data-idx="0" style="padding:6px 2px">'
-        + '<div class="lr-text" style="font-size:16px;line-height:2;color:#333;font-weight:500">' + toeflReadingWordsHtml(para, stems) + '</div>'
-      + '</div>'
-      + '<div id="toefl-zh-block" style="display:none;margin-top:12px;padding:12px 14px;background:#fff8e8;border-left:3px solid #ffc53d;border-radius:8px;font-size:14px;line-height:1.9;color:#7a5c00">' + escapeHtml(zhText) + '</div>'
-      + '<div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">'
-        + '<button class="ra-btn" id="toefl-ra-btn" type="button" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:8px;cursor:pointer">🎤 跟读全文</button>'
-      + '</div>'
+      + linesHtml
       + '<div class="lr-dock" id="toefl-reading-dock" style="display:none">'
         + '<div class="lr-ctrl">'
-          + '<button class="lr-ctrl-btn lr-ctrl-main" id="toefl-reading-full-btn" data-reading="0" type="button" aria-label="朗读短文">🔊 朗读短文</button>'
+          + '<button class="lr-ctrl-btn lr-ctrl-main" id="toefl-reading-full-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>'
           + '<button class="lr-ctrl-btn lr-ctrl-sub" id="toefl-reading-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>'
         + '</div>'
         + '<div class="lr-bar" id="toefl-reading-bar" style="display:none"><i></i></div>'
@@ -9961,31 +9956,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
     var rpBtn = document.getElementById('toefl-reading-replay-btn');
     if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
-    var raBtn = document.getElementById('toefl-ra-btn');
-    if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
-    LessonReader.bind([{ text: para }], {
+    LessonReader.bind(sentences, {
       scope: 'toefl-feature-stage',
       dock: 'toefl-reading-dock',
       main: 'toefl-reading-full-btn',
       replay: 'toefl-reading-replay-btn',
       progress: 'toefl-reading-progress',
       bar: 'toefl-reading-bar',
-      label: '🔊 朗读短文'
+      label: '🔊 朗读全文'
     });
     toeflReadingOpen = true;
     var btn = document.getElementById('toefl-reading-btn');
     if (btn) btn.textContent = '← 返回本类';
     return true;
-  }
-
-  // 显示/隐藏中文翻译
-  function toggleToeflReadingZh() {
-    var block = document.getElementById('toefl-zh-block');
-    var btn = document.getElementById('toefl-zh-toggle-btn');
-    if (!block) return;
-    var show = block.style.display === 'none';
-    block.style.display = show ? 'block' : 'none';
-    if (btn) btn.textContent = show ? '🇨🇳 隐藏中文翻译' : '🇨🇳 显示中文翻译';
   }
 
   function closeToeflCategoryReading() {
