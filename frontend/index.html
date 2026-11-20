@@ -1230,7 +1230,6 @@
 
   <!-- ======= 学习报告 ======= -->
   <div id="view-report" class="view">
-    <button class="btn btn-secondary nav-back-btn" onclick="closeReport()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> 返回</button>
     <div class="section-title" id="report-title">📊 学习报告</div>
 
     <!-- 课文报告：年级切换标签 -->
@@ -1274,7 +1273,6 @@
 
   <!-- ======= 设置 ======= -->
   <div id="view-settings" class="view">
-    <button class="btn btn-secondary nav-back-btn" onclick="closeSettings()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> 返回</button>
 
     <div class="settings-group-title">🔊 发音与朗读</div>
     <div class="settings-card">
@@ -1752,10 +1750,6 @@ const API = ".";
     document.getElementById('topbar-title').textContent = '🏆 积分详情';
 
     area.innerHTML = `
-      <button class="btn btn-secondary nav-back-btn" onclick="hidePointsDetail()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回">
-        <span class="nav-back-ico" aria-hidden="true">←</span> 返回
-      </button>
-
       <div class="points-card">
         <div style="text-align:center">
           <div style="font-size:48px;margin-bottom:8px">🏆</div>
@@ -1830,6 +1824,33 @@ const API = ".";
         </div>
       </div>
     `;
+  }
+
+  // 纯清理积分面板状态（不切换视图）：供离开 learn 视图时兜底调用，避免面板残留
+  function resetPointsPanel() {
+    if (!_pointsPanelActive) return;
+    var area = document.getElementById('word-detail-area');
+    if (area) area.style.display = 'none';
+    var backHome = document.getElementById('learn-back-home');
+    if (backHome) backHome.style.display = (_pointsPrevSub && _pointsPrevSub.backHome) ? _pointsPrevSub.backHome : 'flex';
+    var moduleTitle = document.getElementById('learn-module-title');
+    if (moduleTitle) moduleTitle.style.display = (_pointsPrevSub && _pointsPrevSub.moduleTitle) ? _pointsPrevSub.moduleTitle : 'block';
+    if (_pointsPrevSub) {
+      var quizBar = document.getElementById('quiz-toggle-bar');
+      if (quizBar) quizBar.style.display = _pointsPrevSub.quizBar || '';
+      var matchArea = document.getElementById('match-game-area');
+      var choiceArea = document.getElementById('choice-learn-area');
+      var spellArea = document.getElementById('spell-game-area');
+      var doodleArea = document.getElementById('doodle-game-area');
+      if (matchArea) matchArea.style.display = _pointsPrevSub.match || 'none';
+      if (choiceArea) choiceArea.style.display = _pointsPrevSub.choice || 'none';
+      if (spellArea) spellArea.style.display = _pointsPrevSub.spell || 'none';
+      if (doodleArea) doodleArea.style.display = _pointsPrevSub.doodle || 'none';
+      if (_pointsPrevSub.match && _pointsPrevSub.match !== 'none' && typeof Match !== 'undefined' && Match.startTimer) Match.startTimer();
+    }
+    _pointsPrevView = null;
+    _pointsPrevSub = null;
+    _pointsPanelActive = false;
   }
 
   function hidePointsDetail() {
@@ -2261,6 +2282,11 @@ const API = ".";
     }
     // 学习页面内点击学习导航，不重复切换
     if (name === 'learn' && currentView === 'learn') return;
+    // 积分面板（无独立返回按钮）覆盖在学习视图上：从 learn 切走时静默收起，避免面板状态残留
+    // （放在 currentView 更新之前判断，oldView===learn 才需要清理）
+    if (currentView === 'learn' && name !== 'learn' && typeof _pointsPanelActive !== 'undefined' && _pointsPanelActive) {
+      try { resetPointsPanel(); } catch (e) {}
+    }
     if (name !== 'learn') {
       var _lbh = document.getElementById('learn-back-home');
       if (_lbh) _lbh.style.top = '84px';
