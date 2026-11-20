@@ -8647,7 +8647,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 删除：退掉最后一个已填的字母（复用 pickSlot 的退回逻辑）
     del() {
-      if (this.locked) { toast('已经拼对啦，点「下一个」继续'); return; }
+      if (this.locked) { toast('已经拼对啦，点「' + (this.idx < this.pool.length - 1 ? '跳过' : '完成') + '」继续'); return; }
       let last = -1;
       this.slots.forEach(function (s, i) { if (s.ch !== null) last = i; });
       if (last < 0) { toast('还没有填入字母'); return; }
@@ -8715,7 +8715,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     reshuffle() {
-      if (this.locked) return;   // 已拼对：按钮置灰，这里兜底不做任何事（前进请用「下一个」）
+      if (this.locked) return;   // 已拼对：按钮置灰，这里兜底不做任何事（前进请用「跳过」）
       const w = this.current();
       this.load(true);
       this.fb = { type: 'info', html: '🔀 已重新打乱，再拼一次！' };
@@ -8844,16 +8844,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           '<div class="spell-acts">' +
             '<button class="spell-act"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
             '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
-            '<button class="spell-act" onclick="Spell.skip()">⏭ 跳过</button>' +
+            '<button class="spell-act" onclick="Spell.skip()">⏭ ' + (this.idx < this.pool.length - 1 ? '跳过' : '完成') + '</button>' +
           '</div>' +
-          '<div class="spell-nav">' +
-            (this.idx > 0
-              ? '<button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button>'
-              : '') +
-            (this.idx < this.pool.length - 1
-              ? '<button class="btn btn-primary" id="spell-next-btn" onclick="Spell.next()">下一个 →</button>'
-              : '') +
-          '</div>' +
+          (this.idx > 0
+            ? '<div class="spell-nav"><button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button></div>'
+            : '') +
         '</div>';
     }
   };
