@@ -1098,7 +1098,7 @@
 
   <!-- ======= 学习：单词列表 ======= -->
   <div id="view-learn" class="view">
-    <button id="learn-back-home" class="btn btn-secondary nav-back-btn" onclick="switchView('home')" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">←</span> 返回首页</button>
+    <button id="learn-back-home" class="btn btn-secondary nav-back-btn" onclick="learnBack()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">←</span> 返回首页</button>
     <div class="section-title" id="learn-module-title">上册 Module 1</div>
     <div id="quiz-toggle-bar" class="tab-bar">
       <button class="btn btn-sm tab-btn active" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
@@ -2206,6 +2206,7 @@ const API = ".";
     el('choice-learn-area', 'block');
     el('quiz-toggle-bar', '');
     document.getElementById('topbar-title').textContent = '🎯 开始学习';
+    syncLearnBackLabel();
   }
 
   // 恢复单词拼写页面
@@ -2232,10 +2233,41 @@ const API = ".";
   }
 
   let currentView = 'home';
+
+  // 是否处于「年级模块单词学习做题页」：这是顶部返回按钮需要改为「返回单词列表」的唯一场景。
+  // 外部模块（KET/小托福/拼读，clExtCtx 非空）与就地模式各有自己的返回逻辑，不算在内。
+  function isUnitChoiceLearn() {
+    var _inline = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active
+      && (EXT_FEATURE.inlineView === 'learn' || EXT_FEATURE.module === 'ket'
+        || EXT_FEATURE.module === 'toefl' || EXT_FEATURE.module === 'phonics'
+        || EXT_FEATURE.module === 'toefl-plan'));
+    return learnMode === 'choice' && !clExtCtx && !_inline;
+  }
+
+  // 学习视图顶部返回按钮统一分流：
+  // 年级模块「单词学习」做题页（含结算页）→ 返回单词列表；其余场景 → 返回首页。
+  function learnBack() {
+    if (isUnitChoiceLearn()) {
+      showWordList();
+    } else {
+      switchView('home');
+    }
+  }
+
+  // 同步顶部返回按钮文案：仅年级模块单词学习做题页显示「返回单词列表」。
+  function syncLearnBackLabel() {
+    var _bh = document.getElementById('learn-back-home');
+    if (!_bh) return;
+    var _label = isUnitChoiceLearn() ? '返回单词列表' : '返回首页';
+    _bh.innerHTML = '<span class="nav-back-ico" aria-hidden="true">←</span> ' + _label;
+    _bh.setAttribute('aria-label', _label);
+  }
+
   function setActiveTab(name) {
     document.querySelectorAll('.tab-btn').forEach(function(b) {
       b.classList.toggle('active', b.getAttribute('data-tab') === name);
     });
+    syncLearnBackLabel();
   }
 
   // 课文学习视图下顶栏已显示模块名，隐藏正文残留的紫色模块标题，避免重复
@@ -6999,6 +7031,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function loadChoiceQuestion() {
     clearTimeout(window._clAutoNext);
+    syncLearnBackLabel();
     if (cl_idx >= cl_order.length) {
       showChoiceSummary();
       return;
