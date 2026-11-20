@@ -2613,6 +2613,7 @@ const API = ".";
         <div class="ra-line-item lr-line" id="${lineId}" data-idx="${idx}" style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid ${roleColor}">
           <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}</div>
           <div id="${lineId}-text" class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${lrWordsHtml(line.text)}</div>
+          <div style="font-size:14px;color:#8a6d3b;line-height:1.6;margin:2px 0 8px;padding:6px 10px;background:#fff8e8;border-radius:6px">${line.translation || '（暂无翻译）'}</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
             <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggle(document.getElementById('${lineId}-text'), '${escapeForJS(line.text)}', ${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
@@ -2623,24 +2624,12 @@ const API = ".";
       `;
     });
     
-    // 构建翻译内容
-    let translationHTML = '';
-    unit.content.forEach((line, idx) => {
-      const roleColor = getRoleColor(line.role);
-      translationHTML += `
-        <div style="margin-bottom:12px;padding:8px 12px;background:#fafafa;border-radius:8px">
-          <div style="font-weight:600;color:${roleColor};font-size:12px;margin-bottom:2px">${line.role}</div>
-          <div style="font-size:14px;color:#666">${line.translation || '（暂无翻译）'}</div>
-        </div>
-      `;
-    });
-    
     area.innerHTML = `
       <button id="lesson-back-units" class="btn btn-secondary nav-back-btn" onclick="backToLessonUnits()" style="position:sticky;top:156px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回篇列表">
         <span class="nav-back-ico" aria-hidden="true">←</span> 返回篇列表
       </button>
       
-      <div class="word-detail-card" style="text-align:left">
+      <div class="word-detail-card" style="margin-bottom:180px;text-align:left">
         <h3 style="margin-bottom:16px;color:#333;display:flex;align-items:center;gap:8px">
           <span style="font-size:24px">💬</span>
           对话原文
@@ -2665,16 +2654,6 @@ const API = ".";
           <button class="lr-nav-btn" id="lesson-next-unit-btn" style="display:none">
             下一篇 →
           </button>
-        </div>
-      </div>
-      
-      <div class="word-detail-card" style="margin-top:16px;margin-bottom:180px;text-align:left;background:#fffbf0;border:2px solid #ffe7ba">
-        <h3 style="margin-bottom:16px;color:#d48806;display:flex;align-items:center;gap:8px">
-          <span style="font-size:24px">📝</span>
-          中文翻译
-        </h3>
-        <div style="line-height:1.8">
-          ${translationHTML}
         </div>
       </div>
     `;
