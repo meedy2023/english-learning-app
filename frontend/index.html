@@ -5929,6 +5929,29 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     loadQuizQuestion();
   }
 
+  // 切题后稳定视口：连续点「跳过/上一题」时，按钮聚焦与选项 DOM 重建会把页面滚动位置
+  // 逐步带偏，最终题卡完全滚到顶栏上方（只剩底部按钮和题号）。这里在切题后校正：
+  // 若题卡顶部钻到 sticky 顶栏下方（被遮挡），把它拉回可见区；否则不动，保留用户当前滚动。
+  // 用 setTimeout 延迟到浏览器默认的按钮聚焦滚动完成之后执行，避免校正被覆盖。
+  function stabilizeQuizScroll(viewSel, cardSel) {
+    viewSel = viewSel || '#view-quiz';
+    cardSel = cardSel || '#view-quiz .quiz-card';
+    setTimeout(function () {
+      try {
+        var view = document.querySelector(viewSel);
+        if (!view || !view.classList.contains('active')) return;  // 不在该视图则不处理
+        var card = view.querySelector('.quiz-card');
+        if (!card) return;
+        var rect = card.getBoundingClientRect();
+        if (rect.top < 130) {           // 题卡顶部已钻到 sticky 顶栏/返回按钮下方
+          var y = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0) - 140;
+          if (y < 0) y = 0;
+          window.scrollTo(0, y);
+        }
+      } catch (e) {}
+    }, 0);
+  }
+
   function loadQuizQuestion() {
     if (currentQuizIndex >= quizOrder.length) {
       showQuizSummary();
@@ -5996,6 +6019,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 自动发音
     if (mode === "en_to_cn") setTimeout(function() { speakWord(w.word); }, 100);
+    // 切题重绘后校正视口，避免连续点跳过时题卡被顶栏遮挡
+    stabilizeQuizScroll('#view-quiz', '#view-quiz .quiz-card');
   }
 
   function handleQuizChoice(btnEl, opt, correctWord, mode) {
@@ -10699,6 +10724,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<span>' + o.text + '</span><span>' + String.fromCharCode(65 + i) + '</span></button>';
     }).join('');
     window._ketQuizCur = q;
+    // 切题重绘后校正视口，避免连续点跳过时题卡被顶栏遮挡
+    stabilizeQuizScroll('#view-ket-quiz', '#view-ket-quiz .quiz-card');
   }
 
   function handleKetQuizChoice(btnEl, optIdx) {
