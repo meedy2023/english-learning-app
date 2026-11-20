@@ -5212,7 +5212,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const grid = document.getElementById('grade-grid');
       grid.innerHTML = '';
       // 年级图标
-      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '🎓', '七年级': '🏅', '八年级': '🏆'};
+      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '📗', '七年级': '🏅', '八年级': '🏆'};
       const descMap = {
         '三年级': '外研社三年级上册/下册',
         '四年级': '外研社四年级上册/下册',
@@ -5264,7 +5264,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <span style="margin-left:auto;font-size:22px;color:#6c63ff;padding-left:12px">→</span>
         </div>
         <div class="grade-btn" onclick="openGrade('六年级')">
-          <span class="grade-icon">🎓</span>
+          <span class="grade-icon">📗</span>
           <span class="grade-info">
             <div class="grade-name">六年级</div>
             <div class="grade-desc">外研社六年级上册/下册</div>
@@ -9224,7 +9224,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (ib !== -1) return 1;
         return a.localeCompare(b, 'zh');
       });
-      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '🎓', '七年级': '🏅', '八年级': '🏆'};
+      const iconMap = {'三年级': '📚', '四年级': '📖', '五年级': '📕', '六年级': '📗', '七年级': '🏅', '八年级': '🏆'};
 
       // ========== 年级切换标签 ==========
       const tabsEl = document.getElementById("report-grade-tabs");
