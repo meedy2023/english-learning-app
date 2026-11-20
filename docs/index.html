@@ -1117,7 +1117,6 @@
             <div class="match-sub" id="match-sub">本单元 · 每局 8 个单词</div>
           </div>
           <div style="display:flex;gap:8px;align-items:center">
-            <button class="match-restart nav-back-btn" id="match-back-btn-top" onclick="Match.backOut()" type="button" aria-label="返回" style="background:#fff0f0;color:#d4380d">← 返回</button>
             <button class="match-restart" onclick="Match.restart()" type="button" aria-label="重开">🔄 重开</button>
           </div>
         </div>
@@ -6475,7 +6474,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var unitLabel = document.getElementById('match-unit-label');
       if (unitLabel) unitLabel.textContent = this.unitLabel();
       var backLabel = this.backLabel();
-      var backBtns = [document.getElementById('match-back-btn'), document.getElementById('match-back-btn-top')];
+      var backBtns = [document.getElementById('match-back-btn')];
       backBtns.forEach(function (b) { if (b) b.textContent = backLabel; });
 
       this.renderBoard();
