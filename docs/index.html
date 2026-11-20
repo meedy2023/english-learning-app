@@ -6853,7 +6853,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const area = document.getElementById('choice-learn-area');
     // 外部模块（KET/小托福/拼读，含40天计划）做题过程中提供返回按钮，随时返回来源页
     var clBackLabel = (clExtCtx && clExtCtx.view === 'ket') ? ketCategoryBackLabel()
-      : ((typeof toeflPlanActive !== 'undefined' && toeflPlanActive) ? '返回计划' : '返回');
+      : ((clExtCtx && clExtCtx.view === 'phonics') ? '返回本组'
+      : ((typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan') ? '返回计划'
+      : ((clExtCtx && clExtCtx.view === 'toefl') ? '返回本类' : '返回')));
     const clBackBar = clExtCtx
       ? '<div style="margin-bottom:10px"><button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + clBackLabel + '</button></div>'
       : '';
@@ -7063,6 +7065,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function clBackToModule() {
     const ctx = clExtCtx;
     clExtCtx = null;
+    // 就地模式：只收起就地内容，回到来源页单词列表（如拼读本组），不跳分组/分类列表
+    if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.inlineView === 'learn') {
+      try { extFeatureRestore(); } catch (e) {}
+      return;
+    }
     // 还原课文视图的 tab 栏、标题与返回按钮
     document.getElementById('quiz-toggle-bar').style.display = '';
     document.getElementById('learn-module-title').style.display = '';
