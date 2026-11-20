@@ -205,6 +205,8 @@
       transform: translateY(-1px);
     }
     .view.ext-inline-view { display: block; padding-bottom: 0; }
+    /* 就地嵌入的 PK 页：顶部返回按钮与分类页「返回分类」重复，隐藏；独立 PK 页保留 */
+    #view-pk.ext-inline-view > .nav-back-btn { display: none !important; }
     .btn-icon {
       background: none;
       border: none;
