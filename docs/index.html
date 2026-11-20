@@ -1453,8 +1453,8 @@
   <div id="toefl-plan-area" style="display:none">
     <button class="btn btn-secondary nav-back-btn" onclick="toeflPlanNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回计划列表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
     <div id="toefl-plan-header"></div>
-    <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
     <div id="toefl-plan-entry" style="margin-bottom:12px"></div>
+    <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
     <div id="toefl-plan-feature-stage" style="display:none;margin-top:12px"></div>
     <div id="toefl-plan-passage"></div>
     <div id="toefl-plan-match-area" style="display:none"></div>
@@ -10701,14 +10701,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var prevDay = toeflPlanDayIdx > 0 ? toeflPlanDays[toeflPlanDayIdx - 1] : null;
     var nextDay = toeflPlanDayIdx < total - 1 ? toeflPlanDays[toeflPlanDayIdx + 1] : null;
     var prevDayBtn = prevDay
-      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)">← 第' + toCnDay(prevDay.day) + '天</button>'
+      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)">← Day' + prevDay.day + '</button>'
       : '<span style="flex:1"></span>';
     var nextDayBtn = nextDay
-      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)">第' + toCnDay(nextDay.day) + '天 →</button>'
+      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)">Day' + nextDay.day + ' →</button>'
       : '<span style="flex:1"></span>';
     document.getElementById('toefl-plan-nav').innerHTML =
       prevDayBtn
-      + '<span style="font-size:13px;color:#999;padding:0 6px">第' + toCnDay(d.day) + '天</span>'
+      + '<span style="font-size:13px;color:#999;padding:0 6px">Day' + d.day + '</span>'
       + nextDayBtn;
 
     document.getElementById('toefl-plan-entry').innerHTML =

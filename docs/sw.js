@@ -1,5 +1,5 @@
 /* 英语学习小助手 Service Worker */
-const CACHE = 'english-app-v174';
+const CACHE = 'english-app-v175';
 const ASSETS = [
   './',
   './index.html',
