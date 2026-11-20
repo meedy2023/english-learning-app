@@ -7262,7 +7262,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var _inlineBackLabel = module === 'toefl-plan' ? '返回本天'
         : (module === 'phonics' ? '返回本组' : '返回本类');
       var _inlineBack = document.createElement('div');
-      _inlineBack.style.cssText = 'margin-bottom:10px';
+      _inlineBack.style.cssText = 'margin:20px 0 10px';
       _inlineBack.innerHTML = '<button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="extFeatureRestore()" type="button" aria-label="' + _inlineBackLabel + '"><span class="nav-back-ico" aria-hidden="true">←</span> ' + _inlineBackLabel + '</button>';
       st.appendChild(_inlineBack);
     }
