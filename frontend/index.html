@@ -7223,10 +7223,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + ' data-exttab="' + d.key + '" onclick="moduleTabGo(\'' + module + '\',\'' + d.key + '\')">'
         + '<span class="ico">' + d.ico + '</span><span class="lbl">' + d.lbl + '</span></button>';
     }).join('');
-    // 插到该 view 的返回按钮之后；没有返回按钮则插到 view 顶部
-    var back = view.querySelector(':scope > .nav-back-btn') || view.querySelector('.nav-back-btn');
-    if (back && back.parentNode === view) {
-      if (bar.parentNode !== view || bar.nextSibling !== back.nextSibling) view.insertBefore(bar, back.nextSibling);
+    // 插到返回按钮之后（返回按钮可能在 view 的直接子层，也可能嵌在 content-area 内）。
+    // 插到返回按钮所在容器内，可使 tab 随该内容区一起显隐，避免返回分类列表后残留。
+    var back = view.querySelector('.nav-back-btn');
+    if (back && back.parentNode) {
+      if (bar.parentNode !== back.parentNode || bar.nextSibling !== back.nextSibling) back.parentNode.insertBefore(bar, back.nextSibling);
     } else {
       if (view.firstChild !== bar) view.insertBefore(bar, view.firstChild);
     }
@@ -7236,7 +7237,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (bar && bar.parentNode) bar.parentNode.removeChild(bar);
     _extTabCtx = null;
   }
-  // 模块 tab 点击派发：先清理当前功能态，再执行目标 tab 的本模块功能
+  // 确保处于某模块的「分类详情 view」（就地展开功能 match/doodle/reading/wordlist 的前提）。
+  // 这些功能不切 view，内容渲染在 view-ket/view-toefl/view-phonics 内；若从 learn/quiz/pk
+  // 等页点 tab 进入，必须先切回对应 view，否则内容渲染在隐藏 view 中用户看不到。
+  function extTabEnsureDetailView(module) {
+    var need = (typeof currentView === 'undefined') ? true : (currentView !== module);
+    if (!need) return;
+    if (module === 'ket') backToKetCategoryDetail();
+    else if (module === 'toefl') { switchView('toefl'); updateBottomNav('toefl'); }
+    else { switchView('phonics'); updateBottomNav('phonics'); }
+  }
+
+  // 模块 tab 点击派发：先清理当前功能态，再回详情 view，最后执行目标 tab 的本模块功能
   function moduleTabGo(module, key) {
     var defs = EXT_TAB_DEFS[module];
     if (!defs) return;
@@ -7248,6 +7260,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try { if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit(); } catch (e) {}
     if (typeof closeKetReading === 'function') closeKetReading();
     try { if (typeof PK !== 'undefined' && PK.state) { PK.stop(); PK.state = null; } } catch (e) {}
+    // 就地展开的功能必须先回到分类详情 view；跨 view 的功能(choice/quiz/pk)由其入口自行 switchView。
+    // wordlist 走其 go 内已有的 extTabBackToDetail（会同时设置 topbar 标题），无需在此重复切换。
+    var INLINE_KEYS = { match: 1, doodle: 1, reading: 1 };
+    if (INLINE_KEYS[key]) extTabEnsureDetailView(module);
     target.go();
   }
 
