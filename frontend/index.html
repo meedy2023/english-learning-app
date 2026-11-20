@@ -1546,7 +1546,16 @@ const API = ".";
     getData() {
       const key = 'points_' + USER_ID;
       const data = localStorage.getItem(key);
-      if (data) return JSON.parse(data);
+      if (data) {
+        try {
+          const parsed = JSON.parse(data);
+          if (parsed && typeof parsed === 'object') return parsed;
+        } catch (e) {
+          // 数据损坏：回退到初始数据，避免所有加分路径与积分页整体崩溃
+          console.warn('积分数据解析失败，重置', e);
+          try { localStorage.removeItem(key); } catch (e2) {}
+        }
+      }
       return this.initData();
     },
 
@@ -1578,17 +1587,19 @@ const API = ".";
       localStorage.setItem(key, JSON.stringify(data));
     },
 
-    earn(action, itemId = null) {
+    earn(action, itemId = null, pointOverride = null) {
       const data = this.getData();
-      const points = this.RULES[action] || 0;
+      // pointOverride 用于「提示后答对给一半」等场景，让实际加分与提示一致
+      const points = (pointOverride != null) ? pointOverride : (this.RULES[action] || 0);
 
-      // 检查是否新的一天
-      const today = new Date().toISOString().split('T')[0];
+      // 检查是否新的一天（用本地日期，避免 toISOString 的 UTC 日期在东八区凌晨判错）
+      const now = new Date();
+      const today = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
       if (data.lastDate !== today) {
-        // 计算连续天数
+        // 计算连续天数（Math.round 消除跨时区/DST 造成的小时偏差）
         if (data.lastDate) {
-          const last = new Date(data.lastDate);
-          const diff = (new Date(today) - last) / (1000 * 60 * 60 * 24);
+          const last = new Date(data.lastDate + 'T00:00:00');
+          const diff = Math.round((new Date(today + 'T00:00:00') - last) / (1000 * 60 * 60 * 24));
           data.streak = diff === 1 ? data.streak + 1 : 1;
         } else {
           data.streak = 1;
@@ -2296,18 +2307,24 @@ const API = ".";
     if (name !== 'pk' && typeof PK !== 'undefined' && PK.state) PK.stop();
     // 离开 PK 视图时兜底恢复顶栏（二维码等待页曾隐藏）
     if (name !== 'pk' && typeof PK !== 'undefined' && PK._restoreTopbar) PK._restoreTopbar();
+    // 离开 PK 时关闭可能放大的二维码遮罩，避免全屏遮罩残留在其它页面
+    if (name !== 'pk' && typeof PK !== 'undefined' && PK.closeQr) { try { PK.closeQr(); } catch (e) {} }
     // 离开学习页/报告页（切到首页、各模块主页、设置等）时，清理外部模块单词学习的返回上下文，
     // 避免 clExtCtx 残留导致后续报告模块定位误判（报告页返回学习页需保留，故 report 不清理）
     if (name !== 'learn' && name !== 'report') clExtCtx = null;
     // 离开 KET / 拼读 / 小托福页时收起其消消乐面板（计时也停掉）
     try {
       if (Match.scope && Match.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics' && name !== 'toefl') Match.exit();
+      // 离开学习页时统一停掉消消乐计时（含单元内 scope）：exit 不覆盖 unit，这里补 stopTimer 防止后台空转
+      if (name !== 'learn' && typeof Match.stopTimer === 'function') Match.stopTimer();
       // 离开 KET / 拼读 / 小托福页时收起随手拼面板
       if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit' && name !== 'ket' && name !== 'phonics' && name !== 'toefl') Doodle.exit();
       // 离开 KET 页时收起独立的短文阅读（朗读也停掉）
       if (name !== 'ket' && typeof closeKetReading === 'function') closeKetReading();
       // 切换视图时彻底重置朗读（课文/短文）：停掉播放、清高亮、按钮恢复「朗读」初始态
       try { LessonReader.stop(); } catch (e) {}
+      // 复位跟读状态：停掉可能仍在进行的录音/回放，避免麦克风残留与下次跟读首次点击失效
+      try { if (typeof raStop === 'function') raStop(); } catch (e) {}
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
@@ -2741,7 +2758,16 @@ const API = ".";
   }
 
   function escapeForJS(str) {
-    return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    // 先转义反斜杠，再转义引号/换行/脚本结束标记，避免拼进 inline onclick 时破坏字符串或提前闭合 script
+    return String(str)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/"/g, '\\"')
+      .replace(/\r/g, '\\r')
+      .replace(/\n/g, '\\n')
+      .replace(/<\//gi, '<\\/')
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029');
   }
 
   function speakLine(text) {
@@ -3446,7 +3472,7 @@ const API = ".";
   }
 
   // ========== 单词跟读（简化版，复用全局 _ra 状态）==========
-  function raToggleWord(textEl, text) {
+  function raToggleWord(textEl, text, clickedBtn) {
     // 如果正在录音，点击则停止
     if (_raState === 'recording') { 
       raStopRecordingWord(); 
@@ -3471,7 +3497,7 @@ const API = ".";
     _raState = 'recording';
     _raChunks = [];
     const card = textEl.closest('.word-detail-card');
-    const btn = event.target.closest('.ra-btn');
+    const btn = clickedBtn || (typeof event !== 'undefined' && event.target ? event.target.closest('.ra-btn') : null);
     
     if (btn) {
       btn.textContent = '🔴 点击结束录音';
@@ -3592,6 +3618,11 @@ const API = ".";
     // content: [{text|en}...]；ui: KET 等页面的控制条元素 id
     bind(content, ui) {
       this.stop(true);
+      // 彻底复位状态：silent stop 只停音频不清 state/idx，切课/重进短文后残留的
+      // state='playing'、旧 idx 会导致首次点朗读变成「暂停」不发声，甚至旧 idx 越界直接 finish 白拿积分
+      this.state = 'idle';
+      this.idx = -1;
+      this.restoreReadingSpace();
       this.ui = ui || null;
       this.lines = [];
       const scopeId = (ui && ui.scope) || null;
@@ -3660,7 +3691,9 @@ const API = ".";
       if (this.handle && this.handle.kind === 'system') {
         // 部分安卓浏览器 pause() 不生效：降级为「停掉这句，继续时整句重读」
         const self = this;
+        const pauseTk = this.token;
         setTimeout(() => {
+          if (pauseTk !== self.token) return;  // 切课/重播后 token 变化，废弃旧定时器，避免串台
           let ok = false;
           try { ok = window.speechSynthesis && speechSynthesis.paused; } catch (e) {}
           if (!ok && self.state === 'paused') {
@@ -3681,7 +3714,9 @@ const API = ".";
         this.startTick();
         // 系统语音若在不支持 pause 的机型上被降级，这里重新朗读本句
         if (this.handle && this.handle.kind === 'system') {
+          const resumeTk = this.token;
           setTimeout(function() {
+            if (resumeTk !== self.token) return;  // token 变化说明已切课/停止，避免用新内容重复播放
             let speaking = false;
             try { speaking = !!(window.speechSynthesis && speechSynthesis.speaking); } catch (e) {}
             if (!speaking && self.state === 'playing') self.playCurrent();
@@ -4134,8 +4169,12 @@ const API = ".";
 // 与 playAudioBlob 相同，但返回 audio 元素（整篇朗读需要暂停/继续）
 // onPlayBlocked：当 play() 因自动播放策略被拦截（NotAllowedError）时回调，供调用方降级到系统语音。
 function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
-  // 空 blob 防御：网络合成失败/返回空数据时，不再创建会报 ERR_FILE_NOT_FOUND 的破损音频
-  if (!blob || (blob.size != null && blob.size === 0)) { if (onEnd) onEnd(); return null; }
+  // 空 blob 防御：网络合成失败/返回空数据时，降级到系统语音而非直接 onEnd 推进（否则静默快进整篇并白拿积分）
+  if (!blob || (blob.size != null && blob.size === 0)) {
+    if (onPlayBlocked) onPlayBlocked();
+    else if (onEnd) onEnd();
+    return null;
+  }
   stopAllAudio();
   const token = window._audioToken;
   const url = URL.createObjectURL(blob);
@@ -4144,16 +4183,23 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
   audio.src = url;
   // 语速统一由播放端控制（合成端固定基准速度，避免双重变速）
   try { audio.playbackRate = speechRate; } catch (e) {}
-  const finish = () => {
+  const cleanup = () => {
     if (token !== window._audioToken) return;
     if (window._activeAudio === audio) window._activeAudio = null;
     // 先摘掉 src 再释放 URL，避免浏览器仍在加载该 blob 时被 revoke 触发 ERR_FILE_NOT_FOUND
     try { audio.onended = null; audio.onerror = null; audio.src = ''; } catch (e) {}
     setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 0);
-    if (onEnd) onEnd();
   };
+  const finish = () => { cleanup(); if (onEnd) onEnd(); };
   audio.onended = () => finish();
-  audio.onerror = () => finish();
+  // 解码/加载失败：不能当作「读完」推进句子并计分，应清理后降级到系统语音（与自动播放被拦截同等处理），
+  // 避免音频损坏时静默快进整篇并白拿 lesson_full_read 积分。
+  audio.onerror = () => {
+    if (token !== window._audioToken) return;
+    cleanup();
+    if (onPlayBlocked) onPlayBlocked();
+    else if (onEnd) onEnd();
+  };
   const p = audio.play();
   if (p && p.catch) {
     p.catch((err) => {
@@ -5008,17 +5054,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const word = all.find(function (x) { return String(x.id) === String(wordId); });
       if (!word) { rvIdx++; loadReviewQuestion(); return; }
       const mode = Math.random() > 0.5 ? 'en2cn' : 'cn2en';
-      const others = shuffle(all.filter(function (w) { return String(w.id) !== String(wordId); })).slice(0, 3);
+      const others = all.filter(function (w) { return String(w.id) !== String(wordId); });
+      const disCn = pickDistractors(others, word.chinese, 'chinese', 3);
+      const disEn = pickDistractors(others, word.word, 'word', 3);
       let options;
       if (mode === 'en2cn') {
         options = shuffle([
           { text: word.chinese, correct: true },
-          ...others.map(function (d) { return { text: d.chinese, correct: false }; })
+          ...disCn.map(function (d) { return { text: d.chinese, correct: false }; })
         ]);
       } else {
         options = shuffle([
           { text: word.word, correct: true },
-          ...others.map(function (d) { return { text: d.word, correct: false }; })
+          ...disEn.map(function (d) { return { text: d.word, correct: false }; })
         ]);
       }
       const prompt = mode === 'en2cn' ? '这个单词的中文是？' : '这个中文的英文是？';
@@ -5713,7 +5761,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         <div class="word-phonetic">${w.phonetic}</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
           <button class="speak-btn" onclick="speakWord('${esc(w.word)}')">🔊 听发音</button>
-          <button class="ra-btn" onclick="raToggleWord(document.getElementById('${wordId}-text'), '${esc(w.word)}')" style="padding:8px 16px;font-size:14px;border-radius:8px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:4px">🎤 跟读单词</button>
+          <button class="ra-btn" onclick="raToggleWord(document.getElementById('${wordId}-text'), '${esc(w.word)}', this)" style="padding:8px 16px;font-size:14px;border-radius:8px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:4px">🎤 跟读单词</button>
         </div>
         <div class="word-chinese">${w.chinese}</div>
         <div class="word-example" id="${wordId}-ex">
@@ -5721,7 +5769,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <span style="flex:1" id="${wordId}-ex-text">${capitalize(w.example_en)}</span>
             <div style="display:flex;gap:6px;flex-shrink:0">
               <button class="speak-btn" onclick="speakWord('${esc(w.example_en)}')" style="padding:4px 10px;font-size:12px">🔊 例句</button>
-              <button class="ra-btn" onclick="raToggleWord(document.getElementById('${wordId}-ex-text'), '${esc(w.example_en)}')" style="padding:4px 10px;font-size:12px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">🎤 跟读</button>
+              <button class="ra-btn" onclick="raToggleWord(document.getElementById('${wordId}-ex-text'), '${esc(w.example_en)}', this)" style="padding:4px 10px;font-size:12px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">🎤 跟读</button>
             </div>
           </div>
           <div class="word-example-cn">${w.example_cn}</div>
@@ -5764,6 +5812,22 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+  }
+
+  // 生成干扰项：按目标文本字段去重，并排除与正确答案文本相同的词，
+  // 避免选项里出现两个视觉相同但一真一假的按钮导致误判。
+  function pickDistractors(pool, correctText, field, n) {
+    var seen = {};
+    seen[String(correctText).trim()] = true;
+    var out = [];
+    shuffle(pool).forEach(function (w) {
+      if (out.length >= n) return;
+      var t = String(w[field] == null ? '' : w[field]).trim();
+      if (!t || seen[t]) return;
+      seen[t] = true;
+      out.push(w);
+    });
+    return out;
   }
 
   function startQuiz() {
@@ -5825,16 +5889,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (quizPrevBtn) quizPrevBtn.style.visibility = (currentQuizIndex > 0) ? 'visible' : 'hidden';
     if (quizSkipBtn) quizSkipBtn.style.visibility = (currentQuizIndex < quizOrder.length - 1) ? 'visible' : 'hidden';
 
-    // 生成4个选项
+    // 生成4个选项（按目标文本去重，避免一真一假同文本误判）
     const others = currentWords.filter(x => x.id !== wordId);
-    const distractors = shuffle(others).slice(0, 3);
     let options;
     if (mode === "en_to_cn") {
+      const distractors = pickDistractors(others, w.chinese, 'chinese', 3);
       options = shuffle([
         { text: w.chinese, correct: true, word: w },
         ...distractors.map(d => ({ text: d.chinese, correct: false, word: d }))
       ]);
     } else {
+      const distractors = pickDistractors(others, w.word, 'word', 3);
       options = shuffle([
         { text: w.word, correct: true, word: w },
         ...distractors.map(d => ({ text: d.word, correct: false, word: d }))
@@ -5886,10 +5951,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       comboCount++;
       showCombo(comboCount);
 
-      // 首次答对才给满分积分；提示后答对给一半（鼓励试错）
-      const result = Points.earn('quiz_correct');
+      // 首次答对才给满分积分；提示后答对给一半（鼓励试错），实际加分与提示保持一致
+      const earnedPts = Points.RULES.quiz_correct || 0;
+      const grantPts = retried ? Math.max(1, Math.round(earnedPts / 2)) : earnedPts;
+      const result = Points.earn('quiz_correct', null, grantPts);
       if (result.success) {
-        showPointsToast(retried ? Math.max(1, Math.round(result.points / 2)) : result.points, Points.getMessage('quiz_correct'));
+        showPointsToast(result.points, Points.getMessage('quiz_correct'));
         updatePointsDisplay();
       }
 
@@ -6426,6 +6493,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 开始一局：fresh=true 表示清空本单元进度从头来
     start(opts) {
       opts = opts || {};
+      // 清掉上一局可能未触发的延迟结算，避免重开/退出后被旧 finish 强行打断并重复计分
+      if (this._finishTimer) { clearTimeout(this._finishTimer); this._finishTimer = null; }
+      this._round = (this._round || 0) + 1;
       var pool = this.scopeWords();
       if (!this.scopeKey() || pool.length === 0) {
         toast('请先选择一个模块');
@@ -6510,6 +6580,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 退出（用于 KET / 拼读作用域）：收起面板、恢复被隐藏的列表、计时停掉
     exit() {
       this.stopTimer();
+      if (this._finishTimer) { clearTimeout(this._finishTimer); this._finishTimer = null; }
+      this._round = (this._round || 0) + 1;  // 作废进行中的延迟结算
       var area = document.getElementById('match-game-area');
       if (area) {
         area.style.display = 'none';
@@ -6615,7 +6687,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       this.updateHud();
       try { Celebrate._tone([784, 1046.5], 0.09, 'triangle', 0.18, 0.22); } catch (e) {}
       var self = this;
-      if (this.matched >= this.total) setTimeout(function () { self.finish(); }, 480);
+      var round = this._round;
+      if (this.matched >= this.total) {
+        this._finishTimer = setTimeout(function () {
+          self._finishTimer = null;
+          if (round !== self._round || !self.scope) return;  // 已重开/退出则作废，避免误结算与重复积分
+          self.finish();
+        }, 480);
+      }
     },
 
     onMiss(a, b) {
@@ -6674,6 +6753,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById('match-board').style.display = 'none';
       document.getElementById('match-tip').style.display = 'none';
       document.getElementById('match-result').style.display = 'block';
+      // 就地模式：stage 顶部已有统一返回按钮，隐藏结算页自带的返回按钮避免重复
+      var mBack = document.getElementById('match-back-btn');
+      if (mBack) mBack.style.display = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active) ? 'none' : '';
       document.getElementById('match-res-emoji').textContent = unitDone ? '🎉' : '👍';
       document.getElementById('match-res-title').textContent = unitDone ? label + '完成！' : '本局完成！';
 
@@ -6839,18 +6921,21 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const roll = Math.random();
     const mode = roll < 0.34 ? 'en2cn' : (roll < 0.67 ? 'cn2en' : 'listen');
     const others = cl_words.filter(w => w.id !== wordId);
-    const distractors = shuffle(others).slice(0, 3);
+    const mode0Text = word.chinese;
+    const mode1Text = word.word;
+    const disCn = pickDistractors(others, mode0Text, 'chinese', 3);
+    const disEn = pickDistractors(others, mode1Text, 'word', 3);
     let options;
     if (mode === 'en2cn') {
       options = shuffle([
         { text: word.chinese, correct: true },
-        ...distractors.map(d => ({ text: d.chinese, correct: false }))
+        ...disCn.map(d => ({ text: d.chinese, correct: false }))
       ]);
     } else {
       // cn2en 与 listen 都是英文选项
       options = shuffle([
         { text: word.word, correct: true },
-        ...distractors.map(d => ({ text: d.word, correct: false }))
+        ...disEn.map(d => ({ text: d.word, correct: false }))
       ]);
     }
     const prompt = mode === 'en2cn' ? '这个单词的中文是？' : (mode === 'listen' ? '听发音，选出对应的英文单词' : '这个中文的英文是？');
@@ -6906,7 +6991,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       btn.style.cssText = 'width:100%;text-align:left;padding:14px 18px;font-size:16px;border-radius:12px;background:white;border:2px solid #e8eeff;color:#333;cursor:pointer;transition:all .15s';
       btn.innerHTML = '<span style="display:inline-block;width:28px;height:28px;border-radius:50%;background:#f0f4ff;color:#6c63ff;font-size:13px;text-align:center;line-height:28px;font-weight:700;margin-right:10px;flex-shrink:0">' + labels[i] + '</span><span>' + opt.text + '</span>';
       btn.onclick = (function(o) {
-        return function() { handleChoiceAnswer(o, word, mode); };
+        return function(e) { handleChoiceAnswer(o, word, mode, e && e.currentTarget ? e.currentTarget : this); };
       })(opt);
       optsContainer.appendChild(btn);
     });
@@ -6920,7 +7005,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     speakWord(w.word);
   }
 
-  function handleChoiceAnswer(opt, word, mode) {
+  function handleChoiceAnswer(opt, word, mode, clickedBtn) {
+    var _btn = clickedBtn || (typeof event !== 'undefined' ? event.target : null);
     document.querySelectorAll('.choice-opt-btn').forEach(function(b) { b.style.pointerEvents = 'none'; });
     cl_total++;
     const feedback = document.getElementById('choice-feedback');
@@ -6932,7 +7018,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       comboCount++;
       showCombo(comboCount);
       clStyle(feedback, '#f6ffed', '#52c41a', '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word)));
-      clStyleBtn(event.target, '#f6ffed', '#52c41a');
+      clStyleBtn(_btn, '#f6ffed', '#52c41a');
       Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
       // 按词判定掌握：答对的词即标记 mastered（不再要求整轮全对，避免一题错导致全轮 0 掌握）
       saveChoiceProgress(word.id, 'mastered');
@@ -6949,9 +7035,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         }
       });
       // 标红选错的
-      event.target.style.background = '#fff2f0';
-      event.target.style.borderColor = '#ff4d4f';
-      event.target.style.color = '#ff4d4f';
+      if (_btn) {
+        _btn.style.background = '#fff2f0';
+        _btn.style.borderColor = '#ff4d4f';
+        _btn.style.color = '#ff4d4f';
+      }
       Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
       comboCount = 0;
       hideCombo();
@@ -7068,6 +7156,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 总结页返回按钮：外部调用返回各自分类页，课文返回单词表/首页
   function clSummaryBackBtn() {
+    // 就地模式：stage 顶部已有统一「返回本类/本组/本天」按钮，结算页不再重复显示返回
+    if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.inlineView === 'learn') return '';
     if (clExtCtx) {
       var _clBack = clExtCtx.view === 'ket' ? ketCategoryBackLabel()
         : ((typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan') ? '返回本天'
@@ -7241,6 +7331,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try { if (typeof closeKetReading === 'function') closeKetReading(); } catch (e) {}
     try { if (typeof PK !== 'undefined' && PK.state) { PK.stop(); PK.state = null; } } catch (e) {}
     try { if (typeof PK !== 'undefined' && PK._restoreTopbar) PK._restoreTopbar(); } catch (e) {}
+    try { if (typeof PK !== 'undefined' && PK.closeQr) PK.closeQr(); } catch (e) {}
     var st = document.getElementById(EXT_FEATURE.stageId);
     if (st) { st.innerHTML = ''; st.style.display = 'none'; }
     extFeatureHideList(EXT_FEATURE.module, false);
@@ -7670,10 +7761,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var queue = null;
       if (p && p.queue && p.queue.length) {
         queue = p.queue.map(function (q) {
+          var opts = q.o || [];
+          // 外部载荷可能被篡改/损坏：correct 索引越界时兜底为 0，保证每题必有唯一 correct 选项
+          var ci = Number(q.c);
+          if (!isFinite(ci) || ci < 0 || ci >= opts.length) ci = 0;
           return {
             word: { id: q.w[0], word: q.w[1], chinese: q.w[2] },
             mode: q.m,
-            options: (q.o || []).map(function (t, i) { return { text: t, correct: (i === q.c) }; })
+            options: opts.map(function (t, i) { return { text: t, correct: (i === ci) }; })
           };
         });
       }
@@ -8005,7 +8100,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         Celebrate.answerWrong();
       }
       var btns = document.querySelectorAll('#pk-options .choice-opt-btn');
-      var correctText = q.options.filter(function (o) { return o.correct; })[0].text;
+      var _correctOpt = q.options.filter(function (o) { return o.correct; })[0];
+      var correctText = _correctOpt ? _correctOpt.text : (q.word && q.word.word) || '';
       btns.forEach(function (b) {
         b.style.pointerEvents = 'none';
         var t = b.querySelector('span:last-child').textContent.trim();
@@ -9065,6 +9161,26 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     } catch (e) { return { learned: 0, mastered: 0 }; }
   }
 
+  // 汇总 40 天计划全部天的学习进度（scopeKey 形如 'toefl_40天计划 DayN xxx'），供报告展示
+  function toeflPlanAggProgress() {
+    var learned = 0, mastered = 0, days = 0;
+    try {
+      const all = JSON.parse(localStorage.getItem('wordlearn_' + USER_ID) || '{}');
+      Object.keys(all).forEach(function (key) {
+        if (key.indexOf('toefl_40天计划') !== 0) return;
+        var bucket = all[key] || {};
+        var has = false, l = 0, m = 0;
+        Object.keys(bucket).forEach(function (wid) {
+          has = true;
+          if (bucket[wid] === 'mastered') m++;
+          else if (bucket[wid] === 'learned') l++;
+        });
+        if (has) { days++; learned += l; mastered += m; }
+      });
+    } catch (e) {}
+    return { learned: learned, mastered: mastered, days: days };
+  }
+
   // 状态标签
   function statusLabel(learned, mastered, total) {
     if (mastered === total && total > 0) return '<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#d4f5d4;color:#52c41a">全部掌握 ✓</span>';
@@ -9378,6 +9494,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' · 掌握 ' + mastered + '</div></td>'
           + '</tr>';
       });
+      // 40 天计划单独一行（进度存在 toefl_40天计划 DayN 桶中，不在正式分类列表里）
+      var planAgg = toeflPlanAggProgress();
+      if (planAgg.days > 0) {
+        var planDone = planAgg.learned + planAgg.mastered;
+        rows += '<tr>'
+          + '<td><div class="cell-name">📅 40天计划' + (planAgg.days > 1 ? '（' + planAgg.days + ' 天）' : '') + '</div></td>'
+          + '<td class="num">' + planDone + '</td>'
+          + '<td class="num"><span class="cell-pct">—</span>'
+          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + planDone + ' · 掌握 ' + planAgg.mastered + '（按天累计）</div></td>'
+          + '</tr>';
+        totalLearned += planAgg.learned; totalMastered += planAgg.mastered;
+      }
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>词汇分类</th><th class="num">词数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
@@ -9846,6 +9974,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (!ok) {
       ketReadingOpen = false;
       toast('本分类暂无短文');
+      try { extFeatureRestore(); } catch (e) {}  // 无数据/接口异常时回滚就地态，避免 stage 空白无返回入口
       return;
     }
     area.style.display = 'block';
@@ -9857,7 +9986,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function closeKetReading() {
-    try { LessonReader.stop(true); LessonReader.clearPaint(); } catch (e) {}
+    try { LessonReader.stop(); LessonReader.clearPaint(); } catch (e) {}
+    try { if (typeof raStop === 'function') raStop(); } catch (e) {}  // 停跟读录音/回放，避免麦克风残留、下次跟读首次失效
     ketReadingOpen = false;
     const area = document.getElementById('ket-reading-area');
     if (area) { area.style.display = 'none'; area.innerHTML = ''; }
@@ -9923,10 +10053,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 生成并渲染本类连续短文到就地 stage（一段连贯英文 + 中文翻译开关）
   function renderToeflCategoryReading() {
     var area = document.getElementById('toefl-feature-stage');
-    if (!area) return false;
+    if (!area) { try { extFeatureRestore(); } catch (e) {} return false; }
     var items = toeflCurrentItems || [];
     var withEx = items.filter(function (w) { return w && w.example && String(w.example).trim(); });
-    if (!withEx.length) return false;
+    if (!withEx.length) {
+      toast('本类暂无可生成短文的单词');
+      try { extFeatureRestore(); } catch (e) {}  // 回滚就地态，避免 stage 空白、词表隐藏、无返回入口
+      return false;
+    }
     var stems = toeflBuildStems(items);
     // 均匀取样，覆盖不同词，最多 12 句
     var maxSent = 12;
@@ -10000,7 +10134,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function closeToeflCategoryReading() {
     toeflReadingOpen = false;
-    try { LessonReader.stop(true); LessonReader.clearPaint(); } catch (e) {}
+    try { LessonReader.stop(); LessonReader.clearPaint(); } catch (e) {}
+    try { if (typeof raStop === 'function') raStop(); } catch (e) {}
     var btn = document.getElementById('toefl-reading-btn');
     if (btn) btn.textContent = '📖 短文阅读';
   }
@@ -10099,7 +10234,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function closePhonicsReading() {
     phonicsReadingOpen = false;
-    try { LessonReader.stop(true); LessonReader.clearPaint(); } catch (e) {}
+    try { LessonReader.stop(); LessonReader.clearPaint(); } catch (e) {}
+    try { if (typeof raStop === 'function') raStop(); } catch (e) {}
     var btn = document.getElementById('phonics-reading-btn');
     if (btn) btn.textContent = '📖 短文阅读';
   }
@@ -10398,7 +10534,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const queue = [];
     pool.forEach(function (item) {
       let prompt, question, speak, options, answerLabel;
-      const others = shuffle(src.filter(function (x) { return x !== item; })).slice(0, 3);
+      const othersAll = src.filter(function (x) { return x !== item; });
       const mode = shape === 'grammar' ? 'fill' : (Math.random() > 0.5 ? 'en2zh' : 'zh2en');
       if (shape === 'grammar') {
         // 挖空题：从英文句中挖掉某个词，四选一填空
@@ -10421,13 +10557,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         prompt = '这句话的中文是？';
         question = item.en;
         speak = item.en;
-        options = shuffle([{ text: item.zh, correct: true }].concat(others.map(function (d) { return { text: d.zh, correct: false }; })));
+        options = shuffle([{ text: item.zh, correct: true }].concat(pickDistractors(othersAll, item.zh, 'zh', 3).map(function (d) { return { text: d.zh, correct: false }; })));
         answerLabel = item.zh;
       } else {
         prompt = '这个中文对应的英文是？';
         question = item.zh;
         speak = item.en;
-        options = shuffle([{ text: item.en, correct: true }].concat(others.map(function (d) { return { text: d.en, correct: false }; })));
+        options = shuffle([{ text: item.en, correct: true }].concat(pickDistractors(othersAll, item.en, 'en', 3).map(function (d) { return { text: d.en, correct: false }; })));
         answerLabel = item.en;
       }
       queue.push({
