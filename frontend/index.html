@@ -10715,6 +10715,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl-plan\',\'match\')">🎴 消消乐</button>' +
         '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl-plan\',\'doodle\')">✍️ 随手拼</button>'
       '</div>';
+
+    // 预读短文：把当天词汇放进短文中，先读短文再学单词
+    var passageArea = document.getElementById('toefl-plan-passage');
     if (passageArea) {
       if (d.passage && d.passage.en) {
         var highlighted = toeflPlanHighlight(d.passage.en, d.words);
