@@ -2311,7 +2311,7 @@ const API = ".";
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "📚 KET 学习", "ket-quiz": "🎯 KET 测验", toefl: "🎓 小托福", phonics: "🔤 自然拼读", pk: "⚔️ 单词 PK", settings: "⚙️ 设置" };
+    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "🪜 KET 学习", "ket-quiz": "🎯 KET 测验", toefl: "🎓 小托福", phonics: "🔤 自然拼读", pk: "⚔️ 单词 PK", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
@@ -9118,7 +9118,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 报告模块切换（课文 / KET / 小托福 / 拼读）
   const REPORT_MODULES = [
     { id: 'lesson', icon: '📖', label: '课文' },
-    { id: 'ket', icon: '📚', label: 'KET' },
+    { id: 'ket', icon: '🪜', label: 'KET' },
     { id: 'toefl', icon: '🎓', label: '小托福' },
     { id: 'phonics', icon: '🔤', label: '拼读' }
   ];
@@ -9460,7 +9460,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       <span class="nav-item-icon">🏠</span>年级
     </div>
     <div id="nav-ket" class="nav-item" onclick="switchView('ket')">
-      <span class="nav-item-icon">📚</span>KET
+      <span class="nav-item-icon">🪜</span>KET
     </div>
     <div id="nav-toefl" class="nav-item" onclick="switchView('toefl')">
       <span class="nav-item-icon">🎓</span>小托福
@@ -10369,7 +10369,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function backToKetCategories() {
     try { extFeatureRestore(); } catch (e) {}
     ketCurrentCategory = '';
-    document.getElementById('topbar-title').textContent = '📚 KET 学习';
+    document.getElementById('topbar-title').textContent = '🪜 KET 学习';
     Match.exit();                 // 返回分类时收起消消乐面板
     closeKetReading();            // 返回分类时收起短文阅读
     document.getElementById('ket-category-list').style.display = 'grid';
@@ -10380,7 +10380,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // KET 二级页面的统一返回：回到「当前具体分类页」，而不是 classification 列表
   function ketCategoryTitle() {
-    if (!ketCurrentCategory) return '📚 KET 学习';
+    if (!ketCurrentCategory) return '🪜 KET 学习';
     const prefix = ketCurrentType === '词汇' ? '📖 ' : ketCurrentType === '句型' ? '💬 ' : ketCurrentType === '语法' ? '📝 ' : '';
     return prefix + ketCurrentCategory;
   }
