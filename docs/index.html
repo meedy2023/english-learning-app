@@ -5147,18 +5147,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Review.wrong(wordId);
     }
 
-    if (rvIdx + 1 >= rvOrder.length) {
-      nextBtn.style.display = 'block';
-      nextBtn.textContent = '完成复习 🎉';
-    }
-
-    // 答题结束自动跳转下一个；最后一个不跳转，等用户手动点「完成复习」
+    // 答完最后一题直接进成绩页（短暂展示答案后自动跳，无需点「完成复习」）
+    nextBtn.style.display = 'none';
     clearTimeout(window._rvAutoNext);
-    const isLastQ = rvIdx + 1 >= rvOrder.length;
-    if (!isLastQ) {
-      const autoDelay = isCorrect ? 1200 : 2800;
-      window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, autoDelay);
-    }
+    const autoDelay = isCorrect ? 1200 : 2800;
+    window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, autoDelay);
   }
 
   function nextReviewQuestion() {
@@ -5197,15 +5190,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     feedback.style.color = '#52c41a';
     feedback.innerHTML = '<strong>⏭ 已跳过</strong><br>正确答案：<strong>' + correctText + '</strong>';
     Review.wrong(word.id);
-    if (rvIdx + 1 >= rvOrder.length) {
-      nextBtn.style.display = 'block';
-      nextBtn.textContent = '完成复习 🎉';
-    }
     clearTimeout(window._rvAutoNext);
-    const isLastQ = rvIdx + 1 >= rvOrder.length;
-    if (!isLastQ) {
-      window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, 1200);
-    }
+    // 最后一题跳过直接进成绩页（无需点「完成复习」）
+    nextBtn.style.display = 'none';
+    window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, 1200);
   }
 
   // ========== 测验结算提示语：按正确率分档，同档内随机一条 ==========
@@ -6066,7 +6054,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       apiPOST("/api/progress/" + USER_ID + "/" + correctWord.id + "?status=mastered", {});
 
       window._quizRetry = false;
-      if (isLast) { nextBtn.style.display = "block"; nextBtn.textContent = "查看成绩 🎉"; }
+      // 答完最后一题直接进成绩页，无需点「查看成绩」按钮
+      nextBtn.style.display = "none";
       clearTimeout(window._quizAutoNext);
       window._quizAutoNext = setTimeout(function() { nextQuizQuestion(); }, isLast ? 2000 : 1200);
       return;
@@ -6125,10 +6114,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     window._quizRetry = false;
     const isLast = currentQuizIndex + 1 >= quizOrder.length;
-    if (isLast) {
-      nextBtn.style.display = "block";
-      nextBtn.textContent = "查看成绩 🎉";
-    }
+    // 答完最后一题直接进成绩页，无需点「查看成绩」按钮
+    nextBtn.style.display = "none";
     clearTimeout(window._quizAutoNext);
     window._quizAutoNext = setTimeout(function() { nextQuizQuestion(); }, isLast ? 2000 : 2800);
   }
@@ -7152,16 +7139,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (!clExtCtx) Review.add(word.id);
     }
 
-    // 最后一题答完显示"查看成绩"，中间题自动跳转不显示下一题
-    const _isLast = (cl_idx + 1) >= cl_order.length;
-    if (_isLast) {
-      nextBtn.style.display = 'block';
-      nextBtn.textContent = '查看成绩 🎉';
-    } else {
-      nextBtn.style.display = 'none';
-      clearTimeout(window._clAutoNext);
-      window._clAutoNext = setTimeout(function() { clNextQuestion(); }, isCorrect ? 1200 : 2800);
-    }
+    // 答完最后一题直接进成绩页（短暂展示答案后自动跳，无需点「查看成绩」）
+    nextBtn.style.display = 'none';
+    clearTimeout(window._clAutoNext);
+    window._clAutoNext = setTimeout(function() { clNextQuestion(); }, isCorrect ? 1200 : 2800);
   }
 
   function clSkipQuestion() {
@@ -10775,16 +10756,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       Celebrate.answerWrong();  // 提示音乐替代语音播报「不对」
     }
 
-    if (ketQuizIndex + 1 >= ketQuizQueue.length) {
-      nextBtn.style.display = 'block';
-      nextBtn.textContent = '查看成绩 🎉';
-    }
-
+    // 答完最后一题直接进成绩页（短暂展示答案后自动跳，无需点「查看成绩」）
+    nextBtn.style.display = 'none';
     clearTimeout(window._ketQuizAutoNext);
-    const isLast = ketQuizIndex + 1 >= ketQuizQueue.length;
-    if (!isLast) {
-      window._ketQuizAutoNext = setTimeout(function () { nextKetQuizQuestion(); }, isCorrect ? 1200 : 2800);
-    }
+    window._ketQuizAutoNext = setTimeout(function () { nextKetQuizQuestion(); }, isCorrect ? 1200 : 2800);
   }
 
   function nextKetQuizQuestion() {
