@@ -6720,7 +6720,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ---- KET 分类消消乐 ----
   function startKetMatch() {
     const words = toMatchWords(ketCurrentItems);
-    if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); return; }
+    if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); try { extFeatureRestore(); } catch (e) {} return; }
     Match.exit();
     closeKetReading();               // 玩消消乐时不显示短文阅读
     Match.scope = {
@@ -6738,7 +6738,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ---- 自然拼读分组消消乐 ----
   function startPhonicsMatch() {
     const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
-    if (words.length < 2) { toast('本组单词太少，玩不了消消乐'); return; }
+    if (words.length < 2) { toast('本组单词太少，玩不了消消乐'); try { extFeatureRestore(); } catch (e) {} return; }
     Match.exit();
     Match.scope = {
       type: 'phonics',
@@ -7103,13 +7103,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ---- KET 单词学习入口 ----
   function startKetLearn() {
     const words = toMatchWords(ketCurrentItems);
-    if (words.length < 2) { toast('本类单词太少，暂时学不了'); return; }
+    if (words.length < 2) { toast('本类单词太少，暂时学不了'); try { extFeatureRestore(); } catch (e) {} return; }
     startChoiceLearn(words, { title: '🎯 ' + (ketCurrentCategory || 'KET') + ' 单词学习', scopeKey: 'ket_' + (ketCurrentCategory || ''), onBack: backToKetCategoryDetail, view: 'ket' });
   }
 
   function startKetPk(challenge) {
     const words = toMatchWords(ketCurrentItems);
-    if (words.length < 2) { toast('本类单词太少，玩不了 PK'); return; }
+    if (words.length < 2) { toast('本类单词太少，玩不了 PK'); try { extFeatureRestore(); } catch (e) {} return; }
     const opts = { title: (ketCurrentCategory || 'KET') + ' 词汇', scopeKey: 'ket_' + (ketCurrentCategory || ''), backFn: backToKetCategoryDetail, view: 'ket' };
     if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
@@ -7117,13 +7117,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ---- 小托福单词学习入口 ----
   function startToeflLearn() {
     const words = toMatchWords(toeflCurrentItems);
-    if (words.length < 2) { toast('本类单词太少，暂时学不了'); return; }
+    if (words.length < 2) { toast('本类单词太少，暂时学不了'); try { extFeatureRestore(); } catch (e) {} return; }
     startChoiceLearn(words, { title: '🎯 ' + (toeflCurrentCategory || '小托福') + ' 单词学习', scopeKey: 'toefl_' + (toeflCurrentCategory || ''), onBack: backToToeflCategories, view: 'toefl' });
   }
 
   function startToeflPk(challenge) {
     const words = toMatchWords(toeflCurrentItems);
-    if (words.length < 2) { toast('本类单词太少，玩不了 PK'); return; }
+    if (words.length < 2) { toast('本类单词太少，玩不了 PK'); try { extFeatureRestore(); } catch (e) {} return; }
     const inPlan = (typeof toeflPlanActive !== 'undefined' && toeflPlanActive);
     const opts = {
       title: (toeflCurrentCategory || '小托福') + ' 词汇',
@@ -7137,16 +7137,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ---- 自然拼读单词学习入口 ----
   function startPhonicsLearn() {
-    if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); return; }
+    if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); try { extFeatureRestore(); } catch (e) {} return; }
     const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
-    if (words.length < 2) { toast('本组单词太少，暂时学不了'); return; }
+    if (words.length < 2) { toast('本组单词太少，暂时学不了'); try { extFeatureRestore(); } catch (e) {} return; }
     startChoiceLearn(words, { title: '🎯 ' + (phonicsCurrentGroup.title || '拼读') + ' 单词学习', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), onBack: backToPhonicsGroups, view: 'phonics' });
   }
 
   function startPhonicsPk(challenge) {
-    if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); return; }
+    if (!phonicsCurrentGroup) { toast('请先选择一个拼读分组'); try { extFeatureRestore(); } catch (e) {} return; }
     const words = toMatchWords(phonicsGroupWords(phonicsCurrentGroup));
-    if (words.length < 2) { toast('本组单词太少，玩不了 PK'); return; }
+    if (words.length < 2) { toast('本组单词太少，玩不了 PK'); try { extFeatureRestore(); } catch (e) {} return; }
     const opts = { title: (phonicsCurrentGroup.title || '拼读') + ' 词汇', scopeKey: 'phonics_' + (phonicsCurrentGroup.id || ''), backFn: backToPhonicsGroups, view: 'phonics', backLabel: '返回本组' };
     if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
@@ -7199,7 +7199,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function extFeatureMark(module, key) {
     document.querySelectorAll('.ext-feature-btn').forEach(function (b) {
-      b.classList.toggle('active-feature', b.getAttribute('data-extkey') === key);
+      // 必须同时匹配模块与 key：四个模块都有 data-extkey="quiz"/"choice" 等，仅按 key 会跨模块误高亮
+      var oc = b.getAttribute('onclick') || '';
+      var mm = oc.match(/extFeatureGo\(\s*['"]([a-z-]+)['"]/);
+      var btnModule = mm ? mm[1] : null;
+      b.classList.toggle('active-feature', btnModule === module && b.getAttribute('data-extkey') === key);
     });
   }
   function extFeatureHideList(module, hide) {
@@ -8984,7 +8988,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ---- KET：随手拼（本类词汇） ----
   function startKetDoodle() {
     const words = toMatchWords(ketCurrentItems);
-    if (!words.length) { toast('本类还没有可练的单词'); return; }
+    if (!words.length) { toast('本类还没有可练的单词'); try { extFeatureRestore(); } catch (e) {} return; }
     Doodle.exit();
     if (typeof Match !== 'undefined' && Match.exit) Match.exit();
     if (typeof closeKetReading === 'function') closeKetReading();
@@ -9003,7 +9007,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ---- 自然拼读：随手拼（本组代表词） ----
   function startPhonicsDoodle() {
     const words = phonicsGroupWords(phonicsCurrentGroup);
-    if (!words.length) { toast('本组还没有可练的单词'); return; }
+    if (!words.length) { toast('本组还没有可练的单词'); try { extFeatureRestore(); } catch (e) {} return; }
     Doodle.exit();
     if (typeof Match !== 'undefined' && Match.exit) Match.exit();
     Doodle.start({
@@ -10203,7 +10207,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       ? (returnView === 'toefl' ? 'toefl_' + (toeflCurrentCategory || '') : 'ket_' + (ketCurrentCategory || ''))
       : '';
     ketQuizQueue = buildKetQuiz(ketQuizShape, overrideSrc);
-    if (!ketQuizQueue || ketQuizQueue.length === 0) return;
+    if (!ketQuizQueue || ketQuizQueue.length === 0) { try { extFeatureRestore(); } catch (e) {} return; }
     ketQuizIndex = 0;
     window.ketQuizResults = [];
     window._ketQuizReturnView = returnView || 'ket';   // 记录来源：ket 或 toefl
@@ -10542,14 +10546,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const src = (toeflCurrentItems || []).map(function (w, i) {
       return { en: w.word, zh: w.chinese, id: (w.id != null ? w.id : ('mw' + i + '_' + w.word)) };
     });
-    if (src.length === 0) { toast('本类还没有可测的词汇'); return; }
+    if (src.length === 0) { toast('本类还没有可测的词汇'); try { extFeatureRestore(); } catch (e) {} return; }
     startKetQuiz('word', src, 'toefl');
   }
 
   // 小托福消消乐：复用 Match 组件
   function startToeflMatch() {
     const words = toMatchWords(toeflCurrentItems);
-    if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); return; }
+    if (words.length < 2) { toast('本类内容太少，玩不了消消乐'); try { extFeatureRestore(); } catch (e) {} return; }
     Match.exit();
     Match.scope = {
       type: 'toefl',
@@ -10566,7 +10570,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 小托福随手拼：复用 Doodle 组件
   function startToeflDoodle() {
     const words = toMatchWords(toeflCurrentItems);
-    if (!words.length) { toast('本类还没有可练的单词'); return; }
+    if (!words.length) { toast('本类还没有可练的单词'); try { extFeatureRestore(); } catch (e) {} return; }
     Doodle.exit();
     if (typeof Match !== 'undefined' && Match.exit) Match.exit();
     Doodle.start({
@@ -10778,7 +10782,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 计划页消消乐：复用 Match，挂载到计划区，隐藏当天内容
   function startToeflPlanMatch() {
     var words = toMatchWords(toeflCurrentItems);
-    if (words.length < 2) { toast('本天单词太少，玩不了消消乐'); return; }
+    if (words.length < 2) { toast('本天单词太少，玩不了消消乐'); try { extFeatureRestore(); } catch (e) {} return; }
     Match.exit();
     Match.scope = {
       type: 'toefl-plan', words: words,
@@ -10794,7 +10798,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 计划页随手拼：复用 Doodle，挂载到计划区
   function startToeflPlanDoodle() {
     var words = toMatchWords(toeflCurrentItems);
-    if (!words.length) { toast('本天还没有可练的单词'); return; }
+    if (!words.length) { toast('本天还没有可练的单词'); try { extFeatureRestore(); } catch (e) {} return; }
     Doodle.exit();
     if (typeof Match !== 'undefined' && Match.exit) Match.exit();
     Doodle.start({
