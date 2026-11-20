@@ -571,6 +571,8 @@
   .lr-w.lr-reading { background: #ffe58f; color: #5c3b00; box-shadow: 0 0 0 1px #ffd666; }
   /* 已经读过的单词（本句内） */
   .lr-w.lr-word-done { color: #8c8c8c; }
+  /* 小托福生成短文：本类学习词汇高亮（朗读时让位于朗读高亮） */
+  .lr-w.lr-keyword:not(.lr-reading) { color:#c0392b; background:#fff1b8; font-weight:700; box-shadow:0 0 0 1px #ffd666; }
   /* 朗读控制条（固定悬浮在底部导航上方，滚动时始终可操作） */
   .lr-dock {
     position: fixed;
@@ -7216,6 +7218,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function extFeatureRestore() {
     if (!EXT_FEATURE.active) return;
     var m = EXT_FEATURE.moved;
+    // 小托福分类短文：按钮自身即返回入口，退出时恢复文字并停朗读
+    if (EXT_FEATURE.module === 'toefl' && EXT_FEATURE.key === 'reading') {
+      closeToeflCategoryReading();
+    }
     if (m && m.el) {
       m.el.classList.remove('ext-inline-view');
       if (m.active) m.el.classList.add('active');
@@ -7262,7 +7268,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     extFeatureHideList(module, true);
     // 所有就地 tab 顶部统一返回按钮：KET/小托福→返回本类，拼读→返回本组，40天计划→返回本天
     // 短文阅读例外：功能按钮打开后自身变成「返回 分类名」并提供收起，已有返回入口，不再重复显示统一按钮
-    if (!(module === 'ket' && key === 'reading')) {
+    if (!((module === 'ket' || module === 'toefl') && key === 'reading')) {
       var _inlineBackLabel = module === 'toefl-plan' ? '返回本天'
         : (module === 'phonics' ? '返回本组' : '返回本类');
       var _inlineBack = document.createElement('div');
@@ -7296,6 +7302,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       else if (key === 'challenge') startToeflPk(true);
       else if (key === 'match') startToeflMatch();
       else if (key === 'doodle') startToeflDoodle();
+      else if (key === 'reading') renderToeflCategoryReading();
     } else if (module === 'toefl-plan') {
       if (key === 'choice') startToeflLearn();
       else if (key === 'quiz') startToeflQuiz();
@@ -9863,6 +9870,114 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     } catch (e) {}
   }
 
+  // ========== 小托福分类短文阅读：根据本类词汇例句生成，本类词高亮 ==========
+  let toeflReadingOpen = false;
+
+  // 取本类词的词干（复用 40 天计划口径：长词优先、过滤虚词）
+  function toeflBuildStems(words) {
+    var stems = [];
+    (words || []).forEach(function (w) {
+      String(w.word || '').toLowerCase().split(/\s+/).forEach(function (part) {
+        part = part.replace(/[^a-z-]/g, '');
+        if (part.length < 3) return;
+        var stem = part.replace(/(ies|ing|ed|es|s)$/, '');
+        if (stem.length < 3) stem = part;
+        if (stems.indexOf(stem) < 0) stems.push(stem);
+      });
+    });
+    stems.sort(function (a, b) { return b.length - a.length; });
+    return stems;
+  }
+
+  // 判断一个词是否属于本类词汇（词干匹配词形变化）
+  function toeflIsKeyWord(word, stems) {
+    var low = String(word).toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, '');
+    if (!low || low.length < 3) return false;
+    var stem = low.replace(/(ies|ing|ed|es|s)$/, '');
+    if (stem.length < 3) stem = low;
+    for (var i = 0; i < stems.length; i++) {
+      var st = stems[i];
+      if (low === st || stem === st || (low.indexOf(st) === 0 && low.length - st.length <= 3)) return true;
+    }
+    return false;
+  }
+
+  // 例句拆成 .lr-w 供朗读词级跟随；本类词加 lr-keyword 静态高亮
+  function toeflReadingWordsHtml(text, stems) {
+    return String(text).split(/\s+/).filter(function (w) { return w.length > 0; }).map(function (w) {
+      var key = toeflIsKeyWord(w, stems) ? ' lr-keyword' : '';
+      return '<span class="lr-w' + key + '">' + escapeHtml(w) + '</span>';
+    }).join(' ');
+  }
+
+  // 生成并渲染本类短文到就地 stage
+  function renderToeflCategoryReading() {
+    var area = document.getElementById('toefl-feature-stage');
+    if (!area) return false;
+    var items = toeflCurrentItems || [];
+    var withEx = items.filter(function (w) { return w && w.example && String(w.example).trim(); });
+    if (!withEx.length) return false;
+    var stems = toeflBuildStems(items);
+    // 均匀取样，覆盖不同词，最多 12 句
+    var maxLines = 12;
+    var step = Math.max(1, Math.floor(withEx.length / maxLines));
+    var picked = [];
+    for (var i = 0; i < withEx.length && picked.length < maxLines; i += step) picked.push(withEx[i]);
+    var sentences = picked.map(function (w) {
+      return { en: String(w.example).trim(), zh: String(w.chinese || '') };
+    });
+    readingContent = sentences;
+    var linesHtml = sentences.map(function (line, idx) {
+      return '<div class="lr-line" data-idx="' + idx + '" style="padding:10px 12px;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px;border-radius:10px">'
+        + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">'
+          + '<span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">' + (idx + 1) + '</span>'
+          + '<span class="lr-text" onclick="LessonReader.jump(' + idx + ')" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">' + toeflReadingWordsHtml(line.en, stems) + '</span>'
+          + '<button class="speak-btn" onclick="speakReadingLine(\'' + esc(line.en) + '\')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>'
+          + '<button class="ra-btn" onclick="raToggleKet(this, \'' + esc(line.en) + '\')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>'
+        + '</div>'
+        + '<div style="font-size:13px;color:#999;padding-left:28px">词义：' + escapeHtml(line.zh) + '</div>'
+      + '</div>';
+    }).join('');
+    area.innerHTML = '<div style="padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
+        + '<div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ' + escapeHtml(toeflCurrentCategory || '') + '<span style="font-size:11px;font-weight:400;color:#c9a355">（高亮词为本类词汇）</span></div>'
+      + '</div>'
+      + linesHtml
+      + '<div class="lr-dock" id="toefl-reading-dock" style="display:none">'
+        + '<div class="lr-ctrl">'
+          + '<button class="lr-ctrl-btn lr-ctrl-main" id="toefl-reading-full-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>'
+          + '<button class="lr-ctrl-btn lr-ctrl-sub" id="toefl-reading-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>'
+        + '</div>'
+        + '<div class="lr-bar" id="toefl-reading-bar" style="display:none"><i></i></div>'
+        + '<div class="lr-progress" id="toefl-reading-progress" style="display:none"></div>'
+      + '</div>'
+      + '</div>';
+    var mainBtn = document.getElementById('toefl-reading-full-btn');
+    if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
+    var rpBtn = document.getElementById('toefl-reading-replay-btn');
+    if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
+    LessonReader.bind(sentences, {
+      scope: 'toefl-feature-stage',
+      dock: 'toefl-reading-dock',
+      main: 'toefl-reading-full-btn',
+      replay: 'toefl-reading-replay-btn',
+      progress: 'toefl-reading-progress',
+      bar: 'toefl-reading-bar',
+      label: '🔊 朗读全文'
+    });
+    toeflReadingOpen = true;
+    var btn = document.getElementById('toefl-reading-btn');
+    if (btn) btn.textContent = '← 返回本类';
+    return true;
+  }
+
+  function closeToeflCategoryReading() {
+    toeflReadingOpen = false;
+    try { LessonReader.stop(true); LessonReader.clearPaint(); } catch (e) {}
+    var btn = document.getElementById('toefl-reading-btn');
+    if (btn) btn.textContent = '📖 短文阅读';
+  }
+
   // ========== KET 分页功能 ==========
   let ketCurrentPage = 1;
   let ketItemsPerPage = 10; // 默认每页10项
@@ -10483,7 +10598,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'toefl\',\'pk\')">⚔️ 单词PK</button>' +
         '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'toefl\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
         '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'toefl\',\'match\')">🎴 消消乐</button>' +
-        '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl\',\'doodle\')">✍️ 随手拼</button>'
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'toefl\',\'doodle\')">✍️ 随手拼</button>' +
+        '<button class="btn btn-primary ext-feature-btn" data-extkey="reading" id="toefl-reading-btn" style="grid-column:1 / -1;padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="extFeatureGo(\'toefl\',\'reading\')">📖 短文阅读</button>'
       '</div>';
     } catch (e) {
       console.error('加载小托福词汇失败:', e);
