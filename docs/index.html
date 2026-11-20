@@ -5099,6 +5099,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         </div>
       `;
       window._rvCur = { word: word, mode: mode, options: options };
+      // 切题重绘后校正视口，避免连续点跳过时题卡被顶栏遮挡
+      stabilizeQuizScroll('#view-review', '#review-area .quiz-card');
     });
   }
 
@@ -5931,17 +5933,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 切题后稳定视口：连续点「跳过/上一题」时，按钮聚焦与选项 DOM 重建会把页面滚动位置
   // 逐步带偏，最终题卡完全滚到顶栏上方（只剩底部按钮和题号）。这里在切题后校正：
-  // 若题卡顶部钻到 sticky 顶栏下方（被遮挡），把它拉回可见区；否则不动，保留用户当前滚动。
+  // 若锚点顶部钻到 sticky 顶栏下方（被遮挡），把它拉回可见区；否则不动，保留用户当前滚动。
   // 用 setTimeout 延迟到浏览器默认的按钮聚焦滚动完成之后执行，避免校正被覆盖。
+  // cardSel 可为任意题卡/锚点；用锚点自身可见性判断当前视图是否在显示，兼容就地内嵌模式
+  // （该模式下 view 被移出 .view 且去掉 active，按 view.classList 判断会漏掉）。
   function stabilizeQuizScroll(viewSel, cardSel) {
-    viewSel = viewSel || '#view-quiz';
-    cardSel = cardSel || '#view-quiz .quiz-card';
+    cardSel = cardSel || ((viewSel || '#view-quiz') + ' .quiz-card');
     setTimeout(function () {
       try {
-        var view = document.querySelector(viewSel);
-        if (!view || !view.classList.contains('active')) return;  // 不在该视图则不处理
-        var card = view.querySelector('.quiz-card');
-        if (!card) return;
+        var card = document.querySelector(cardSel);
+        if (!card || !card.getClientRects().length) return;  // 锚点未显示则不处理
         var rect = card.getBoundingClientRect();
         if (rect.top < 130) {           // 题卡顶部已钻到 sticky 顶栏/返回按钮下方
           var y = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0) - 140;
@@ -7095,6 +7096,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       })(opt);
       optsContainer.appendChild(btn);
     });
+    // 切题重绘后校正视口，避免连续点跳过时题卡被顶栏遮挡
+    stabilizeQuizScroll('#view-learn', '#choice-learn-area .cl-meta');
   }
 
   function speakChoiceWord(mode, wordId) {
@@ -8740,12 +8743,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (this.idx <= 0) { toast('已经是第一个单词了'); return; }
       this.idx--;
       this.load(true);
+      stabilizeQuizScroll('#view-learn', '#spell-game-area .spell-card');
     },
 
     next() {
       if (this.idx >= this.pool.length - 1) { this.finish(); return; }
       this.idx++;
       this.load(true);
+      stabilizeQuizScroll('#view-learn', '#spell-game-area .spell-card');
     },
 
     skip() {
@@ -9030,11 +9035,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     prev() {
       if (this.idx <= 0) { toast('已经是第一个单词了'); return; }
       this.idx--; this.resetQ();
+      if (this.scope && this.scope.mountId) stabilizeQuizScroll(null, '#' + this.scope.mountId + ' .do-card');
     },
 
     next() {
       if (this.idx >= this.queue.length - 1) { this.finish(); return; }
       this.idx++; this.resetQ();
+      if (this.scope && this.scope.mountId) stabilizeQuizScroll(null, '#' + this.scope.mountId + ' .do-card');
     },
 
     skip() { this.next(); },
