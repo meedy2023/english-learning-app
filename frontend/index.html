@@ -197,6 +197,31 @@
       color: #ffffff;
       box-shadow: 0 2px 6px rgba(108, 99, 255, 0.35);
     }
+    /* 模块专属 tab 栏（KET/小托福/拼读）：复用课文 tab 视觉，但选择器独立 */
+    .ext-tab-bar {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .ext-tab-bar .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 9px 6px;
+      min-height: 42px;
+      font-size: 13px;
+      border-radius: 11px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .ext-tab-bar .btn .ico { font-size: 14px; line-height: 1; flex: none; }
+    .ext-tab-btn { background: #f0f0f8; color: #6c63ff; font-weight: 600; }
+    .ext-tab-btn.active {
+      background: linear-gradient(135deg, #4f9fff, #6c63ff);
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(108, 99, 255, 0.35);
+    }
     .btn-icon {
       background: none;
       border: none;
@@ -2229,6 +2254,8 @@ const API = ".";
   }
 
   function switchView(name) {
+    // 模块专属 tab 栏随视图切换清理；各模块功能入口在 switchView 之后会重新挂载
+    try { if (typeof unmountExtTabBar === 'function') unmountExtTabBar(); } catch (e) {}
     // 学习页面内点击学习导航，不重复切换
     if (name === 'learn' && currentView === 'learn') return;
     if (name !== 'learn') {
@@ -6491,8 +6518,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 返回：单元内回单词表，其它作用域退出游戏
     backOut() {
+      var _t = this.scope && this.scope.type;
       if (this.isUnit()) { showWordList(); return; }
       this.exit();
+      // 模块功能：退出游戏后 tab 栏回到「单词表」高亮
+      if (EXT_TAB_DEFS[_t] && _extTabCtx && _extTabCtx.module === _t) mountExtTabBar(_t, 'wordlist');
     },
 
     hideSiblings(ids) {
@@ -6700,6 +6730,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     };
     Match.hideSiblings(['ket-content-list', 'ket-quiz-entry', 'ket-pagination']);
     Match.start({});
+    if (EXT_TAB_DEFS.ket) mountExtTabBar('ket', 'match');
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -6717,6 +6748,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     };
     Match.hideSiblings(['phonics-lesson-list', 'phonics-match-entry']);
     Match.start({});
+    if (EXT_TAB_DEFS.phonics) mountExtTabBar('phonics', 'match');
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -6785,6 +6817,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     area.style.display = 'block';
     switchView('learn');
     document.getElementById('topbar-title').textContent = (clExtCtx && clExtCtx.title) || '🎯 开始学习';
+    // 模块专属 tab 栏：外部模块（KET/小托福/拼读）的单词学习页显示本模块 tab
+    if (isExt && EXT_TAB_DEFS[_extNav]) mountExtTabBar(_extNav, 'choice');
     loadChoiceQuestion();
   }
 
@@ -7124,6 +7158,99 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (challenge) PK.startChallenge(words, opts); else PK.start(words, opts);
   }
 
+  // ========== 模块专属 tab 栏（KET / 小托福 / 自然拼读） ==========
+  // 与课文 tab 栏完全隔离：这三个模块的功能页分散在多个 view（learn / ket-quiz / pk /
+  // 各分类详情页），因此采用「动态挂载」——在每个功能页顶部生成一条模块 tab 栏，
+  // 点击 tab 派发到本模块对应的功能函数（而不是课文函数，避免串到课文内容）。
+  // tab 项按当前模块对齐其分类详情页的现有按钮。
+  var _extTabBarId = '_ext_module_tabbar';
+  // 每个 tab 的 go() 直接用函数引用指向本模块功能入口（不用字符串，避免全局查找与中间封装）
+  var EXT_TAB_DEFS = {
+    ket: [
+      { key: 'wordlist',  ico: '📋', lbl: '单词表',   go: function () { extTabBackToDetail('ket'); mountExtTabBar('ket', 'wordlist'); } },
+      { key: 'choice',    ico: '🎯', lbl: '单词学习', go: function () { startKetLearn(); } },
+      { key: 'quiz',      ico: '🏆', lbl: '词汇测验', go: function () { startKetQuiz(ketQuizShape === 'sentence' ? 'sentence' : (ketQuizShape === 'grammar' ? 'grammar' : 'word')); } },
+      { key: 'pk',        ico: '⚔️', lbl: '单词PK',   go: function () { startKetPk(false); } },
+      { key: 'challenge', ico: '🤝', lbl: '同步挑战', go: function () { startKetPk(true); } },
+      { key: 'match',     ico: '🎴', lbl: '消消乐',   go: function () { startKetMatch(); } },
+      { key: 'doodle',    ico: '✍️', lbl: '随手拼',   go: function () { startKetDoodle(); } },
+      { key: 'reading',   ico: '📖', lbl: '短文阅读', go: function () { if (!ketReadingOpen) toggleKetReading(); } }
+    ],
+    toefl: [
+      { key: 'wordlist',  ico: '📋', lbl: '单词表',   go: function () { extTabBackToDetail('toefl'); mountExtTabBar('toefl', 'wordlist'); } },
+      { key: 'choice',    ico: '🎯', lbl: '单词学习', go: function () { startToeflLearn(); } },
+      { key: 'quiz',      ico: '🏆', lbl: '词汇测验', go: function () { startToeflQuiz(); } },
+      { key: 'pk',        ico: '⚔️', lbl: '单词PK',   go: function () { startToeflPk(false); } },
+      { key: 'challenge', ico: '🤝', lbl: '同步挑战', go: function () { startToeflPk(true); } },
+      { key: 'match',     ico: '🎴', lbl: '消消乐',   go: function () { startToeflMatch(); } },
+      { key: 'doodle',    ico: '✍️', lbl: '随手拼',   go: function () { startToeflDoodle(); } }
+    ],
+    phonics: [
+      { key: 'wordlist',  ico: '📋', lbl: '单词表',   go: function () { extTabBackToDetail('phonics'); mountExtTabBar('phonics', 'wordlist'); } },
+      { key: 'choice',    ico: '🎯', lbl: '单词学习', go: function () { startPhonicsLearn(); } },
+      { key: 'pk',        ico: '⚔️', lbl: '单词PK',   go: function () { startPhonicsPk(false); } },
+      { key: 'challenge', ico: '🤝', lbl: '同步挑战', go: function () { startPhonicsPk(true); } },
+      { key: 'match',     ico: '🎴', lbl: '消消乐',   go: function () { startPhonicsMatch(); } },
+      { key: 'doodle',    ico: '✍️', lbl: '随手拼',   go: function () { startPhonicsDoodle(); } }
+    ]
+  };
+  var _extTabCtx = null;   // { module, active }：当前模块 tab 栏上下文
+
+  // 回到某模块当前分类/分组详情页（供「单词表」tab 使用）
+  function extTabBackToDetail(module) {
+    if (module === 'ket') backToKetCategoryDetail();
+    else if (module === 'toefl') { if (currentView !== 'toefl') switchView('toefl'); else restoreToeflView(); updateBottomNav('toefl'); }
+    else { if (currentView !== 'phonics') switchView('phonics'); else restorePhonicsView(); updateBottomNav('phonics'); }
+  }
+
+  // 在当前 active view 顶部（返回按钮之后）挂载/更新模块 tab 栏
+  function mountExtTabBar(module, activeKey) {
+    var defs = EXT_TAB_DEFS[module];
+    if (!defs) return;
+    _extTabCtx = { module: module, active: activeKey };
+    var view = document.querySelector('.view.active');
+    if (!view) return;
+    var bar = document.getElementById(_extTabBarId);
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = _extTabBarId;
+      bar.className = 'ext-tab-bar';   // 独立 class：避免被课文 tab-bar 选择器 / setActiveTab 误伤
+      bar.style.cssText = 'margin-bottom:16px';
+    }
+    // 构建按钮：用独立 class + data 属性，避免全局 setActiveTab 清除高亮
+    bar.innerHTML = defs.map(function (d) {
+      return '<button type="button" class="btn btn-sm ext-tab-btn' + (d.key === activeKey ? ' active' : '') + '"'
+        + ' data-exttab="' + d.key + '" onclick="moduleTabGo(\'' + module + '\',\'' + d.key + '\')">'
+        + '<span class="ico">' + d.ico + '</span><span class="lbl">' + d.lbl + '</span></button>';
+    }).join('');
+    // 插到该 view 的返回按钮之后；没有返回按钮则插到 view 顶部
+    var back = view.querySelector(':scope > .nav-back-btn') || view.querySelector('.nav-back-btn');
+    if (back && back.parentNode === view) {
+      if (bar.parentNode !== view || bar.nextSibling !== back.nextSibling) view.insertBefore(bar, back.nextSibling);
+    } else {
+      if (view.firstChild !== bar) view.insertBefore(bar, view.firstChild);
+    }
+  }
+  function unmountExtTabBar() {
+    var bar = document.getElementById(_extTabBarId);
+    if (bar && bar.parentNode) bar.parentNode.removeChild(bar);
+    _extTabCtx = null;
+  }
+  // 模块 tab 点击派发：先清理当前功能态，再执行目标 tab 的本模块功能
+  function moduleTabGo(module, key) {
+    var defs = EXT_TAB_DEFS[module];
+    if (!defs) return;
+    var target = null;
+    for (var i = 0; i < defs.length; i++) if (defs[i].key === key) { target = defs[i]; break; }
+    if (!target) return;
+    // 清理当前功能态（游戏/测验/PK/短文），避免残留面板覆盖新功能
+    try { if (Match && Match.scope) Match.exit(); } catch (e) {}
+    try { if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit(); } catch (e) {}
+    if (typeof closeKetReading === 'function') closeKetReading();
+    try { if (typeof PK !== 'undefined' && PK.state) { PK.stop(); PK.state = null; } } catch (e) {}
+    target.go();
+  }
+
   // ========== 单词 PK 对战（人机 + 二维码同步对战） ==========
   // 词库复用各模块当前词表；答对/答错按 scopeKey 写回 wordlearn_（只升不降），与单词学习口径一致。
   // 战绩单独存 wordpk_<USER_ID>，按模块（ket/toefl/phonics）隔离，不污染掌握统计。
@@ -7417,6 +7544,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (this.state.mode === 'ai') this.renderSetup();
       else if (this.state.mode === 'accept') this.renderAcceptSetup();  // 应战方先看准备页，点开始才计时
       else this.renderCreateWait();  // 发起方先看二维码等待页，不答题、计时冻结
+      // 模块专属 tab 栏：KET/小托福/拼读发起的 PK 显示本模块 tab（高亮单词PK或同步挑战）
+      if (EXT_TAB_DEFS[this.state.view]) {
+        mountExtTabBar(this.state.view, this.state.mode === 'create' ? 'challenge' : 'pk');
+      }
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
@@ -8497,6 +8628,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const type = this.scope && this.scope.type;
       this.exit();
       if (type === 'unit' && typeof showWordList === 'function') showWordList();
+      // 模块功能：退出随手拼后 tab 栏回到「单词表」高亮
+      if (EXT_TAB_DEFS[type] && _extTabCtx && _extTabCtx.module === type) mountExtTabBar(type, 'wordlist');
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
@@ -8809,6 +8942,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       words: words,
       hide: ['ket-content-list', 'ket-quiz-entry', 'ket-pagination']
     });
+    if (EXT_TAB_DEFS.ket) mountExtTabBar('ket', 'doodle');
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -8827,6 +8961,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       words: words,
       hide: ['phonics-lesson-list', 'phonics-match-entry']
     });
+    if (EXT_TAB_DEFS.phonics) mountExtTabBar('phonics', 'doodle');
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -9623,7 +9758,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const btn = document.getElementById('ket-reading-btn');
     if (!area) return;
 
-    if (ketReadingOpen) { closeKetReading(); return; }
+    if (ketReadingOpen) {
+      closeKetReading();
+      if (_extTabCtx && _extTabCtx.module === 'ket') mountExtTabBar('ket', 'wordlist');
+      return;
+    }
 
     ketReadingOpen = true;
     try { Match.exit(); } catch (e) {}
@@ -9639,6 +9778,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (list) list.style.display = 'none';
     if (pag) pag.style.display = 'none';
     if (btn) btn.textContent = '← ' + ketCategoryBackLabel();
+    if (EXT_TAB_DEFS.ket) mountExtTabBar('ket', 'reading');
   }
 
   function closeKetReading() {
@@ -10026,6 +10166,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
     switchView('ket-quiz');
     loadKetQuizQuestion();
+    // 模块专属 tab 栏：KET/小托福测验页显示本模块 tab（高亮词汇测验）
+    var _quizMod = (returnView === 'toefl') ? 'toefl' : 'ket';
+    if (EXT_TAB_DEFS[_quizMod]) mountExtTabBar(_quizMod, 'quiz');
   }
 
   function loadKetQuizQuestion() {
@@ -10152,6 +10295,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function backToKetCategory() {
+    try { if (typeof unmountExtTabBar === 'function') unmountExtTabBar(); } catch (e) {}
     const ret = window._ketQuizReturnView || 'ket';
     currentView = ret;
     document.querySelectorAll('.view').forEach(function (v) { v.classList.remove('active'); });
@@ -10369,6 +10513,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     };
     Match.hideSiblings(['toefl-content-list', 'toefl-quiz-entry']);
     Match.start({});
+    if (EXT_TAB_DEFS.toefl) mountExtTabBar('toefl', 'match');
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -10387,6 +10532,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       words: words,
       hide: ['toefl-content-list', 'toefl-quiz-entry']
     });
+    if (EXT_TAB_DEFS.toefl) mountExtTabBar('toefl', 'doodle');
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
