@@ -10573,6 +10573,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   var toeflPlanActive = false;   // 是否处于计划浏览（含其发起的练习）
 
   // 计划页显示状态：隐藏分类列表与分类内容区，显示计划区
+  // 天数转中文：1→一, 12→十二, 40→四十（40天计划足够覆盖）
+  function toCnDay(n) {
+    n = parseInt(n, 10) || 0;
+    var d = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+    if (n < 10) return d[n];
+    if (n < 20) return '十' + (n % 10 ? d[n % 10] : '');
+    return d[Math.floor(n / 10)] + '十' + (n % 10 ? d[n % 10] : '');
+  }
+
   function showToeflPlanView() {
     var cat = document.getElementById('toefl-category-list');
     var content = document.getElementById('toefl-content-area');
@@ -10676,15 +10685,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       + '<div style="font-size:20px;font-weight:700;margin-top:8px">Day ' + d.day + ' · ' + d.title + '</div>'
       + '<div style="font-size:13px;color:#888;margin-top:2px">第 ' + (toeflPlanDayIdx + 1) + ' / ' + total + ' 天 · 本页 ' + d.words.length + ' 词</div>';
 
-    var prevDayBtn = toeflPlanDayIdx > 0
-      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)">← 上一天</button>'
+    var prevDay = toeflPlanDayIdx > 0 ? toeflPlanDays[toeflPlanDayIdx - 1] : null;
+    var nextDay = toeflPlanDayIdx < total - 1 ? toeflPlanDays[toeflPlanDayIdx + 1] : null;
+    var prevDayBtn = prevDay
+      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(-1)">← 第' + toCnDay(prevDay.day) + '天</button>'
       : '<span style="flex:1"></span>';
-    var nextDayBtn = toeflPlanDayIdx < total - 1
-      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)">下一天 →</button>'
+    var nextDayBtn = nextDay
+      ? '<button class="btn btn-secondary btn-sm" style="flex:1" onclick="toeflPlanGo(1)">第' + toCnDay(nextDay.day) + '天 →</button>'
       : '<span style="flex:1"></span>';
     document.getElementById('toefl-plan-nav').innerHTML =
       prevDayBtn
-      + '<span style="font-size:13px;color:#999;padding:0 6px">Day ' + d.day + '/' + total + '</span>'
+      + '<span style="font-size:13px;color:#999;padding:0 6px">第' + toCnDay(d.day) + '天</span>'
       + nextDayBtn;
 
     document.getElementById('toefl-plan-entry').innerHTML =
