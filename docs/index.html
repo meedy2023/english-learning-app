@@ -810,6 +810,15 @@
     }
     .spell-act:active { transform: scale(0.96); }
     .spell-act:disabled { opacity: .45; cursor: default; transform: none; }
+    /* 题目/篇目导航按钮（跳过、上一题、下一题）：统一浅紫圆角 + 图标文字，视觉与单词拼写「跳过」一致 */
+    .quiz-nav-btn {
+      border: none; border-radius: 12px; padding: 10px 12px; font-size: 13px; font-weight: 600;
+      background: #eef2ff; color: #5a54e8; cursor: pointer; min-height: 42px;
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+      white-space: nowrap; transition: opacity 0.15s, transform 0.1s;
+    }
+    .quiz-nav-btn:active { transform: scale(0.96); }
+    .quiz-nav-btn:disabled { opacity: .45; cursor: default; transform: none; }
     /* 删除按钮：紧跟字母格子下方，便于拇指操作 */
     .spell-tools { display: flex; justify-content: center; margin-top: 10px; }
     .spell-del-btn {
@@ -1181,11 +1190,11 @@
       <div id="quiz-options" style="display:flex;flex-direction:column;gap:10px;margin-top:12px"></div>
       <!-- 反馈区 -->
       <div id="quiz-feedback" style="display:none;margin-top:16px;text-align:center;padding:14px;border-radius:12px;font-size:15px"></div>
-      <button class="btn btn-primary" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
+      <button class="quiz-nav-btn" id="quiz-next-btn" onclick="nextQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 ➡️</button>
     </div>
     <div style="display:flex;gap:8px;margin-top:12px">
-      <button class="btn btn-secondary btn-sm" id="quiz-prev-btn" style="flex:1" onclick="prevQuizQuestion()">← 上一题</button>
-      <button class="btn btn-secondary btn-sm" id="quiz-skip-btn" style="flex:1" onclick="skipQuiz()">跳过 →</button>
+      <button class="quiz-nav-btn" id="quiz-prev-btn" style="flex:1" onclick="prevQuizQuestion()">⬅️ 上一题</button>
+      <button class="quiz-nav-btn" id="quiz-skip-btn" style="flex:1" onclick="skipQuiz()">⏭ 跳过</button>
     </div>
     <div id="quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="quiz-num">1</span> / <span id="quiz-total">0</span> 题</div>
   </div>
@@ -1426,11 +1435,11 @@
     </div>
     <div id="ket-quiz-options" style="display:flex;flex-direction:column;gap:10px;margin-top:12px"></div>
     <div id="ket-quiz-feedback" style="display:none;margin-top:16px;text-align:center;padding:14px;border-radius:12px;font-size:15px"></div>
-    <button class="btn btn-primary" id="ket-quiz-next-btn" onclick="nextKetQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
+    <button class="quiz-nav-btn" id="ket-quiz-next-btn" onclick="nextKetQuizQuestion()" style="display:none;margin-top:12px;width:100%">下一题 ➡️</button>
   </div>
   <div style="display:flex;gap:8px;margin-top:12px">
-    <button class="btn btn-secondary btn-sm" id="ket-quiz-prev-btn" style="flex:1" onclick="prevKetQuizQuestion()">← 上一题</button>
-    <button class="btn btn-secondary btn-sm" id="ket-quiz-skip-btn" style="flex:1" onclick="skipKetQuiz()">跳过 →</button>
+    <button class="quiz-nav-btn" id="ket-quiz-prev-btn" style="flex:1" onclick="prevKetQuizQuestion()">⬅️ 上一题</button>
+    <button class="quiz-nav-btn" id="ket-quiz-skip-btn" style="flex:1" onclick="skipKetQuiz()">⏭ 跳过</button>
   </div>
   <div id="ket-quiz-hint" style="text-align:center;margin-top:12px;color:#bbb;font-size:13px">第 <span id="ket-quiz-num">1</span> / <span id="ket-quiz-total">0</span> 题</div>
 </div>
@@ -1510,7 +1519,7 @@
     <div class="result-correct" id="result-correct" style="display:none">
       正确答案：<span id="result-correct-text"></span>
     </div>
-    <button class="btn btn-primary" onclick="nextQuestion()">下一题 →</button>
+    <button class="quiz-nav-btn" style="width:100%" onclick="nextQuestion()">下一题 ➡️</button>
   </div>
 </div>
 
@@ -2697,11 +2706,11 @@ const API = ".";
         <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
         <div class="lr-progress" id="lesson-read-progress" style="display:none"></div>
         <div class="lr-nav">
-          <button class="lr-nav-btn" id="lesson-prev-unit-btn" style="display:none">
-            ← 上一篇
+          <button class="quiz-nav-btn" style="flex:1;display:none" id="lesson-prev-unit-btn">
+            ⬅️ 上一篇
           </button>
-          <button class="lr-nav-btn" id="lesson-next-unit-btn" style="display:none">
-            下一篇 →
+          <button class="quiz-nav-btn" style="flex:1;display:none" id="lesson-next-unit-btn">
+            下一篇 ➡️
           </button>
         </div>
       </div>
@@ -5123,11 +5132,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             }).join('')}
           </div>
           <div id="review-feedback" style="display:none;margin-top:16px;text-align:center;padding:14px;border-radius:12px;font-size:15px"></div>
-          <button class="btn btn-primary" id="review-next-btn" onclick="nextReviewQuestion()" style="display:none;margin-top:12px;width:100%">下一题 →</button>
+          <button class="quiz-nav-btn" id="review-next-btn" onclick="nextReviewQuestion()" style="display:none;margin-top:12px;width:100%">下一题 ➡️</button>
         </div>
         <div style="display:flex;gap:8px;margin-top:12px">
-          <button id="rv-prev-btn" class="btn btn-secondary btn-sm" style="flex:1;display:none" onclick="prevReviewQuestion()">← 上一个</button>
-          <button id="rv-skip-btn" class="btn btn-secondary btn-sm" style="flex:1" onclick="reviewSkipQuestion()">跳过</button>
+          <button id="rv-prev-btn" class="quiz-nav-btn" style="flex:1;display:none" onclick="prevReviewQuestion()">⬅️ 上一题</button>
+          <button id="rv-skip-btn" class="quiz-nav-btn" style="flex:1" onclick="reviewSkipQuestion()">⏭ 跳过</button>
         </div>
       `;
       window._rvCur = { word: word, mode: mode, options: options };
@@ -5192,7 +5201,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     loadReviewQuestion();
     setTimeout(function () {
       const prevBtn = document.getElementById('rv-prev-btn');
-      if (prevBtn) prevBtn.style.display = 'flex';
+      if (prevBtn) prevBtn.style.display = 'inline-flex';
     }, 0);
   }
 
@@ -5203,7 +5212,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     loadReviewQuestion();
     setTimeout(function () {
       const prevBtn = document.getElementById('rv-prev-btn');
-      if (prevBtn) prevBtn.style.display = (rvIdx > 0 ? 'flex' : 'none');
+      if (prevBtn) prevBtn.style.display = (rvIdx > 0 ? 'inline-flex' : 'none');
     }, 0);
   }
 
@@ -5936,7 +5945,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     comboCount = 0;
     hideCombo();
     // 恢复显示跳过按钮和题号
-    const skipBtn = document.querySelector('#view-quiz .btn-secondary[onclick="skipQuiz()"]');
+    const skipBtn = document.getElementById('quiz-skip-btn');
     if (skipBtn) skipBtn.parentElement.style.display = "flex";
     document.getElementById("quiz-hint").style.display = "block";
     setActiveTab('quiz');
@@ -6217,7 +6226,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById("quiz-feedback").style.display = "none";
     document.getElementById("quiz-next-btn").style.display = "none";
     // 隐藏跳过按钮
-    const skipBtn = document.querySelector('#view-quiz .btn-secondary[onclick="skipQuiz()"]');
+    const skipBtn = document.getElementById('quiz-skip-btn');
     if (skipBtn) skipBtn.parentElement.style.display = "none";
     // 隐藏题号提示
     document.getElementById("quiz-hint").style.display = "none";
@@ -7096,13 +7105,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     '<div id="choice-options" style="display:flex;flex-direction:column;gap:10px;margin-top:16px"></div>' +
     '<div id="choice-feedback" style="display:none;margin-top:12px;text-align:center;padding:14px;border-radius:12px;font-size:15px;line-height:1.5"></div>' +
     '<div style="display:flex;gap:10px;margin-top:12px">' +
-      '<button id="cl-prev-btn" class="btn btn-secondary" style="padding:12px 20px;background:#f5f5f5;border:1px solid #ddd;color:#999;display:none" onclick="prevChoiceQuestion()">← 上一题</button>' +
-      '<button class="btn btn-secondary" style="padding:12px 20px;background:#f5f5f5;border:1px solid #ddd;color:#999" onclick="clSkipQuestion()">跳过</button>' +
-      '<button id="cl-next-btn" class="btn btn-primary" style="flex:1;display:none" onclick="clNextQuestion()">下一题 →</button>' +
+      '<button id="cl-prev-btn" class="quiz-nav-btn" style="flex:1;display:none" onclick="prevChoiceQuestion()">⬅️ 上一题</button>' +
+      '<button class="quiz-nav-btn" style="flex:1" onclick="clSkipQuestion()">⏭ 跳过</button>' +
+      '<button id="cl-next-btn" class="quiz-nav-btn" style="flex:1;display:none" onclick="clNextQuestion()">下一题 ➡️</button>' +
     '</div>';
 
     const prevBtn = document.getElementById('cl-prev-btn');
-    if (prevBtn) prevBtn.style.display = cl_idx > 0 ? 'block' : 'none';
+    if (prevBtn) prevBtn.style.display = cl_idx > 0 ? 'inline-flex' : 'none';
 
     const optsContainer = document.getElementById('choice-options');
     const labels = ['A', 'B', 'C', 'D'];
@@ -8780,8 +8789,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '<div class="sd-title">' + (done >= total ? '本单元全部拼完啦！' : '本单元单词已全部过一遍') + '</div>' +
         '<div class="sd-sub">本单元共 ' + total + ' 个单词，本轮拼对 ' + done + ' 个<br>可以换下一个单元，也再练一轮</div>' +
         '<div class="spell-nav" style="max-width:320px;margin:16px auto 0">' +
-        '<button class="btn btn-secondary" onclick="Spell.prev()">← 上一个单词</button>' +
-        '<button class="btn btn-primary" onclick="Spell.start(true)">🔄 再拼一轮</button>' +
+        '<button class="quiz-nav-btn" style="flex:1" onclick="Spell.prev()">⬅️ 上一题</button>' +
+        '<button class="btn btn-primary" style="flex:1;width:auto;margin-top:0" onclick="Spell.start(true)">🔄 再拼一轮</button>' +
         '</div>' +
         '<button class="btn btn-secondary nav-back-btn" style="margin-top:10px;width:100%;max-width:320px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
         '</div></div>';
@@ -8847,7 +8856,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<button class="spell-act" onclick="Spell.skip()">⏭ ' + (this.idx < this.pool.length - 1 ? '跳过' : '完成') + '</button>' +
           '</div>' +
           (this.idx > 0
-            ? '<div class="spell-nav"><button class="btn btn-primary" onclick="Spell.prev()">← 上一个</button></div>'
+            ? '<div class="spell-nav"><button class="quiz-nav-btn" style="flex:1" onclick="Spell.prev()">⬅️ 上一题</button></div>'
             : '') +
         '</div>';
     }
