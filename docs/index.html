@@ -7580,20 +7580,24 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
 
-    // 二维码等待页：隐藏全局顶栏（标题+图标）保持极简；返回胶囊上移贴顶。
-    // tab 栏：仅年级学习页面(view=home)发起的好友PK与其它 tab 一致、保留可自由切换；
-    //         其它模块(KET/小托福/拼读)的好友PK仍隐藏 tab 栏，维持原极简设计不变。
+    // PK 页顶部 tab 栏只属于年级学习页面(home)：里面每个入口都指向课文模块函数。
+    // 从 KET/小托福/拼读进入 PK 必须隐藏，否则点 tab 会跳到课文模块内容（KET 单词PK 变课文内容即此因）。
+    _syncPkTabBar: function () {
+      var tabBar = document.querySelector('#view-pk .tab-bar');
+      if (!tabBar) return;
+      var s = this.state;
+      tabBar.style.display = (s && s.view === 'home') ? '' : 'none';
+    },
+    // 二维码等待页：隐藏全局顶栏（标题+图标）保持极简；返回胶囊上移贴顶；tab 栏按来源模块同步
     _hideTopbarForQr: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'none';
-      var tabBar = document.querySelector('#view-pk .tab-bar');
-      var s = this.state;
-      if (tabBar) tabBar.style.display = (s && s.view === 'home') ? '' : 'none';
+      this._syncPkTabBar();
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '16px';
     },
-    // 恢复全局顶栏、tab 栏与返回胶囊位置（离开二维码页时统一调用）
+    // 恢复全局顶栏与返回胶囊位置；tab 栏按来源模块同步（仅 home 显示）
     _restoreTopbar: function () {
       var tb = document.querySelector('.topbar'); if (tb) tb.style.display = 'flex';
-      var tabBar = document.querySelector('#view-pk .tab-bar'); if (tabBar) tabBar.style.display = '';
+      this._syncPkTabBar();
       var bk = document.querySelector('#view-pk .nav-back-btn'); if (bk) bk.style.top = '78px';
     },
 
@@ -8040,6 +8044,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     showResultCompare: function (p) {
       this.stop();
       this.state = { mode: 'result' };
+      this._syncPkTabBar();   // 比分对比页无来源模块，隐藏 PK 页 tab 栏
       switchView('pk');
       var tt = document.getElementById('topbar-title');
       if (tt) tt.textContent = '📊 比分对比';
