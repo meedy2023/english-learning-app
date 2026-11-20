@@ -8884,8 +8884,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         fbHtml = '<div class="do-fb ' + this.fb.type + '">' + this.fb.html + '</div>';
       }
 
-      // 底部只留一个不起眼的小文字入口：返回
-      const footHtml =
+      // 底部返回入口：就地 tab 模式由 stage 顶部统一「返回本类/本组/本天」按钮接管，此处不再重复渲染；独立随手拼页仍保留
+      const inExtInlineMode = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active);
+      const footHtml = inExtInlineMode ? '' :
         '<div class="do-foot">' +
           '<button class="do-link" type="button" onclick="Doodle.back()">← ' + escDoodle(this.scope.backLabel) + '</button>' +
         '</div>';
