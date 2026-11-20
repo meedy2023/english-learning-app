@@ -2243,31 +2243,28 @@ const API = ".";
 
   let currentView = 'home';
 
-  // 是否处于「年级模块单词学习做题页」：这是顶部返回按钮需要改为「返回单词列表」的唯一场景。
-  // 外部模块（KET/小托福/拼读，clExtCtx 非空）与就地模式各有自己的返回逻辑，不算在内。
-  function isUnitChoiceLearn() {
-    var _inline = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active
-      && (EXT_FEATURE.inlineView === 'learn' || EXT_FEATURE.module === 'ket'
-        || EXT_FEATURE.module === 'toefl' || EXT_FEATURE.module === 'phonics'
-        || EXT_FEATURE.module === 'toefl-plan'));
-    return learnMode === 'choice' && !clExtCtx && !_inline;
+  // 是否处于「点击单词表某个单词进入的单个单词详情页」：
+  // 此时顶部吸顶返回按钮应显示「返回单词表」，点击回到单词表。
+  // 单词学习 tab（做题页/结算页 learnMode==='choice'）不属于此场景，仍返回首页。
+  function isWordDetailView() {
+    return learnMode === 'word-detail';
   }
 
   // 学习视图顶部返回按钮统一分流：
-  // 年级模块「单词学习」做题页（含结算页）→ 返回单词列表；其余场景 → 返回首页。
+  // 单个单词详情页 → 返回单词表；其余场景（含单词学习 tab、测验、游戏、课文等）→ 返回首页。
   function learnBack() {
-    if (isUnitChoiceLearn()) {
+    if (isWordDetailView()) {
       showWordList();
     } else {
       switchView('home');
     }
   }
 
-  // 同步顶部返回按钮文案：仅年级模块单词学习做题页显示「返回单词列表」。
+  // 同步顶部返回按钮文案：仅单个单词详情页显示「返回单词表」。
   function syncLearnBackLabel() {
     var _bh = document.getElementById('learn-back-home');
     if (!_bh) return;
-    var _label = isUnitChoiceLearn() ? '返回单词列表' : '返回首页';
+    var _label = isWordDetailView() ? '返回单词表' : '返回首页';
     _bh.innerHTML = '<span class="nav-back-ico" aria-hidden="true">←</span> ' + _label;
     _bh.setAttribute('aria-label', _label);
   }
@@ -5842,6 +5839,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (_bh) _bh.style.display = "flex";
     const area = document.getElementById("word-detail-area");
     area.style.display = "block";
+    // 顶部吸顶返回按钮文案随场景同步：单个单词详情页显示「返回单词表」
+    syncLearnBackLabel();
 
     // 获得积分：查看新单词
     const result = skipReward ? { success: false } : Points.earn('word_view', 'word_' + w.id);
