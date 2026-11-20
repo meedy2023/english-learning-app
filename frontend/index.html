@@ -10696,6 +10696,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       _quizBack.innerHTML = '<span class="nav-back-ico" aria-hidden="true">←</span> '
         + (returnView === 'toefl' ? '返回' : ketCategoryBackLabel());
     }
+    // 恢复结果页隐藏的答题控件（成绩页 → 再测一次）
+    var _kPrev = document.getElementById('ket-quiz-prev-btn');
+    var _kSkip = document.getElementById('ket-quiz-skip-btn');
+    if (_kSkip && _kSkip.parentElement) _kSkip.parentElement.style.display = 'flex';
+    if (_kPrev) _kPrev.style.visibility = 'hidden';
+    if (_kSkip) _kSkip.style.visibility = 'visible';
+    var _kHint = document.getElementById('ket-quiz-hint');
+    if (_kHint) _kHint.style.display = 'block';
     switchView('ket-quiz');
     loadKetQuizQuestion();
   }
@@ -10803,6 +10811,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function showKetQuizSummary() {
     hideCombo();
     clearTimeout(window._ketQuizAutoNext);
+    // 结果页：隐藏答题流程的外围控件（查看成绩/下一题按钮、上一题+跳过组、反馈区、题号），
+    // 避免它们残留在成绩页上（与主测验 showQuizSummary 保持一致）
+    var _kNext = document.getElementById('ket-quiz-next-btn');
+    if (_kNext) _kNext.style.display = 'none';
+    var _kFeedback = document.getElementById('ket-quiz-feedback');
+    if (_kFeedback) _kFeedback.style.display = 'none';
+    var _kSkip = document.getElementById('ket-quiz-skip-btn');
+    if (_kSkip && _kSkip.parentElement) _kSkip.parentElement.style.display = 'none';
+    var _kHint = document.getElementById('ket-quiz-hint');
+    if (_kHint) _kHint.style.display = 'none';
     const results = window.ketQuizResults || [];
     const total = results.length;
     const correct = results.filter(function (r) { return r.correct; }).length;
