@@ -207,6 +207,8 @@
     .view.ext-inline-view { display: block; padding-bottom: 0; }
     /* 就地嵌入的 PK 页：顶部返回按钮与分类页「返回分类」重复，隐藏；独立 PK 页保留 */
     #view-pk.ext-inline-view > .nav-back-btn { display: none !important; }
+    /* 40天计划就地测验：顶部统一「返回本天」，隐藏测验页自带返回条避免重复 */
+    #toefl-plan-feature-stage #ket-quiz-back-btn { display: none !important; }
     .btn-icon {
       background: none;
       border: none;
@@ -6854,9 +6856,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 外部模块（KET/小托福/拼读，含40天计划）做题过程中提供返回按钮，随时返回来源页
     var clBackLabel = (clExtCtx && clExtCtx.view === 'ket') ? ketCategoryBackLabel()
       : ((clExtCtx && clExtCtx.view === 'phonics') ? '返回本组'
-      : ((typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan') ? '返回计划'
+      : ((typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan') ? '返回本天'
       : ((clExtCtx && clExtCtx.view === 'toefl') ? '返回本类' : '返回')));
-    const clBackBar = clExtCtx
+    // 40天计划就地模式由 stage 顶部统一提供「返回本天」，此处不再重复生成返回条
+    var _clPlanInline = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan');
+    const clBackBar = (clExtCtx && !_clPlanInline)
       ? '<div style="margin-bottom:10px"><button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + clBackLabel + '</button></div>'
       : '';
     area.innerHTML = clBackBar +
@@ -7054,7 +7058,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 总结页返回按钮：外部调用返回各自分类页，课文返回单词表/首页
   function clSummaryBackBtn() {
     if (clExtCtx) {
-      var _clBack = clExtCtx.view === 'ket' ? ketCategoryBackLabel() : '返回';
+      var _clBack = clExtCtx.view === 'ket' ? ketCategoryBackLabel()
+        : ((typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && EXT_FEATURE.module === 'toefl-plan') ? '返回本天'
+        : (clExtCtx.view === 'phonics' ? '返回本组' : (clExtCtx.view === 'toefl' ? '返回本类' : '返回')));
       return '<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="clBackToModule()" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> ' + _clBack + '</button>';
     }
     return '<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:500" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>' +
@@ -7246,6 +7252,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     EXT_FEATURE.stageId = extFeatureStageId(module);
     st.style.display = 'block';
     extFeatureHideList(module, true);
+    // 40天计划：所有就地 tab 顶部统一「← 返回本天」，点击收起内容回到本天计划页
+    if (module === 'toefl-plan') {
+      var _planBack = document.createElement('div');
+      _planBack.style.cssText = 'margin-bottom:10px';
+      _planBack.innerHTML = '<button class="btn btn-secondary nav-back-btn" style="position:static;display:inline-flex;align-items:center;gap:6px;padding:8px 16px;font-size:14px;border-radius:999px;font-weight:600" onclick="extFeatureRestore()" type="button" aria-label="返回本天"><span class="nav-back-ico" aria-hidden="true">←</span> 返回本天</button>';
+      st.appendChild(_planBack);
+    }
     // 需要独立 view 的功能：把该 view 嵌入承载容器（脱离 .view 全局互斥）
     if (viewName) {
       var view = document.getElementById('view-' + viewName);
