@@ -5206,11 +5206,86 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
 
+  // ========== 测验结算提示语：按正确率分档，同档内随机一条 ==========
+  const QUIZ_RESULT_MSGS = {
+    // <50% 安抚、不打击，引导复习
+    low: [
+      '没关系，这次有点难，我们回头再多读一读单词！',
+      '不用着急，先去复习，练熟之后再来挑战吧。',
+      '还有不少单词比较陌生，我们慢慢巩固，不着急。',
+      '这次暂时有点吃力，多听几遍发音，会越来越熟悉的。',
+      '学习本来就是慢慢积累的，我们回去再复习一下。',
+      '别灰心，多练习几次，你一定可以进步！',
+      '我们先回到单词页，把不熟的单词记牢。',
+      '一次测验说明不了什么，继续加油！'
+    ],
+    // 50%~79% 肯定已有收获，引导看错题
+    mid: [
+      '不错哦，已经掌握一半以上啦，把错题看一看！',
+      '有进步！把做错的单词多读几遍，下次会更好。',
+      '很棒，还差一点点就更优秀啦，重点复习错题。',
+      '看得出来你认真思考了，把不会的单词巩固一下。',
+      '继续加油！把错题里的单词记牢，离优秀更近一步。',
+      '表现还可以，查漏补缺，下次争取更高正确率。',
+      '已经拿下不少题目，把薄弱单词再熟悉一下吧。',
+      '稳步前进，把错题弄懂，你会越来越厉害！'
+    ],
+    // 80%~89% 掌握得不错，查漏补缺
+    upper: [
+      '很不错哦，大部分单词都掌握了，再把错题巩固一下就更好啦！',
+      '表现很棒！已经有八成把握了，把剩下的小漏洞补一补。',
+      '掌握得挺扎实的，再留意几个不太熟的单词，就更稳了。',
+      '进步明显！把错题里的单词再读几遍，离满分就不远啦。',
+      '做得不错，基础很牢，查漏补缺后一定会更出色。',
+      '已经很厉害了，再把容易混淆的单词分清楚，就完美啦。',
+      '稳稳的发挥！把不会的几个记牢，下次一定更上一层楼。',
+      '八成以上都答对了，真棒！错题再看一眼，就无可挑剔啦。'
+    ],
+    // 90%~99% 接近满分，表扬 + 轻微提醒
+    high: [
+      '太厉害了，大部分都会！再留意一下错题就完美啦。',
+      '很棒！只差一点点满分，把这道错题再看看。',
+      '表现超优秀，就差一点点，再接再厉！',
+      '单词掌握得很扎实，只差一题就满分咯。',
+      '非常厉害，稍微留意一下容易混淆的单词！',
+      '很不错，继续保持，下次冲击满分！',
+      '实力在线，就差一点点，再细心一点就完美啦。',
+      '太棒啦，大部分单词都稳稳记住了！'
+    ],
+    // =100% 满分专属
+    perfect: [
+      '满分🎉！太厉害啦，一题都没有错！',
+      '哇！满分通关，你真的超棒！',
+      '🎉满分达成！所有单词都牢牢记住咯！',
+      '完美满分！单词掌握得非常扎实！',
+      '解锁满分成就！再接再厉！',
+      '全部答对，你的记忆力真棒！',
+      '太棒啦，拿下满分，为你点赞！',
+      '满分✅，这部分内容你已经完全掌握！',
+      '太稳啦，轻轻松松拿下满分！',
+      '表现完美，继续保持这份认真！'
+    ]
+  };
+  let _lastQuizResultMsg = null;
+  function quizResultMessage(pct) {
+    var tier = 'low';
+    if (pct >= 100) tier = 'perfect';
+    else if (pct >= 90) tier = 'high';
+    else if (pct >= 80) tier = 'upper';
+    else if (pct >= 50) tier = 'mid';
+    var arr = QUIZ_RESULT_MSGS[tier];
+    var idx = Math.floor(Math.random() * arr.length);
+    // 同档内若随机到与上一次相同，顺延一条，避免连续两次测验看到同一句
+    if (arr.length > 1 && arr[idx] === _lastQuizResultMsg) idx = (idx + 1) % arr.length;
+    _lastQuizResultMsg = arr[idx];
+    return arr[idx];
+  }
+
   function showReviewSummary() {
     clearTimeout(window._rvAutoNext);
     const pct = rvTotal > 0 ? Math.round(rvCorrect / rvTotal * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = pct >= 90 ? '复习得太棒了！' : pct >= 70 ? '复习得很不错！' : pct >= 50 ? '继续加油，会记住的！' : '没关系，明天再巩固一次！';
+    const msgs = quizResultMessage(pct);
     const _remainIds = Review.idsForGrade(currentGrade || '');
     const remain = _remainIds === null ? Review.count() : _remainIds.length;
     const area = document.getElementById('review-area');
@@ -6062,7 +6137,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const correct = results.filter(r => r.correct).length;
     const pct = total > 0 ? Math.round(correct / total * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+    const msgs = quizResultMessage(pct);
 
     // 测验满分额外奖励
     if (pct === 100 && total > 0) {
@@ -7123,7 +7198,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     hideCombo();
     const pct = cl_total > 0 ? Math.round(cl_correct / cl_total * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+    const msgs = quizResultMessage(pct);
     const area = document.getElementById('choice-learn-area');
     area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
@@ -10706,7 +10781,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const correct = results.filter(function (r) { return r.correct; }).length;
     const pct = total > 0 ? Math.round(correct / total * 100) : 0;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = pct >= 90 ? '太厉害了，全都会！' : pct >= 70 ? '很棒，继续加油！' : pct >= 50 ? '还不错，再接再厉！' : '多练练，一定会进步！';
+    const msgs = quizResultMessage(pct);
     if (pct === 100 && total > 0) {
       const r = Points.earn('quiz_perfect');
       if (r.success) { setTimeout(function () { showPointsToast(r.points, Points.getMessage('quiz_perfect')); updatePointsDisplay(); }, 500); }
