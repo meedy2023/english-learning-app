@@ -10654,13 +10654,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         options = shuffle([{ text: blank, correct: true }].concat(distractors.map(function (d) { return { text: d, correct: false }; })));
         answerLabel = item.en;
       } else if (mode === 'en2zh') {
-        prompt = '这句话的中文是？';
+        prompt = shape === 'word' ? '这个单词的中文是？' : '这句话的中文是？';
         question = item.en;
         speak = item.en;
         options = shuffle([{ text: item.zh, correct: true }].concat(pickDistractors(othersAll, item.zh, 'zh', 3).map(function (d) { return { text: d.zh, correct: false }; })));
         answerLabel = item.zh;
       } else {
-        prompt = '这个中文对应的英文是？';
+        prompt = shape === 'word' ? '这个中文的英文是？' : '这句话的英文是？';
         question = item.zh;
         speak = item.en;
         options = shuffle([{ text: item.en, correct: true }].concat(pickDistractors(othersAll, item.en, 'en', 3).map(function (d) { return { text: d.en, correct: false }; })));
