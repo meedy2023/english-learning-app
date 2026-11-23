@@ -10968,6 +10968,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (_kSkip) _kSkip.style.visibility = 'visible';
     var _kHint = document.getElementById('ket-quiz-hint');
     if (_kHint) _kHint.style.display = 'block';
+    // 恢复答题区（题干/题目/听发音），避免结算页隐藏后「再测一次」看不到题目
+    var _kPrompt = document.getElementById('ket-quiz-prompt');
+    var _kWord = document.getElementById('ket-quiz-word');
+    var _kSpeak = document.getElementById('ket-quiz-speak-btn');
+    if (_kPrompt) _kPrompt.style.display = '';
+    if (_kWord) _kWord.style.display = '';
+    if (_kSpeak && _kSpeak.parentElement) _kSpeak.parentElement.style.display = '';
     switchView('ket-quiz');
     loadKetQuizQuestion();
   }
@@ -11079,6 +11086,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (_kSkip && _kSkip.parentElement) _kSkip.parentElement.style.display = 'none';
     var _kHint = document.getElementById('ket-quiz-hint');
     if (_kHint) _kHint.style.display = 'none';
+    // 结算页只展示结算内容：隐藏题干、题目、听发音按钮等答题区元素
+    var _kPrompt = document.getElementById('ket-quiz-prompt');
+    var _kWord = document.getElementById('ket-quiz-word');
+    var _kSpeak = document.getElementById('ket-quiz-speak-btn');
+    if (_kPrompt) _kPrompt.style.display = 'none';
+    if (_kWord) _kWord.style.display = 'none';
+    if (_kSpeak && _kSpeak.parentElement) _kSpeak.parentElement.style.display = 'none';
     // 分母恒为题目数组长度；按题目 id 从答案映射去重统计，跳过/回退未答的题算错但不改变分母
     var stats = calcQuizStats(ketQuizQueue.map(function (q) { return q.id; }), ketQuizAnswers);
     const total = stats.total;
