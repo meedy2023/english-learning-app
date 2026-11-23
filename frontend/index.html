@@ -5054,8 +5054,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let allWordsCache = null;
   let rvOrder = [];
   let rvIdx = 0;
-  let rvCorrect = 0;
-  let rvTotal = 0;
+  let rvAnswers = {}; // { [单词id]: { correct } } —— 去重映射，回退重答只按最终答案计一次
 
   async function getAllWords() {
     if (allWordsCache) return allWordsCache;
@@ -5172,8 +5171,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const prevBtn = document.getElementById('rv-prev-btn');
         if (prevBtn) prevBtn.style.display = 'none';
       }, 0);
-      rvCorrect = 0;
-      rvTotal = 0;
+      rvAnswers = {};
       switchView('review');
       loadReviewQuestion();
     });
@@ -5243,13 +5241,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const opt = cur.options[optIdx];
     const word = cur.word;
     document.querySelectorAll('#review-area .choice-opt-btn').forEach(function (b) { b.style.pointerEvents = 'none'; });
-    rvTotal++;
     const feedback = document.getElementById('review-feedback');
     const nextBtn = document.getElementById('review-next-btn');
     const isCorrect = opt.correct;
+    // 键用单词 id（与 rvOrder 同源）：同一题重复作答只覆盖、不追加，回退重答不会重复计数
+    rvAnswers[wordId] = { correct: isCorrect };
 
     if (isCorrect) {
-      rvCorrect++;
       btnEl.style.background = '#f6ffed';
       btnEl.style.borderColor = '#52c41a';
       btnEl.style.color = '#52c41a';
@@ -5309,10 +5307,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function reviewSkipQuestion() {
-    // 跳过只算错题、不算分；与闯关测验的 skipQuiz 行为一致
+    // 跳过不写答案映射：既不算对也不算错，不计入正确率分母；错词本仍标记为未掌握
     const cur = window._rvCur;
     if (!cur) return;
-    rvTotal++;
     document.querySelectorAll('#review-area .choice-opt-btn').forEach(function (b) { b.style.pointerEvents = 'none'; });
     const feedback = document.getElementById('review-feedback');
     const nextBtn = document.getElementById('review-next-btn');
@@ -5463,24 +5460,44 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function showReviewSummary() {
     clearTimeout(window._rvAutoNext);
-    const pct = rvTotal > 0 ? Math.round(rvCorrect / rvTotal * 100) : 0;
-    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = quizResultMessage(pct);
+    // 三态统计：与单词学习/闯关测验/词汇测验统一口径
+    // 分母恒为题目数组长度；跳过不写映射，不进正确率分母；回退重答按最终答案计一次
+    var stats = calcQuizStats(rvOrder, rvAnswers);
+    var total = stats.total, correct = stats.correct, wrong = stats.wrong;
+    var skipped = stats.skipped, answered = stats.answered;
+    var completion = stats.completion;
+    var noAnswer = answered === 0;
+    var accuracyText = noAnswer ? '--' : (stats.accuracy + '%');
+    var msgs = noAnswer ? choiceCompletionMessage(0) : quizResultMessage(stats.accuracy);
+    var emoji = noAnswer ? '📚' : (stats.accuracy >= 90 ? '🏆' : stats.accuracy >= 70 ? '👏' : stats.accuracy >= 50 ? '💪' : '📚');
+    var subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
+    var primaryBtn = noAnswer
+      ? '<button class="btn btn-primary" style="width:100%" onclick="openReview()">▶ 开始复习</button>'
+      : '<button class="btn btn-primary" style="width:100%" onclick="switchView(\'home\')">完成，返回首页</button>';
     const _remainIds = Review.idsForGrade(currentGrade || '');
     const remain = _remainIds === null ? Review.count() : _remainIds.length;
     const area = document.getElementById('review-area');
     area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
-      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
-      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + rvCorrect + '/' + rvTotal + ' 个答对</div>' +
-      '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
+      '<div style="display:flex;justify-content:center;gap:32px;margin-bottom:8px">' +
+        '<div><div style="font-size:36px;font-weight:800;color:#6c63ff;line-height:1.1">' + accuracyText + '</div><div style="font-size:12px;color:#999;margin-top:2px">正确率</div></div>' +
+        '<div><div style="font-size:36px;font-weight:800;color:#52c41a;line-height:1.1">' + completion + '%</div><div style="font-size:12px;color:#999;margin-top:2px">完成率</div></div>' +
+      '</div>' +
+      '<div style="font-size:14px;color:#999;margin-bottom:16px">' + subLine + '</div>' +
+      '<div style="display:flex;justify-content:center;gap:24px;font-size:13px;color:#888;margin-bottom:20px">' +
+        '<span style="color:#52c41a">正确 ' + correct + '</span>' +
+        '<span style="color:#ff4d4f">错误 ' + wrong + '</span>' +
+        '<span style="color:#faad14">未答 ' + skipped + '</span>' +
+        '<span>共 ' + total + ' 题</span>' +
+      '</div>' +
+      '<div style="font-size:16px;color:#555;margin-bottom:24px">' + msgs + '</div>' +
       '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
         '<div style="font-size:28px;font-weight:700;color:' + (remain > 0 ? '#ff4d4f' : '#52c41a') + '">' + remain + '</div>' +
         '<div style="font-size:12px;color:#999;margin-top:4px">错词本剩余</div>' +
       '</div>' +
-      '<button class="btn btn-primary" style="width:100%" onclick="switchView(\'home\')">完成，返回首页</button>' +
+      primaryBtn +
       '</div>';
-    Celebrate.result(pct);  // 答完结算：胜利/失利音乐
+    if (!noAnswer) Celebrate.result(stats.accuracy);  // 全跳过不播结算音乐
     Review.refreshEntry();
   }
 
