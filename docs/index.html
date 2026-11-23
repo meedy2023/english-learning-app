@@ -5250,6 +5250,20 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     window._rvAutoNext = setTimeout(function() { nextReviewQuestion(); }, 1200);
   }
 
+  // ========== 测验统计（三套测验统一）：分母恒等于题目数组长度 ==========
+  // questionIds: 题目 id 数组（quizOrder / cl_order / ketQuizQueue.map(q=>q.id)）
+  // answerMap:   { [questionId]: { correct: boolean, ... } } —— 同一题重复作答只覆盖、不追加
+  // 未答（跳过、或回退后未重答）在 map 中无条目：计入分母但不算正确；全部未答时为 0% 而非 NaN。
+  function calcQuizStats(questionIds, answerMap) {
+    var total = (questionIds || []).length;
+    var correct = 0;
+    for (var i = 0; i < total; i++) {
+      var ans = answerMap && answerMap[questionIds[i]];
+      if (ans && ans.correct) correct++;
+    }
+    return { total: total, correct: correct, pct: total > 0 ? Math.round(correct / total * 100) : 0 };
+  }
+
   // ========== 测验结算提示语：按正确率分档，同档内随机一条 ==========
   const QUIZ_RESULT_MSGS = {
     // <50% 安抚、不打击，引导复习
@@ -5973,7 +5987,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (currentWords.length === 0) { toast("请先选择一个模块"); return; }
     quizOrder = shuffle(currentWords.map(w => w.id));
     currentQuizIndex = 0;
-    window.quizResults = [];
+    window.quizAnswerMap = {};
     window._quizRetry = false;
     comboCount = 0;
     hideCombo();
@@ -6164,7 +6178,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const nextBtn = document.getElementById("quiz-next-btn");
     const isCorrect = opt.correct;
 
-    if (!window.quizResults) window.quizResults = [];
+    if (!window.quizAnswerMap) window.quizAnswerMap = {};
     if (!window._quizRetry) window._quizRetry = false;
 
     // ---- 答对：直接进入下一题 ----
@@ -6182,7 +6196,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const retried = window._quizRetry;
       feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word)) + (retried ? "<br><span style='font-size:12px;color:#52c41a'>（再试一次就答对了，真棒！）</span>" : "");
       Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
-      window.quizResults.push({ correct: true, retried: retried });
+      window.quizAnswerMap[currentQuizIndex] = { correct: true, retried: retried };
 
       comboCount++;
       showCombo(comboCount);
@@ -6257,7 +6271,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     comboCount = 0;
     hideCombo();
     Review.add(correctWord.id);
-    window.quizResults.push({ correct: false, retried: true });
+    window.quizAnswerMap[currentQuizIndex] = { correct: false, retried: true };
 
     window._quizRetry = false;
     const isLast = currentQuizIndex + 1 >= quizOrder.length;
@@ -6276,10 +6290,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function prevQuizQuestion() {
     clearTimeout(window._quizAutoNext);
     if (currentQuizIndex <= 0) return;
-    // 丢弃当前题及之后的作答记录，回退上一题重新作答
-    if (window.quizResults) {
-      window.quizResults = window.quizResults.slice(0, currentQuizIndex - 1);
-    }
+    // 「上一个」只切换题号，不改动答案映射、不产生任何统计记录
     comboCount = 0;
     hideCombo();
     currentQuizIndex--;
@@ -6287,15 +6298,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function resetQuizResults() {
-    window.quizResults = [];
+    window.quizAnswerMap = {};
   }
 
   function showQuizSummary() {
     hideCombo();
-    const results = window.quizResults || [];
-    const total = results.length;
-    const correct = results.filter(r => r.correct).length;
-    const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    // 分母恒为题目数组长度；答案映射按题号去重，跳过/回退未答算错但不改变分母
+    var stats = calcQuizStats(quizOrder, window.quizAnswerMap);
+    const total = stats.total;
+    const correct = stats.correct;
+    const pct = stats.pct;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = quizResultMessage(pct);
 
@@ -6355,9 +6367,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
 
   function skipQuiz() {
-    // 跳过也算一题，但不算正确
-    if (!window.quizResults) window.quizResults = [];
-    window.quizResults.push({ correct: false, skipped: true });
+    // 跳过不写答案；该题仍计入分母（汇总时按题目数组遍历，无映射即算未答）
     currentQuizIndex++;
     loadQuizQuestion();
   }
@@ -6376,8 +6386,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let cl_words = [];
   let cl_idx = 0;
   let cl_order = [];
-  let cl_correct = 0;
-  let cl_total = 0;
+  let clAnswers = {}; // { [单词id]: { correct } } —— 去重映射，替代旧的累加计数器
   let comboCount = 0;
   let clExtCtx = null; // 外部模块（KET/小托福/拼读）调用时的返回上下文 {title, onBack, scopeKey}
 
@@ -7111,8 +7120,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     cl_words = isExt ? toMatchWords(extWords) : [...currentWords];
     if (cl_words.length < 2) { toast('单词太少，暂时学不了'); return; }
     cl_idx = 0;
-    cl_correct = 0;
-    cl_total = 0;
+    clAnswers = {};
     comboCount = 0;
     hideCombo();
     const ids = cl_words.map(w => w.id);
@@ -7250,13 +7258,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function handleChoiceAnswer(opt, word, mode, clickedBtn) {
     var _btn = clickedBtn || (typeof event !== 'undefined' ? event.target : null);
     document.querySelectorAll('.choice-opt-btn').forEach(function(b) { b.style.pointerEvents = 'none'; });
-    cl_total++;
     const feedback = document.getElementById('choice-feedback');
     const nextBtn = document.getElementById('cl-next-btn');
     const isCorrect = opt.correct;
+    // 按单词 id 覆盖式记录最终答案，回退重答只覆盖不追加
+    clAnswers[word.id] = { correct: isCorrect };
 
     if (isCorrect) {
-      cl_correct++;
       comboCount++;
       showCombo(comboCount);
       clStyle(feedback, '#f6ffed', '#52c41a', '<strong>✅ 正确！</strong><br>' + (mode === 'en2cn' ? capitalize(word.word) + ' = ' + word.chinese : word.chinese + ' = ' + capitalize(word.word)));
@@ -7299,7 +7307,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function clSkipQuestion() {
     clearTimeout(window._clAutoNext);
-    cl_total++; // 跳过也算一题，但不算正确
+    // 跳过不写答案；该题仍计入分母（按题目数组遍历时无映射即算未答）
     cl_idx++;
     loadChoiceQuestion();
   }
@@ -7357,22 +7365,26 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function showChoiceSummary() {
     hideCombo();
-    const pct = cl_total > 0 ? Math.round(cl_correct / cl_total * 100) : 0;
+    // 分母恒为题目数组长度；答案映射去重统计，未答算错但不改变分母
+    var stats = calcQuizStats(cl_order, clAnswers);
+    const total = stats.total;
+    const correct = stats.correct;
+    const pct = stats.pct;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = quizResultMessage(pct);
     const area = document.getElementById('choice-learn-area');
     area.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
       '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
-      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + cl_correct + '/' + cl_total + ' 题正确</div>' +
+      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
       '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
       '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
         '<div style="display:flex;gap:16px">' +
-          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#52c41a">' + cl_correct + '</div><div style="font-size:12px;color:#999">正确</div></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#52c41a">' + correct + '</div><div style="font-size:12px;color:#999">正确</div></div>' +
           '<div style="width:1px;background:#eee"></div>' +
-          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#ff4d4f">' + (cl_total - cl_correct) + '</div><div style="font-size:12px;color:#999">错误</div></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#ff4d4f">' + (total - correct) + '</div><div style="font-size:12px;color:#999">错误</div></div>' +
           '<div style="width:1px;background:#eee"></div>' +
-          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#6c63ff">' + cl_total + '</div><div style="font-size:12px;color:#999">总题数</div></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#6c63ff">' + total + '</div><div style="font-size:12px;color:#999">总题数</div></div>' +
         '</div>' +
       '</div>' +
       '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="clRestartLearn()">🔄 再来一轮</button>' +
@@ -10533,6 +10545,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   let ketQuizSpeak = null;
   let ketQuizScope = '';  // 词汇测验对应的进度 scope（ket_/toefl_ + 分类名）
   let ketGrammarExamples = [];
+  let ketQuizAnswers = {}; // { [题目id]: { correct, optIdx } } —— 去重映射，替代旧的追加数组
 
   function renderKetPagination(totalItems) {
     const totalPages = Math.ceil(totalItems / ketItemsPerPage);
@@ -10832,6 +10845,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         answerLabel = item.en;
       }
       queue.push({
+        id: 'kq_' + queue.length,
         prompt: prompt,
         question: question,
         speak: speak,
@@ -10851,7 +10865,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     ketQuizQueue = buildKetQuiz(ketQuizShape, overrideSrc);
     if (!ketQuizQueue || ketQuizQueue.length === 0) { try { extFeatureRestore(); } catch (e) {} return; }
     ketQuizIndex = 0;
-    window.ketQuizResults = [];
+    ketQuizAnswers = {};
     window._ketQuizReturnView = returnView || 'ket';   // 记录来源：ket 或 toefl
     comboCount = 0;
     hideCombo();
@@ -10906,9 +10920,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (!cur) return;
     const opt = cur.options[optIdx];
     document.querySelectorAll('#ket-quiz-options button').forEach(function (b) { b.style.pointerEvents = 'none'; });
-    window.ketQuizResults = window.ketQuizResults || [];
     const isCorrect = opt.correct;
-    window.ketQuizResults.push({ correct: isCorrect });
+    ketQuizAnswers[cur.id] = { correct: isCorrect, optIdx: optIdx };
     // 词汇测验成绩同步到对应模块报告：答对=掌握，答错=已学（句型/语法无单词，不写）
     if (ketQuizScope && cur.wordId != null) writeExtProgress(ketQuizScope, cur.wordId, isCorrect ? 'mastered' : 'learned');
     const feedback = document.getElementById('ket-quiz-feedback');
@@ -10948,7 +10961,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function prevKetQuizQuestion() {
     clearTimeout(window._ketQuizAutoNext);
     if (ketQuizIndex <= 0) return;
-    if (window.ketQuizResults) window.ketQuizResults = window.ketQuizResults.slice(0, ketQuizIndex - 1);
+    // 「上一个」只切换题号，不改动答案映射、不产生任何统计记录
     comboCount = 0;
     hideCombo();
     ketQuizIndex--;
@@ -10956,8 +10969,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function skipKetQuiz() {
-    window.ketQuizResults = window.ketQuizResults || [];
-    window.ketQuizResults.push({ correct: false, skipped: true });
+    // 跳过不写入答案；该题仍计入分母（汇总时按题目数组遍历，无映射即算未答）
     ketQuizIndex++;
     loadKetQuizQuestion();
   }
@@ -10980,10 +10992,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (_kSkip && _kSkip.parentElement) _kSkip.parentElement.style.display = 'none';
     var _kHint = document.getElementById('ket-quiz-hint');
     if (_kHint) _kHint.style.display = 'none';
-    const results = window.ketQuizResults || [];
-    const total = results.length;
-    const correct = results.filter(function (r) { return r.correct; }).length;
-    const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+    // 分母恒为题目数组长度；按题目 id 从答案映射去重统计，跳过/回退未答的题算错但不改变分母
+    var stats = calcQuizStats(ketQuizQueue.map(function (q) { return q.id; }), ketQuizAnswers);
+    const total = stats.total;
+    const correct = stats.correct;
+    const pct = stats.pct;
     const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
     const msgs = quizResultMessage(pct);
     if (pct === 100 && total > 0) {
