@@ -5851,6 +5851,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 转义单引号，防止破坏 HTML onclick 属性的 JS 字符串
     const esc = s => (s || "").replace(/'/g, "\\'");
     const wordId = 'ra-word-' + w.id;
+    // 记录当前词与索引，供「上一个 / 跳过 / 学习」按钮使用
+    window._wdCurrent = w;
+    const wdIdx = currentWords.findIndex(function (x) { return x.id === w.id; });
     // 图文双通道：视觉锚点（真实配图优先，emoji 兜底）
     const vis = wordVisual(w);
     const visHTML = vis
@@ -5885,7 +5888,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         <button class="btn btn-secondary" onclick="markWord('${w.id}', 'mastered')" style="flex:1;background:linear-gradient(135deg,#ffd700 0%,#ffb700 100%);border:none;color:#fff;font-weight:600">⭐ 已掌握</button>
       </div>
       <button class="btn btn-secondary" onclick="speakAll('${esc(w.word)}','${esc(w.chinese)}','${esc(w.example_en)}','${esc(w.example_cn)}')" style="margin-top:10px;width:100%;background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px">🔊 朗读全部</button>
+      <div style="display:flex;gap:10px;margin-top:16px">
+        ${wdIdx > 0 ? '<button class="quiz-nav-btn" style="flex:1" onclick="wordDetailNav(-1)">⬅️ 上一个</button>' : ''}
+        ${wdIdx >= 0 && wdIdx < currentWords.length - 1 ? '<button class="quiz-nav-btn" style="flex:1" onclick="wordDetailNav(1)">跳过 ⏭</button>' : ''}
+        <button class="quiz-nav-btn" style="flex:1" onclick="wordDetailStudy()">📖 学习</button>
+      </div>
     `;
+  }
+
+  // 单词详情页翻页：delta=-1 上一个、delta=1 跳过（下一个单词）
+  function wordDetailNav(delta) {
+    var w = window._wdCurrent;
+    if (!w || !currentWords || !currentWords.length) return;
+    var idx = currentWords.findIndex(function (x) { return x.id === w.id; });
+    if (idx < 0) return;
+    var next = idx + delta;
+    if (next < 0 || next >= currentWords.length) return;
+    showWordDetail(currentWords[next], true);
+  }
+
+  // 单词详情页「学习」：只针对当前这一个单词做题（干扰项仍取自同模块其它词）
+  function wordDetailStudy() {
+    var w = window._wdCurrent;
+    if (!w || !currentWords || !currentWords.length) return;
+    startChoiceLearn(null, null, w.id);
   }
 
   // ========== 标记单词状态 ==========
@@ -6016,7 +6042,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         node = node.parentNode;
       }
       var isNavBtn =
-        /\b(skipQuiz|skipKetQuiz|reviewSkipQuestion|clSkipQuestion|Spell\.skip|prevQuizQuestion|prevKetQuizQuestion|prevReviewQuestion|prevChoiceQuestion|Spell\.prev|nextQuizQuestion|nextKetQuizQuestion|nextReviewQuestion|clNextQuestion|Spell\.next)\s*\(/.test(oc) ||
+        /\b(skipQuiz|skipKetQuiz|reviewSkipQuestion|clSkipQuestion|Spell\.skip|prevQuizQuestion|prevKetQuizQuestion|prevReviewQuestion|prevChoiceQuestion|Spell\.prev|nextQuizQuestion|nextKetQuizQuestion|nextReviewQuestion|clNextQuestion|Spell\.next|wordDetailNav|wordDetailStudy)\s*\(/.test(oc) ||
         /(^|-)(quiz|rv|cl)-(skip|prev|next)-btn$/.test(id) ||
         id === 'review-next-btn';
       // 拼写区交互：字母块/格子/删除/重新打乱/查看答案都会同步 render 重建 DOM
@@ -7060,7 +7086,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return out;
   }
 
-  function startChoiceLearn(extWords, extOpts) {
+  function startChoiceLearn(extWords, extOpts, onlyWordId) {
     // 外部调用（KET/小托福/拼读）时，extWords 提供词表，extOpts 提供标题与返回回调
     const isExt = !!(extWords && extWords.length);
     // 记录 learn 视图真实来源，供底部导航高亮使用（KET / 小托福 / 拼读 / 课文）
@@ -7082,7 +7108,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     comboCount = 0;
     hideCombo();
     const ids = cl_words.map(w => w.id);
-    cl_order = shuffle(ids);
+    // onlyWordId：只针对这一个词出题（cl_words 仍保留全部词用于生成干扰项）
+    cl_order = (onlyWordId != null && ids.indexOf(onlyWordId) !== -1) ? [onlyWordId] : shuffle(ids);
     setActiveTab('choice');
     document.getElementById('word-list').style.display = 'none';
     document.getElementById('word-detail-area').style.display = 'none';
