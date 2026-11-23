@@ -165,7 +165,7 @@ KET_DATA = {
                 {"word": "half", "chinese": "半", "example": "It's half past two."},
                 {"word": "quarter", "chinese": "一刻钟", "example": "It's quarter to three."},
                 {"word": "past", "chinese": "过", "example": "It's ten past nine."},
-                {"word": "to", "chinese": "差", "example": "It's five to ten."},
+                {"word": "to", "chinese": "差（时间：差五分十点）", "example": "It's five to ten."},
                 {"word": "early", "chinese": "早的", "example": "I wake up early."},
                 {"word": "late", "chinese": "晚的", "example": "Don't be late."},
                 {"word": "always", "chinese": "总是", "example": "I always eat breakfast."},
