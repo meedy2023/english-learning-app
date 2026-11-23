@@ -8591,6 +8591,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     fb: null,      // {type:'ok'|'bad'|'info', html:''}
     badFlash: false,
 
+    // 取消「答对后自动进入下一个单词」的定时器（翻页/重开/离开时调用）
+    _cancelAutoNext() {
+      if (this._autoNextTimer) { clearTimeout(this._autoNextTimer); this._autoNextTimer = null; }
+    },
+
     // 只有纯字母、长度合适的英文单词才适合做拼写题
     usableWords() {
       return (currentWords || []).filter(function (w) {
@@ -8604,6 +8609,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     start(fresh) {
+      this._cancelAutoNext();
       if (!currentModule || !currentWords || currentWords.length === 0) {
         toast('请先选择一个模块');
         learnMode = null;
@@ -8653,6 +8659,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 载入当前单词：拆成字母块并打乱（保证打乱结果不等于原单词）
     load(shuffleRandom) {
+      this._cancelAutoNext();
       const w = this.pool[this.idx];
       if (!w) { this.finish(); return; }
       const letters = String(w.word).toLowerCase().split('');
@@ -8758,6 +8765,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           updatePointsDisplay();
         }
       }
+      // 答对后自动跳到下一个单词（最后一题自动进结算），无需手点「跳过/完成」。
+      // 停留 900ms 让用户看清「拼写正确 + 答案」。重开/翻页/离开由各入口 _cancelAutoNext 清理，
+      // 回调再校验 round 与可见性，避免用户已离开拼写页还被跳走。
+      const spellRound = this.idx;
+      this._autoNextTimer = setTimeout(function () {
+        self._autoNextTimer = null;
+        if (spellRound !== self.idx || !self.locked) return;
+        var area = document.getElementById('spell-game-area');
+        if (!area || area.style.display === 'none' || !area.getClientRects().length) return;
+        self.next();
+      }, 900);
     },
 
     wrong(input, answer) {
@@ -8797,6 +8815,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     reveal() {
       const w = this.current();
       if (!w) return;
+      // 已拼对：不再覆盖「拼写正确」反馈，否则会留下「点重新打乱再拼一遍」的提示，
+      // 而此时「重新打乱」已置灰，形成矛盾引导。
+      if (this.locked) return;
       const letters = String(w.word).toLowerCase().split('');
       // 用字母块按顺序填满格子（不参与积分 judging）
       const self = this;
@@ -8835,6 +8856,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     finish() {
+      this._cancelAutoNext();
       const total = this.pool.length;
       const done = Object.keys(this.solved).length;
       document.getElementById('spell-game-area').innerHTML =
@@ -8906,7 +8928,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           fbHtml +
           '<div class="spell-acts">' +
             '<button class="spell-act"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.reshuffle()">🔀 重新打乱</button>' +
-            '<button class="spell-act" onclick="Spell.reveal()">👁 查看答案</button>' +
+            '<button class="spell-act"' + (this.locked ? ' disabled' : '') + ' onclick="Spell.reveal()">👁 查看答案</button>' +
             '<button class="spell-act" onclick="Spell.skip()">⏭ ' + (this.idx < this.pool.length - 1 ? '跳过' : '完成') + '</button>' +
           '</div>' +
           (this.idx > 0
