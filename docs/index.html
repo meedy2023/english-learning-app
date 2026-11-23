@@ -8685,7 +8685,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (this.locked) return;
       const s = this.slots[i];
       if (!s || s.ch === null) return;
-      const t = this.tiles.filter(function (x) { return x.id === s.tileId; })[0];
+      let t = this.tiles.filter(function (x) { return x.id === s.tileId; })[0];
+      // 兜底：格子有字母但 tileId 缺失（异常/历史状态）时，按字母找回一个已隐藏的同类字母块恢复，
+      // 避免该字母块永久隐藏造成「字母丢失」。重复字母（如 apple 的两个 p）找回任意一个即可。
+      if (!t && s.ch) {
+        t = this.tiles.filter(function (x) { return x.used && x.ch === s.ch; })[0];
+      }
       if (t) t.used = false;
       s.ch = null;
       s.tileId = null;
@@ -8799,7 +8804,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (this.locked) return;
       const letters = String(w.word).toLowerCase().split('');
       // 用字母块按顺序填满格子（不参与积分 judging）
-      const self = this;
+      // 先把所有字母块复位再统一分配：若沿用已有 used 状态，
+      // 之前输入过的字母块会被 !used 过滤掉、格子 tileId=null，
+      // 之后删除该格时 pickSlot 找不到 tile，字母块永久隐藏（表现为字母丢失）。
+      this.tiles.forEach(function (t) { t.used = false; });
       const pool = this.tiles.slice();
       this.slots = letters.map(function (ch) {
         const t = pool.filter(function (x) { return !x.used && x.ch === ch; })[0];
