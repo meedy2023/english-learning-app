@@ -6039,7 +6039,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     window._quizRetry = false;
     comboCount = 0;
     hideCombo();
-    // 恢复显示跳过按钮和题号
+    // 恢复显示答题区（题干/单词/听发音）与跳过按钮、题号
+    const quizPromptEl = document.getElementById("quiz-prompt");
+    const quizWordEl = document.getElementById("quiz-word");
+    const quizSpeakBtn = document.getElementById("quiz-speak-btn");
+    if (quizPromptEl) quizPromptEl.style.display = "";
+    if (quizWordEl) quizWordEl.style.display = "";
+    if (quizSpeakBtn && quizSpeakBtn.parentElement) quizSpeakBtn.parentElement.style.display = "";
     const skipBtn = document.getElementById('quiz-skip-btn');
     if (skipBtn) skipBtn.parentElement.style.display = "flex";
     document.getElementById("quiz-hint").style.display = "block";
@@ -6391,6 +6397,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     '</div>';
     document.getElementById("quiz-feedback").style.display = "none";
     document.getElementById("quiz-next-btn").style.display = "none";
+    // 结算页只展示结算内容：隐藏题干、单词、听发音按钮等答题区元素
+    const quizPromptEl = document.getElementById("quiz-prompt");
+    const quizWordEl = document.getElementById("quiz-word");
+    const quizSpeakBtn = document.getElementById("quiz-speak-btn");
+    if (quizPromptEl) quizPromptEl.style.display = "none";
+    if (quizWordEl) quizWordEl.style.display = "none";
+    if (quizSpeakBtn && quizSpeakBtn.parentElement) quizSpeakBtn.parentElement.style.display = "none";
     // 隐藏跳过按钮
     const skipBtn = document.getElementById('quiz-skip-btn');
     if (skipBtn) skipBtn.parentElement.style.display = "none";
