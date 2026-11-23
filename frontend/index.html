@@ -576,7 +576,7 @@
   .lr-w.lr-reading { background: #ffe58f; color: #5c3b00; box-shadow: 0 0 0 1px #ffd666; }
   /* 已经读过的单词（本句内） */
   .lr-w.lr-word-done { color: #8c8c8c; }
-  /* 小托福生成短文：本类学习词汇高亮（朗读时让位于朗读高亮） */
+  /* 短文阅读（KET/小托福/拼读）：本章节/本类词汇高亮（朗读时让位于朗读高亮） */
   .lr-w.lr-keyword:not(.lr-reading) { color:#c0392b; background:#fff1b8; font-weight:700; box-shadow:0 0 0 1px #ffd666; }
   /* 朗读控制条（固定悬浮在底部导航上方，滚动时始终可操作） */
   .lr-dock {
@@ -3661,9 +3661,46 @@ const API = ".";
   //      播放 · 暂停 · 继续 · 重播 · 点句跳转，读完给积分
   // 公共：把一句英文拆成 <span class="lr-w"> 供词级高亮
   function escapeHtml(s) { return String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-  function lrWordsHtml(text) {
+  // 公共词干提取：ies 还原为 y，保证 hobby / hobbies 等 y-i 变化互配
+  function categoryStem(part) {
+    var w = String(part);
+    if (/ies$/.test(w)) {
+      var yForm = w.replace(/ies$/, 'y');
+      return yForm.length >= 3 ? yForm : w;
+    }
+    var s = w.replace(/(ing|ed|es|s)$/, '');
+    return s.length >= 3 ? s : w;
+  }
+  // 公共：从词表提取词干（长词优先、过滤虚词），用于短文里的本章节/本类词高亮
+  function buildCategoryStems(words) {
+    var stems = [];
+    (words || []).forEach(function (w) {
+      String(w.word || '').toLowerCase().split(/\s+/).forEach(function (part) {
+        part = part.replace(/[^a-z-]/g, '');
+        if (part.length < 3) return;
+        var stem = categoryStem(part);
+        if (stem.length < 3) stem = part;
+        if (stems.indexOf(stem) < 0) stems.push(stem);
+      });
+    });
+    stems.sort(function (a, b) { return b.length - a.length; });
+    return stems;
+  }
+  // 公共：判断一个词是否属于本章节/本类词汇（词干匹配词形变化）
+  function isCategoryKeyword(word, stems) {
+    var low = String(word).toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, '');
+    if (!low || low.length < 3) return false;
+    var stem = categoryStem(low);
+    if (stem.length < 3) stem = low;
+    for (var i = 0; i < stems.length; i++) {
+      var st = stems[i];
+      if (low === st || stem === st || (low.indexOf(st) === 0 && low.length - st.length <= 3)) return true;
+    }
+    return false;
+  }
+  function lrWordsHtml(text, stems) {
     return String(text).split(/\s+/).filter(w => w.length > 0)
-      .map(w => '<span class="lr-w">' + escapeHtml(w) + '</span>').join(' ');
+      .map(w => '<span class="lr-w' + (stems && isCategoryKeyword(w, stems) ? ' lr-keyword' : '') + '">' + escapeHtml(w) + '</span>').join(' ');
   }
 
   const LessonReader = {
@@ -10376,12 +10413,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (!reading || !reading.sentences || reading.sentences.length === 0) return false;
 
       readingContent = reading.sentences;
+      // 本章节词汇来自当前 KET 分类词表（短文入口只在词汇分类页出现）
+      var ketStems = buildCategoryStems(ketCurrentItems || []);
 
       let linesHtml = reading.sentences.map((line, idx) => `
         <div class="lr-line" data-idx="${idx}" style="padding:10px 12px;border-bottom:1px dashed #ffe7ba;display:flex;flex-direction:column;gap:6px;border-radius:10px">
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">${idx + 1}</span>
-            <span class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">${lrWordsHtml(line.en)}</span>
+            <span class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">${lrWordsHtml(line.en, ketStems)}</span>
             <button class="speak-btn" onclick="speakReadingLine('${esc(line.en)}')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggleKet(this, '${esc(line.en)}')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>
           </div>
@@ -10392,7 +10431,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       area.innerHTML = `
         <div style="padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-            <div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ${esc(reading.title || '')}</div>
+            <div style="font-size:17px;font-weight:600;color:#d48806">📖 短文阅读 · ${esc(reading.title || '')}<span style="font-size:11px;font-weight:400;color:#c9a355">（高亮词为本类词汇）</span></div>
           </div>
           ${linesHtml}
           <!-- 朗读控制条：与课文一致，固定悬浮在底部导航上方 -->
@@ -10485,43 +10524,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ========== 小托福分类短文阅读：根据本类词汇例句生成，本类词高亮 ==========
   let toeflReadingOpen = false;
 
-  // 取本类词的词干（复用 40 天计划口径：长词优先、过滤虚词）
-  function toeflBuildStems(words) {
-    var stems = [];
-    (words || []).forEach(function (w) {
-      String(w.word || '').toLowerCase().split(/\s+/).forEach(function (part) {
-        part = part.replace(/[^a-z-]/g, '');
-        if (part.length < 3) return;
-        var stem = part.replace(/(ies|ing|ed|es|s)$/, '');
-        if (stem.length < 3) stem = part;
-        if (stems.indexOf(stem) < 0) stems.push(stem);
-      });
-    });
-    stems.sort(function (a, b) { return b.length - a.length; });
-    return stems;
-  }
-
-  // 判断一个词是否属于本类词汇（词干匹配词形变化）
-  function toeflIsKeyWord(word, stems) {
-    var low = String(word).toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, '');
-    if (!low || low.length < 3) return false;
-    var stem = low.replace(/(ies|ing|ed|es|s)$/, '');
-    if (stem.length < 3) stem = low;
-    for (var i = 0; i < stems.length; i++) {
-      var st = stems[i];
-      if (low === st || stem === st || (low.indexOf(st) === 0 && low.length - st.length <= 3)) return true;
-    }
-    return false;
-  }
-
-  // 例句拆成 .lr-w 供朗读词级跟随；本类词加 lr-keyword 静态高亮
-  function toeflReadingWordsHtml(text, stems) {
-    return String(text).split(/\s+/).filter(function (w) { return w.length > 0; }).map(function (w) {
-      var key = toeflIsKeyWord(w, stems) ? ' lr-keyword' : '';
-      return '<span class="lr-w' + key + '">' + escapeHtml(w) + '</span>';
-    }).join(' ');
-  }
-
   // 生成并渲染本类连续短文到就地 stage（一段连贯英文 + 中文翻译开关）
   function renderToeflCategoryReading() {
     var area = document.getElementById('toefl-feature-stage');
@@ -10533,7 +10535,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       try { extFeatureRestore(); } catch (e) {}  // 回滚就地态，避免 stage 空白、词表隐藏、无返回入口
       return false;
     }
-    var stems = toeflBuildStems(items);
+    var stems = buildCategoryStems(items);
     // 均匀取样，覆盖不同词，最多 12 句
     var maxSent = 12;
     var step = Math.max(1, Math.floor(withEx.length / maxSent));
@@ -10561,7 +10563,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '</div>'
       + '</div>'
       + '<div class="lr-line" data-idx="0" style="padding:6px 2px">'
-        + '<div class="lr-text" style="font-size:16px;line-height:2;color:#333;font-weight:500">' + toeflReadingWordsHtml(para, stems) + '</div>'
+        + '<div class="lr-text" style="font-size:16px;line-height:2;color:#333;font-weight:500">' + lrWordsHtml(para, stems) + '</div>'
       + '</div>'
       + '<div id="toefl-zh-block" style="display:none;margin-top:12px;padding:12px 14px;background:#fff8e8;border-left:3px solid #ffc53d;border-radius:8px;font-size:14px;line-height:1.9;color:#7a5c00">' + escapeHtml(zhText) + '</div>'
       + '<div class="lr-dock" id="toefl-reading-dock" style="display:none">'
@@ -10650,7 +10652,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 一段连续英文短文 + 逐句对应的中文译文
     var para = sentences.map(function (s) { return s.en; }).join(' ');
     var zhText = sentences.map(function (s) { return s.zh; }).join('');
-    var stems = toeflBuildStems(items);
+    var stems = buildCategoryStems(items);
     readingContent = [{ text: para }];
     area.innerHTML = '<div style="padding:16px;background:#fffdf5;border-radius:12px;border:2px solid #ffe7ba">'
       + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">'
@@ -10661,7 +10663,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '</div>'
       + '</div>'
       + '<div class="lr-line" data-idx="0" style="padding:6px 2px">'
-        + '<div class="lr-text" style="font-size:16px;line-height:2;color:#333;font-weight:500">' + toeflReadingWordsHtml(para, stems) + '</div>'
+        + '<div class="lr-text" style="font-size:16px;line-height:2;color:#333;font-weight:500">' + lrWordsHtml(para, stems) + '</div>'
       + '</div>'
       + '<div id="phonics-zh-block" style="display:none;margin-top:12px;padding:12px 14px;background:#fff8e8;border-left:3px solid #ffc53d;border-radius:8px;font-size:14px;line-height:1.9;color:#7a5c00">' + escapeHtml(zhText) + '</div>'
       + '<div class="lr-dock" id="phonics-reading-dock" style="display:none">'
