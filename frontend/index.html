@@ -4061,10 +4061,26 @@ const API = ".";
       .replace(/\bSt\.?\s+(?=[A-Z])/g, 'Saint ');
   }
 
-  // 多音词发音纠正：词表里 live = /lɪv/（居住），但 TTS 引擎（讯飞/Edge）单独读该词时
-  // 常默认读成 /laɪv/（现场的/活的）。整词发音场景下用 Edge SSML <phoneme> 强制指定音标。
-  // 只对「整段文本恰好是该单词」生效，不动句子上下文（句子里 TTS 会按语境自行正确发音）。
-  const HOMOGRAPH_IPA = { live: 'lɪv' };
+  // TTS 标准读音纠正表：部分单词因拼写与读音不一致 / 重音易错，会被 TTS 引擎（尤其讯飞英文）读错。
+  // 典型：live=/lɪv/（居住，常被读成 /laɪv/）；vehicle 被读成 vuh-HIK-uhl，
+  // 正确应为 VEE-hi-kuhl（重音在第一音节）。命中时整词发音走 Edge SSML <phoneme>
+  // 强制标准英式音标（与 Edge 默认 en-GB 音色一致），并绕过不支持音标的讯飞。
+  // 音标只对「整段文本恰好是该单词」生效，不动句子上下文（句子里 TTS 会按语境自行正确发音）。
+  const HOMOGRAPH_IPA = {
+    live: 'lɪv',
+    vehicle: 'ˈviːəkl',
+    wednesday: 'ˈwenzdeɪ',
+    february: 'ˈfebrəri',
+    vegetable: 'ˈvedʒtəbl',
+    chocolate: 'ˈtʃɒklət',
+    library: 'ˈlaɪbrəri',
+    restaurant: 'ˈrestrɒnt',
+    temperature: 'ˈtemprətʃə',
+    often: 'ˈɒfn',
+    island: 'ˈaɪlənd',
+    climb: 'klaɪm',
+    hour: 'ˈaʊə'
+  };
   function homographIpa(text) {
     const w = String(text == null ? '' : text).trim().toLowerCase().replace(/^[^a-z]+|[^a-z]+$/g, '');
     return HOMOGRAPH_IPA[w] || null;
