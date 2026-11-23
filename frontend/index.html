@@ -5353,6 +5353,96 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     };
   }
 
+  // ========== 测验结算五档反馈：完成率为主轴、正确率为副轴 ==========
+  // 档位序号：S=4 A=3 B=2 C=1 D=0
+  // 完成率档（主轴）：100→S(4)，≥80→A(3)，≥60→B(2)，≥40→C(1)，<40→D(0)
+  // 正确率档（副轴）：≥90→S(4)，≥70→A(3)，≥50→B(2)，≥30→C(1)，<30→D(0)
+  // 最终档 = 两者较低者（就低原则）：完成率为主轴决定上限；错配时保守取低。
+  // 全跳过时 completion=0 → 完成率档 0 → 必为 D（不看正确率，符合 D 档设计）。
+  function quizFiveTier(stats) {
+    var completion = stats.completion;
+    var accuracy = stats.accuracy;
+    var cTier = completion >= 100 ? 4 : completion >= 80 ? 3 : completion >= 60 ? 2 : completion >= 40 ? 1 : 0;
+    var aTier = (accuracy == null) ? 0 : (accuracy >= 90 ? 4 : accuracy >= 70 ? 3 : accuracy >= 50 ? 2 : accuracy >= 30 ? 1 : 0);
+    return Math.min(cTier, aTier);
+  }
+
+  const FIVE_TIER_MSGS = {
+    4: [ // S 卓越档 · 完成率100% + 正确率≥90%
+      '满分通关！你已经把这一组单词彻底拿下了。',
+      '全对完成，这份专注力真的很了不起。',
+      '10 题全中，看来这些单词已经是你的老朋友了。',
+      '稳、准、快，这一轮你发挥得太漂亮了。',
+      '全部答对，说明你的复习方法非常有效。',
+      '完美收官！要不要挑战更难的一组？',
+      '这一轮零失误，你的词汇量在悄悄长大。',
+      '满分不是运气，是你一次次练习换来的。',
+      '太厉害了！保持这个节奏，KET 稳了。',
+      '全对完成，你现在可以自信地说「我会了」。'
+    ],
+    3: [ // A 优秀档 · 完成率≥80% + 正确率70%~89%
+      '完成得不错！再巩固几个小细节就完美了。',
+      '大部分都答对了，剩下的错题正是你的提分点。',
+      '这一轮表现很稳，把错题再看一遍就更强了。',
+      '你已经掌握了绝大部分，胜利就在眼前。',
+      '答得挺好！错的那几题，下次一定能拿下。',
+      '优秀完成！错题本已经帮你记好了。',
+      '离满分只差一小步，再试一次吧。',
+      '你的进步很明显，继续这样练下去。',
+      '完成度很高，把不会的补上就是满分。',
+      '这一轮很扎实，错题是最好的老师。'
+    ],
+    2: [ // B 进步档 · 完成率≥60% + 正确率50%~69%
+      '你坚持做完了大半，这份毅力很珍贵。',
+      '已经掌握一半多了，剩下的我们一起攻克。',
+      '有进步！把错题再听一遍发音，会记得更牢。',
+      '别急，慢慢来，每一题都是收获。',
+      '你答对的每一题，都是实实在在的进步。',
+      '完成度不错，试试先复习再测一次。',
+      '一半以上都对了，说明方法是对的。',
+      '坚持到这里已经很棒了，再来一轮？',
+      '错题不可怕，它们正在帮你查漏补缺。',
+      '你的努力正在积累，继续加油。'
+    ],
+    1: [ // C 挣扎档 · 完成率≥40% + 正确率30%~49%
+      '没关系，这一组确实有点难，我们换个方式试试。',
+      '先别急着测，回去看看单词释义会轻松很多。',
+      '答错不代表你不会，只是还没记熟而已。',
+      '我们把这一组拆成两半，一次只练 5 个。',
+      '你已经完成了不少，这本身就值得肯定。',
+      '试试「听发音 + 看例句」再测，效果会不一样。',
+      '每个人都会遇到卡住的单词，这很正常。',
+      '不用一次全对，今天比昨天多对一题就是进步。',
+      '要不要先去单词学习页过一遍，再回来测？',
+      '慢慢来，我们不着急，学会才是最重要的。'
+    ],
+    0: [ // D 重建档 · 完成率<40% 或全跳过（不看正确率）
+      '今天先到这儿吧，你已经很努力了。',
+      '累了就歇会儿，单词会一直等你。',
+      '没关系，我们换个轻松的玩一会儿。',
+      '这一组有点难，先跳过也完全没问题。',
+      '想先听一遍发音吗？我陪你慢慢听。',
+      '想不想先玩几局消消乐游戏？',
+      '去消消乐放松一下吧，回来再练。',
+      '你今天来学习，就已经很棒了。',
+      '不着急，什么时候想开始都可以。',
+      '我们下次从更简单的开始，好吗？'
+    ]
+  };
+  var _lastFiveTierMsg = null;
+  function fiveTierMessage(stats) {
+    var arr = FIVE_TIER_MSGS[quizFiveTier(stats)];
+    var idx = Math.floor(Math.random() * arr.length);
+    // 同档内若随机到与上一次相同，顺延一条，避免连续两次测验看到同一句
+    if (arr.length > 1 && arr[idx] === _lastFiveTierMsg) idx = (idx + 1) % arr.length;
+    _lastFiveTierMsg = arr[idx];
+    return arr[idx];
+  }
+
+  // 五档 emoji 映射：与五档判定保持一致，避免「重建档文案 + 🏆」式错配
+  const FIVE_TIER_EMOJI = { 4: '🏆', 3: '👏', 2: '💪', 1: '🤗', 0: '🫂' };
+  function fiveTierEmoji(stats) { return FIVE_TIER_EMOJI[quizFiveTier(stats)]; }
+
   // ========== 测验结算提示语：按正确率分档，同档内随机一条 ==========
   const QUIZ_RESULT_MSGS = {
     // <50% 安抚、不打击，引导复习
@@ -5468,8 +5558,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var completion = stats.completion;
     var noAnswer = answered === 0;
     var accuracyText = noAnswer ? '--' : (stats.accuracy + '%');
-    var msgs = noAnswer ? choiceCompletionMessage(0) : quizResultMessage(stats.accuracy);
-    var emoji = noAnswer ? '📚' : (stats.accuracy >= 90 ? '🏆' : stats.accuracy >= 70 ? '👏' : stats.accuracy >= 50 ? '💪' : '📚');
+    var msgs = fiveTierMessage(stats);
+    var emoji = fiveTierEmoji(stats);
     var subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
     var primaryBtn = noAnswer
       ? '<button class="btn btn-primary" style="width:100%" onclick="openReview()">▶ 开始复习</button>'
@@ -6462,8 +6552,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 正确率：无已作答显示 -- 而非 0%；反馈文案按完成率分档，跳过不算错
     const accuracyText = noAnswer ? '--' : (accuracy + '%');
-    const msgs = choiceCompletionMessage(completion);
-    const emoji = noAnswer ? '📚' : (accuracy >= 90 ? '🏆' : accuracy >= 70 ? '👏' : accuracy >= 50 ? '💪' : '📚');
+    const msgs = fiveTierMessage(stats);
+    const emoji = fiveTierEmoji(stats);
     const subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
     // 主按钮：全跳过时改为「开始测验」
     const primaryBtn = noAnswer
@@ -7552,8 +7642,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 正确率：无已作答显示 -- 而非 0%；有作答显示整数百分比
     const accuracyText = noAnswer ? '--' : (accuracy + '%');
     // 反馈文案按完成率分档（不是按正确率），跳过不算错
-    const msgs = choiceCompletionMessage(completion);
-    const emoji = noAnswer ? '📚' : (accuracy >= 90 ? '🏆' : accuracy >= 70 ? '👏' : accuracy >= 50 ? '💪' : '📚');
+    const msgs = fiveTierMessage(stats);
+    const emoji = fiveTierEmoji(stats);
     const subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
     // 主按钮：无作答时改为「开始学习」，有作答时保持「再来一轮」
     const primaryBtn = noAnswer
@@ -11237,8 +11327,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 正确率：无已作答显示 -- 而非 0%；反馈文案按完成率分档，跳过不算错
     const accuracyText = noAnswer ? '--' : (accuracy + '%');
-    const msgs = choiceCompletionMessage(completion);
-    const emoji = noAnswer ? '📚' : (accuracy >= 90 ? '🏆' : accuracy >= 70 ? '👏' : accuracy >= 50 ? '💪' : '📚');
+    const msgs = fiveTierMessage(stats);
+    const emoji = fiveTierEmoji(stats);
     const subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
     // 主按钮：全跳过时改为「开始测验」
     const primaryBtn = noAnswer
