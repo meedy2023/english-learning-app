@@ -10970,11 +10970,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.getElementById('ket-quiz-word').textContent = q.question;
     document.getElementById('ket-quiz-num').textContent = ketQuizIndex + 1;
     document.getElementById('ket-quiz-total').textContent = ketQuizQueue.length;
-    // 分页边界：第一题隐藏「上一题」，最后一题隐藏「跳过 →」
+    // 分页边界：第一题隐藏「上一题」；最后一题保留「跳过」（点击后直接进入成绩页）
     const prevBtn = document.getElementById('ket-quiz-prev-btn');
     const skipBtn = document.getElementById('ket-quiz-skip-btn');
     if (prevBtn) prevBtn.style.visibility = (ketQuizIndex > 0) ? 'visible' : 'hidden';
-    if (skipBtn) skipBtn.style.visibility = (ketQuizIndex < ketQuizQueue.length - 1) ? 'visible' : 'hidden';
+    if (skipBtn) skipBtn.style.visibility = 'visible';
     if (q.speak) setTimeout(function () { speakWord(q.speak); }, 150);
 
     document.getElementById('ket-quiz-options').innerHTML = q.options.map(function (o, i) {
@@ -11042,7 +11042,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function skipKetQuiz() {
     // 跳过不写入答案；该题仍计入分母（汇总时按题目数组遍历，无映射即算未答）
+    clearTimeout(window._ketQuizAutoNext);
     ketQuizIndex++;
+    // 最后一题跳过后 index 越界，loadKetQuizQuestion 自动进入成绩页
     loadKetQuizQuestion();
   }
 
