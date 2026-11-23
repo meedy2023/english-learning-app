@@ -6179,11 +6179,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
     document.getElementById("quiz-num").textContent = currentQuizIndex + 1;
     document.getElementById("quiz-total").textContent = quizOrder.length;
-    // 分页边界：第一题隐藏「上一题」，最后一题隐藏「跳过 →」
+    // 分页边界：第一题隐藏「上一题」；最后一题保留「跳过」（点击后直接进入成绩页）
     const quizPrevBtn = document.getElementById("quiz-prev-btn");
     const quizSkipBtn = document.getElementById("quiz-skip-btn");
     if (quizPrevBtn) quizPrevBtn.style.visibility = (currentQuizIndex > 0) ? 'visible' : 'hidden';
-    if (quizSkipBtn) quizSkipBtn.style.visibility = (currentQuizIndex < quizOrder.length - 1) ? 'visible' : 'hidden';
+    if (quizSkipBtn) quizSkipBtn.style.visibility = 'visible';
 
     // 生成4个选项（按目标文本去重，避免一真一假同文本误判）
     const others = currentWords.filter(x => x.id !== wordId);
@@ -6416,7 +6416,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function skipQuiz() {
     // 跳过不写答案；该题仍计入分母（汇总时按题目数组遍历，无映射即算未答）
+    clearTimeout(window._quizAutoNext);
     currentQuizIndex++;
+    // 最后一题跳过后 index 越界，loadQuizQuestion 自动进入成绩页
     loadQuizQuestion();
   }
 
