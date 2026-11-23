@@ -2282,6 +2282,11 @@ const API = ".";
     if (_lmt) _lmt.style.display = 'none';
   }
 
+  // 测验页顶栏标题：小托福复用 KET 测验视图，按测验来源显示对应模块名
+  function ketQuizTitle() {
+    return window._ketQuizReturnView === 'toefl' ? '🎯 小托福测验' : '🎯 KET 测验';
+  }
+
   // ===== 底部导航高亮 =====
   // 规则：年级/课文学习/测验/错词复习 → 「年级」；KET、小托福、拼读及其二级页面 → 各自模块。
   // 三个外部模块复用课文的 learn 视图做单词学习，需按真实来源模块高亮，不能再统一落到「年级」。
@@ -2322,7 +2327,7 @@ const API = ".";
     // 目标内容已嵌入分类页的 stage 中显示；只有真正离开时才由 extFeatureRestore 收尾。
     if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active && name === EXT_FEATURE.inlineView) {
       var _it = document.getElementById('topbar-title');
-      if (_it) _it.textContent = (name === 'pk') ? '⚔️ 单词 PK' : (name === 'ket-quiz') ? '🎯 KET 测验' : '📚 英语学习';
+      if (_it) _it.textContent = (name === 'pk') ? '⚔️ 单词 PK' : (name === 'ket-quiz') ? ketQuizTitle() : '📚 英语学习';
       return;
     }
     // 真正切到其它 view：先退出就地模式，搬回被嵌入的 view
@@ -2366,7 +2371,7 @@ const API = ".";
     } catch (e) {}   // Match 尚未初始化时忽略
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     document.getElementById("view-" + name).classList.add("active");
-    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "🪜 KET 学习", "ket-quiz": "🎯 KET 测验", toefl: "🎓 小托福", phonics: "🔤 自然拼读", pk: "⚔️ 单词 PK", settings: "⚙️ 设置" };
+    const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "🪜 KET 学习", "ket-quiz": ketQuizTitle(), toefl: "🎓 小托福", phonics: "🔤 自然拼读", pk: "⚔️ 单词 PK", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
     guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
