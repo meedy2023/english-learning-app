@@ -6652,8 +6652,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 开始一局：fresh=true 表示清空本单元进度从头来
     start(opts) {
       opts = opts || {};
-      // 清掉上一局可能未触发的延迟结算，避免重开/退出后被旧 finish 强行打断并重复计分
+      // 清掉上一局可能未触发的延迟结算与自动切换，避免重开/退出后被旧 finish 打断并重复计分
       if (this._finishTimer) { clearTimeout(this._finishTimer); this._finishTimer = null; }
+      this._cancelAutoNext();
       this._round = (this._round || 0) + 1;
       var pool = this.scopeWords();
       if (!this.scopeKey() || pool.length === 0) {
@@ -6757,6 +6758,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 返回：单元内回单词表，其它作用域退出游戏
     backOut() {
+      this._cancelAutoNext();
       if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active) { extFeatureRestore(); return; }
       var _t = this.scope && this.scope.type;
       if (this.isUnit()) { showWordList(); return; }
@@ -6850,7 +6852,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (this.matched >= this.total) {
         this._finishTimer = setTimeout(function () {
           self._finishTimer = null;
-          if (round !== self._round || !self.scope) return;  // 已重开/退出则作废，避免误结算与重复积分
+          // 仅用 round 变化作废「已重开/退出」的旧结算，避免误结算与重复积分。
+          // 注意：单元内消消乐的 scope 本来就是 null（isUnit() 正依赖此），
+          // 绝不能把 !scope 当作作废条件，否则单元内消完不会 finish（不撒花/不结算）。
+          if (round !== self._round) return;
           self.finish();
         }, 480);
       }
@@ -6886,6 +6891,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     stopTimer() {
       if (this.timer) { clearInterval(this.timer); this.timer = null; }
+      this._cancelAutoNext();
+    },
+
+    // 取消「消除完成后自动进入下一局」的定时器（重开/退出/离开页面时调用）
+    _cancelAutoNext() {
+      if (this._autoNextTimer) { clearTimeout(this._autoNextTimer); this._autoNextTimer = null; }
     },
 
     tick() {
@@ -6930,6 +6941,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (roundR && roundR.success) showPointsToast(roundR.points, Points.getMessage('match_round'));
       }
       updatePointsDisplay();
+
+      // 消除完成后自动进入下一局：撒花 + 结算停留片刻后自动开下一局，无需手动点「继续下一局」。
+      // 重开/退出/离开页面时由 stopTimer()/exit() 清理；回调里再校验一次作用域与可见性，
+      // 避免用户已离开消消乐（含进积分/设置页时 finished=true 未走 stopTimer）还被拉回。
+      var self = this;
+      var round = this._round;
+      this._autoNextTimer = setTimeout(function () {
+        self._autoNextTimer = null;
+        if (round !== self._round || !self.finished) return;
+        var area = document.getElementById('match-game-area');
+        if (!area || area.style.display === 'none' || !area.getClientRects().length) return;
+        self.nextRound();
+      }, 2200);
     }
   };
 
