@@ -6324,7 +6324,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const retried = window._quizRetry;
       feedback.innerHTML = "<strong>✅ 正确！</strong><br>" + (mode === "en_to_cn" ? capitalize(correctWord.word) + " = " + correctWord.chinese : correctWord.chinese + " = " + capitalize(correctWord.word)) + (retried ? "<br><span style='font-size:12px;color:#52c41a'>（再试一次就答对了，真棒！）</span>" : "");
       Celebrate.answerCorrect();  // 提示音乐替代语音播报「正确」
-      window.quizAnswerMap[currentQuizIndex] = { correct: true, retried: retried };
+      // 键用单词 id，与 quizOrder / calcQuizStats 保持一致（用索引会导致统计全判为未答）
+      window.quizAnswerMap[quizOrder[currentQuizIndex]] = { correct: true, retried: retried };
 
       comboCount++;
       showCombo(comboCount);
@@ -6399,7 +6400,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     comboCount = 0;
     hideCombo();
     Review.add(correctWord.id);
-    window.quizAnswerMap[currentQuizIndex] = { correct: false, retried: true };
+    window.quizAnswerMap[quizOrder[currentQuizIndex]] = { correct: false, retried: true };
 
     window._quizRetry = false;
     const isLast = currentQuizIndex + 1 >= quizOrder.length;
