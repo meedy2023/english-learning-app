@@ -5981,22 +5981,40 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }, 0);
   }
 
-  // ===== 点击「跳过/上一题/下一题」及拼写交互区时锁定视口，根治连续点击页面上移 =====
-  // 上面的 stabilizeQuizScroll 只在题卡被顶栏遮挡时才纠正，处理不了「轻微但逐步累积」的上移，
-  // 且 setTimeout(0) 常被浏览器「点击按钮→聚焦按钮→把按钮滚入视口」的默认行为覆盖。
-  // 这里改为在 pointerdown（按钮聚焦、页面默认滚动发生之前）记录 scrollY，
-  // 重绘完成后精确还原，视口始终不动。事件委托只挂一次，覆盖所有页面与就地内嵌模式。
-  // 拼写区的字母块/格子每次点击都会 innerHTML 整体重建，同样会引起焦点/滚动重算，
-  // 连续点击会把视口推到页面底部露出大片空白，故一并纳入（格子是 DIV，需按 onclick 查找而非只找 BUTTON）。
+  // ===== 通用视口保护：根治连续点击导致页面焦点上移（露出底部大片背景） =====
+  // 上面的 stabilizeQuizScroll 只在题卡被顶栏遮挡时才纠正，处理不了轻微但累积的上移。
+  // 分两层保护：
+  //  1) 导航/拼写交互（会 innerHTML 重绘）：pointerdown 记录 scrollY，重绘后绝对值还原，视口完全不动；
+  //  2) 其它点击（含无按钮空白区域、JS 赋值 onclick 的卡片）：pointerup 判定为 tap 后，只纠正
+  //     「被意外推到页面下方」的滚动；滑动手势、主动回顶部、朗读/锚点滚动都不干预。
+  // 用 hook scrollTo/scrollIntoView 标记「代码主动滚动」，避免误伤上述预期滚动。
+  // 事件委托只挂一次，覆盖所有页面与就地内嵌模式。
   var _navScrollLock = null;
+  var _tapOrigin = null;
+  var _scrollIntent = false;
+  var _origScrollTo = window.scrollTo;
+  var _origScrollIntoView = (typeof Element !== 'undefined' && Element.prototype) ? Element.prototype.scrollIntoView : null;
+  window.scrollTo = function () { _scrollIntent = true; return _origScrollTo.apply(this, arguments); };
+  if (_origScrollIntoView) {
+    Element.prototype.scrollIntoView = function () { _scrollIntent = true; return _origScrollIntoView.apply(this, arguments); };
+  }
+
   document.addEventListener('pointerdown', function (e) {
     try {
-      // 向上找最近一个带 onclick 的可交互元素：兼容 spell-slot 这类 DIV 格子，不能只认 BUTTON。
-      var t = e.target;
-      while (t && t !== document && !(t.getAttribute && t.getAttribute('onclick'))) t = t.parentNode;
-      if (!t || t === document) return;
-      var oc = t.getAttribute('onclick') || '';
-      var id = t.id || '';
+      _scrollIntent = false;   // 每次新手势重置「主动滚动」标记
+      _tapOrigin = {
+        x: e.clientX, y: e.clientY,
+        scrollY: window.pageYOffset || document.documentElement.scrollTop || 0
+      };
+      // 向上找最近带 onclick 的元素：兼容 HTML 属性、JS 赋值，以及 spell-slot 这类 DIV 格子。
+      var node = e.target;
+      var oc = '', id = '';
+      while (node && node !== document) {
+        var a = node.getAttribute && node.getAttribute('onclick');
+        if (a) { oc = a; id = node.id || ''; break; }
+        if (node.onclick) { oc = String(node.onclick); id = node.id || ''; break; }
+        node = node.parentNode;
+      }
       var isNavBtn =
         /\b(skipQuiz|skipKetQuiz|reviewSkipQuestion|clSkipQuestion|Spell\.skip|prevQuizQuestion|prevKetQuizQuestion|prevReviewQuestion|prevChoiceQuestion|Spell\.prev|nextQuizQuestion|nextKetQuizQuestion|nextReviewQuestion|clNextQuestion|Spell\.next)\s*\(/.test(oc) ||
         /(^|-)(quiz|rv|cl)-(skip|prev|next)-btn$/.test(id) ||
@@ -6004,16 +6022,35 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       // 拼写区交互：字母块/格子/删除/重新打乱/查看答案都会同步 render 重建 DOM
       var isSpellInteract = /\bSpell\.(pickTile|pickSlot|del|reshuffle|reveal)\s*\(/.test(oc);
       if (!isNavBtn && !isSpellInteract) return;
-      var lock = { y: (window.pageYOffset || document.documentElement.scrollTop || 0) };
+      var lock = { y: _tapOrigin.scrollY };
       _navScrollLock = lock;
       function restore() {
         if (_navScrollLock !== lock) return;   // 已被后续点击取代，交给新锁处理
         var cur = window.pageYOffset || document.documentElement.scrollTop || 0;
-        if (Math.abs(cur - lock.y) > 1) window.scrollTo(0, lock.y);
+        // 用原始 scrollTo 还原，避免被 hook 标记成「主动滚动」而误伤后续保护
+        if (Math.abs(cur - lock.y) > 1) _origScrollTo.call(window, 0, lock.y);
       }
       setTimeout(restore, 0);                                            // 重绘同步完成后
       requestAnimationFrame(function () { requestAnimationFrame(restore); }); // 覆盖 focus/平滑滚动延迟
       setTimeout(function () { if (_navScrollLock === lock) _navScrollLock = null; }, 500);
+    } catch (err) {}
+  }, true);
+
+  // 通用兜底：tap（非滑动）后若视口被意外推到下方，还原；代码主动滚动则尊重它。
+  document.addEventListener('pointerup', function (e) {
+    var s = _tapOrigin;
+    _tapOrigin = null;
+    if (!s || _navScrollLock) return;
+    try {
+      if (Math.abs((e.clientX || 0) - s.x) > 10 || Math.abs((e.clientY || 0) - s.y) > 10) return; // 滑动手势，不干预
+      function fix() {
+        if (_scrollIntent) return;   // 代码主动滚动（回顶部/朗读/锚点），不还原
+        var cur = window.pageYOffset || document.documentElement.scrollTop || 0;
+        // 用原始 scrollTo 还原，避免被 hook 标记成「主动滚动」而误伤后续保护
+        if (cur > s.scrollY + 1) _origScrollTo.call(window, 0, s.scrollY);
+      }
+      setTimeout(fix, 0);
+      requestAnimationFrame(function () { requestAnimationFrame(fix); });
     } catch (err) {}
   }, true);
 
