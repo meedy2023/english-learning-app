@@ -8217,9 +8217,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   var PK = {
     TIME: 10,   // 每题作答秒数
     DIFF: {
-      easy:   { label: '轻松', acc: 0.60, react: [3.6, 5.0] },
-      normal: { label: '标准', acc: 0.80, react: [2.5, 3.6] },
-      hard:   { label: '挑战', acc: 0.95, react: [1.4, 2.4] }
+      easy:   { label: '轻松', acc: 0.60, react: [3.6, 5.0], mult: 1.0 },
+      normal: { label: '标准', acc: 0.80, react: [2.5, 3.6], mult: 1.2 },
+      hard:   { label: '挑战', acc: 0.95, react: [1.4, 2.4], mult: 1.5 }
     },
     state: null,
 
@@ -8666,6 +8666,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       '</div>';
     },
 
+    // ---- 统一计分：玩家与 AI 共用同一公式，保证公平 ----
+    // 每题 = (基础10 + 速度分0~4 + 连击分0~3) × 难度倍率
+    // 速度分按剩余时间比例连续计算（不再「≥5秒才+1」阶跃），AI 用实际反应时间代入，避免恒拿满；
+    // 连击 2/3/5 连分别 +1/+2/+3，让连对有实际收益；难度倍率让选高难度有分数回报（双方同倍率不影响胜负公平）。
+    questionGain: function (left, combo) {
+      var ratio = Math.max(0, Math.min(this.TIME, left)) / this.TIME;
+      var speed = Math.round(ratio * 4);
+      var comboBonus = combo >= 5 ? 3 : combo >= 3 ? 2 : combo >= 2 ? 1 : 0;
+      var cfg = this.DIFF[this.state.diff] || this.DIFF.normal;
+      return Math.round((10 + speed + comboBonus) * cfg.mult);
+    },
+
     // ---- 玩家作答 ----
     answer: function (opt, timeout) {
       var s = this.state;
@@ -8678,12 +8690,14 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var gain = 0;
       if (correct) {
         s.combo++; s.myCorrect++;
-        gain = 10 + (left >= 5 ? 1 : 0);
+        gain = this.questionGain(left, s.combo);
         s.my += gain;
+        showCombo(s.combo);   // 连击可视化：答对即时火焰特效，连对越多越炫
         writeExtProgress(s.scopeKey, q.word.id, 'mastered');
         Celebrate.answerCorrect();
       } else {
         s.combo = 0;
+        hideCombo();          // 答错中断连击，立即收起特效
         writeExtProgress(s.scopeKey, q.word.id, 'learned');
         Celebrate.answerWrong();
       }
@@ -8701,7 +8715,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         fb.style.display = 'block';
         fb.style.background = correct ? '#f6ffed' : '#fff2f0';
         fb.style.color = correct ? '#52c41a' : '#ff4d4f';
-        fb.innerHTML = (correct ? '✅ 答对！+' + gain + ' 分' : (timeout ? '⏰ 时间到！' : '❌ 答错了')) +
+        fb.innerHTML = (correct ? '✅ 答对！+' + gain + ' 分' + (s.combo >= 2 ? ' · ' + s.combo + ' 连击🔥' : '') : (timeout ? '⏰ 时间到！' : '❌ 答错了')) +
           '<br><span style="font-size:12px;color:#999">正确答案：' + correctText + '</span>';
       }
       this.updateScores();
@@ -8718,7 +8732,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       var gain = 0;
       if (correct) {
         s.aiCombo++;
-        gain = 10 + (Math.max(0, this.TIME - react) >= 5 ? 1 : 0);
+        // AI 与玩家同一公式：速度按实际剩余时间连续计分，连击同样加成
+        gain = this.questionGain(Math.max(0, this.TIME - react), s.aiCombo);
         s.ai += gain;
       } else {
         s.aiCombo = 0;
@@ -8755,6 +8770,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     finish: function () {
       var s = this.state;
       if (!s) return;
+      hideCombo();   // 结算时收起连击特效，避免悬浮残留
       this.stop();
       document.getElementById('pk-game').style.display = 'none';
       var area = document.getElementById('pk-result');
@@ -8776,7 +8792,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
               '<div style="background:#eef4ff;border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:#4f9fff">我</div><div style="font-size:32px;font-weight:800;color:#4f9fff">' + s.my + '</div></div>' +
               '<div style="background:#fff0f0;border-radius:14px;padding:14px 28px"><div style="font-size:13px;color:#ff6b6b">🤖 电脑</div><div style="font-size:32px;font-weight:800;color:#ff6b6b">' + s.ai + '</div></div>' +
             '</div>' +
-            '<div style="font-size:14px;color:#888;margin-bottom:24px">答对 ' + s.myCorrect + '/' + s.queue.length + ' 题 · 最高分 ' + stat.highScore + ' · 当前连胜 ' + stat.streak + '</div>' +
+            '<div style="font-size:14px;color:#888;margin-bottom:24px">难度 ' + this.DIFF[s.diff].label + ' ×' + this.DIFF[s.diff].mult + ' · 答对 ' + s.myCorrect + '/' + s.queue.length + ' 题 · 最高分 ' + stat.highScore + ' · 当前连胜 ' + stat.streak + '</div>' +
             '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="PK.begin()">🔄 再来一局</button>' +
             '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="PK.back()">返回</button>' +
           '</div>';
@@ -8802,7 +8818,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             '<div style="font-size:48px;font-weight:800;color:#4f9fff;line-height:1.1">' + s.my + '</div>' +
             '<div style="font-size:14px;color:#666;margin-top:8px">答对 <b>' + s.myCorrect + '/' + s.queue.length + '</b> 题 · 正确率 <b>' + acc + '%</b></div>' +
           '</div>' +
-          '<div style="font-size:12px;color:#aaa;margin-bottom:16px">最高分 ' + st.highScore + ' · 累计答题正确率 ' + (st.total ? Math.round(st.correct / st.total * 100) : 0) + '%</div>' +
+          '<div style="font-size:12px;color:#aaa;margin-bottom:16px">难度 ' + this.DIFF[s.diff].label + ' ×' + this.DIFF[s.diff].mult + ' · 最高分 ' + st.highScore + ' · 累计答题正确率 ' + (st.total ? Math.round(st.correct / st.total * 100) : 0) + '%</div>' +
           '<button class="btn btn-primary" style="width:100%;padding:13px;margin-bottom:10px;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="PK.copyChallenge(\'res\')">📊 分享比分给朋友</button>' +
           (navigator.share ? '<button class="btn btn-secondary" style="width:100%;padding:12px;margin-bottom:10px" onclick="PK.shareResult()">📤 发送比分</button>' : '') +
           '<button class="btn btn-secondary" style="width:100%;padding:12px;margin-bottom:10px" onclick="PK.rematch()">🔄 再答一次</button>' +
