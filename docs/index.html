@@ -199,11 +199,13 @@
     }
     /* 分类页功能按钮就地切换：高亮态 + 嵌入的 view（脱离 .view 全局互斥） */
     .ext-feature-btn.active-feature {
-      outline: 3px solid #6c63ff;
+      outline: 2px solid #6c63ff;
       outline-offset: 2px;
-      box-shadow: 0 3px 12px rgba(108, 99, 255, 0.45);
-      transform: translateY(-1px);
+      box-shadow: inset 0 -4px 0 rgba(255,255,255,.92), 0 4px 14px rgba(108,99,255,.5);
+      transform: translateY(-2px);
+      filter: brightness(.92) saturate(1.15);
     }
+    @media (prefers-reduced-motion: reduce) { .ext-feature-btn.active-feature { transform: none } }
     .view.ext-inline-view { display: block; padding-bottom: 0; }
     /* 就地嵌入的 PK 页：顶部返回按钮与分类页「返回分类」重复，隐藏；独立 PK 页保留 */
     #view-pk.ext-inline-view > .nav-back-btn { display: none !important; }
@@ -4961,10 +4963,22 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   // ========== API 请求 ==========
-  async function apiGET(path) {
+  // 静态内容 GET 结果内存缓存：同一 path 二次进入直接返回，避免重复请求。
+  // 进度/掌握状态类接口随答题实时变化，不缓存，保证数据新鲜。
+  var API_CACHE = {};
+  var API_NO_CACHE = /\/progress\/|\/word-status\//;
+  function clearApiCache() { API_CACHE = {}; }
+  async function apiGET(path, opts) {
+    var useCache = !API_NO_CACHE.test(path);
+    if (opts && opts.refresh) delete API_CACHE[path];
+    if (useCache && Object.prototype.hasOwnProperty.call(API_CACHE, path)) {
+      return JSON.parse(JSON.stringify(API_CACHE[path]));
+    }
     const res = await fetch(API + path);
     if (!res.ok) throw new Error(`API 错误: ${res.status}`);
-    return res.json();
+    const data = await res.json();
+    if (useCache) API_CACHE[path] = data;
+    return data;
   }
   async function apiPOST(path, body) {
     const res = await fetch(API + path, {
@@ -7625,6 +7639,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     active: false,
     module: null,
     key: null,
+    shape: '',
     inlineView: null,
     stageId: null,
     moved: null
@@ -7689,6 +7704,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     EXT_FEATURE.active = false;
     EXT_FEATURE.module = null;
     EXT_FEATURE.key = null;
+    EXT_FEATURE.shape = '';
     EXT_FEATURE.inlineView = null;
     EXT_FEATURE.stageId = null;
     EXT_FEATURE.moved = null;
@@ -7697,7 +7713,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function extFeatureLeave() { extFeatureRestore(); }
   // 点击红框功能按钮：高亮 + 把对应功能就地展示
   function extFeatureGo(module, key, shape) {
-    // 同一个按钮再次点击：收起就地内容（目前仅短文阅读需要显式收起）
+    var _shape = shape || '';
+    // 同一入口再次点击：不销毁、不重建、不重新请求，仅平滑滚动到顶部。
+    // DOM/表单填写/游戏进度/滚动位置全部原地保留（原生 keep-alive 等效）。
+    // 例外：短文阅读的再次点击是「收起」语义，保留原逻辑。
+    if (EXT_FEATURE.active && EXT_FEATURE.module === module && EXT_FEATURE.key === key
+        && (EXT_FEATURE.shape || '') === _shape && key !== 'reading') {
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    // reading 再次点击仍执行收起
     if (EXT_FEATURE.active && EXT_FEATURE.module === module && EXT_FEATURE.key === key && key === 'reading') {
       extFeatureRestore();
       return;
@@ -7712,6 +7737,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     EXT_FEATURE.active = true;
     EXT_FEATURE.module = module;
     EXT_FEATURE.key = key;
+    EXT_FEATURE.shape = _shape;
     EXT_FEATURE.inlineView = viewName;
     EXT_FEATURE.stageId = extFeatureStageId(module);
     st.style.display = 'block';
@@ -7768,7 +7794,30 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       else if (key === 'doodle') startPhonicsDoodle();
       else if (key === 'reading') renderPhonicsReading();
     }
+    // 切换到其他入口后，滚动位置统一重置到顶部
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+  // 就地功能区主动下拉刷新：仅在页面已置顶时，于就地功能区内下拉超过阈值，
+  // 清除 API 内存缓存并提示，使下次进入重新请求（满足「除非用户主动下拉刷新」）。
+  // 使用 passive 监听、不 preventDefault，避免干扰既有的视口滚动保护。
+  var _extPullStartY = null;
+  document.addEventListener('touchstart', function (e) {
+    if (!EXT_FEATURE.active || !EXT_FEATURE.stageId) { _extPullStartY = null; return; }
+    var stage = document.getElementById(EXT_FEATURE.stageId);
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (y > 2 || !stage || !e.touches[0] || !stage.contains(e.target)) { _extPullStartY = null; return; }
+    _extPullStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (_extPullStartY == null) return;
+    var startY = _extPullStartY; _extPullStartY = null;
+    var endY = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : startY;
+    if (endY - startY > 70) {
+      clearApiCache();
+      toast('已刷新，下次进入将重新加载数据');
+    }
+  }, { passive: true });
 
   // ========== 单词 PK 对战（人机 + 二维码同步对战） ==========
   // 词库复用各模块当前词表；答对/答错按 scopeKey 写回 wordlearn_（只升不降），与单词学习口径一致。
