@@ -3388,7 +3388,7 @@ const API = ".";
 
   function raToggle(lineEl, text, idx) {
     // 如果正在录音，点击则停止
-    if (_raState === 'recording') { 
+    if (_raState === 'recording' && _ra && _ra.state === 'recording') { 
       raStopRecording(lineEl); 
       return; 
     }
@@ -3512,7 +3512,7 @@ const API = ".";
   // ========== 单词跟读（简化版，复用全局 _ra 状态）==========
   function raToggleWord(textEl, text, clickedBtn) {
     // 如果正在录音，点击则停止
-    if (_raState === 'recording') { 
+    if (_raState === 'recording' && _ra && _ra.state === 'recording') { 
       raStopRecordingWord(); 
       return; 
     }
@@ -3523,10 +3523,10 @@ const API = ".";
     }
 
     // 开始录音
-    raStartRecordingWordFlow(textEl, text);
+    raStartRecordingWordFlow(textEl, text, clickedBtn);
   }
 
-  function raStartRecordingWordFlow(textEl, text) {
+  function raStartRecordingWordFlow(textEl, text, clickedBtn) {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
       toast('您的浏览器不支持麦克风录音');
       return;
@@ -3534,8 +3534,8 @@ const API = ".";
     
     _raState = 'recording';
     _raChunks = [];
-    const card = textEl.closest('.word-detail-card');
-    const btn = clickedBtn || (typeof event !== 'undefined' && event.target ? event.target.closest('.ra-btn') : null);
+    const card = textEl && textEl.closest ? textEl.closest('.word-detail-card') : null;
+    const btn = clickedBtn || (typeof event !== 'undefined' && event && event.target && event.target.closest ? event.target.closest('.ra-btn') : null);
     
     if (btn) {
       btn.textContent = '🔴 点击结束录音';
@@ -4618,7 +4618,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== KET 跟读（复用全局 _ra 状态机）==========
   function raToggleKet(btnEl, text) {
-    if (_raState === 'recording') { raStopRecordingKet(); return; }
+    if (_raState === 'recording' && _ra && _ra.state === 'recording') { raStopRecordingKet(); return; }
     if (_raState === 'playing') { raReset(); return; }
     raStartRecordingKet(btnEl, text);
   }
