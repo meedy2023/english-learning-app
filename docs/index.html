@@ -6357,16 +6357,29 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function showQuizSummary() {
     hideCombo();
-    // 分母恒为题目数组长度；答案映射按题号去重，跳过/回退未答算错但不改变分母
+    // 三态统计：答对/答错/跳过。跳过不写答案映射，既不算对也不算错；分母恒为题目数组长度。
     var stats = calcQuizStats(quizOrder, window.quizAnswerMap);
     const total = stats.total;
     const correct = stats.correct;
-    const pct = stats.pct;
-    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = quizResultMessage(pct);
+    const wrong = stats.wrong;
+    const skipped = stats.skipped;
+    const answered = stats.answered;      // 已作答 = correct + wrong
+    const accuracy = stats.accuracy;      // 正确率（正确/已作答），无已答为 null
+    const completion = stats.completion;  // 完成率（已作答/总题数）
+    const noAnswer = answered === 0;      // 全部跳过 / 一题未答
 
-    // 测验满分额外奖励
-    if (pct === 100 && total > 0) {
+    // 正确率：无已作答显示 -- 而非 0%；反馈文案按完成率分档，跳过不算错
+    const accuracyText = noAnswer ? '--' : (accuracy + '%');
+    const msgs = choiceCompletionMessage(completion);
+    const emoji = noAnswer ? '📚' : (accuracy >= 90 ? '🏆' : accuracy >= 70 ? '👏' : accuracy >= 50 ? '💪' : '📚');
+    const subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
+    // 主按钮：全跳过时改为「开始测验」
+    const primaryBtn = noAnswer
+      ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startQuiz()">▶ 开始测验</button>'
+      : '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startQuiz()">🔄 再来一轮</button>';
+
+    // 满分额外奖励：仅「全部作答且全部答对」才触发；全跳过不写成绩、不扣积分、不计连续天数
+    if (!noAnswer && correct === total && total > 0) {
       const result = Points.earn('quiz_perfect');
       if (result.success) {
         setTimeout(() => {
@@ -6375,23 +6388,28 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         }, 500);
       }
     }
-    
+
     const container = document.getElementById("quiz-options");
     container.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
-      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
-      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
+      '<div style="display:flex;justify-content:center;gap:32px;margin-bottom:8px">' +
+        '<div><div style="font-size:36px;font-weight:800;color:#6c63ff;line-height:1.1">' + accuracyText + '</div><div style="font-size:12px;color:#999;margin-top:2px">正确率</div></div>' +
+        '<div><div style="font-size:36px;font-weight:800;color:#52c41a;line-height:1.1">' + completion + '%</div><div style="font-size:12px;color:#999;margin-top:2px">完成率</div></div>' +
+      '</div>' +
+      '<div style="font-size:14px;color:#999;margin-bottom:24px">' + subLine + '</div>' +
       '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
-      '<div style="background:white;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
-        '<div style="display:flex;gap:16px">' +
-          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#52c41a">' + correct + '</div><div style="font-size:12px;color:#999">正确</div></div>' +
-          '<div style="width:1px;background:#eee"></div>' +
-          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#ff4d4f">' + (total - correct) + '</div><div style="font-size:12px;color:#999">错误/跳过</div></div>' +
-          '<div style="width:1px;background:#eee"></div>' +
-          '<div style="flex:1;text-align:center"><div style="font-size:28px;font-weight:700;color:#6c63ff">' + total + '</div><div style="font-size:12px;color:#999">总题数</div></div>' +
+      '<div style="background:white;border-radius:16px;padding:18px 12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
+        '<div style="display:flex;align-items:center">' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#52c41a">' + correct + '</div><div style="font-size:11px;color:#999">正确</div></div>' +
+          '<div style="width:1px;background:#eee;height:32px"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#ff4d4f">' + wrong + '</div><div style="font-size:11px;color:#999">错误</div></div>' +
+          '<div style="width:1px;background:#eee;height:32px"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#faad14">' + skipped + '</div><div style="font-size:11px;color:#999">未答</div></div>' +
+          '<div style="width:1px;background:#eee;height:32px"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#6c63ff">' + total + '</div><div style="font-size:11px;color:#999">总题数</div></div>' +
         '</div>' +
       '</div>' +
-      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startQuiz()">🔄 再来一轮</button>' +
+      primaryBtn +
       `<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="switchView('learn')" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>` +
       `<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">🏠</span> 返回首页</button>` +
     '</div>';
@@ -6409,7 +6427,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (skipBtn) skipBtn.parentElement.style.display = "none";
     // 隐藏题号提示
     document.getElementById("quiz-hint").style.display = "none";
-    Celebrate.result(pct);  // 答完结算：胜利/失利音乐代替语音播报
+    if (!noAnswer) Celebrate.result(accuracy);  // 仅实际作答才播结算音乐；全跳过不触发
   }
 
   function speakQuizWord() {
@@ -11076,7 +11094,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   function showKetQuizSummary() {
     hideCombo();
     clearTimeout(window._ketQuizAutoNext);
-    // 结果页：隐藏答题流程的外围控件（查看成绩/下一题按钮、上一题+跳过组、反馈区、题号），
+    // 结果页：隐藏答题流程的外围控件（下一题按钮、上一题+跳过组、反馈区、题号），
     // 避免它们残留在成绩页上（与主测验 showQuizSummary 保持一致）
     var _kNext = document.getElementById('ket-quiz-next-btn');
     if (_kNext) _kNext.style.display = 'none';
@@ -11093,27 +11111,58 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (_kPrompt) _kPrompt.style.display = 'none';
     if (_kWord) _kWord.style.display = 'none';
     if (_kSpeak && _kSpeak.parentElement) _kSpeak.parentElement.style.display = 'none';
-    // 分母恒为题目数组长度；按题目 id 从答案映射去重统计，跳过/回退未答的题算错但不改变分母
+
+    // 三态统计：答对/答错/跳过。跳过不写答案映射，既不算对也不算错；分母恒为题目数组长度。
     var stats = calcQuizStats(ketQuizQueue.map(function (q) { return q.id; }), ketQuizAnswers);
     const total = stats.total;
     const correct = stats.correct;
-    const pct = stats.pct;
-    const emoji = pct >= 90 ? '🏆' : pct >= 70 ? '👏' : pct >= 50 ? '💪' : '📚';
-    const msgs = quizResultMessage(pct);
-    if (pct === 100 && total > 0) {
+    const wrong = stats.wrong;
+    const skipped = stats.skipped;
+    const answered = stats.answered;
+    const accuracy = stats.accuracy;
+    const completion = stats.completion;
+    const noAnswer = answered === 0;
+
+    // 正确率：无已作答显示 -- 而非 0%；反馈文案按完成率分档，跳过不算错
+    const accuracyText = noAnswer ? '--' : (accuracy + '%');
+    const msgs = choiceCompletionMessage(completion);
+    const emoji = noAnswer ? '📚' : (accuracy >= 90 ? '🏆' : accuracy >= 70 ? '👏' : accuracy >= 50 ? '💪' : '📚');
+    const subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
+    // 主按钮：全跳过时改为「开始测验」
+    const primaryBtn = noAnswer
+      ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">▶ 开始测验</button>'
+      : '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">🔄 再测一次</button>';
+
+    // 满分额外奖励：仅「全部作答且全部答对」才触发；全跳过不写成绩、不扣积分、不计连续天数
+    if (!noAnswer && correct === total && total > 0) {
       const r = Points.earn('quiz_perfect');
       if (r.success) { setTimeout(function () { showPointsToast(r.points, Points.getMessage('quiz_perfect')); updatePointsDisplay(); }, 500); }
     }
+
     document.getElementById('ket-quiz-options').innerHTML =
       '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:72px;margin-bottom:16px">' + emoji + '</div>' +
-      '<div style="font-size:40px;font-weight:800;color:#6c63ff;margin-bottom:8px">' + pct + '%</div>' +
-      '<div style="font-size:15px;color:#999;margin-bottom:24px">' + correct + '/' + total + ' 题正确</div>' +
+      '<div style="display:flex;justify-content:center;gap:32px;margin-bottom:8px">' +
+        '<div><div style="font-size:36px;font-weight:800;color:#6c63ff;line-height:1.1">' + accuracyText + '</div><div style="font-size:12px;color:#999;margin-top:2px">正确率</div></div>' +
+        '<div><div style="font-size:36px;font-weight:800;color:#52c41a;line-height:1.1">' + completion + '%</div><div style="font-size:12px;color:#999;margin-top:2px">完成率</div></div>' +
+      '</div>' +
+      '<div style="font-size:14px;color:#999;margin-bottom:24px">' + subLine + '</div>' +
       '<div style="font-size:16px;color:#555;margin-bottom:32px">' + msgs + '</div>' +
-      '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">再测一次</button>' +
+      '<div style="background:white;border-radius:16px;padding:18px 12px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:24px">' +
+        '<div style="display:flex;align-items:center">' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#52c41a">' + correct + '</div><div style="font-size:11px;color:#999">正确</div></div>' +
+          '<div style="width:1px;background:#eee;height:32px"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#ff4d4f">' + wrong + '</div><div style="font-size:11px;color:#999">错误</div></div>' +
+          '<div style="width:1px;background:#eee;height:32px"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#faad14">' + skipped + '</div><div style="font-size:11px;color:#999">未答</div></div>' +
+          '<div style="width:1px;background:#eee;height:32px"></div>' +
+          '<div style="flex:1;text-align:center"><div style="font-size:24px;font-weight:700;color:#6c63ff">' + total + '</div><div style="font-size:11px;color:#999">总题数</div></div>' +
+        '</div>' +
+      '</div>' +
+      primaryBtn +
       '<button class="btn btn-secondary nav-back-btn" style="width:100%" onclick="backToKetCategory()" type="button" aria-label="返回分类">← ' + (window._ketQuizReturnView === 'toefl' ? '返回' : ketCategoryBackLabel()) + '</button>' +
       '</div>';
-    Celebrate.result(pct);  // 答完结算：胜利/失利音乐
+    if (!noAnswer) Celebrate.result(accuracy);  // 仅实际作答才播结算音乐；全跳过不触发
   }
 
   function backToKetCategory() {
