@@ -195,8 +195,11 @@
     .tab-btn.active {
       background: linear-gradient(135deg, #4f9fff, #6c63ff);
       color: #ffffff;
-      box-shadow: 0 2px 6px rgba(108, 99, 255, 0.35);
+      box-shadow: inset 0 -4px 0 rgba(255,255,255,.92), 0 3px 10px rgba(108, 99, 255, 0.42);
+      filter: brightness(.92) saturate(1.12);
+      transform: translateY(-1px);
     }
+    @media (prefers-reduced-motion: reduce) { .tab-btn.active { transform: none } }
     /* 分类页功能按钮就地切换：高亮态 + 嵌入的 view（脱离 .view 全局互斥） */
     .ext-feature-btn.active-feature {
       outline: 2px solid #6c63ff;
@@ -1112,15 +1115,15 @@
     <button id="learn-back-home" class="btn btn-secondary nav-back-btn" onclick="learnBack()" style="position:sticky;top:84px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:12px" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">←</span> 返回首页</button>
     <div class="section-title" id="learn-module-title">上册 Module 1</div>
     <div id="quiz-toggle-bar" class="tab-bar">
-      <button class="btn btn-sm tab-btn active" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="startHomePk()"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="startHomePk(true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
+      <button class="btn btn-sm tab-btn active" data-tab="wordlist" onclick="gradeTabGo('wordlist', showWordList)"><span class="ico">📋</span><span class="lbl">单词表</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="choice" onclick="gradeTabGo('choice', startChoiceLearn)"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="gradeTabGo('textbook', showTextbookList)"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="gradeTabGo('quiz', startQuiz)"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="match" onclick="gradeTabGo('match', startWordMatch)"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="spell" onclick="gradeTabGo('spell', startSpell)"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="gradeTabGo('doodle', startDoodle)"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="gradeTabGo('homepk', startHomePk)"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="gradeTabGo('homepkfriend', startHomePk, true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
     </div>
     <div class="word-list" id="word-list"></div>
     <div id="word-detail-area" style="display:none"></div>
@@ -1172,15 +1175,15 @@
     <div class="section-title" id="quiz-module-title" style="display:none">模块</div>
     <div class="cl-meta" id="quiz-meta" style="display:none"></div>
     <div class="tab-bar" style="margin-bottom:16px">
-      <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
-      <button class="btn btn-sm tab-btn active" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="startHomePk()"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
-      <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="startHomePk(true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="gradeTabGo('wordlist', showWordList)"><span class="ico">📋</span><span class="lbl">单词表</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="choice" onclick="gradeTabGo('choice', startChoiceLearn)"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="gradeTabGo('textbook', showTextbookList)"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
+      <button class="btn btn-sm tab-btn active" data-tab="quiz" onclick="gradeTabGo('quiz', startQuiz)"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="match" onclick="gradeTabGo('match', startWordMatch)"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="spell" onclick="gradeTabGo('spell', startSpell)"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="gradeTabGo('doodle', startDoodle)"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="gradeTabGo('homepk', startHomePk)"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
+      <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="gradeTabGo('homepkfriend', startHomePk, true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
     </div>
     <div class="quiz-card">
       <div class="quiz-prompt" id="quiz-prompt">这个单词的中文是什么意思？</div>
@@ -1494,15 +1497,15 @@
 <div id="view-pk" class="view">
   <button class="btn btn-secondary nav-back-btn" onclick="PK.back()" style="position:sticky;top:78px;z-index:95;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600;margin-bottom:16px" type="button" aria-label="返回"><span class="nav-back-ico" aria-hidden="true">←</span> <span id="pk-back-label">返回</span></button>
   <div class="tab-bar" style="margin-bottom:16px">
-    <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="showWordList()"><span class="ico">📋</span><span class="lbl">单词表</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="choice" onclick="startChoiceLearn()"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="showTextbookList()"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="startQuiz()"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="match" onclick="startWordMatch()"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="spell" onclick="startSpell()"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="startDoodle()"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="startHomePk()"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
-    <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="startHomePk(true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="wordlist" onclick="gradeTabGo('wordlist', showWordList)"><span class="ico">📋</span><span class="lbl">单词表</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="choice" onclick="gradeTabGo('choice', startChoiceLearn)"><span class="ico">🎯</span><span class="lbl">单词学习</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="textbook" onclick="gradeTabGo('textbook', showTextbookList)"><span class="ico">📖</span><span class="lbl">课文学习</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="quiz" onclick="gradeTabGo('quiz', startQuiz)"><span class="ico">🏆</span><span class="lbl">闯关测验</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="match" onclick="gradeTabGo('match', startWordMatch)"><span class="ico">🎴</span><span class="lbl">消消乐</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="spell" onclick="gradeTabGo('spell', startSpell)"><span class="ico">🔤</span><span class="lbl">单词拼写</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="doodle" onclick="gradeTabGo('doodle', startDoodle)"><span class="ico">✍️</span><span class="lbl">随手拼</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="homepk" onclick="gradeTabGo('homepk', startHomePk)"><span class="ico">⚔️</span><span class="lbl">单词PK</span></button>
+    <button class="btn btn-sm tab-btn" data-tab="homepkfriend" onclick="gradeTabGo('homepkfriend', startHomePk, true)"><span class="ico">🤝</span><span class="lbl">好友PK</span></button>
   </div>
   <div id="pk-setup"></div>
   <div id="pk-game" style="display:none"></div>
@@ -2276,6 +2279,26 @@ const API = ".";
       b.classList.toggle('active', b.getAttribute('data-tab') === name);
     });
     syncLearnBackLabel();
+  }
+
+  // ===== 年级模块 tab：同入口重复点击仅平滑置顶（不重建/DOM 不动/不重新请求），切换入口后置顶 =====
+  // 原生 JS 静态站无 Router/keep-alive；短路分支完全不碰 DOM，
+  // 已填表单、答题进度、游戏状态、滚动位置天然原地保留 = keep-alive 等效。
+  // GRADE_TAB 记录「由年级 tab 进入」的入口，避免从分类页就地功能态误判为同入口。
+  var GRADE_TAB = { tab: null };
+  function gradeTabGo(tab, fn, arg) {
+    var v = document.querySelector('.view.active');
+    var bar = v ? v.querySelector('.tab-bar') : null;
+    var activeBtn = bar ? bar.querySelector('.tab-btn.active') : null;
+    var extActive = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active);
+    if (GRADE_TAB.tab === tab && activeBtn && activeBtn.getAttribute('data-tab') === tab && !extActive) {
+      if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    GRADE_TAB.tab = tab;
+    setActiveTab(tab);   // 统一高亮：顺带补上 spell/doodle 原本未调用 setActiveTab 的缺口
+    if (typeof fn === 'function') fn(arg);
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // 课文学习视图下顶栏已显示模块名，隐藏正文残留的紫色模块标题，避免重复
@@ -7812,6 +7835,26 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   document.addEventListener('touchend', function (e) {
     if (_extPullStartY == null) return;
     var startY = _extPullStartY; _extPullStartY = null;
+    var endY = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : startY;
+    if (endY - startY > 70) {
+      clearApiCache();
+      toast('已刷新，下次进入将重新加载数据');
+    }
+  }, { passive: true });
+
+  // 年级模块 tab 页同样支持主动下拉刷新：置顶状态下在 tab 页区域下拉超过阈值清缓存。
+  var _gradePullStartY = null;
+  document.addEventListener('touchstart', function (e) {
+    var v = document.querySelector('.view.active');
+    var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+    if (!v || !/^view-(learn|quiz|pk)$/.test(v.id) || !v.querySelector('.tab-bar')
+        || (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active)
+        || y > 2 || !e.touches[0]) { _gradePullStartY = null; return; }
+    _gradePullStartY = e.touches[0].clientY;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (_gradePullStartY == null) return;
+    var startY = _gradePullStartY; _gradePullStartY = null;
     var endY = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : startY;
     if (endY - startY > 70) {
       clearApiCache();
