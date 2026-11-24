@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v242</div>
+          <div class="settings-row-sub" id="settings-version">v243</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -4968,20 +4968,25 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const _t = document.getElementById('topbar-title');
       reportReturnTitle = _t ? _t.textContent : null;
     }
+    // 每次进入报告默认展示「全部」年级，避免上次选中的年级跨次残留串扰
+    reportSelectedGrade = null;
     // 根据来源视图自动定位报告模块
     // 外部模块（KET/小托福/拼读）的单词学习页复用课文 learn 视图，
     // 此时 currentView 为 'learn'，需用 clExtCtx.view 定位真实来源模块。
     // 仅当确实停留在学习页(currentView==='learn')时才采用 clExtCtx.view，
     // 避免用户经底部导航跳离学习页后 clExtCtx 残留导致报告模块误判。
-    const src = (currentView === 'learn' && clExtCtx && clExtCtx.view) || (currentView === 'pk' && typeof PK !== 'undefined' && PK.state && PK.state.view) || reportReturnView || currentView;
-    if (src === 'ket' || src === 'ket-quiz') reportModule = 'ket';
+    const srcRaw = (currentView === 'learn' && clExtCtx && clExtCtx.view) || (currentView === 'pk' && typeof PK !== 'undefined' && PK.state && PK.state.view) || reportReturnView || currentView;
+    // KET 词汇测验与小托福词汇测验共用 ket-quiz 视图，必须按 _ketQuizReturnView 还原真实来源模块，
+    // 否则小托福测验页点报告会被错判为 KET（与 navModuleForView 的分流口径一致）。
+    const src = srcRaw === 'ket-quiz' ? (window._ketQuizReturnView === 'toefl' ? 'toefl' : 'ket') : srcRaw;
+    if (src === 'ket') reportModule = 'ket';
     else if (src === 'toefl') reportModule = 'toefl';
     else if (src === 'phonics') reportModule = 'phonics';
     else reportModule = 'lesson';
     // 消消乐进行中先看报告：暂停计时，返回时由 restoreMatchView 恢复
     if (learnMode === 'match' && typeof Match !== 'undefined' && Match.stopTimer && !Match.finished) Match.stopTimer();
+    // 不要在此再调 renderReport()：switchView('report') 内部已统一调用，重复调用会二次请求 API 并重建 DOM
     switchView('report');
-    renderReport();
   }
   function closeReport() {
     switchView(reportReturnView || 'home');
@@ -5014,10 +5019,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v242';
+          vEl.textContent = m ? ('v' + m[1]) : 'v243';
         })
-        .catch(function () { vEl.textContent = 'v242'; });
-    } catch (e) { vEl.textContent = 'v242'; }
+        .catch(function () { vEl.textContent = 'v243'; });
+    } catch (e) { vEl.textContent = 'v243'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -9887,11 +9892,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     { id: 'toefl', icon: '🎓', label: '小托福' },
     { id: 'phonics', icon: '🔤', label: '拼读' }
   ];
-  function switchReportModule(mod) {
-    reportModule = mod;
-    updateBottomNav('report');   // 报告切换模块时同步高亮对应底部导航
-    renderReport();
-  }  // 报告页总入口：根据当前锁定模块渲染对应报告（不提供模块切换）
+  // 报告页总入口：根据当前锁定模块渲染对应报告（不提供模块切换）
   function renderReport() {
     // 不渲染模块切换标签：报告页进入即锁定单一模块（由 openReport 按来源视图定位）
     const tabsEl = document.getElementById('report-module-tabs');
@@ -9906,7 +9907,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const gradeTabsEl = document.getElementById('report-grade-tabs');
     const overviewEl = document.getElementById('report-overview');
     const isLesson = (reportModule === 'lesson');
-    gradeTabsEl.style.display = isLesson ? 'flex' : 'none';
+    if (gradeTabsEl) gradeTabsEl.style.display = isLesson ? 'flex' : 'none';
     if (overviewEl) overviewEl.style.display = isLesson ? '' : 'none';
     // 分发到各模块报告
     if (reportModule === 'lesson') loadLessonReport();
@@ -10109,7 +10110,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const v = byType[t];
         totalItems += v.items;
         const done = v.learned + v.mastered;
-        const pct = (v.items > 0) ? Math.round(done / v.items * 100) : 0;
+        const pct = (v.items > 0) ? Math.min(100, Math.round(done / v.items * 100)) : 0;
         let progressCell;
         if (t === '词汇') {
           progressCell = '<span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
@@ -10127,7 +10128,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>类型</th><th class="num">知识点数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">词汇学习进度基于单词学习与词汇测验记录；句型、语法以测验为主，进度暂不统计</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalItems + ' 个知识点 · 词汇学习进度基于单词学习与词汇测验记录；句型、语法以测验为主，进度暂不统计</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载 KET 报告失败</div>';
     }
@@ -10155,7 +10156,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const learned = p.learned, mastered = p.mastered;
         totalLearned += learned; totalMastered += mastered;
         const done = learned + mastered;
-        const pct = (c.count > 0) ? Math.round(done / c.count * 100) : 0;
+        const pct = (c.count > 0) ? Math.min(100, Math.round(done / c.count * 100)) : 0;
         rows += '<tr>'
           + '<td><div class="cell-name">' + c.category + '</div></td>'
           + '<td class="num">' + (c.count || 0) + '</td>'
@@ -10211,7 +10212,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const learned = p.learned, mastered = p.mastered;
         totalLearned += learned; totalMastered += mastered;
         const done = learned + mastered;
-        const pct = (wordTotal > 0) ? Math.round(done / wordTotal * 100) : 0;
+        const pct = (wordTotal > 0) ? Math.min(100, Math.round(done / wordTotal * 100)) : 0;
         rows += '<tr>'
           + '<td><div class="cell-name">' + (icons[g.id] || '🔤') + ' ' + g.title + '</div><div class="cell-sub">' + (g.desc || '') + '</div></td>'
           + '<td class="num">' + (g.lesson_count || 0) + '</td>'
