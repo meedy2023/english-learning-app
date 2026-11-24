@@ -1311,7 +1311,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">🐢 朗读速度</div>
-          <div class="settings-row-sub">0.8 / 1.0 / 1.2 / 1.5 / 2.0 倍，切换即刻生效</div>
+          <div class="settings-row-sub">0.5 / 0.8 / 1.0 / 1.2 / 1.5 倍，切换即刻生效</div>
         </div>
         <div class="settings-row-ctl">
           <select id="speech-rate-select" class="settings-select" onchange="setSpeechRate(this.value)"></select>
@@ -4109,11 +4109,11 @@ const API = ".";
   let speechRate = parseFloat(localStorage.getItem('speech_rate') || '0.8');
   if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.8;
   const SPEECH_RATE_OPTIONS = [
+    { value: '0.5', label: '0.5倍 · 很慢' },
     { value: '0.8', label: '0.8倍 · 慢速推荐' },
     { value: '1', label: '1.0倍 · 正常' },
     { value: '1.2', label: '1.2倍 · 稍快' },
-    { value: '1.5', label: '1.5倍 · 快' },
-    { value: '2', label: '2.0倍 · 很快' }
+    { value: '1.5', label: '1.5倍 · 快' }
   ];
   const SPEECH_RATE_VALUES = SPEECH_RATE_OPTIONS.map(function (o) { return parseFloat(o.value); });
   const SPEECH_RATE_DEFAULT = 0.8;
