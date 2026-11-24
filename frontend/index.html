@@ -3932,8 +3932,16 @@ const API = ".";
       // 开播后又按真实进度归零，高亮跳回首词——表现为「先高亮前两个词，再从第一个词开始」。
       // 等音频真正开始（kind 变 'audio'/'system'）再按真实进度高亮。
       if (this.handle && this.handle.kind === 'none') return;
+      // 小托福分类短文 / 40天预读短文 / KET 短文 / 拼读短文 / 课文 均复用本播放器，
+      // 回跳需在此统一根治：网络音频「元素已创建(kind='audio')但尚未真正出声」时同样不能推进。
+      // 此时 el.duration 往往仍是 NaN、el.paused 可能为 true，会落到下方 startAt 估算分支把进度
+      // 前推到前几个词；等音频从 currentTime=0 真正开播又归零，依旧「先亮前两词再回首词」。
+      // 以 el.currentTime > 0 作为「真正开播」的可靠信号，之前一律不推进（保持首词）。
+      // 仅对网络音频(kind==='audio')生效；系统语音(kind==='system')同步启动，仍用 startAt 估算。
+      const _h = this.handle;
+      if (_h && _h.kind === 'audio' && !(_h.el && _h.el.currentTime > 0)) return;
       let p = 0;
-      const el = this.handle && this.handle.el;
+      const el = _h && _h.el;
       if (el && isFinite(el.duration) && el.duration > 0) {
         // 音频真实 duration 可读：用真实进度，并据此校准估算时长，供降级/系统语音场景复用
         p = el.currentTime / el.duration;
