@@ -7863,6 +7863,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try { if (typeof Match !== 'undefined' && Match.scope && Match.scope.type !== 'unit') Match.exit(); } catch (e) {}
     try { if (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type !== 'unit') Doodle.exit(); } catch (e) {}
     try { if (typeof closeKetReading === 'function') closeKetReading(); } catch (e) {}
+    try { LessonReader.stop(); } catch (e) {}
     try { if (typeof PK !== 'undefined' && PK.state) { PK.stop(); PK.state = null; } } catch (e) {}
     try { if (typeof PK !== 'undefined' && PK._restoreTopbar) PK._restoreTopbar(); } catch (e) {}
     try { if (typeof PK !== 'undefined' && PK.closeQr) PK.closeQr(); } catch (e) {}
@@ -11685,18 +11686,29 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     });
   }
 
+  // 把整段 passage 拆成句子数组 [{en, zh}]，供 LessonReader 逐句朗读高亮
+  // 容错：中英句数不等时按索引取中文，缺失留空（数据中个别天英文比中文多一句）
+  function toeflPlanSplitPassage(en, zh) {
+    var ens = String(en || '').replace(/\s+/g, ' ').trim().match(/[^.!?]+[.!?]+/g) || [];
+    ens = ens.map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
+    var zhs = String(zh || '').match(/[^。！？]+[。！？]+/g) || [];
+    zhs = zhs.map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
+    if (!ens.length && en) ens = [String(en).trim()];
+    return ens.map(function (e, i) { return { en: e, zh: i < zhs.length ? zhs[i] : '' }; });
+  }
+
   function toeflPlanSpeakPassage() {
-    if (!toeflPlanDays.length) return;
-    var p = toeflPlanDays[toeflPlanDayIdx].passage;
-    if (p && p.en) TTS.speak(p.en, 'en-US');
+    try { LessonReader.toggle(); } catch (e) {}
   }
 
   function toeflPlanToggleZh() {
-    var zh = document.getElementById('toefl-plan-passage-zh');
+    var area = document.getElementById('toefl-plan-passage');
     var btn = document.getElementById('toefl-plan-zh-toggle');
-    if (!zh) return;
-    var showing = zh.style.display !== 'none';
-    zh.style.display = showing ? 'none' : 'block';
+    if (!area) return;
+    var zhs = area.querySelectorAll('.lr-zh');
+    if (!zhs.length) return;
+    var showing = zhs[0].style.display !== 'none';
+    zhs.forEach(function (el) { el.style.display = showing ? 'none' : ''; });
     if (btn) btn.textContent = showing ? '显示中文翻译 ▾' : '隐藏中文翻译 ▴';
   }
 
@@ -11717,6 +11729,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function exitToeflPlan() {
+    try { LessonReader.stop(); } catch (e) {}
     try { extFeatureRestore(); } catch (e) {}
     toeflPlanActive = false;
     try { if (typeof Match !== 'undefined' && Match.exit) Match.exit(); } catch (e) {}
@@ -11770,20 +11783,50 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var passageArea = document.getElementById('toefl-plan-passage');
     if (passageArea) {
       if (d.passage && d.passage.en) {
-        var highlighted = toeflPlanHighlight(d.passage.en, d.words);
+        var planSentences = toeflPlanSplitPassage(d.passage.en, d.passage.zh);
+        var planStems = buildCategoryStems(d.words);
+        var linesHtml = planSentences.map(function (line, idx) {
+          return '<div class="lr-line" data-idx="' + idx + '" style="padding:10px 12px;border-bottom:1px dashed #f0d9a8;border-radius:10px;display:flex;flex-direction:column;gap:4px">'
+            + '<div style="display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap">'
+              + '<span style="background:#ffe7ba;color:#b8860b;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">' + (idx + 1) + '</span>'
+              + '<span class="lr-text" onclick="LessonReader.jump(' + idx + ')" title="点击从这一句开始朗读" style="font-size:15px;line-height:1.9;color:#3a2f1a;flex:1;min-width:0;cursor:pointer">' + lrWordsHtml(line.en, planStems) + '</span>'
+              + '<button class="speak-btn" onclick="speakReadingLine(\'' + esc(line.en) + '\')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>'
+              + '<button class="ra-btn" onclick="raToggleKet(this, \'' + esc(line.en) + '\')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>'
+            + '</div>'
+            + (line.zh ? '<div class="lr-zh" style="font-size:13px;color:#999;padding-left:28px">' + escapeHtml(line.zh) + '</div>' : '')
+          + '</div>';
+        }).join('');
         passageArea.innerHTML =
           '<div style="background:linear-gradient(135deg,#fffaf0,#fff6e8);border:1px solid #ffe3b8;border-radius:14px;padding:16px;margin-bottom:14px">'
-          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
-            + '<div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:#b8860b">📖 预读短文 <span style="font-size:11px;font-weight:400;color:#c9a355">（加粗词为当天词汇）</span></div>'
-            + '<button class="speak-btn" onclick="toeflPlanSpeakPassage()" style="padding:6px 14px;font-size:13px">🔊 朗读全文</button>'
+          + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">'
+            + '<div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:#b8860b">📖 预读短文 <span style="font-size:11px;font-weight:400;color:#c9a355">（红色为当天词汇，朗读时逐词高亮；点句子可跳转）</span></div>'
+            + '<button id="toefl-plan-zh-toggle" class="btn btn-secondary btn-sm" onclick="toeflPlanToggleZh()" style="font-size:12px">隐藏中文翻译 ▴</button>'
           + '</div>'
-          + '<div id="toefl-plan-passage-en" style="font-size:15px;line-height:1.9;color:#3a2f1a">' + highlighted + '</div>'
-          + '<button id="toefl-plan-zh-toggle" class="btn btn-secondary btn-sm" onclick="toeflPlanToggleZh()" style="margin-top:10px;font-size:12px">显示中文翻译 ▾</button>'
-          + '<div id="toefl-plan-passage-zh" style="display:none;margin-top:10px;padding-top:10px;border-top:1px dashed #f0d9a8;font-size:14px;line-height:1.8;color:#7a6240">'
-            + (d.passage.zh || '')
+          + linesHtml
+          + '<div class="lr-dock" id="toefl-plan-reader-dock" style="display:none">'
+            + '<div class="lr-ctrl">'
+              + '<button class="lr-ctrl-btn lr-ctrl-main" id="toefl-plan-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>'
+              + '<button class="lr-ctrl-btn lr-ctrl-sub" id="toefl-plan-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>'
+            + '</div>'
+            + '<div class="lr-bar" id="toefl-plan-read-bar" style="display:none"><i></i></div>'
+            + '<div class="lr-progress" id="toefl-plan-read-progress" style="display:none"></div>'
           + '</div>'
         + '</div>';
+        var _planSpeakBtn = document.getElementById('toefl-plan-full-speak-btn');
+        if (_planSpeakBtn) _planSpeakBtn.onclick = function () { LessonReader.toggle(); };
+        var _planReplayBtn = document.getElementById('toefl-plan-replay-btn');
+        if (_planReplayBtn) _planReplayBtn.onclick = function () { LessonReader.replay(); };
+        LessonReader.bind(planSentences, {
+          scope: 'toefl-plan-passage',
+          dock: 'toefl-plan-reader-dock',
+          main: 'toefl-plan-full-speak-btn',
+          replay: 'toefl-plan-replay-btn',
+          progress: 'toefl-plan-read-progress',
+          bar: 'toefl-plan-read-bar',
+          label: '🔊 朗读全文'
+        });
       } else {
+        try { LessonReader.stop(); } catch (e) {}
         passageArea.innerHTML = '';
       }
     }
