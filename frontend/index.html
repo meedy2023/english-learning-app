@@ -42,10 +42,6 @@
     .topbar h1 { font-size: 19px; font-weight: 700; flex: 1 1 auto; min-width: 0; margin-right: 12px; line-height: 1.35; overflow-wrap: anywhere; word-break: break-word; }
     .topbar-right { font-size: 13px; opacity: 0.9; flex-shrink: 0; white-space: nowrap; }
     #grade-display { white-space: nowrap; }
-  .tts-engine-bar { display:flex; align-items:center; gap:8px; margin:6px 0 14px; flex-wrap:wrap; }
-  .tts-engine-label { font-size:13px; color:#555; }
-  .tts-select { font-size:13px; padding:4px 8px; border-radius:8px; border:1px solid #e0e6ff; background:#f5f7ff; color:#333; }
-  .tts-engine-hint { font-size:12px; color:#999; }
 
     /* ========== 页面容器 ========== */
     .container { max-width: 480px; margin: 0 auto; padding: 0 16px 140px; }
@@ -683,7 +679,6 @@
     .nav-item { min-height: 56px; }
     .word-item { min-height: 44px; }
     .module-card { min-height: 44px; }
-    .tts-select { min-height: 44px; }
 
     /* ========== P3 优化：大字模式 ========== */
     body.big-font { zoom: 1.25; }
@@ -1100,15 +1095,6 @@
       <div id="review-entry-badge" style="background:#ff4d4f;color:white;font-size:12px;font-weight:600;padding:4px 10px;border-radius:12px;white-space:nowrap">错词 0 个</div>
     </div>
     <div class="section-title">选择模块开始学习</div>
-    <div class="tts-engine-bar" id="tts-engine-bar">
-      <span class="tts-engine-label">🔊 发音引擎</span>
-      <select id="tts-engine-select" onchange="setTtsEngine(this.value)" class="tts-select">
-        <option value="auto">自动（推荐）</option>
-        <option value="system">系统发音</option>
-        <option value="network">网络发音</option>
-      </select>
-      <span class="tts-engine-hint" id="tts-engine-hint"></span>
-    </div>
     <div class="module-grid" id="module-grid">
       <div class="spinner"></div>
     </div>
@@ -1381,14 +1367,6 @@
           <button class="btn btn-secondary" onclick="importAllData()" style="background:#f6ffed;border:1px solid #b7eb8f;color:#52c41a;display:flex;align-items:center;justify-content:center;gap:6px"><span>🔄</span> 恢复</button>
         </div>
       </div>
-      <div class="settings-row" style="display:block">
-        <div class="settings-row-title">🏆 积分数据</div>
-        <div class="settings-row-sub" style="margin-bottom:10px">单独导出 / 导入积分记录。</div>
-        <div class="settings-actions" style="padding-top:0;padding-bottom:4px">
-          <button class="btn btn-secondary" onclick="exportPoints()" style="background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px"><span>📤</span> 导出积分</button>
-          <button class="btn btn-secondary" onclick="importPoints()" style="background:#f0f4ff;border:1px solid #d0d8ff;color:#6c63ff;display:flex;align-items:center;justify-content:center;gap:6px"><span>📥</span> 导入积分</button>
-        </div>
-      </div>
     </div>
 
     <div class="settings-group-title">ℹ️ 关于</div>
@@ -1402,10 +1380,19 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v240</div>
+          <div class="settings-row-sub" id="settings-version">v241</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div style="min-width:0">
+          <div class="settings-row-title">♻️ 恢复默认设置</div>
+          <div class="settings-row-sub">发音、语速、发音人、大字模式等还原为初始值</div>
+        </div>
+        <div class="settings-row-ctl">
+          <span class="settings-mini-btn" onclick="resetAllSettings()" style="background:#fff7e6;border:1px solid #ffd591;color:#d48806">恢复默认</span>
         </div>
       </div>
       <div class="settings-row" style="display:block">
@@ -2415,10 +2402,8 @@ const API = ".";
     // 年级选择页不显示右上角
     // 顶栏年级标签已按需求全局移除（仅保留元素供文本更新，不再显示）
     document.getElementById("grade-display").style.display = "none";
-    // 年级选择页不显示右上角设置入口
-    var _sb = document.getElementById("settings-btn");
     // 设置齿轮固定在顶栏右上角，所有页面均可点击进入设置
-    var _sb = document.getElementById("settings-btn");
+    const _sb = document.getElementById("settings-btn");
     if (_sb) _sb.style.display = "inline-flex";
     if (name === "settings") refreshSettingsInfo();
     if (name === "report") renderReport();
@@ -4846,14 +4831,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     ttsEngine = v;
     try { localStorage.setItem('tts_engine', v); } catch (e) {}
     const map = { auto: '自动（无音时切网络）', system: '系统发音', network: '网络发音' };
-    ['tts-engine-select', 'settings-tts-engine-select'].forEach(function(id) {
-      const sel = document.getElementById(id);
-      if (sel) sel.value = v;
-    });
-    ['tts-engine-hint', 'settings-tts-engine-hint'].forEach(function(id) {
-      const hint = document.getElementById(id);
-      if (hint) hint.textContent = '当前：' + (map[v] || v);
-    });
+    const sel = document.getElementById('settings-tts-engine-select');
+    if (sel) sel.value = v;
+    const hint = document.getElementById('settings-tts-engine-hint');
+    if (hint) hint.textContent = '当前：' + (map[v] || v);
   }
   setTtsEngine(ttsEngine);
 
@@ -4870,20 +4851,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (sel) sel.value = v;
   }
   function previewEnVoice() {
-    stopAllAudio();
-    const v = document.getElementById('en-voice-select').value;
-    XFYunTTS.synth('Hello! How are you today?', 'en-US',
-      function(b) { playAudioBlob(b); },
-      function(err) { console.warn('试听失败', err); toast('试听失败' + (err && err.message ? '（' + err.message + '）' : '')); },
-      v);
+    // 统一走 TTS：遵守发音引擎设置（系统/网络），并自动应用当前选中的英文发音人
+    const sel = document.getElementById('en-voice-select');
+    if (sel) setEnVoice(sel.value);
+    TTS.speak('Hello! How are you today?', 'en-US');
   }
   function previewZhVoice() {
-    stopAllAudio();
-    const v = document.getElementById('zh-voice-select').value;
-    XFYunTTS.synth('你好，欢迎学习英语！', 'zh-CN',
-      function(b) { playAudioBlob(b); },
-      function(err) { console.warn('试听失败', err); toast('试听失败' + (err && err.message ? '（' + err.message + '）' : '')); },
-      v);
+    // 统一走 TTS：遵守发音引擎设置（系统/网络），并自动应用当前选中的中文发音人
+    const sel = document.getElementById('zh-voice-select');
+    if (sel) setZhVoice(sel.value);
+    TTS.speak('你好，欢迎学习英语！', 'zh-CN');
   }
   // 初始化发音类型下拉选项
   function initVoiceSelects() {
@@ -5051,10 +5028,35 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v240';
+          vEl.textContent = m ? ('v' + m[1]) : 'v241';
         })
-        .catch(function () { vEl.textContent = 'v240'; });
-    } catch (e) { vEl.textContent = 'v240'; }
+        .catch(function () { vEl.textContent = 'v241'; });
+    } catch (e) { vEl.textContent = 'v241'; }
+  }
+  // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
+  function resetAllSettings() {
+    if (!window.confirm('确定恢复默认设置吗？\n发音引擎、语速、发音人、大字模式、语音引导都会还原为初始值。\n（学习数据与积分不受影响）')) {
+      toast('已取消');
+      return;
+    }
+    try {
+      ['tts_engine', 'en_voice', 'zh_voice', 'speech_rate', 'big_font', 'voice_guide'].forEach(function (k) {
+        try { localStorage.removeItem(k); } catch (e) {}
+      });
+    } catch (e) {}
+    ttsEngine = 'auto';
+    enVoice = 'catherine';
+    zhVoice = 'xiaoyan';
+    speechRate = SPEECH_RATE_DEFAULT;
+    bigFontOn = false;
+    voiceGuideOn = false;
+    try { stopAllAudio(); } catch (e) {}
+    setTtsEngine('auto');
+    initVoiceSelects();
+    initSpeechRateSelect();
+    applyBigFont();
+    applyVoiceGuide();
+    toast('✓ 已恢复默认设置');
   }
   function clearAppCache() {
     try {
