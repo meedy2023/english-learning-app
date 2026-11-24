@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v245</div>
+          <div class="settings-row-sub" id="settings-version">v246</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5019,10 +5019,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v245';
+          vEl.textContent = m ? ('v' + m[1]) : 'v246';
         })
-        .catch(function () { vEl.textContent = 'v245'; });
-    } catch (e) { vEl.textContent = 'v245'; }
+        .catch(function () { vEl.textContent = 'v246'; });
+    } catch (e) { vEl.textContent = 'v246'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -11179,6 +11179,20 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
     return (h >>> 0).toString(36);
   }
+  // 语法挖空题：按「英文词/缩写」整体取词，保留 don't / o'clock / I've 等撇号
+  function ketGrammarTokens(text) {
+    return String(text || '').match(/[A-Za-z0-9]+(?:['’][A-Za-z0-9]+)*/g) || [];
+  }
+  function ketRegExpEscape(text) {
+    return String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+  function ketBlankSentence(sentence, token) {
+    var pattern = new RegExp('(^|[^A-Za-z0-9])(' + ketRegExpEscape(token) + ')(?=$|[^A-Za-z0-9])');
+    var blanked = String(sentence || '').replace(pattern, function (match, prefix) {
+      return prefix + '____';
+    });
+    return blanked !== sentence ? blanked : null;
+  }
   function buildKetQuiz(shape, overrideSrc) {
     let src;
     if (overrideSrc) src = overrideSrc;
@@ -11202,17 +11216,27 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const othersAll = src.filter(function (x) { return x !== item; });
       const mode = shape === 'grammar' ? 'fill' : (Math.random() > 0.5 ? 'en2zh' : 'zh2en');
       if (shape === 'grammar') {
-        // 挖空题：从英文句中挖掉某个词，四选一填空
-        const words = item.en.replace(/[.,!?;:'"()]/g, '').split(' ').filter(function (x) { return x.length >= 3; });
+        // 挖空题：从英文句中挖掉某个词，四选一填空；保留缩写撇号，避免 dont / oclock 这类不存在的词
+        const words = ketGrammarTokens(item.en).filter(function (x) { return x.length >= 3; });
         if (words.length === 0) return;
         const blank = words[Math.floor(Math.random() * words.length)];
-        const blanked = item.en.replace(new RegExp(blank.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')), '____');
+        const blanked = ketBlankSentence(item.en, blank);
+        if (!blanked) return; // 挖空失败时不出题，避免出现「题干没空但选项是单词」
+        const seen = Object.create(null);
+        seen[blank.toLowerCase()] = true;
         const distractors = shuffle(src.filter(function (x) { return x !== item; })
           .map(function (x) {
-            const ws = x.en.replace(/[.,!?;:'"()]/g, '').split(' ').filter(function (a) { return a.length >= 3; });
+            const ws = ketGrammarTokens(x.en).filter(function (a) { return a.length >= 3; });
             return ws.length ? ws[Math.floor(Math.random() * ws.length)] : null;
           })
-          .filter(function (a, idx, arr) { return a && a !== blank && arr.indexOf(a) === idx; })).slice(0, 3);
+          .filter(function (d) {
+            if (!d) return false;
+            const key = d.toLowerCase();
+            if (seen[key]) return false;
+            seen[key] = true;
+            return true;
+          })).slice(0, 3);
+        if (distractors.length < 3) return; // 语法题固定四选一
         prompt = '选择正确的单词填入空格';
         question = blanked;
         speak = item.en;
