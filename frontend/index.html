@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v243</div>
+          <div class="settings-row-sub" id="settings-version">v244</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5019,10 +5019,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v243';
+          vEl.textContent = m ? ('v' + m[1]) : 'v244';
         })
-        .catch(function () { vEl.textContent = 'v243'; });
-    } catch (e) { vEl.textContent = 'v243'; }
+        .catch(function () { vEl.textContent = 'v244'; });
+    } catch (e) { vEl.textContent = 'v244'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -10141,12 +10141,18 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     statsEl.style.display = 'none';
     container.innerHTML = '<div class="spinner"></div>';
     try {
-      const data = await apiGET('/api/toefl/categories');
-      const cats = data.categories || [];
-      if (cats.length === 0) {
-        container.innerHTML = '<div style="text-align:center;color:#999;padding:32px;font-size:14px">暂无小托福词汇内容</div>';
-        return;
-      }
+      // 分类词库与 40天计划词库并行加载：计划进度独立存于 wordlearn_，不依赖分类接口是否为空，
+      // 避免分类接口异常时提前 return 把「40天计划」整行挡在渲染之外。
+      const [data, planData] = await Promise.all([
+        apiGET('/api/toefl/categories'),
+        apiGET('/api/toefl/plan').catch(function () { return { stages: [] }; })
+      ]);
+      const cats = (data && data.categories) || [];
+      // 40天计划总词数作为进度分母（计划不在正式分类列表中，需从计划数据单独统计）
+      var planTotal = 0;
+      (((planData && planData.stages) || [])).forEach(function (st) {
+        (st.days || []).forEach(function (d) { planTotal += (d.words || []).length; });
+      });
       let rows = '';
       let totalWords = 0;
       let totalLearned = 0, totalMastered = 0;
@@ -10166,22 +10172,31 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           + '</tr>';
       });
       // 40 天计划单独一行（进度存在 toefl_40天计划 DayN 桶中，不在正式分类列表里）
+      // 与分类行同口径：词数列显示计划总词数，学习进度显示真实百分比与进度条，并计入全局汇总。
+      // 这样学完 40天计划后，报告里能看到明确的百分比与已学/掌握数，不再是一个写死的「—」。
       var planAgg = toeflPlanAggProgress();
+      totalWords += planTotal;
       if (planAgg.days > 0) {
         var planDone = planAgg.learned + planAgg.mastered;
+        var planPct = planTotal > 0 ? Math.min(100, Math.round(planDone / planTotal * 100)) : 0;
+        totalLearned += planAgg.learned; totalMastered += planAgg.mastered;
         rows += '<tr>'
           + '<td><div class="cell-name">📅 40天计划' + (planAgg.days > 1 ? '（' + planAgg.days + ' 天）' : '') + '</div></td>'
-          + '<td class="num">' + planDone + '</td>'
-          + '<td class="num"><span class="cell-pct">—</span>'
-          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + planDone + ' · 掌握 ' + planAgg.mastered + '（按天累计）</div></td>'
+          + '<td class="num">' + planTotal + '</td>'
+          + '<td class="num"><span class="cell-pct' + (planPct >= 100 ? ' done' : '') + '">' + planPct + '%</span>'
+          + '<div class="bar"><div class="bar-fill" style="width:' + planPct + '%;background:' + reportBarColor(planPct) + '"></div></div>'
+          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + planDone + ' · 掌握 ' + planAgg.mastered + ' · 共 ' + planTotal + ' 词</div></td>'
           + '</tr>';
-        totalLearned += planAgg.learned; totalMastered += planAgg.mastered;
+      }
+      if (!rows) {
+        container.innerHTML = '<div style="text-align:center;color:#999;padding:32px;font-size:14px">暂无小托福词汇内容</div>';
+        return;
       }
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>词汇分类</th><th class="num">词数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
         + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalWords + ' 词 · 已学 ' + (totalLearned + totalMastered) + ' 词 · 掌握 ' + totalMastered + ' 词</div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:6px">词汇学习进度基于单词学习与词汇测验记录</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:6px">词汇学习进度基于单词学习、词汇测验与 40天计划记录</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载小托福报告失败</div>';
     }
