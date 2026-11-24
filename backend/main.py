@@ -389,7 +389,14 @@ def get_ket_categories():
                 })
         elif cat_type in ["句型", "语法"]:
             for sub_cat in cat_data.keys():
-                count = len(cat_data[sub_cat]) if isinstance(cat_data[sub_cat], list) else 1
+                item = cat_data[sub_cat]
+                # 语法是含「例句」的 dict：分母取例句数，不能按 dict 兜底为 1
+                if isinstance(item, list):
+                    count = len(item)
+                elif isinstance(item, dict) and isinstance(item.get("例句"), list):
+                    count = len(item["例句"])
+                else:
+                    count = 1
                 categories.append({
                     "type": cat_type, "category": sub_cat, "count": count
                 })

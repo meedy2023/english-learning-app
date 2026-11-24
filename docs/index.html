@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v244</div>
+          <div class="settings-row-sub" id="settings-version">v245</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5019,10 +5019,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v244';
+          vEl.textContent = m ? ('v' + m[1]) : 'v245';
         })
-        .catch(function () { vEl.textContent = 'v244'; });
-    } catch (e) { vEl.textContent = 'v244'; }
+        .catch(function () { vEl.textContent = 'v245'; });
+    } catch (e) { vEl.textContent = 'v245'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -5471,13 +5471,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     ]
   };
   var _lastFiveTierMsg = null;
-  function fiveTierMessage(stats) {
+  function fiveTierMessage(stats, subject) {
     var arr = FIVE_TIER_MSGS[quizFiveTier(stats)];
     var idx = Math.floor(Math.random() * arr.length);
     // 同档内若随机到与上一次相同，顺延一条，避免连续两次测验看到同一句
     if (arr.length > 1 && arr[idx] === _lastFiveTierMsg) idx = (idx + 1) % arr.length;
-    _lastFiveTierMsg = arr[idx];
-    return arr[idx];
+    var msg = arr[idx];
+    _lastFiveTierMsg = msg;
+    // 句型/语法复用单词文案，替换掉「单词」类字眼以免语义错配（词汇测验/其他测验不变）
+    if (subject === 'sentence' || subject === 'grammar') {
+      var noun = subject === 'sentence' ? '句型' : '语法';
+      msg = msg.replace(/词汇量/g, noun + '储备').replace(/单词/g, noun).replace(/词汇/g, noun);
+    }
+    return msg;
   }
 
   // 五档 emoji 映射：与五档判定保持一致，避免「重建档文案 + 🏆」式错配
@@ -10090,15 +10096,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         container.innerHTML = '<div style="text-align:center;color:#999;padding:32px;font-size:14px">暂无 KET 学习内容</div>';
         return;
       }
-      // 按类型分组统计（词汇类型汇总各词汇分类的单词学习进度）
+      // 按类型分组统计：词汇/句型/语法各有独立 scope，进度口径统一（来源不同，桶不混用）
       const byType = {};
+      const SCOPE_PREFIX = { '词汇': 'ket_', '句型': 'ket_sent_', '语法': 'ket_gram_' };
       cats.forEach(c => {
         if (!byType[c.type]) byType[c.type] = { count: 0, items: 0, learned: 0, mastered: 0 };
         byType[c.type].count++;
         byType[c.type].items += (c.count || 0);
-        // 词汇分类有单词学习，进度 scopeKey = 'ket_' + 分类名
-        if (c.type === '词汇') {
-          const p = extWordProgress('ket_' + c.category);
+        const prefix = SCOPE_PREFIX[c.type];
+        if (prefix) {
+          const p = extWordProgress(prefix + c.category);
           byType[c.type].learned += p.learned;
           byType[c.type].mastered += p.mastered;
         }
@@ -10111,14 +10118,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         totalItems += v.items;
         const done = v.learned + v.mastered;
         const pct = (v.items > 0) ? Math.min(100, Math.round(done / v.items * 100)) : 0;
-        let progressCell;
-        if (t === '词汇') {
-          progressCell = '<span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
-            + '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' + reportBarColor(pct) + '"></div></div>'
-            + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' · 掌握 ' + v.mastered + '</div>';
-        } else {
-          progressCell = '<span style="color:#999">—</span>';
-        }
+        const progressCell = '<span class="cell-pct' + (pct >= 100 ? ' done' : '') + '">' + pct + '%</span>'
+          + '<div class="bar"><div class="bar-fill" style="width:' + pct + '%;background:' + reportBarColor(pct) + '"></div></div>'
+          + '<div style="font-size:11px;color:#999;margin-top:4px">已学 ' + done + ' · 掌握 ' + v.mastered + '</div>';
         rows += '<tr>'
           + '<td><div class="cell-name">' + (typeMeta[t] || t) + '</div><div class="cell-sub">' + v.count + ' 个分类</div></td>'
           + '<td class="num">' + v.items + '</td>'
@@ -10128,7 +10130,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       container.innerHTML = '<div class="report-table-wrap"><table class="report-table">'
         + '<thead><tr><th>类型</th><th class="num">知识点数</th><th class="num">学习进度</th></tr></thead>'
         + '<tbody>' + rows + '</tbody></table></div>'
-        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalItems + ' 个知识点 · 词汇学习进度基于单词学习与词汇测验记录；句型、语法以测验为主，进度暂不统计</div>';
+        + '<div style="text-align:center;color:#999;font-size:12px;margin-top:12px">共 ' + totalItems + ' 个知识点 · 进度基于单词学习、词汇/句型/语法测验记录</div>';
     } catch (e) {
       container.innerHTML = '<div style="text-align:center;color:#999;padding:32px">加载 KET 报告失败</div>';
     }
@@ -11095,6 +11097,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         titleEl.textContent = '📝 ' + category;
         const data = await apiGET('/api/ket/grammar?category=' + encodeURIComponent(category));
         const grammar = data.grammar || {};
+        ketCurrentItems = [];   // 避免上一句型分类的词/句残留
         ketGrammarExamples = grammar.例句 || [];
 
         let html = `
@@ -11170,14 +11173,24 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== KET 测验（词汇/句型/语法 通用） ==========
   // 标准化题目结构：{ prompt, question, speak, options:[{text,correct}], answerLabel }
+  // 内容哈希：为句型/语法例句生成稳定 id（shuffle 前后不变），供报告进度持久化
+  function ketContentHash(text) {
+    var s = String(text || ''), h = 5381;
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36);
+  }
   function buildKetQuiz(shape, overrideSrc) {
     let src;
     if (overrideSrc) src = overrideSrc;
     else if (shape === 'word') src = (ketCurrentItems || []).map(function (w, i) {
       return { en: w.word, zh: w.chinese, id: (w.id != null ? w.id : ('mw' + i + '_' + w.word)) };
     });
-    else if (shape === 'sentence') src = (ketCurrentItems || []).map(function (s) { return { en: s.english, zh: s.chinese }; });
-    else if (shape === 'grammar') src = (ketGrammarExamples || []).map(function (ex) { return { en: ex, zh: null }; });
+    else if (shape === 'sentence') src = (ketCurrentItems || []).map(function (s, i) {
+      return { en: s.english, zh: s.chinese, id: 'ks' + i + '_' + ketContentHash(s.english) };
+    });
+    else if (shape === 'grammar') src = (ketGrammarExamples || []).map(function (ex, i) {
+      return { en: ex, zh: null, id: 'kg' + i + '_' + ketContentHash(ex) };
+    });
     else src = [];
 
     if (src.length === 0) { toast('当前分类没有内容'); return null; }
@@ -11233,14 +11246,22 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   function startKetQuiz(shape, overrideSrc, returnView) {
     ketQuizShape = shape || 'word';
+    // 来源缓存：结果页「再测一次」显式传回来源；小托福词表另行缓存，避免用 KET 残留词表重测
+    window._ketQuizReturnView = returnView || 'ket';
+    var _isToefl = window._ketQuizReturnView === 'toefl';
+    if (_isToefl && overrideSrc) window._ketQuizToeflSrc = overrideSrc;
+    var _finalSrc = overrideSrc || (_isToefl ? window._ketQuizToeflSrc : null);
+    var _cat = _isToefl ? (toeflCurrentCategory || '') : (ketCurrentCategory || '');
+    // 句型/语法使用独立 scope，避免其 id 落入词汇 bucket 污染词汇进度
     ketQuizScope = ketQuizShape === 'word'
-      ? (returnView === 'toefl' ? 'toefl_' + (toeflCurrentCategory || '') : 'ket_' + (ketCurrentCategory || ''))
+      ? (_isToefl ? 'toefl_' + _cat : 'ket_' + _cat)
+      : ketQuizShape === 'sentence' ? 'ket_sent_' + _cat
+      : ketQuizShape === 'grammar' ? 'ket_gram_' + _cat
       : '';
-    ketQuizQueue = buildKetQuiz(ketQuizShape, overrideSrc);
+    ketQuizQueue = buildKetQuiz(ketQuizShape, _finalSrc);
     if (!ketQuizQueue || ketQuizQueue.length === 0) { try { extFeatureRestore(); } catch (e) {} return; }
     ketQuizIndex = 0;
     ketQuizAnswers = {};
-    window._ketQuizReturnView = returnView || 'ket';   // 记录来源：ket 或 toefl
     comboCount = 0;
     hideCombo();
     // 返回按钮显示来源分类名（如「← 返回 个人信息」）；小托福来源保持通用文案
@@ -11303,7 +11324,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     document.querySelectorAll('#ket-quiz-options button').forEach(function (b) { b.style.pointerEvents = 'none'; });
     const isCorrect = opt.correct;
     ketQuizAnswers[cur.id] = { correct: isCorrect, optIdx: optIdx };
-    // 词汇测验成绩同步到对应模块报告：答对=掌握，答错=已学（句型/语法无单词，不写）
+    // 测验成绩同步到对应模块报告：答对=掌握，答错=已学
+    // 词汇/句型/语法各有独立 scope 与稳定 id，句型/语法同样计入报告进度
     if (ketQuizScope && cur.wordId != null) writeExtProgress(ketQuizScope, cur.wordId, isCorrect ? 'mastered' : 'learned');
     const feedback = document.getElementById('ket-quiz-feedback');
     const nextBtn = document.getElementById('ket-quiz-next-btn');
@@ -11396,13 +11418,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 正确率：无已作答显示 -- 而非 0%；反馈文案按完成率分档，跳过不算错
     const accuracyText = noAnswer ? '--' : (accuracy + '%');
-    const msgs = fiveTierMessage(stats);
+    // 句型/语法测验沿用通用文案，但替换掉「单词」类字眼，避免语义错配
+    const msgs = fiveTierMessage(stats, ketQuizShape === 'word' ? null : ketQuizShape);
     const emoji = fiveTierEmoji(stats);
     const subLine = correct + '/' + answered + ' 题正确 · 完成率 ' + completion + '%';
-    // 主按钮：全跳过时改为「开始测验」
+    // 主按钮：全跳过时改为「开始测验」；带上来源，避免小托福「再测一次」把进度写进 KET bucket
+    const _retryCall = 'startKetQuiz(ketQuizShape, null, \'' + (window._ketQuizReturnView || 'ket') + '\')';
     const primaryBtn = noAnswer
-      ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">▶ 开始测验</button>'
-      : '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="startKetQuiz(ketQuizShape)">🔄 再测一次</button>';
+      ? '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="' + _retryCall + '">▶ 开始测验</button>'
+      : '<button class="btn btn-primary" style="width:100%;margin-bottom:10px" onclick="' + _retryCall + '">🔄 再测一次</button>';
 
     // 满分额外奖励：仅「全部作答且全部答对」才触发；全跳过不写成绩、不扣积分、不计连续天数
     if (!noAnswer && correct === total && total > 0) {

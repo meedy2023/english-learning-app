@@ -267,7 +267,9 @@
       if (kd[t]) {
         Object.keys(kd[t]).forEach((sub) => {
           const arr = kd[t][sub];
-          cats.push({ type: t, category: sub, count: Array.isArray(arr) ? arr.length : 1 });
+          // 语法是 {规则, 例句[]}：分母取例句数，不能按 dict 兜底为 1
+          const n = Array.isArray(arr) ? arr.length : ((arr && Array.isArray(arr['例句'])) ? arr['例句'].length : 1);
+          cats.push({ type: t, category: sub, count: n });
         });
       }
     });
