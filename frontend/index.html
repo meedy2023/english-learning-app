@@ -1344,18 +1344,6 @@
       </div>
     </div>
 
-    <div class="settings-group-title">📚 学习</div>
-    <div class="settings-card">
-      <div class="settings-row">
-        <div style="min-width:0">
-          <div class="settings-row-title">🎒 当前年级</div>
-          <div class="settings-row-sub" id="settings-grade-text">未选择</div>
-        </div>
-        <div class="settings-row-ctl">
-          <span class="settings-mini-btn" onclick="backToGrade()">切换年级</span>
-        </div>
-      </div>
-    </div>
 
     <div class="settings-group-title">💾 数据备份</div>
     <div class="settings-card">
@@ -1380,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v241</div>
+          <div class="settings-row-sub" id="settings-version">v242</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5004,8 +4992,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
   function refreshSettingsInfo() {
-    const g = document.getElementById('settings-grade-text');
-    if (g) g.textContent = currentGrade ? currentGrade : '未选择';
     const sel = document.getElementById('settings-tts-engine-select');
     if (sel) sel.value = ttsEngine;
     // 同步发音人与语速下拉，避免历史/恢复数据后显示与实际发音不一致
@@ -5028,10 +5014,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v241';
+          vEl.textContent = m ? ('v' + m[1]) : 'v242';
         })
-        .catch(function () { vEl.textContent = 'v241'; });
-    } catch (e) { vEl.textContent = 'v241'; }
+        .catch(function () { vEl.textContent = 'v242'; });
+    } catch (e) { vEl.textContent = 'v242'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
