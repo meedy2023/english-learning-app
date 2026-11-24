@@ -3927,6 +3927,11 @@ const API = ".";
       if (this.state !== 'playing') return;
       const line = this.lines[this.idx];
       if (!line) return;
+      // 网络音频异步合成期间（handle.kind==='none'、audio 元素尚未就绪）：不推进高亮。
+      // 否则会按 startAt 估算先把进度推到前几个词（高亮前两个词），合成完成、音频从 currentTime=0
+      // 开播后又按真实进度归零，高亮跳回首词——表现为「先高亮前两个词，再从第一个词开始」。
+      // 等音频真正开始（kind 变 'audio'/'system'）再按真实进度高亮。
+      if (this.handle && this.handle.kind === 'none') return;
       let p = 0;
       const el = this.handle && this.handle.el;
       if (el && isFinite(el.duration) && el.duration > 0) {
