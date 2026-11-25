@@ -1,5 +1,5 @@
 /* 英语学习小助手 Service Worker */
-const CACHE = 'english-app-v260';
+const CACHE = 'english-app-v261';
 const ASSETS = [
   './',
   './index.html',
@@ -38,11 +38,28 @@ self.addEventListener('fetch', (e) => {
 
   const path = url.pathname;
 
-  // index.html 与音频文件走网络优先（保证拿到最新版本，避免缓存旧文件名/旧页面）
+  // index.html 走网络优先（保证拿到最新版本，避免缓存旧页面）
   const isHtml = path.endsWith('/') || path.endsWith('/index.html') || path.endsWith('.html');
+  // 音频走缓存优先：文件名带内容哈希，命中缓存即秒开，弱网/离线不受网络波动影响
   const isAudio = /\.(wav|mp3|ogg|m4a|aac)$/i.test(path);
 
-  if (isHtml || isAudio) {
+  if (isAudio) {
+    e.respondWith(
+      caches.match(e.request).then((cached) => {
+        if (cached) return cached;
+        return fetch(e.request).then((resp) => {
+          if (resp && resp.status === 200) {
+            const clone = resp.clone();
+            caches.open(CACHE).then((c) => c.put(e.request, clone));
+          }
+          return resp;
+        });
+      })
+    );
+    return;
+  }
+
+  if (isHtml) {
     e.respondWith(
       fetch(e.request)
         .then((resp) => {
