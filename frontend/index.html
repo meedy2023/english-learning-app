@@ -2726,9 +2726,6 @@ const API = ".";
         </div>
         <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
         <div class="lr-progress" id="lesson-read-progress" style="display:none"></div>
-        <div style="margin-top:8px">
-          <button id="lesson-role-read-btn" onclick="LessonReader.toggleRoleRead()" type="button" aria-pressed="true" title="开启后：女生用女声、男生用男声" style="width:100%;padding:9px 12px;font-size:13px;border-radius:10px;font-weight:600;border:1px solid #e0e6ff;background:#f5f7ff;color:#6c63ff;cursor:pointer;min-height:38px">🎭 分角色：开</button>
-        </div>
         <div class="lr-nav">
           <button class="quiz-nav-btn" style="flex:1;display:none" id="lesson-prev-unit-btn">
             ⬅️ 上一篇
@@ -2756,7 +2753,7 @@ const API = ".";
       replayBtn.onclick = function() { LessonReader.replay(); };
     }
     // 绑定句子：采集朗读行
-    LessonReader.bind(unit.content, { roleBtn: 'lesson-role-read-btn' });
+    LessonReader.bind(unit.content);
 
     // 计算当前单元在模块中的位置
     var unitIndex = -1;
@@ -2895,9 +2892,8 @@ const API = ".";
   }
 
   function speakLine(text, role) {
-    // 单句朗读同样按角色发声；关闭分角色开关时沿用设置里的统一发音人
-    const voiceId = (typeof LessonReader !== 'undefined' && LessonReader.roleRead) ? roleVoiceId(role) : null;
-    TTS.speak(text, 'en-US', null, voiceId);
+    // 单句朗读同样按角色发声（女生女声、男生男声）
+    TTS.speak(text, 'en-US', null, roleVoiceId(role));
   }
 
 // ========== 跟读功能（麦克风录音）==========
@@ -3771,9 +3767,8 @@ const API = ".";
     startAt: 0,       // 当前句开始时间（系统语音用）
     estMs: 2000,      // 当前句估算时长（系统语音无 currentTime 时用）
     paused: false,
-    // 课文分角色朗读开关：女生女声、男生男声；用户可在控制条里关掉，回到统一发音人
-    roleRead: localStorage.getItem('lesson_role_read') !== '0',
-    ui: null,           // {main, replay, progress, bar, dock, label, roleBtn} —— 可绑定任意页面的悬浮控制条
+    // 课文朗读默认分角色：女生女声、男生男声，无需开关
+    ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
     // 取 UI 元素：优先本次绑定的 ids，回落到课文页默认 id
     UI(key, defId) {
       const id = (this.ui && this.ui[key]) || defId;
@@ -3836,14 +3831,6 @@ const API = ".";
       this.updateUI();
     },
     replay() { this.start(0); },
-    // 分角色朗读开关：切换后立即生效（播放中重播当前句，让用户马上听到音色变化）
-    toggleRoleRead() {
-      this.roleRead = !this.roleRead;
-      try { localStorage.setItem('lesson_role_read', this.roleRead ? '1' : '0'); } catch (e) {}
-      this.updateUI();
-      toast(this.roleRead ? '🎭 已开启分角色朗读：女生女声、男生男声' : '已关闭分角色朗读，使用统一发音人');
-      if (this.state === 'playing' && this.idx >= 0) this.start(this.idx);
-    },
     jump(idx) {
       if (this.state === 'idle' || this.state === 'finished') {
         // 未开始或已读完：点击某句 → 从头/该句开始读
@@ -3928,11 +3915,11 @@ const API = ".";
       this._audioStartAt = null;
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
       this.estMs = Math.max(1200, (line.total / 14) * 1000 / (speechRate || 0.75) + 400);
-      // 分角色朗读：按本句角色选发音人；预合成下一句也要用下一句角色的音色，否则会串成同一个声音
-      const voiceId = this.roleRead ? roleVoiceId(line.role) : null;
+      // 按本句角色选发音人；预合成下一句也要用下一句角色的音色，否则会串成同一个声音
+      const voiceId = roleVoiceId(line.role);
       const nextLine = this.lines[this.idx + 1];
       if (nextLine && nextLine.text) {
-        TTS.prefetch(nextLine.text, 'en-US', true, this.roleRead ? roleVoiceId(nextLine.role) : null);
+        TTS.prefetch(nextLine.text, 'en-US', true, roleVoiceId(nextLine.role));
       }
       this.handle = TTS.speakSentence(line.text, 'en-US', {
         human: true,   // 差异化标点停顿 + 语调
@@ -4115,8 +4102,6 @@ const API = ".";
       const rp = this.UI('replay', 'lesson-replay-btn');
       const pg = this.UI('progress', 'lesson-read-progress');
       const bar = this.UI('bar', 'lesson-read-bar');
-      // 只在显式传入 roleBtn 的页面（课文详情）更新开关，避免误改其它模块隐藏的按钮
-      const rb = (this.ui && this.ui.roleBtn) ? document.getElementById(this.ui.roleBtn) : null;
       const total = this.lines.length;
       const idleTxt = (this.ui && this.ui.label) || '🔊 朗读整篇课文';
       let txt = idleTxt;
@@ -4130,13 +4115,6 @@ const API = ".";
         if (showPg && total) pg.textContent = '正在朗读第 ' + (this.idx + 1) + ' / ' + total + ' 句' + (this.state === 'paused' ? '（已暂停）' : '');
       }
       if (bar) bar.style.display = showPg ? '' : 'none';
-      if (rb) {
-        rb.textContent = this.roleRead ? '🎭 分角色：开' : '🎭 分角色：关';
-        rb.style.background = this.roleRead ? 'linear-gradient(135deg,#a855f7,#ec4899)' : '#f5f7ff';
-        rb.style.color = this.roleRead ? '#fff' : '#6c63ff';
-        rb.style.borderColor = this.roleRead ? 'transparent' : '#e0e6ff';
-        rb.setAttribute('aria-pressed', this.roleRead ? 'true' : 'false');
-      }
     },
     updateBar(p) {
       const bar = this.UI('bar', 'lesson-read-bar');
