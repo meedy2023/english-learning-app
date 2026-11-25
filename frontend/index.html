@@ -2683,9 +2683,9 @@ const API = ".";
     let dialogueHTML = '';
     unit.content.forEach((line, idx) => {
       const roleColor = getRoleColor(line.role);
-      const lineGender = roleGender(line.role);
-      const roleBadge = lineGender
-        ? ' <span title="分角色朗读：' + ROLE_VOICE_PROFILES[lineGender].label + '" style="font-size:12px;opacity:.85">' + (lineGender === 'female' ? '♀' : '♂') + '</span>'
+      const lineVoice = ROLE_VOICE_BY_ID[roleVoiceId(line.role)];
+      const roleBadge = lineVoice
+        ? ' <span title="分角色朗读：' + lineVoice.label + '" style="font-size:12px;opacity:.85">' + (lineVoice.gender === 'female' ? '♀' : '♂') + '</span>'
         : '';
       const lineId = 'ra-line-' + idx;
       dialogueHTML += `
@@ -2821,14 +2821,15 @@ const API = ".";
     return colors[role] || '#6c63ff';
   }
 
-  // ========== 课文分角色朗读：角色 → 性别 → 音色 ==========
+  // ========== 课文分角色朗读：角色 → 独立音色 ==========
   // 教材固定人物按设定标注；未收录角色按称谓/名字关键词推断。
   // 动物、旁白、群体等无固定性别的角色返回 null，沿用设置页选中的发音人。
   const ROLE_FEMALE_NAMES = [
     'amy', 'lingling', 'wenwen', 'yanyan', 'jingjing', 'lanlan', 'huahua', 'weiwei',
     'nana', 'jiajia', 'yoyo', 'lulu', 'coco', 'susu', 'mia', 'tippi',
     'mum', 'mother', 'grandma', 'sister', 'girl', 'woman', 'baby',
-    'ms smart', 'ms li', 'ms olivia', 'mother hen', 'mum bird'
+    'ms smart', 'ms li', 'ms olivia', 'mother hen', 'mum bird',
+    'mia', 'yoyo', 'lulu', 'coco', 'susu', 'duoduo', 'zuzu'
   ];
   const ROLE_MALE_NAMES = [
     'sam', 'daming', 'tom', 'ben', 'bob', 'bobo', 'david', 'terry', 'jay', 'ray',
@@ -2858,22 +2859,79 @@ const API = ".";
     }
     return gs[0] || null;
   }
-  // 音色：讯飞发音人 id（与设置页同源）；Edge 网络兜底用同性别音色；系统语音用 pitch 拉开差异
+  // 角色音色池：同一性别也拆成多个不同音色，Tom / Mum / Dad 各用各的声音。
+  // xfPitch+speed 走讯飞（catherine/henry 的音调语速变体），edge 走网络兜底，
+  // sysPitch 用于本机 speechSynthesis 降级，label 显示在角色标识上。
+  const ROLE_VOICE_POOL = [
+    { id: 'role_f1', gender: 'female', vcn: 'catherine', xfPitch: 50, speed: 50, edge: 'en-GB-SoniaNeural',      sysPitch: 1.35, label: '清亮女声' },
+    { id: 'role_f2', gender: 'female', vcn: 'catherine', xfPitch: 60, speed: 52, edge: 'en-US-JennyNeural',       sysPitch: 1.26, label: '柔美女声' },
+    { id: 'role_f3', gender: 'female', vcn: 'catherine', xfPitch: 70, speed: 55, edge: 'en-GB-LibbyNeural',       sysPitch: 1.46, label: '少女音' },
+    { id: 'role_f4', gender: 'female', vcn: 'catherine', xfPitch: 42, speed: 46, edge: 'en-US-AriaNeural',        sysPitch: 1.14, label: '成熟女声' },
+    { id: 'role_f5', gender: 'female', vcn: 'catherine', xfPitch: 34, speed: 44, edge: 'en-GB-MaisieNeural',      sysPitch: 1.05, label: '沉稳女声' },
+    { id: 'role_m1', gender: 'male',   vcn: 'henry',     xfPitch: 50, speed: 50, edge: 'en-GB-RyanNeural',        sysPitch: 0.80, label: '青年男声' },
+    { id: 'role_m2', gender: 'male',   vcn: 'henry',     xfPitch: 40, speed: 46, edge: 'en-GB-GeorgeNeural',      sysPitch: 0.64, label: '低沉男声' },
+    { id: 'role_m3', gender: 'male',   vcn: 'henry',     xfPitch: 58, speed: 55, edge: 'en-US-GuyNeural',         sysPitch: 0.92, label: '活泼男声' },
+    { id: 'role_m4', gender: 'male',   vcn: 'henry',     xfPitch: 32, speed: 42, edge: 'en-GB-ChristopherNeural', sysPitch: 0.55, label: '沉稳男声' },
+    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 46, speed: 48, edge: 'en-US-DavidNeural',       sysPitch: 0.73, label: '温和男声' }
+  ];
+  const ROLE_VOICE_BY_ID = {};
+  const ROLE_VOICE_TTS_PROFILES = {};
+  ROLE_VOICE_POOL.forEach(function (p) {
+    ROLE_VOICE_BY_ID[p.id] = p;
+    ROLE_VOICE_TTS_PROFILES[p.id] = { vcn: p.vcn, pitch: p.xfPitch, speed: p.speed };
+  });
+  const ROLE_VOICE_IDS = {
+    female: ROLE_VOICE_POOL.filter(function (p) { return p.gender === 'female'; }).map(function (p) { return p.id; }),
+    male: ROLE_VOICE_POOL.filter(function (p) { return p.gender === 'male'; }).map(function (p) { return p.id; })
+  };
+  // 教材高频人物固定分配，避免同性别角色撞音；未列出的角色按名字哈希稳定落到同性别池
+  const ROLE_VOICE_ASSIGN = {
+    'teacher':'role_f5', 'narrator':'role_m4',  // 高频但无性别标记的人物，固定音色（避开主角撞音）
+    'lingling':'role_f1', 'amy':'role_f2', 'wenwen':'role_f3', 'jingjing':'role_f4', 'yanyan':'role_f5',
+    'huahua':'role_f1', 'weiwei':'role_f2', 'lanlan':'role_f3', 'nana':'role_f4', 'jiajia':'role_f5',
+    'tippi':'role_f3', 'girl':'role_f3', 'little chicken':'role_f3', 'baby':'role_f3',
+    'mum':'role_f4', 'mother':'role_f4', "amy's mum":'role_f4', 'ms smart':'role_f4', 'ms li':'role_f4', 'ms olivia':'role_f4',
+    'grandma':'role_f5', 'mother hen':'role_f5', 'woman':'role_f5',
+    'tom':'role_m1', 'bob':'role_m1', 'bobo':'role_m1', 'bobby':'role_m1', 'li han':'role_m1', 'jay':'role_m1',
+    'dad':'role_m2', 'father':'role_m2', 'man':'role_m2', 'liu fei':'role_m2', 'jim':'role_m2', 'doctor':'role_m2', 'detective sharp':'role_m2',
+    'sam':'role_m3', 'boy':'role_m3', 'taotao':'role_m3', 'ray':'role_m3',
+    'daming':'role_m5', 'ben':'role_m5', 'david':'role_m5', 'yangyang':'role_m5',
+    'grandpa':'role_m4', 'terry':'role_m4', 'old man':'role_m4', 'lu xun':'role_m4', 'fabre':'role_m4', 'samuel pepys':'role_m4'
+  };
   const ROLE_VOICE_PROFILES = {
-    female: { xf: 'catherine', edge: 'en-GB-SoniaNeural', pitch: 1.35, label: '女声' },
-    male:   { xf: 'henry',     edge: 'en-GB-RyanNeural',  pitch: 0.72, label: '男声' }
+    female: { pitch: 1.35, label: '女声' },
+    male:   { pitch: 0.8,  label: '男声' }
   };
   const VOICE_ID_GENDER = { catherine: 'female', henry: 'male', child_en: 'female' };
+  ROLE_VOICE_POOL.forEach(function (p) { VOICE_ID_GENDER[p.id] = p.gender; });
+  const ROLE_ALL_VOICE_IDS = ROLE_VOICE_POOL.map(function (p) { return p.id; });
+  // 无性别标记但明显是人物的角色（学生 / 主持人 / 管理员等）也分独立音色；
+  // 动物、物体、自然景物仍沿用设置页发音人。
+  const ROLE_HUMAN_NEUTRAL = /^(teacher|narrator|student|students|kids|children|everyone|all|both|family|friend|my new friend|host|old friends|zookeeper|police officer|forest keeper|barbapapa|tutu|lin jia)\b/i;
+  function roleVoiceHash(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+    return h >>> 0;
+  }
   function roleVoiceId(role) {
+    const raw = String(role || '').trim().toLowerCase().replace(/[’]/g, "'");
+    if (!raw) return null;
+    if (ROLE_VOICE_ASSIGN[raw]) return ROLE_VOICE_ASSIGN[raw];
     const g = roleGender(role);
-    return g ? ROLE_VOICE_PROFILES[g].xf : null;
+    if (!g && !ROLE_HUMAN_NEUTRAL.test(raw)) return null;  // 动物 / 物体 / 男女合读：沿用设置发音人
+    const ids = g ? ROLE_VOICE_IDS[g] : ROLE_ALL_VOICE_IDS;
+    return ids[roleVoiceHash(raw) % ids.length];
   }
   function edgeVoiceFor(voiceId) {
-    if (voiceId === 'henry') return ROLE_VOICE_PROFILES.male.edge;
-    if (voiceId === 'catherine' || voiceId === 'child_en') return ROLE_VOICE_PROFILES.female.edge;
+    const p = ROLE_VOICE_BY_ID[voiceId];
+    if (p) return p.edge;
+    if (voiceId === 'henry') return 'en-GB-RyanNeural';
+    if (voiceId === 'catherine' || voiceId === 'child_en') return 'en-GB-SoniaNeural';
     return null;
   }
   function voicePitchFor(voiceId) {
+    const p = ROLE_VOICE_BY_ID[voiceId];
+    if (p) return p.sysPitch;
     const g = VOICE_ID_GENDER[voiceId];
     return g ? ROLE_VOICE_PROFILES[g].pitch : null;
   }
@@ -4150,14 +4208,14 @@ const API = ".";
 
   // 发音人配置：id -> 讯飞 vcn + 音调(pitch) + 语速(speed)
   // 英文无真童声，用凯瑟琳女声 + 高音调模拟儿童音
-  const VOICE_PROFILES = {
+  const VOICE_PROFILES = Object.assign({
     catherine: { vcn: 'catherine', pitch: 50, speed: 50 },
     henry: { vcn: 'henry', pitch: 50, speed: 50 },
     child_en: { vcn: 'catherine', pitch: 85, speed: 55 },
     xiaoyan: { vcn: 'xiaoyan', pitch: 50, speed: 50 },
     xiaofeng: { vcn: 'xiaofeng', pitch: 50, speed: 50 },
     aisBABYXu: { vcn: 'aisBABYXu', pitch: 55, speed: 50 }
-  };
+  }, ROLE_VOICE_TTS_PROFILES);  // 角色音色 id 也要有讯飞 vcn/pitch/speed，否则会按 id 原样请求失败
 
   // ---- 朗读速度（面向小学生，默认慢速）----
   // 参考：课文平均 7.5 词/句，常规 TTS 约 160 词/分钟（偏快）；
@@ -4595,11 +4653,11 @@ function playAudioBlob(blob, onEnd) {
         const prefix = lang === 'zh-CN' ? 'zh' : 'en';
         let v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
              || speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(prefix));
-        // 分角色朗读：系统语音也要听出男女差异。优先挑同性别的本地音色；
-        // 没有合适音色时至少用 pitch 拉开（女声偏高、男声偏低）。
+        // 分角色朗读：系统语音也按角色区分。同性别的不同角色用不同 pitch，
+        // 并优先挑同性别的本地音色；匹配不到时至少靠 pitch 拉开差异。
         const _gender = voiceId ? VOICE_ID_GENDER[voiceId] : null;
         if (_gender && lang === 'en-US') {
-          u.pitch = ROLE_VOICE_PROFILES[_gender].pitch;
+          u.pitch = voicePitchFor(voiceId) || ROLE_VOICE_PROFILES[_gender].pitch;
           const prefer = _gender === 'female' ? /female|sonia|jenny|aria|zira|samantha|karen|moira|tessa/i
                                               : /male|ryan|guy|david|christopher|george|mark/i;
           const oppose = _gender === 'female' ? /male|ryan|guy|david|christopher|george|mark/i
