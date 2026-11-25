@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v246</div>
+          <div class="settings-row-sub" id="settings-version">v247</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5019,10 +5019,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v246';
+          vEl.textContent = m ? ('v' + m[1]) : 'v247';
         })
-        .catch(function () { vEl.textContent = 'v246'; });
-    } catch (e) { vEl.textContent = 'v246'; }
+        .catch(function () { vEl.textContent = 'v247'; });
+    } catch (e) { vEl.textContent = 'v247'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -6639,7 +6639,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         '</div>' +
       '</div>' +
       primaryBtn +
-      `<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="switchView('learn')" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>` +
+      `<button class="btn btn-secondary nav-back-btn" style="width:100%;margin-bottom:8px;display:flex;align-items:center;justify-content:center;gap:6px" onclick="showWordList()" type="button" aria-label="返回单词表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回单词表</button>` +
       `<button class="btn btn-secondary nav-back-btn" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px" onclick="backToHome()" type="button" aria-label="返回首页"><span class="nav-back-ico" aria-hidden="true">🏠</span> 返回首页</button>` +
     '</div>';
     document.getElementById("quiz-feedback").style.display = "none";
