@@ -2950,8 +2950,14 @@ const API = ".";
   }
 
   function speakLine(text, role) {
-    // 单句朗读同样按角色发声（女生女声、男生男声）
-    TTS.speak(text, 'en-US', null, roleVoiceId(role));
+    // 单句朗读同样按角色发声（女生女声、男生男声）；优先用预生成音频，缺失再走网络 TTS
+    const voiceId = roleVoiceId(role);
+    const spoken = expandAbbrev(text, 'en-US');
+    const preUrl = preAudioUrl(spoken, 'en-US', voiceId, true);
+    if (preUrl && playPreAudio(preUrl, null, function () {
+      TTS.speak(text, 'en-US', null, voiceId);
+    })) return;
+    TTS.speak(text, 'en-US', null, voiceId);
   }
 
 // ========== 跟读功能（麦克风录音）==========
@@ -3978,10 +3984,12 @@ const API = ".";
       const voiceId = roleVoiceId(line.role);
       const nextLine = this.lines[this.idx + 1];
       if (nextLine && nextLine.text) {
+        warmPreAudio(preAudioUrl(expandAbbrev(nextLine.text, 'en-US'), 'en-US', roleVoiceId(nextLine.role), true));
         TTS.prefetch(nextLine.text, 'en-US', true, roleVoiceId(nextLine.role));
       }
       this.handle = TTS.speakSentence(line.text, 'en-US', {
-        human: true,   // 差异化标点停顿 + 语调
+        human: true,      // 差异化标点停顿 + 语调
+        preAudio: true,   // P0：本地预生成音频优先
         voiceId: voiceId,
         onReady: function(audio) {
           if (tk !== self.token) return;
@@ -4569,6 +4577,79 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
     }
   }
 
+  // ---- P0 预生成音频：本地文件优先，失败回退现有 TTS 链路 ----
+  // 文件名规则与 pregenerate_audio.py 完全一致，无需 manifest；
+  // 预生成音频已按目标语速合成，播放端固定 playbackRate=1，避免二次重采样。
+  const PRE_AUDIO_BASE = './audio/lesson/';
+  function preAudioUrl(text, lang, voiceId, human) {
+    if (lang !== 'en-US' || !text) return null;
+    const canon = 'edge|' + (voiceId || 'default') + '|' + Number(speechRate) + '|' + (human ? '1' : '0') + '|' + text;
+    let h = 0x811c9dc5;
+    for (let i = 0; i < canon.length; i++) {
+      h ^= canon.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    const key = ('00000000' + (h >>> 0).toString(16)).slice(-8);
+    return PRE_AUDIO_BASE + key.slice(0, 2) + '/' + key + '.mp3';
+  }
+  const _preAudioWarm = {};
+  const _preAudioWarmOrder = [];
+  function warmPreAudio(url) {
+    if (!url || _preAudioWarm[url]) return;
+    const a = new Audio();
+    a.preload = 'auto';
+    try { a.src = url; a.load(); } catch (e) {}
+    _preAudioWarm[url] = a;
+    _preAudioWarmOrder.push(url);
+    while (_preAudioWarmOrder.length > 4) {
+      const old = _preAudioWarmOrder.shift();
+      if (_preAudioWarm[old]) {
+        try { _preAudioWarm[old].src = ''; } catch (e) {}
+        delete _preAudioWarm[old];
+      }
+    }
+  }
+  function playPreAudio(url, onEnd, onFail) {
+    if (!url) return null;
+    stopAllAudio();
+    const token = window._audioToken;
+    const audio = new Audio();
+    let settled = false;
+    window._activeAudio = audio;
+    audio.preload = 'auto';
+    audio.src = url;
+    try { audio.playbackRate = 1; } catch (e) {}
+    const cleanup = () => {
+      if (settled) return;
+      settled = true;
+      if (token !== window._audioToken) return;
+      if (window._activeAudio === audio) window._activeAudio = null;
+      try { audio.onended = null; audio.onerror = null; audio.pause(); audio.src = ''; } catch (e) {}
+    };
+    audio.onended = () => {
+      if (settled || token !== window._audioToken) return;
+      cleanup();
+      if (onEnd) onEnd();
+    };
+    audio.onerror = () => {
+      if (settled || token !== window._audioToken) return;
+      cleanup();
+      if (onFail) onFail();
+    };
+    try {
+      const p = audio.play();
+      if (p && p.catch) p.catch(() => {
+        if (settled || token !== window._audioToken) return;
+        cleanup();
+        if (onFail) onFail();
+      });
+    } catch (e) {
+      cleanup();
+      if (onFail) onFail();
+    }
+    return audio;
+  }
+
   // 解锁自动播放：浏览器对「无用户手势的音频播放」会拦截（NotAllowedError）。
   // 关键：很多移动浏览器（尤其 iOS Safari、部分安卓 WebView）里，muted 静音播放
   // 不会授予「非静音音频」的自动播放许可，导致后续连播句（setTimeout 异步触发）被拦截。
@@ -4776,6 +4857,22 @@ function playAudioBlob(blob, onEnd) {
         handle.stop = () => { try { speechSynthesis.cancel(); } catch (e) {} };
         TTS.speakSystem(text, lang, opts.onEnd, G, voiceId);
       };
+      // P0：预生成音频优先。文件不存在/加载失败时静默回退原网络→本机链路。
+      const preUrl = opts.preAudio === false ? null : preAudioUrl(text, lang, voiceId, !!opts.human);
+      if (preUrl) {
+        const preEl = playPreAudio(preUrl, opts.onEnd, () => { goSystem(); });
+        if (preEl) {
+          handle.kind = 'preaudio';
+          handle.el = preEl;
+          handle.pause = () => { try { preEl.pause(); } catch (e) {} };
+          handle.resume = () => {
+            try { preEl.playbackRate = 1; const p = preEl.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {}
+          };
+          handle.stop = () => { try { preEl.pause(); } catch (e) {} };
+          if (opts.onReady) opts.onReady(preEl);
+          return handle;
+        }
+      }
       if (!useNet) { goSystem(); return handle; }
       this.synthOnce(text, lang, (blob) => {
         if (blob) {
@@ -4866,6 +4963,7 @@ function playAudioBlob(blob, onEnd) {
       const edgeVoice = edgeVoiceFor(voiceId);
       const needLive = sentenceNeedLiveIpa(text, lang);
       const key = (needLive ? 'homo|' + speechRate + '|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
+      warmPreAudio(preAudioUrl(text, lang, voiceId, !!human));
       if (_ttsCache.has(key)) return;
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
       const ok = (blob) => {

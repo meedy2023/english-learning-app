@@ -1,0 +1,301 @@
+# -*- coding: utf-8 -*-
+"""预生成课文逐句音频（Edge Neural，无需 API Key），供前端优先播放。
+
+脚本使用当前可用的 edge-tts 协议，生成的是完整音频文件，浏览器端只做普通播放，
+因此不受运行时 WebSocket / 讯飞接口波动影响，音质与自然度上限更高。
+
+生成规则与 frontend/index.html 中的角色音色、缩写展开、语速换算保持一致；
+每条音频文件名由 (engine, roleVoiceId, speechRate, human, text) 的 FNV-1a 决定，
+前端可用同样算法直接定位文件，无需 manifest。缺失文件自动回退现有 TTS 链路。
+
+用法：
+    python pregenerate_audio.py --dry-run              # 只看将生成多少条
+    python pregenerate_audio.py --limit 20             # 试生成前 20 条
+    python pregenerate_audio.py --all-rates            # 生成 5 个语速档
+    python pregenerate_audio.py --rate 0.8 --workers 8 # 指定档位与并发
+
+依赖：
+    pip install --upgrade edge-tts
+"""
+import argparse
+import asyncio
+import json
+import os
+import re
+import sys
+import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+DEFAULT_SOURCE = ROOT / "docs" / "data" / "textbook.json"
+DEFAULT_OUT = ROOT / "docs" / "audio" / "lesson"
+
+# 与 frontend/index.html 的 ROLE_VOICE_POOL / ROLE_VOICE_ASSIGN 保持同步。
+ROLE_VOICE_POOL = [
+    {"id": "role_f1", "gender": "female", "edge": "en-GB-SoniaNeural"},
+    {"id": "role_f2", "gender": "female", "edge": "en-US-JennyNeural"},
+    {"id": "role_f3", "gender": "female", "edge": "en-GB-LibbyNeural"},
+    {"id": "role_f4", "gender": "female", "edge": "en-US-AriaNeural"},
+    {"id": "role_f5", "gender": "female", "edge": "en-GB-MaisieNeural"},
+    {"id": "role_m1", "gender": "male",   "edge": "en-GB-RyanNeural"},
+    {"id": "role_m2", "gender": "male",   "edge": "en-GB-ThomasNeural"},
+    {"id": "role_m3", "gender": "male",   "edge": "en-US-GuyNeural"},
+    {"id": "role_m4", "gender": "male",   "edge": "en-US-ChristopherNeural"},
+    {"id": "role_m5", "gender": "male",   "edge": "en-US-EricNeural"},
+]
+ROLE_VOICE_ASSIGN = {
+    "teacher": "role_f5", "narrator": "role_m4",
+    "lingling": "role_f1", "amy": "role_f2", "wenwen": "role_f3", "jingjing": "role_f4", "yanyan": "role_f5",
+    "huahua": "role_f1", "weiwei": "role_f2", "lanlan": "role_f3", "nana": "role_f4", "jiajia": "role_f5",
+    "tippi": "role_f3", "girl": "role_f3", "little chicken": "role_f3", "baby": "role_f3",
+    "mum": "role_f4", "mother": "role_f4", "amy's mum": "role_f4", "ms smart": "role_f4", "ms li": "role_f4", "ms olivia": "role_f4",
+    "grandma": "role_f5", "mother hen": "role_f5", "woman": "role_f5",
+    "tom": "role_m1", "bob": "role_m1", "bobo": "role_m1", "bobby": "role_m1", "li han": "role_m1", "jay": "role_m1",
+    "dad": "role_m2", "father": "role_m2", "man": "role_m2", "liu fei": "role_m2", "jim": "role_m2", "doctor": "role_m2", "detective sharp": "role_m2",
+    "sam": "role_m3", "boy": "role_m3", "taotao": "role_m3", "ray": "role_m3",
+    "daming": "role_m5", "ben": "role_m5", "david": "role_m5", "yangyang": "role_m5",
+    "grandpa": "role_m4", "terry": "role_m4", "old man": "role_m4", "lu xun": "role_m4", "fabre": "role_m4", "samuel pepys": "role_m4",
+}
+ROLE_FEMALE_NAMES = [
+    "amy", "lingling", "wenwen", "yanyan", "jingjing", "lanlan", "huahua", "weiwei",
+    "nana", "jiajia", "yoyo", "lulu", "coco", "susu", "mia", "tippi",
+    "mum", "mother", "grandma", "sister", "girl", "woman", "baby",
+    "ms smart", "ms li", "ms olivia", "mother hen", "mum bird",
+    "duoduo", "zuzu",
+]
+ROLE_MALE_NAMES = [
+    "sam", "daming", "tom", "ben", "bob", "bobo", "david", "terry", "jay", "ray",
+    "jim", "bobby", "taotao", "yangyang", "li han", "liu fei", "lu xun", "fabre",
+    "yang shanzhou", "samuel pepys", "detective sharp", "dad", "father", "grandpa",
+    "boy", "man", "old man", "dad dog",
+]
+ROLE_HUMAN_NEUTRAL = re.compile(
+    r"^(teacher|narrator|student|students|kids|children|everyone|all|both|family|friend|"
+    r"my new friend|host|old friends|zookeeper|police officer|forest keeper|barbapapa|tutu|lin jia)\b",
+    re.I,
+)
+ROLE_BY_ID = {p["id"]: p for p in ROLE_VOICE_POOL}
+ROLE_IDS_BY_GENDER = {
+    g: [p["id"] for p in ROLE_VOICE_POOL if p["gender"] == g]
+    for g in ("female", "male")
+}
+ALL_ROLE_IDS = [p["id"] for p in ROLE_VOICE_POOL]
+
+RATE_TABLE = [
+    (0.5, 0.775),
+    (0.8, 0.830),
+    (1.0, 1.000),
+    (1.2, 1.180),
+    (1.5, 1.390),
+]
+ALL_RATES = [r for r, _ in RATE_TABLE]
+
+
+def fnv1a32(text):
+    h = 0x811C9DC5
+    for ch in text:
+        h ^= ord(ch)
+        h = (h * 0x01000193) & 0xFFFFFFFF
+    return h
+
+
+def single_role_gender(role):
+    p = role.strip().lower().replace("’", "'")
+    if p in ROLE_FEMALE_NAMES:
+        return "female"
+    if p in ROLE_MALE_NAMES:
+        return "male"
+    if re.search(r"^(ms|mrs|miss)\b|mum|mother|grandma|sister|girl|woman", p):
+        return "female"
+    if re.search(r"^(mr|sir)\b|dad|father|grandpa|boy|man", p):
+        return "male"
+    return None
+
+
+def role_gender(role):
+    raw = str(role or "").strip().lower().replace("’", "'")
+    if not raw:
+        return None
+    parts = [s.strip() for s in re.split(r"\s*(?:&|,|\band\b)\s*", raw, flags=re.I) if s.strip()]
+    gs = [single_role_gender(p) for p in parts]
+    if len(gs) > 1:
+        if all(g == "female" for g in gs):
+            return "female"
+        if all(g == "male" for g in gs):
+            return "male"
+        return None
+    return gs[0] if gs else None
+
+
+def role_voice_id(role):
+    raw = str(role or "").strip().lower().replace("’", "'")
+    if not raw:
+        return None
+    if raw in ROLE_VOICE_ASSIGN:
+        return ROLE_VOICE_ASSIGN[raw]
+    gender = role_gender(role)
+    if not gender and not ROLE_HUMAN_NEUTRAL.match(raw):
+        return None
+    ids = ROLE_IDS_BY_GENDER[gender] if gender else ALL_ROLE_IDS
+    return ids[fnv1a32(raw) % len(ids)]
+
+
+def edge_voice_for(voice_id):
+    profile = ROLE_BY_ID.get(voice_id)
+    return profile["edge"] if profile else "en-GB-SoniaNeural"
+
+
+def synth_rate(rate):
+    r = max(0.5, min(1.5, float(rate)))
+    for (ua, sa), (ub, sb) in zip(RATE_TABLE, RATE_TABLE[1:]):
+        if r <= ub:
+            t = (r - ua) / (ub - ua)
+            return sa + t * (sb - sa)
+    return RATE_TABLE[-1][1]
+
+
+def edge_rate_pct(rate):
+    return int(round((synth_rate(rate) - 1) * 100))
+
+
+def expand_abbrev(text):
+    text = re.sub(r"\bMs\.?\s+(?=[A-Z])", "Miz ", text)
+    text = re.sub(r"\bMr\.?\s+(?=[A-Z])", "Mister ", text)
+    text = re.sub(r"\bMrs\.?\s+(?=[A-Z])", "Missus ", text)
+    text = re.sub(r"\bDr\.?\s+(?=[A-Z])", "Doctor ", text)
+    text = re.sub(r"\bSt\.?\s+(?=[A-Z])", "Saint ", text)
+    return text
+
+
+def audio_key(text, voice_id, rate):
+    canon = "edge|" + (voice_id or "default") + "|" + format(float(rate), "g") + "|1|" + text
+    return format(fnv1a32(canon), "08x")
+
+
+def audio_path(out_dir, text, voice_id, rate):
+    key = audio_key(text, voice_id, rate)
+    return Path(out_dir) / key[:2] / (key + ".mp3")
+
+
+async def synth_async(text, voice, rate_pct, timeout):
+    try:
+        import edge_tts
+    except ImportError:
+        raise RuntimeError("缺少依赖 edge-tts，请先执行：pip install --upgrade edge-tts")
+
+    rate = format(rate_pct, "+d") + "%"
+    communicate = edge_tts.Communicate(
+        text,
+        voice,
+        rate=rate,
+        boundary="SentenceBoundary",
+        connect_timeout=max(5, timeout),
+        receive_timeout=max(10, timeout),
+    )
+    chunks = []
+    async for chunk in communicate.stream():
+        if chunk.get("type") == "audio" and chunk.get("data"):
+            chunks.append(chunk["data"])
+    if not chunks:
+        raise RuntimeError("Edge 未返回音频数据")
+    return b"".join(chunks)
+
+
+def generate_one(job, out_dir, timeout, retries):
+    text, voice_id, rate, voice = job
+    target = audio_path(out_dir, text, voice_id, rate)
+    if target.exists() and target.stat().st_size > 0:
+        return "skip", target, None
+    target.parent.mkdir(parents=True, exist_ok=True)
+    last_error = None
+    for attempt in range(1, retries + 1):
+        try:
+            data = asyncio.run(synth_async(text, voice, edge_rate_pct(rate), timeout))
+            tmp = target.with_name(target.name + ".tmp." + str(os.getpid()) + "." + str(attempt))
+            with open(tmp, "wb") as f:
+                f.write(data)
+            os.replace(tmp, target)
+            return "ok", target, None
+        except Exception as exc:
+            last_error = exc
+            if attempt < retries:
+                time.sleep(0.6 * attempt)
+    return "fail", target, last_error
+
+
+def collect_jobs(source, rates, limit):
+    with open(source, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    jobs, seen = [], set()
+    for grades in data.values():
+        for terms in grades.values():
+            for units in terms.values():
+                for lessons in units.values():
+                    for lesson in lessons:
+                        for line in lesson.get("content", []):
+                            text = str(line.get("text") or "").strip()
+                            if not text:
+                                continue
+                            voice_id = role_voice_id(line.get("role") or "")
+                            spoken = expand_abbrev(text)
+                            for rate in rates:
+                                key = audio_key(spoken, voice_id, rate)
+                                if key in seen:
+                                    continue
+                                seen.add(key)
+                                jobs.append((spoken, voice_id, rate, edge_voice_for(voice_id)))
+    if limit:
+        jobs = jobs[:limit]
+    return jobs
+
+
+def main():
+    ap = argparse.ArgumentParser(description="预生成课文逐句音频（Edge Neural）")
+    ap.add_argument("--source", default=str(DEFAULT_SOURCE), help="教材 JSON 路径")
+    ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
+    ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")
+    ap.add_argument("--all-rates", action="store_true", help="生成全部 5 个语速档")
+    ap.add_argument("--limit", type=int, default=0, help="最多生成条数（0=全部）")
+    ap.add_argument("--workers", type=int, default=6, help="并发数")
+    ap.add_argument("--timeout", type=int, default=30, help="单次连接超时秒数")
+    ap.add_argument("--retries", type=int, default=3, help="失败重试次数")
+    ap.add_argument("--dry-run", action="store_true", help="只统计不合成")
+    args = ap.parse_args()
+
+    rates = ALL_RATES if args.all_rates else (args.rate or [0.8])
+    for r in rates:
+        if r not in ALL_RATES:
+            ap.error("不支持的语速 " + str(r) + "，可选：" + ", ".join(map(str, ALL_RATES)))
+
+    jobs = collect_jobs(Path(args.source), rates, args.limit)
+    print("待处理：" + str(len(jobs)) + " 条，语速=" + ", ".join(format(r, "g") for r in rates))
+    if args.dry_run:
+        for job in jobs[:5]:
+            print("  " + audio_path(args.out_dir, job[0], job[1], job[2]).name +
+                  "  " + job[3] + "  " + job[0][:50])
+        return 0
+
+    counts = {"ok": 0, "skip": 0, "fail": 0}
+    failures = []
+    with ThreadPoolExecutor(max_workers=max(1, args.workers)) as pool:
+        futures = {pool.submit(generate_one, j, args.out_dir, args.timeout, args.retries): j for j in jobs}
+        for done, future in enumerate(as_completed(futures), 1):
+            status, target, error = future.result()
+            counts[status] += 1
+            if status == "fail":
+                failures.append((futures[future][0], str(error)))
+            if done % 50 == 0 or done == len(jobs):
+                print("进度 " + str(done) + "/" + str(len(jobs)) +
+                      "  新增 " + str(counts["ok"]) + "  跳过 " + str(counts["skip"]) +
+                      "  失败 " + str(counts["fail"]))
+
+    print("完成：新增 " + str(counts["ok"]) + "，跳过 " + str(counts["skip"]) +
+          "，失败 " + str(counts["fail"]))
+    for text, error in failures[:10]:
+        print("  失败：" + text[:50] + " -> " + error)
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

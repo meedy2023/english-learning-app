@@ -1,7 +1,7 @@
 # 课文朗读 · 角色音色分配表
 
 > 代码位置：`frontend/index.html` 与 `docs/index.html` 中 `// ========== 课文分角色朗读` 段落，**两份必须完全一致**。
-> 当前 SW 缓存版本：`english-app-v254`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
+> 当前 SW 缓存版本：`english-app-v258`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
 
 ## 1. 音色池（10 组）
 
@@ -83,13 +83,35 @@
 - 每个增益节点后串一个 `lowpass` 滤波（2600Hz），柔化三角波高次谐波的"电子感"；
 - 高八度泛音峰值略降（0.28 → 0.24）。
 
-## 6. 以后怎么改
+## 6. P0 预生成音频（固定课文）
+
+固定课文不再完全依赖浏览器端 WebSocket / 讯飞接口，而是由脚本离线生成逐句 MP3，前端优先播放本地文件；文件缺失或加载失败时静默回退原 TTS 链路。
+
+- 生成脚本：`pregenerate_audio.py`（根目录），依赖 `pip install --upgrade edge-tts`，不需要 API Key。
+- 输出目录：`docs/audio/lesson/<哈希前2位>/<哈希>.mp3`。
+- 哈希规则：`FNV-1a("edge|" + roleVoiceId + "|" + speechRate + "|1|" + expandAbbrev(text))`，与前端 `preAudioUrl()` 完全一致，无需 manifest。
+- 默认只生成 0.8 档；`--all-rates` 生成 5 档。当前 1253 行去重后 1238 条（0.8 档）。
+- 前端接入点：`TTS.speakSentence()` 与 `speakLine()` 先试本地音频；`LessonReader` 播放当前句时预热下一句。
+- 预生成音频按目标语速合成，播放端 `playbackRate = 1`，不再叠加残余系数。
+- 切换角色音色或改名后，必须重新运行脚本覆盖旧文件（文件名随 voiceId 变化，不会互相覆盖）。
+
+常用命令：
+
+```bash
+python pregenerate_audio.py --dry-run
+python pregenerate_audio.py --limit 20
+python pregenerate_audio.py --workers 6
+python pregenerate_audio.py --all-rates
+```
+
+## 7. 以后怎么改
 
 1. **调音色听感**：改第 1 节对应的 `ROLE_VOICE_POOL` 那一行（vcn / pitch / speed / edge / sysPitch / label），**不要改 id**，否则第 2 节的固定分配会失配。
 2. **给角色换声音 / 修撞音**：改 `ROLE_VOICE_ASSIGN` 对应条目，并同步更新本文件第 2 节。
 3. **新增人物名字**：加进 `ROLE_FEMALE_NAMES` / `ROLE_MALE_NAMES`；无性别标记的人物名（老师、主持人等）加进 `ROLE_HUMAN_NEUTRAL` 正则。
 4. **调语速/音质**：改 `RATE_SYNTH_TABLE` 或第 4 节提到的三个函数；改 `humanProsody` 的 pitchAdj 幅度；改 `Celebrate` 三处音效的滤波/包络。
-5. **同步与发布**：两份 HTML 改完后两份 `sw.js` 版本号 +1，提交并 push（`origin main`），GitHub Pages 约 1 分钟后生效。
+5. **重新生成音频**：改过角色音色、语速映射或课文文本后，重跑 `pregenerate_audio.py`；只改 HTML 不重跑会继续播放旧音色/旧语速的预生成文件。
+6. **同步与发布**：两份 HTML 改完后两份 `sw.js` 版本号 +1，提交并 push（`origin main`），GitHub Pages 约 1 分钟后生效。
 
 > TTS 音频缓存是页面内存 `Map`，刷新即清空，改音色参数后刷新页面就能听到新声音；但 HTML 被 SW 缓存，不升版本号用户拿不到新表。
 > 当前真实数据覆盖：126 个角色 / 1253 行课文，1149 行（92%）分配了独立音色。
