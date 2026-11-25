@@ -12,6 +12,8 @@
     python pregenerate_audio.py --dry-run                        # 课文：只看将生成多少条
     python pregenerate_audio.py --kind words --all-rates         # 单词发音：5 档全量
     python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句：5 档全量
+    python pregenerate_audio.py --kind examples --all-rates      # 四模块词汇例句：5 档全量
+    python pregenerate_audio.py --kind plan-reading --all-rates  # 40天计划短文：5 档全量
     python pregenerate_audio.py --limit 20                       # 试生成前 20 条
     python pregenerate_audio.py --all-rates --workers 8          # 课文：5 档全量
 
@@ -291,13 +293,23 @@ KIND_LABELS = {
     "lesson": "课文逐句",
     "words": "单词发音",
     "ket-reading": "KET短文单句",
+    "examples": "词汇例句（四模块）",
+    "plan-reading": "40天计划短文",
 }
-# 各 kind 的默认数据源；--source 可显式覆盖
+# 各 kind 的默认数据源；--source 可显式覆盖（examples/plan-reading 为多源聚合，忽略 --source）
 DEFAULT_SOURCE_BY_KIND = {
     "lesson": ROOT / "docs" / "data" / "textbook.json",
     "words": ROOT / "docs" / "data" / "words.json",
     "ket-reading": ROOT / "docs" / "data" / "ket.json",
+    "examples": ROOT / "docs" / "data",          # 目录：words/ket/toefl/toefl-plan 四份
+    "plan-reading": ROOT / "docs" / "data" / "toefl-plan.json",
 }
+DATA_DIR = ROOT / "docs" / "data"
+
+
+def _load(path):
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
 def collect_jobs(source, rates, limit, kind="lesson"):
@@ -305,12 +317,18 @@ def collect_jobs(source, rates, limit, kind="lesson"):
     - lesson：课文逐句（human=1，分角色音色），5 层嵌套的 content[].text/role
     - words：单词发音（human=0，默认音），words.json 的 word 字段
     - ket-reading：KET 短文单句（human=0，默认音），ket.json 的 短文[].sentences[].en
+    - examples：词汇例句（human=0，默认音）——前端 speakWord(example_en/example) → TTS.speak → human=0
+        来源：words.json 的 example_en、ket.json 词汇.example、toefl.json 词汇.example、
+              toefl-plan.json 的 words[].word（40天计划单词也走 speakWord）
+    - plan-reading：40天计划短文（human=1，默认音）——LessonReader.bind([{en:passage.en}])
+        → speakSentence(human=true, voiceId=null)；静态文本，可预生成
+    注：小托福/拼读分类短文是运行时抽样拼装的整段，文本不固定，走修复后的
+        「预生成 miss → 网络合成+内存缓存 → 本机」回退，不做预生成。
     """
     jobs, seen = [], set()
-    with open(source, "r", encoding="utf-8") as f:
-        data = json.load(f)
 
     if kind == "lesson":
+        data = _load(source)
         for grades in data.values():
             for terms in grades.values():
                 for units in terms.values():
@@ -319,14 +337,44 @@ def collect_jobs(source, rates, limit, kind="lesson"):
                             for line in lesson.get("content", []):
                                 _add_jobs(jobs, seen, [line.get("text")], rates, True, line.get("role") or "")
     elif kind == "words":
+        data = _load(source)
         texts = [w.get("word") for w in data if isinstance(w, dict)] if isinstance(data, list) else []
         _add_jobs(jobs, seen, texts, rates, False, "")
     elif kind == "ket-reading":
+        data = _load(source)
         texts = []
         for item in (data.get("短文") or {}).values():
             for sent in (item.get("sentences") or []):
                 texts.append(sent.get("en"))
         _add_jobs(jobs, seen, texts, rates, False, "")
+    elif kind == "examples":
+        texts = []
+        # words.json：example_en
+        for w in _load(DATA_DIR / "words.json"):
+            if isinstance(w, dict):
+                texts.append(w.get("example_en"))
+        # ket.json：词汇/分类/*[].example
+        ket = _load(DATA_DIR / "ket.json")
+        for cat in (ket.get("词汇", {}).get("分类") or {}).values():
+            for item in cat:
+                texts.append(item.get("example"))
+        # toefl.json：词汇/分类/*[].example
+        toefl = _load(DATA_DIR / "toefl.json")
+        for cat in (toefl.get("词汇", {}).get("分类") or {}).values():
+            for item in cat:
+                texts.append(item.get("example"))
+        # toefl-plan.json：每单词的 word（同样走 speakWord）
+        plan = _load(DATA_DIR / "toefl-plan.json")
+        for st in plan.get("stages", []):
+            for day in st.get("days", []):
+                for w in day.get("words", []):
+                    texts.append(w.get("word"))
+        _add_jobs(jobs, seen, texts, rates, False, "")
+    elif kind == "plan-reading":
+        plan = _load(source)
+        texts = [day.get("passage", {}).get("en")
+                 for st in plan.get("stages", []) for day in st.get("days", [])]
+        _add_jobs(jobs, seen, texts, rates, True, "")
     else:
         raise ValueError("未知 kind: " + kind)
 
@@ -338,7 +386,8 @@ def collect_jobs(source, rates, limit, kind="lesson"):
 def main():
     ap = argparse.ArgumentParser(description="预生成固定文本音频（Edge Neural）")
     ap.add_argument("--kind", default="lesson", choices=list(KIND_LABELS),
-                    help="数据源类型：lesson=课文逐句 / words=单词发音 / ket-reading=KET短文单句")
+                    help="数据源类型：lesson=课文逐句 / words=单词发音 / ket-reading=KET短文单句 / "
+                         "examples=四模块词汇例句 / plan-reading=40天计划短文")
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
     ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")

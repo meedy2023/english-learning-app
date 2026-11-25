@@ -1,7 +1,7 @@
 # 课文朗读 · 角色音色分配表
 
 > 代码位置：`frontend/index.html` 与 `docs/index.html` 中 `// ========== 课文分角色朗读` 段落，**两份必须完全一致**。
-> 当前 SW 缓存版本：`english-app-v263`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
+> 当前 SW 缓存版本：`english-app-v264`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
 
 ## 1. 音色池（10 组）
 
@@ -116,7 +116,10 @@
   - `lesson`：`textbook.json` 逐句，五档 6180 条（合读/群体/动物走默认音）。
   - `words`：`words.json` 的 `word` 字段，默认音，五档约 6410 条（1756 词去重后）。
   - `ket-reading`：`ket.json` 的 `短文[].sentences[].en`，默认音，五档约 490 条。
+  - `examples`：四模块词汇例句（human=0 默认音）——`words.json` 的 `example_en`、`ket.json`/`toefl.json` 的 `词汇.分类[].example`、`toefl-plan.json` 的 `words[].word`，前端都由 `speakWord()` → `TTS.speak` 发音，五档约 36725 条。
+  - `plan-reading`：`toefl-plan.json` 的 `passage.en`（human=1 默认音，40 天计划静态整篇短文），五档 200 条。
 - 前端接入点：`TTS.speakSentence()` / `speakLine()`（human=1）与 `TTS.speak()`（human=0）都先试本地音频；`LessonReader` 播放当前句时预热下一句。`speak()` 覆盖单词发音、例句、测验/PK/拼写/跟读自动播放等全部短朗读。
+- **三级回退（v264 统一）**：所有整篇朗读走「本地预生成 mp3 → 网络合成 + 内存缓存（`_ttsCache` LRU 200）→ 本机 speechSynthesis」。`speakSentence` 原先 preAudio miss 后直接掉本机、绕过网络与内存缓存（音色与设置不一致，部分 WebView 无声）；现已改为 miss 后先走 `synthOnce()`（结果进内存缓存，同一句再读无需联网），彻底失败才掉本机。运行时拼装的短文（小托福/拼读分类）因此也能享受网络+内存缓存，不再静默掉系统音色。
 - 预生成音频按目标语速合成，播放端 `playbackRate = 1`，不再叠加残余系数。
 - SW 策略：`sw.js` 中音频走**缓存优先**（命中即返回，弱网/离线秒开），未命中才走网络并写缓存；文件名带内容哈希，内容变了名字就变，不存在缓存陈旧问题。`index.html` 仍走网络优先，避免缓存旧页面。
 - 切换角色音色或改名后，必须重新运行对应 `--kind` 覆盖旧文件（文件名随 voiceId 变化，不会互相覆盖）。
@@ -127,11 +130,13 @@
 python pregenerate_audio.py --dry-run                        # 课文统计
 python pregenerate_audio.py --kind words --all-rates         # 单词五档
 python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句五档
+python pregenerate_audio.py --kind examples --all-rates      # 四模块词汇例句五档（约 3.67 万条 / +500MB）
+python pregenerate_audio.py --kind plan-reading --all-rates  # 40天计划短文五档（200 条）
 python pregenerate_audio.py --limit 20
 python pregenerate_audio.py --all-rates
 ```
 
-无法预生成（保持实时 TTS）：小托福/拼读分类短文是运行时抽样套模板动态拼装的整段文本；中文语音引导与设置预览被 `preAudioUrl()` 的 `lang !== 'en-US'` 挡住；自然拼读音素已有独立真人 WAV（`docs/phonics/`）。
+无法预生成（走网络合成 + 内存缓存，miss 时不再直接掉系统音色）：小托福/拼读分类短文是运行时抽样套模板动态拼装的整段文本；中文语音引导与设置预览被 `preAudioUrl()` 的 `lang !== 'en-US'` 挡住；自然拼读音素已有独立真人 WAV（`docs/phonics/`）。
 
 ## 7. 以后怎么改
 

@@ -4902,10 +4902,33 @@ function playAudioBlob(blob, onEnd) {
         handle.stop = () => { try { speechSynthesis.cancel(); } catch (e) {} };
         TTS.speakSystem(text, lang, opts.onEnd, G, voiceId);
       };
-      // P0：预生成音频优先。文件不存在/加载失败时静默回退原网络→本机链路。
+      // 网络合成 + 内存缓存：预生成缺失（如运行时拼装的短文）时走这条链路，
+      // 合成结果进 _ttsCache（LRU 200），同一句再读无需联网；彻底失败才掉本机语音。
+      // 抽取成函数供 preAudio 失败回调复用，保证「本地→网络缓存→本机」三级回退一致。
+      const _G = G || ((f) => f);
+      const goNetwork = () => {
+        if (!useNet) { goSystem(); return; }
+        this.synthOnce(text, lang, _G((blob) => {
+          if (blob) {
+            // 网络音频被自动播放策略拦截时，降级到系统语音（speechSynthesis 不受 autoplay 限制），
+            // 避免「后面每句都无声但快速跳完」的静默循环。
+            const audio = playAudioBlobEx(blob, opts.onEnd, () => { goSystem(); });
+            handle.kind = 'audio';
+            handle.el = audio;
+            handle.pause = () => { try { audio.pause(); } catch (e) {} };
+            handle.resume = () => { try { audio.playbackRate = audioPlaybackRate(); const p = audio.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
+            handle.stop = () => { try { audio.pause(); } catch (e) {} };
+            opts.onReady && opts.onReady(audio);
+          } else {
+            TTS_NET.onFail();
+            goSystem();
+          }
+        }), opts.human, voiceId);
+      };
+      // P0：预生成音频优先。文件不存在/加载失败时回退网络合成（含内存缓存）→ 本机。
       const preUrl = opts.preAudio === false ? null : preAudioUrl(text, lang, voiceId, !!opts.human);
       if (preUrl) {
-        const preEl = playPreAudio(preUrl, opts.onEnd, () => { goSystem(); });
+        const preEl = playPreAudio(preUrl, opts.onEnd, _G(goNetwork));
         if (preEl) {
           handle.kind = 'preaudio';
           handle.el = preEl;
@@ -4918,24 +4941,7 @@ function playAudioBlob(blob, onEnd) {
           return handle;
         }
       }
-      if (!useNet) { goSystem(); return handle; }
-      this.synthOnce(text, lang, (blob) => {
-        if (blob) {
-          const _G = G || ((f) => f);
-          // 网络音频被自动播放策略拦截时，降级到系统语音（speechSynthesis 不受 autoplay 限制），
-          // 避免「后面每句都无声但快速跳完」的静默循环。
-          const audio = playAudioBlobEx(blob, opts.onEnd, () => { goSystem(); });
-          handle.kind = 'audio';
-          handle.el = audio;
-          handle.pause = () => { try { audio.pause(); } catch (e) {} };
-          handle.resume = () => { try { audio.playbackRate = audioPlaybackRate(); const p = audio.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
-          handle.stop = () => { try { audio.pause(); } catch (e) {} };
-          opts.onReady && opts.onReady(audio);
-        } else {
-          TTS_NET.onFail();
-          goSystem();
-        }
-      }, opts.human, voiceId);
+      goNetwork();
       return handle;
     },
     // 音标发音（自然拼读）：网络走 Edge SSML <phoneme>，本机模式读代表词；
