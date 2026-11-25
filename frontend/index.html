@@ -4626,32 +4626,150 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
     const key = ('00000000' + (h >>> 0).toString(16)).slice(-8);
     return PRE_AUDIO_BASE + key.slice(0, 2) + '/' + key + '.mp3';
   }
-  const _preAudioWarm = {};
-  const _preAudioWarmOrder = [];
-  function warmPreAudio(url) {
-    if (!url || _preAudioWarm[url]) return;
-    const a = new Audio();
-    a.preload = 'auto';
-    try { a.src = url; a.load(); } catch (e) {}
-    _preAudioWarm[url] = a;
-    _preAudioWarmOrder.push(url);
-    while (_preAudioWarmOrder.length > 4) {
-      const old = _preAudioWarmOrder.shift();
-      if (_preAudioWarm[old]) {
-        try { _preAudioWarm[old].src = ''; } catch (e) {}
-        delete _preAudioWarm[old];
-      }
+  // ===== 零延迟音频层：fetch→Blob URL 内存缓存 + 视口预取 + LRU 淘汰 =====
+  // 移动端（尤其 iOS Safari）反复走 HTTP 请求会有明显首字节延迟；用 fetch 预下载为
+  // Blob URL 后点击直接播放本地引用，彻底消除网络往返。缓存按 LRU 淘汰，防止长会话内存膨胀。
+  const AUDIO_BLOB_CACHE_MAX = 50;
+  const _audioBlobCache = new Map();   // url -> blobUrl（Map 迭代顺序即 LRU，末尾最新）
+  const _audioBlobPending = new Map(); // url -> Promise（同一 url 并发预取去重）
+  function _audioBlobEvict() {
+    while (_audioBlobCache.size > AUDIO_BLOB_CACHE_MAX) {
+      const oldestUrl = _audioBlobCache.keys().next().value;
+      const blobUrl = _audioBlobCache.get(oldestUrl);
+      try { URL.revokeObjectURL(blobUrl); } catch (e) {}
+      _audioBlobCache.delete(oldestUrl);
     }
   }
+  function cachedAudioUrl(url) {
+    if (!url || !_audioBlobCache.has(url)) return null;
+    const blobUrl = _audioBlobCache.get(url);
+    _audioBlobCache.delete(url);
+    _audioBlobCache.set(url, blobUrl); // 命中即提到 LRU 末尾
+    return blobUrl;
+  }
+  function prefetchAudioBlob(url) {
+    if (!url || _audioBlobCache.has(url)) return Promise.resolve(cachedAudioUrl(url));
+    if (_audioBlobPending.has(url)) return _audioBlobPending.get(url);
+    const task = (typeof fetch === 'function'
+      ? fetch(url, { cache: 'force-cache' }).then(function (r) {
+          if (!r || !r.ok) throw new Error('prefetch http ' + (r && r.status));
+          return r.blob();
+        })
+      : Promise.reject(new Error('no fetch')))
+      .then(function (blob) {
+        if (!blob || !blob.size) throw new Error('empty audio blob');
+        const blobUrl = URL.createObjectURL(blob);
+        _audioBlobCache.delete(url);
+        _audioBlobCache.set(url, blobUrl);
+        _audioBlobEvict();
+        return blobUrl;
+      })
+      .catch(function () { return null; }) // 预取失败静默：播放仍可直接走原 URL
+      .then(function (v) { _audioBlobPending.delete(url); return v; });
+    _audioBlobPending.set(url, task);
+    return task;
+  }
+  function warmPreAudio(url) { if (url) prefetchAudioBlob(url); }
+
+  // 视口预取：单词卡片即将进入可视区域（提前 200px）时静默发起音频请求。
+  // 元素用 data-speak-word 声明要预取的单词；同时兼容直接带 data-preaudio-url 的元素。
+  let _speakObserver = null;
+  function ensureSpeakObserver() {
+    if (_speakObserver || typeof IntersectionObserver === 'undefined') return _speakObserver;
+    _speakObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        let url = el.getAttribute('data-preaudio-url');
+        if (!url) {
+          const word = el.getAttribute('data-speak-word');
+          if (word) url = preAudioUrl(expandAbbrev(word, 'en-US'), 'en-US', null, false);
+        }
+        if (url) prefetchAudioBlob(url);
+        try { _speakObserver.unobserve(el); } catch (e) {} // 一次性：播过不再重复预取
+      });
+    }, { rootMargin: '200px' });
+    return _speakObserver;
+  }
+  function observeSpeakCards(root) {
+    const io = ensureSpeakObserver();
+    if (!io || !root || !root.querySelectorAll) return;
+    // 1) 显式声明的元素
+    const explicit = root.querySelectorAll('[data-speak-word], [data-preaudio-url]');
+    for (let i = 0; i < explicit.length; i++) {
+      try { io.observe(explicit[i]); } catch (e) {}
+    }
+    // 2) 自动识别听发音按钮：从 onclick="speakWord('...')" 提取单词，
+    //    这样所有模块（词表/KET/小托福/测验/PK）动态渲染的卡片都无需改模板即可预取。
+    const btns = root.querySelectorAll('.speak-btn');
+    for (let i = 0; i < btns.length; i++) {
+      const btn = btns[i];
+      if (btn.getAttribute('data-spk-observed')) continue;
+      const attr = btn.getAttribute('onclick') || '';
+      const m = attr.match(/speakWord\(['"](.*?)['"]\)/);
+      if (!m || !m[1]) continue;
+      const url = preAudioUrl(expandAbbrev(m[1], 'en-US'), 'en-US', null, false);
+      if (!url) continue;
+      btn.setAttribute('data-spk-observed', '1');
+      // 交给 IntersectionObserver：只有真正接近视口（200px）时才发起 fetch，
+      // 避免在长列表渲染瞬间对全部卡片并发预取、冲垮弱网。
+      btn.setAttribute('data-preaudio-url', url);
+      try { io.observe(btn); } catch (e) {}
+    }
+  }
+  // DOM 动态重绘后自动补挂视口预取（innerHTML 重建的卡片不会丢失预取能力）。
+  let _speakObserveScheduled = false;
+  if (typeof MutationObserver !== 'undefined') {
+    new MutationObserver(function () {
+      if (_speakObserveScheduled) return;
+      _speakObserveScheduled = true;
+      setTimeout(function () {
+        _speakObserveScheduled = false;
+        try { observeSpeakCards(document.body); } catch (e) {}
+      }, 0);
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+
+  // 首次触摸/点击时同步解锁 AudioContext（iOS Safari 必须在用户手势栈内 resume）。
+  // 与已有 unlockAudio() 的 HTMLAudio 解锁互补：这里处理 WebAudio 上下文。
+  let _audioCtxUnlocked = false;
+  function unlockAudioContext() {
+    if (_audioCtxUnlocked) return;
+    _audioCtxUnlocked = true;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!window.__sharedAudioCtx) window.__sharedAudioCtx = new AC();
+      const ctx = window.__sharedAudioCtx;
+      if (ctx.state === 'suspended' && ctx.resume) {
+        const p = ctx.resume(); // 同步在手势栈内调用，iOS 才认可
+        if (p && p.catch) p.catch(function () {});
+      }
+      // 同步播放一个极短静音 buffer，确保 iOS 把上下文标记为「已激活」
+      try {
+        const buf = ctx.createBuffer(1, 1, ctx.sampleRate || 22050);
+        const src = ctx.createBufferSource();
+        src.buffer = buf;
+        src.connect(ctx.destination);
+        src.start(0);
+        src.stop(0.001);
+      } catch (e) {}
+    } catch (e) {}
+  }
+  document.addEventListener('touchstart', unlockAudioContext, { capture: true, passive: true });
+  document.addEventListener('pointerdown', unlockAudioContext, { capture: true, passive: true });
+
   function playPreAudio(url, onEnd, onFail) {
     if (!url) return null;
     stopAllAudio();
     const token = window._audioToken;
+    const cached = cachedAudioUrl(url);   // 命中：直接用 Blob URL（本地引用，零网络延迟）
     const audio = new Audio();
     let settled = false;
+    let fallbackTried = false;
     window._activeAudio = audio;
     audio.preload = 'auto';
-    audio.src = url;
+    audio.src = cached || url;
     try { audio.playbackRate = 1; } catch (e) {}
     const cleanup = () => {
       if (settled) return;
@@ -4660,27 +4778,35 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
       if (window._activeAudio === audio) window._activeAudio = null;
       try { audio.onended = null; audio.onerror = null; audio.pause(); audio.src = ''; } catch (e) {}
     };
+    const failOnce = () => {
+      if (settled || token !== window._audioToken) return;
+      // Blob URL 在个别 WebView 上播放失败时，回退原始 HTTP URL 重试一次
+      if (cached && !fallbackTried) {
+        fallbackTried = true;
+        try {
+          audio.src = url;
+          const p2 = audio.play();
+          if (p2 && p2.catch) p2.catch(() => { cleanup(); if (onFail) onFail(); });
+          return;
+        } catch (e) { /* 继续走下方失败处理 */ }
+      }
+      cleanup();
+      if (onFail) onFail();
+    };
     audio.onended = () => {
       if (settled || token !== window._audioToken) return;
       cleanup();
       if (onEnd) onEnd();
     };
-    audio.onerror = () => {
-      if (settled || token !== window._audioToken) return;
-      cleanup();
-      if (onFail) onFail();
-    };
+    audio.onerror = failOnce;
     try {
       const p = audio.play();
-      if (p && p.catch) p.catch(() => {
-        if (settled || token !== window._audioToken) return;
-        cleanup();
-        if (onFail) onFail();
-      });
+      if (p && p.catch) p.catch(failOnce);
     } catch (e) {
-      cleanup();
-      if (onFail) onFail();
+      failOnce();
     }
+    // 未命中时后台预取，供本词/下一词再次点击时秒开
+    if (!cached) prefetchAudioBlob(url);
     return audio;
   }
 
