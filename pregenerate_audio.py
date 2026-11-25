@@ -14,6 +14,8 @@
     python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句：5 档全量
     python pregenerate_audio.py --kind examples --all-rates      # 四模块词汇例句：5 档全量
     python pregenerate_audio.py --kind plan-reading --all-rates  # 40天计划短文：5 档全量
+    python pregenerate_audio.py --kind vocab-extra --all-rates   # 补充词汇短句(KET/小托福/拼读)：5 档全量
+    python pregenerate_audio.py --kind ket-reading-full --all-rates  # KET短文整篇(human=1)：5 档全量
     python pregenerate_audio.py --limit 20                       # 试生成前 20 条
     python pregenerate_audio.py --all-rates --workers 8          # 课文：5 档全量
 
@@ -295,14 +297,18 @@ KIND_LABELS = {
     "ket-reading": "KET短文单句",
     "examples": "词汇例句（四模块）",
     "plan-reading": "40天计划短文",
+    "vocab-extra": "补充词汇短句（KET/小托福/拼读，human=0）",
+    "ket-reading-full": "KET短文整篇（human=1）",
 }
-# 各 kind 的默认数据源；--source 可显式覆盖（examples/plan-reading 为多源聚合，忽略 --source）
+# 各 kind 的默认数据源；--source 可显式覆盖（多源聚合 kind 忽略 --source）
 DEFAULT_SOURCE_BY_KIND = {
     "lesson": ROOT / "docs" / "data" / "textbook.json",
     "words": ROOT / "docs" / "data" / "words.json",
     "ket-reading": ROOT / "docs" / "data" / "ket.json",
     "examples": ROOT / "docs" / "data",          # 目录：words/ket/toefl/toefl-plan 四份
     "plan-reading": ROOT / "docs" / "data" / "toefl-plan.json",
+    "vocab-extra": ROOT / "docs" / "data",       # 目录：ket/toefl/phonics 三份 + 固定预览文本
+    "ket-reading-full": ROOT / "docs" / "data" / "ket.json",
 }
 DATA_DIR = ROOT / "docs" / "data"
 
@@ -322,6 +328,14 @@ def collect_jobs(source, rates, limit, kind="lesson"):
               toefl-plan.json 的 words[].word（40天计划单词也走 speakWord）
     - plan-reading：40天计划短文（human=1，默认音）——LessonReader.bind([{en:passage.en}])
         → speakSentence(human=true, voiceId=null)；静态文本，可预生成
+    - vocab-extra：补充词汇短句（human=0，默认音）——凡经 speakWord() 朗读、
+        但不在 words.json / 例句覆盖内的静态文本：KET 词汇 word、KET 句型 english、
+        KET 语法例句、小托福词汇 word、拼读 words[].w 与 sound_word，以及设置页固定预览句。
+        前端入口：KET/小托福词表朗读、测验 speakKetQuizWord、PK/Spell/Doodle/Match、
+        词卡、音标缺素材回退、发音人预览。
+    - ket-reading-full：KET 短文整篇（human=1，默认音）——LessonReader.bind(sentences)
+        → speakSentence(human=true, voiceId=null)。单句朗读是 human=0（ket-reading kind），
+        哈希 key 不同，必须单独生成，不能复用 ket-reading 的文件。
     注：小托福/拼读分类短文是运行时抽样拼装的整段，文本不固定，走修复后的
         「预生成 miss → 网络合成+内存缓存 → 本机」回退，不做预生成。
     """
@@ -375,6 +389,45 @@ def collect_jobs(source, rates, limit, kind="lesson"):
         texts = [day.get("passage", {}).get("en")
                  for st in plan.get("stages", []) for day in st.get("days", [])]
         _add_jobs(jobs, seen, texts, rates, True, "")
+    elif kind == "vocab-extra":
+        texts = []
+        ket = _load(DATA_DIR / "ket.json")
+        # 词汇/分类/*[].word（KET 词表朗读、测验 speak=item.en、PK/Spell 等）
+        for cat in (ket.get("词汇", {}).get("分类") or {}).values():
+            for item in cat:
+                texts.append(item.get("word"))
+        # 句型/*[].english
+        for cat in (ket.get("句型") or {}).values():
+            for item in cat:
+                texts.append(item.get("english"))
+        # 语法/*.例句[]（语法挖空题朗读完整例句）
+        for item in (ket.get("语法") or {}).values():
+            if isinstance(item, dict):
+                for sent in (item.get("例句") or []):
+                    texts.append(sent)
+        # 小托福 词汇/分类/*[].word
+        toefl = _load(DATA_DIR / "toefl.json")
+        for cat in (toefl.get("词汇", {}).get("分类") or {}).values():
+            for item in cat:
+                texts.append(item.get("word"))
+        # 拼读：[].lessons[].words[].w 与 lessons[].sound_word
+        phonics = _load(DATA_DIR / "phonics.json")
+        for group in phonics:
+            for lesson in group.get("lessons", []):
+                texts.append(lesson.get("sound_word"))
+                for word in lesson.get("words", []):
+                    texts.append(word.get("w"))
+        # 设置页发音人/语速预览固定句（前端 previewEnVoice / previewSpeechRate 硬编码）
+        texts.append("Hello! How are you today?")
+        _add_jobs(jobs, seen, texts, rates, False, "")
+    elif kind == "ket-reading-full":
+        ket = _load(source)
+        texts = []
+        for item in (ket.get("短文") or {}).values():
+            for sent in (item.get("sentences") or []):
+                texts.append(sent.get("en"))
+        # 整篇播放器 bind(sentences) 取 text||en，无 role → voiceId=null，human=1
+        _add_jobs(jobs, seen, texts, rates, True, "")
     else:
         raise ValueError("未知 kind: " + kind)
 
@@ -387,7 +440,9 @@ def main():
     ap = argparse.ArgumentParser(description="预生成固定文本音频（Edge Neural）")
     ap.add_argument("--kind", default="lesson", choices=list(KIND_LABELS),
                     help="数据源类型：lesson=课文逐句 / words=单词发音 / ket-reading=KET短文单句 / "
-                         "examples=四模块词汇例句 / plan-reading=40天计划短文")
+                         "examples=四模块词汇例句 / plan-reading=40天计划短文 / "
+                         "vocab-extra=补充词汇短句(KET/小托福/拼读,human=0) / "
+                         "ket-reading-full=KET短文整篇(human=1)")
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
     ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")
