@@ -2866,13 +2866,18 @@ const API = ".";
     { id: 'role_f1', gender: 'female', vcn: 'catherine', xfPitch: 50, speed: 50, edge: 'en-GB-SoniaNeural',      sysPitch: 1.24, label: '清亮女声' },
     { id: 'role_f2', gender: 'female', vcn: 'catherine', xfPitch: 58, speed: 52, edge: 'en-US-JennyNeural',       sysPitch: 1.18, label: '柔美女声' },
     { id: 'role_f3', gender: 'female', vcn: 'catherine', xfPitch: 60, speed: 55, edge: 'en-GB-LibbyNeural',       sysPitch: 1.30, label: '少女音' },
-    { id: 'role_f4', gender: 'female', vcn: 'catherine', xfPitch: 44, speed: 46, edge: 'en-US-AriaNeural',        sysPitch: 1.10, label: '成熟女声' },
+    { id: 'role_f4', gender: 'female', vcn: 'catherine', xfPitch: 44, speed: 46, edge: 'en-US-EmmaNeural',        sysPitch: 1.10, label: '成熟女声' },
     { id: 'role_f5', gender: 'female', vcn: 'catherine', xfPitch: 40, speed: 44, edge: 'en-GB-MaisieNeural',      sysPitch: 1.02, label: '沉稳女声' },
     { id: 'role_m1', gender: 'male',   vcn: 'henry',     xfPitch: 50, speed: 50, edge: 'en-GB-RyanNeural',        sysPitch: 0.88, label: '青年男声' },
     { id: 'role_m2', gender: 'male',   vcn: 'henry',     xfPitch: 42, speed: 46, edge: 'en-GB-ThomasNeural',      sysPitch: 0.76, label: '低沉男声' },
     { id: 'role_m3', gender: 'male',   vcn: 'henry',     xfPitch: 57, speed: 55, edge: 'en-US-GuyNeural',         sysPitch: 0.98, label: '活泼男声' },
     { id: 'role_m4', gender: 'male',   vcn: 'henry',     xfPitch: 40, speed: 42, edge: 'en-US-ChristopherNeural', sysPitch: 0.70, label: '沉稳男声' },
-    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 47, speed: 48, edge: 'en-US-EricNeural',        sysPitch: 0.82, label: '温和男声' }
+    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 47, speed: 48, edge: 'en-US-EricNeural',        sysPitch: 0.82, label: '温和男声' },
+    // 以下仅按固定分配使用（老师 / 学生），不参与名字哈希兜底，避免影响其它角色。
+    // Edge 无真童声：女童声用 Ana（Cute 标签，最接近童声），男童声用 Roger（Lively 年轻男声）；讯飞靠高 pitch 模拟。
+    { id: 'role_teacher', gender: 'female', vcn: 'catherine', xfPitch: 44, speed: 46, edge: 'en-US-AriaNeural',   sysPitch: 1.08, label: '成年女声·老师', fixedOnly: true },
+    { id: 'role_child_f', gender: 'female', vcn: 'catherine', xfPitch: 60, speed: 55, edge: 'en-US-AnaNeural',    sysPitch: 1.32, label: '女童声', fixedOnly: true },
+    { id: 'role_child_m', gender: 'male',   vcn: 'henry',     xfPitch: 58, speed: 55, edge: 'en-US-RogerNeural',  sysPitch: 1.12, label: '男童声', fixedOnly: true }
   ];
   const ROLE_VOICE_BY_ID = {};
   const ROLE_VOICE_TTS_PROFILES = {};
@@ -2881,20 +2886,23 @@ const API = ".";
     ROLE_VOICE_TTS_PROFILES[p.id] = { vcn: p.vcn, pitch: p.xfPitch, speed: p.speed };
   });
   const ROLE_VOICE_IDS = {
-    female: ROLE_VOICE_POOL.filter(function (p) { return p.gender === 'female'; }).map(function (p) { return p.id; }),
-    male: ROLE_VOICE_POOL.filter(function (p) { return p.gender === 'male'; }).map(function (p) { return p.id; })
+    female: ROLE_VOICE_POOL.filter(function (p) { return p.gender === 'female' && !p.fixedOnly; }).map(function (p) { return p.id; }),
+    male: ROLE_VOICE_POOL.filter(function (p) { return p.gender === 'male' && !p.fixedOnly; }).map(function (p) { return p.id; })
   };
   // 教材高频人物固定分配，避免同性别角色撞音；未列出的角色按名字哈希稳定落到同性别池
   const ROLE_VOICE_ASSIGN = {
-    'teacher':'role_f5', 'narrator':'role_m4',  // 高频但无性别标记的人物，固定音色（避开主角撞音）
+    'teacher':'role_teacher', 'narrator':'role_m4',  // 老师固定成年女声；旁白固定沉稳男声（避开主角撞音）
     'lingling':'role_f1', 'amy':'role_f2', 'wenwen':'role_f3', 'jingjing':'role_f4', 'yanyan':'role_f5',
     'huahua':'role_f1', 'weiwei':'role_f2', 'lanlan':'role_f3', 'nana':'role_f4', 'jiajia':'role_f5',
-    'tippi':'role_f3', 'girl':'role_f3', 'little chicken':'role_f3', 'baby':'role_f3',
+    'tippi':'role_f3', 'little chicken':'role_f3', 'baby':'role_f3',
+    // 学生标签统一用儿童音：女童声 / 男童声（此前散落在成人音色池里）
+    'girl':'role_child_f', 'student':'role_child_f', 'students':'role_child_f',
+    'boy':'role_child_m', 'kids':'role_child_m', 'children':'role_child_m',
     'mum':'role_f4', 'mother':'role_f4', "amy's mum":'role_f4', 'ms smart':'role_f4', 'ms li':'role_f4', 'ms olivia':'role_f4',
     'grandma':'role_f5', 'mother hen':'role_f5', 'woman':'role_f5',
     'tom':'role_m1', 'bob':'role_m1', 'bobo':'role_m1', 'bobby':'role_m1', 'li han':'role_m1', 'jay':'role_m1',
     'dad':'role_m2', 'father':'role_m2', 'man':'role_m2', 'liu fei':'role_m2', 'jim':'role_m2', 'doctor':'role_m2', 'detective sharp':'role_m2',
-    'sam':'role_m3', 'boy':'role_m3', 'taotao':'role_m3', 'ray':'role_m3',
+    'sam':'role_m3', 'taotao':'role_m3', 'ray':'role_m3',
     'daming':'role_m5', 'ben':'role_m5', 'david':'role_m5', 'yangyang':'role_m5',
     'grandpa':'role_m4', 'terry':'role_m4', 'old man':'role_m4', 'lu xun':'role_m4', 'fabre':'role_m4', 'samuel pepys':'role_m4'
   };
@@ -2904,7 +2912,7 @@ const API = ".";
   };
   const VOICE_ID_GENDER = { catherine: 'female', henry: 'male', child_en: 'female' };
   ROLE_VOICE_POOL.forEach(function (p) { VOICE_ID_GENDER[p.id] = p.gender; });
-  const ROLE_ALL_VOICE_IDS = ROLE_VOICE_POOL.map(function (p) { return p.id; });
+  const ROLE_ALL_VOICE_IDS = ROLE_VOICE_POOL.filter(function (p) { return !p.fixedOnly; }).map(function (p) { return p.id; });
   // 无性别标记但明显是人物的角色（学生 / 主持人 / 管理员等）也分独立音色；
   // 动物、物体、自然景物仍沿用设置页发音人。
   const ROLE_HUMAN_NEUTRAL = /^(teacher|narrator|student|students|kids|children|everyone|all|both|family|friend|my new friend|host|old friends|zookeeper|police officer|forest keeper|barbapapa|tutu|lin jia)\b/i;

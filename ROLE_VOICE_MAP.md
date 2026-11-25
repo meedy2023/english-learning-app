@@ -1,7 +1,7 @@
 # 课文朗读 · 角色音色分配表
 
 > 代码位置：`frontend/index.html` 与 `docs/index.html` 中 `// ========== 课文分角色朗读` 段落，**两份必须完全一致**。
-> 当前 SW 缓存版本：`english-app-v258`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
+> 当前 SW 缓存版本：`english-app-v259`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
 
 ## 1. 音色池（10 组）
 
@@ -10,14 +10,21 @@
 | `role_f1` | 女 | 清亮女声 | catherine | 50 | 50 | en-GB-SoniaNeural | 1.24 |
 | `role_f2` | 女 | 柔美女声 | catherine | 58 | 52 | en-US-JennyNeural | 1.18 |
 | `role_f3` | 女 | 少女音 | catherine | 60 | 55 | en-GB-LibbyNeural | 1.30 |
-| `role_f4` | 女 | 成熟女声 | catherine | 44 | 46 | en-US-AriaNeural | 1.10 |
+| `role_f4` | 女 | 成熟女声 | catherine | 44 | 46 | en-US-EmmaNeural | 1.10 |
 | `role_f5` | 女 | 沉稳女声 | catherine | 40 | 44 | en-GB-MaisieNeural | 1.02 |
 | `role_m1` | 男 | 青年男声 | henry | 50 | 50 | en-GB-RyanNeural | 0.88 |
 | `role_m2` | 男 | 低沉男声 | henry | 42 | 46 | en-GB-ThomasNeural | 0.76 |
 | `role_m3` | 男 | 活泼男声 | henry | 57 | 55 | en-US-GuyNeural | 0.98 |
 | `role_m4` | 男 | 沉稳男声 | henry | 40 | 42 | en-US-ChristopherNeural | 0.70 |
 | `role_m5` | 男 | 温和男声 | henry | 47 | 48 | en-US-EricNeural | 0.82 |
+| `role_teacher` | 女 | 成年女声·老师 | catherine | 44 | 46 | en-US-AriaNeural | 1.08 |
+| `role_child_f` | 女 | 女童声 | catherine | 60 | 55 | en-US-AnaNeural | 1.32 |
+| `role_child_m` | 男 | 男童声 | henry | 58 | 55 | en-US-RogerNeural | 1.12 |
 
+- **年龄匹配**：`Teacher` 固定用成年女声（`role_teacher`，原 `role_f5`/MaisieNeural 是偏童声的年轻女声，听感像儿童）；`Girl/Student/Students` 用女童声、`Boy/Kids/Children` 用男童声。
+- **Edge 无真童声**：官方英文音色均为成人录制，女童声用 `en-US-AnaNeural`（Cute 标签，最接近童声），男童声用 `en-US-RogerNeural`（Lively 年轻男声）；讯飞端靠高 pitch（58~60）模拟。
+- 上表后 3 个（`role_teacher`/`role_child_f`/`role_child_m`）标了 `fixedOnly: true`，**只按固定分配使用，不进入第 3 节的名字哈希池**，避免未列出的角色随机落到老师/儿童音。
+- 为避免与老师撞音，`role_f4`（成熟女声，Mum 等）的 Edge 音色从 `en-US-AriaNeural` 改为 `en-US-EmmaNeural`，Aria 让给老师专用。
 - 讯飞只有 `catherine`（女）和 `henry`（男）两个真实 vcn，靠 pitch / speed 变体拉开同性别差异。
 - **pitch 已收敛**：讯飞 pitch 在合成时钳制到 40~60（`XFYunTTS.synth`），系统 `sysPitch` 收敛到 0.70~1.30。原因是 pitch 偏离 50 越远，合成音越容易带金属电音；角色区分主要靠 vcn + Edge 不同音色实现。
 - 表格里的讯飞 speed 字段是角色**语速微调**，不是全局语速；全局语速现在由 `xfSynthSpeed()` 按用户设定统一生成（见第 4 节），会覆盖此字段。
@@ -32,16 +39,20 @@
 |---|---|---|
 | `role_f1` | 清亮女声 | Lingling、Huahua |
 | `role_f2` | 柔美女声 | Amy、Weiwei |
-| `role_f3` | 少女音 | Wenwen、Lanlan、Tippi、Girl、Little Chicken、Baby |
+| `role_f3` | 少女音 | Wenwen、Lanlan、Tippi、Little Chicken、Baby |
 | `role_f4` | 成熟女声 | Jingjing、Nana、Mum、Mother、Amy's mum、Ms Smart、Ms Li、Ms Olivia |
-| `role_f5` | 沉稳女声 | Teacher、Yanyan、Jiajia、Grandma、Mother Hen、Woman |
+| `role_f5` | 沉稳女声 | Yanyan、Jiajia、Grandma、Mother Hen、Woman |
 | `role_m1` | 青年男声 | **Tom**、Bob、Bobo、Bobby、Li Han、Jay |
 | `role_m2` | 低沉男声 | **Dad / Father**、Man、Liu Fei、Jim、Doctor、Detective Sharp |
-| `role_m3` | 活泼男声 | Sam、Boy、Taotao、Ray |
+| `role_m3` | 活泼男声 | Sam、Taotao、Ray |
 | `role_m4` | 沉稳男声 | Narrator、Grandpa、Terry、Old man、Lu Xun、Fabre、Samuel Pepys |
 | `role_m5` | 温和男声 | Daming、Ben、David、Yangyang |
+| `role_teacher` | 成年女声·老师 | **Teacher** |
+| `role_child_f` | 女童声 | **Girl、Student、Students** |
+| `role_child_m` | 男童声 | **Boy、Kids、Children** |
 
 > 用户举例的三个角色：**Tom = 青年男声、Mum = 成熟女声、Dad = 低沉男声**，三者音色互不相同。
+> 年龄匹配：**Teacher = 成年女声（不再用偏童声的 Maisie）**；学生标签（Girl/Boy/Student/Students/Kids/Children）统一用儿童音。
 
 ## 3. 未列出的角色怎么分配
 
@@ -109,6 +120,7 @@ python pregenerate_audio.py --all-rates
 1. **调音色听感**：改第 1 节对应的 `ROLE_VOICE_POOL` 那一行（vcn / pitch / speed / edge / sysPitch / label），**不要改 id**，否则第 2 节的固定分配会失配。
 2. **给角色换声音 / 修撞音**：改 `ROLE_VOICE_ASSIGN` 对应条目，并同步更新本文件第 2 节。
 3. **新增人物名字**：加进 `ROLE_FEMALE_NAMES` / `ROLE_MALE_NAMES`；无性别标记的人物名（老师、主持人等）加进 `ROLE_HUMAN_NEUTRAL` 正则。
+   - 如果是老师/学生这类要锁定年龄身份的角色，直接用 `ROLE_VOICE_ASSIGN` 固定到 `role_teacher` / `role_child_f` / `role_child_m`，不要只靠性别哈希。
 4. **调语速/音质**：改 `RATE_SYNTH_TABLE` 或第 4 节提到的三个函数；改 `humanProsody` 的 pitchAdj 幅度；改 `Celebrate` 三处音效的滤波/包络。
 5. **重新生成音频**：改过角色音色、语速映射或课文文本后，重跑 `pregenerate_audio.py`；只改 HTML 不重跑会继续播放旧音色/旧语速的预生成文件。
 6. **同步与发布**：两份 HTML 改完后两份 `sw.js` 版本号 +1，提交并 push（`origin main`），GitHub Pages 约 1 分钟后生效。

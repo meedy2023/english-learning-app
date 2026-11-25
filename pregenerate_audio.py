@@ -36,24 +36,32 @@ ROLE_VOICE_POOL = [
     {"id": "role_f1", "gender": "female", "edge": "en-GB-SoniaNeural"},
     {"id": "role_f2", "gender": "female", "edge": "en-US-JennyNeural"},
     {"id": "role_f3", "gender": "female", "edge": "en-GB-LibbyNeural"},
-    {"id": "role_f4", "gender": "female", "edge": "en-US-AriaNeural"},
+    {"id": "role_f4", "gender": "female", "edge": "en-US-EmmaNeural"},
     {"id": "role_f5", "gender": "female", "edge": "en-GB-MaisieNeural"},
     {"id": "role_m1", "gender": "male",   "edge": "en-GB-RyanNeural"},
     {"id": "role_m2", "gender": "male",   "edge": "en-GB-ThomasNeural"},
     {"id": "role_m3", "gender": "male",   "edge": "en-US-GuyNeural"},
     {"id": "role_m4", "gender": "male",   "edge": "en-US-ChristopherNeural"},
     {"id": "role_m5", "gender": "male",   "edge": "en-US-EricNeural"},
+    # 仅固定分配使用（老师 / 学生），不参与名字哈希兜底，避免影响其它角色。
+    # Edge 无真童声：女童声用 Ana（Cute），男童声用 Roger（Lively 年轻男声）。
+    {"id": "role_teacher", "gender": "female", "edge": "en-US-AriaNeural", "fixedOnly": True},
+    {"id": "role_child_f", "gender": "female", "edge": "en-US-AnaNeural",  "fixedOnly": True},
+    {"id": "role_child_m", "gender": "male",   "edge": "en-US-RogerNeural", "fixedOnly": True},
 ]
 ROLE_VOICE_ASSIGN = {
-    "teacher": "role_f5", "narrator": "role_m4",
+    "teacher": "role_teacher", "narrator": "role_m4",
     "lingling": "role_f1", "amy": "role_f2", "wenwen": "role_f3", "jingjing": "role_f4", "yanyan": "role_f5",
     "huahua": "role_f1", "weiwei": "role_f2", "lanlan": "role_f3", "nana": "role_f4", "jiajia": "role_f5",
-    "tippi": "role_f3", "girl": "role_f3", "little chicken": "role_f3", "baby": "role_f3",
+    "tippi": "role_f3", "little chicken": "role_f3", "baby": "role_f3",
+    # 学生标签统一用儿童音：女童声 / 男童声
+    "girl": "role_child_f", "student": "role_child_f", "students": "role_child_f",
+    "boy": "role_child_m", "kids": "role_child_m", "children": "role_child_m",
     "mum": "role_f4", "mother": "role_f4", "amy's mum": "role_f4", "ms smart": "role_f4", "ms li": "role_f4", "ms olivia": "role_f4",
     "grandma": "role_f5", "mother hen": "role_f5", "woman": "role_f5",
     "tom": "role_m1", "bob": "role_m1", "bobo": "role_m1", "bobby": "role_m1", "li han": "role_m1", "jay": "role_m1",
     "dad": "role_m2", "father": "role_m2", "man": "role_m2", "liu fei": "role_m2", "jim": "role_m2", "doctor": "role_m2", "detective sharp": "role_m2",
-    "sam": "role_m3", "boy": "role_m3", "taotao": "role_m3", "ray": "role_m3",
+    "sam": "role_m3", "taotao": "role_m3", "ray": "role_m3",
     "daming": "role_m5", "ben": "role_m5", "david": "role_m5", "yangyang": "role_m5",
     "grandpa": "role_m4", "terry": "role_m4", "old man": "role_m4", "lu xun": "role_m4", "fabre": "role_m4", "samuel pepys": "role_m4",
 }
@@ -77,10 +85,10 @@ ROLE_HUMAN_NEUTRAL = re.compile(
 )
 ROLE_BY_ID = {p["id"]: p for p in ROLE_VOICE_POOL}
 ROLE_IDS_BY_GENDER = {
-    g: [p["id"] for p in ROLE_VOICE_POOL if p["gender"] == g]
+    g: [p["id"] for p in ROLE_VOICE_POOL if p["gender"] == g and not p.get("fixedOnly")]
     for g in ("female", "male")
 }
-ALL_ROLE_IDS = [p["id"] for p in ROLE_VOICE_POOL]
+ALL_ROLE_IDS = [p["id"] for p in ROLE_VOICE_POOL if not p.get("fixedOnly")]
 
 RATE_TABLE = [
     (0.5, 0.775),
