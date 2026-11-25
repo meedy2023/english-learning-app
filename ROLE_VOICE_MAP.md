@@ -1,7 +1,7 @@
 # 课文朗读 · 角色音色分配表
 
 > 代码位置：`frontend/index.html` 与 `docs/index.html` 中 `// ========== 课文分角色朗读` 段落，**两份必须完全一致**。
-> 当前 SW 缓存版本：`english-app-v262`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
+> 当前 SW 缓存版本：`english-app-v263`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
 
 ## 1. 音色池（10 组）
 
@@ -109,6 +109,7 @@
 - 生成脚本：`pregenerate_audio.py`（根目录），依赖 `pip install --upgrade edge-tts`，不需要 API Key。
 - 输出目录：`docs/audio/lesson/<哈希前2位>/<哈希>.mp3`。
 - 哈希规则：`FNV-1a("edge|" + roleVoiceId + "|" + speechRate + "|" + human + "|" + expandAbbrev(text))`，与前端 `preAudioUrl()` 完全一致，无需 manifest。
+  - **中文转拼音**：`expandAbbrev` 发音前会把英文朗读文本里嵌入的汉字转成无声调拼音（页面显示不变）。当前仅五年级上册 Unit 4 的 `The word is "早".` → `"zao".`，en-US 音色原本会跳过汉字导致不发音。映射表 `ZH_TO_PINYIN`（前端 `index.html` 与 `pregenerate_audio.py` 各一份，必须逐字一致）；新增汉字时用 `pypinyin` 的 `lazy_pinyin(ch)[0]` 取拼音后两端同步添加，并重跑对应 `--kind` 覆盖音频。
   - `human=1`：课文逐句/短文（`speakSentence`，分角色 + 人性化停顿），roleVoiceId 参与哈希。
   - `human=0`：单词 / 例句 / KET 短文单句（`speak`，普通发音），一律默认音（voiceId=null → `default`）。
 - 三类数据源（`--kind` 切换，默认 lesson）：

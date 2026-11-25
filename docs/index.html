@@ -4312,9 +4312,21 @@ const API = ".";
   // 英文缩写展开：TTS 引擎（讯飞/Edge）对 Ms / Mr / Mrs 等缩写常按字母或错误音节拼读，
   // 这里在发音前把它们展开成正确读音（只改发音，不改页面显示文本）。
   // 边界：仅匹配「缩写(可带点) + 空格 + 大写字母开头的人名」，避免误伤普通词。
+  // 英文朗读文本里偶尔嵌入单个汉字（如课文 "The word is "早"."）。
+  // en-US 英文音色会把汉字静默跳过导致不发音，这里在发音前把汉字替换成拼音
+  // （无声调，英文音节能读），页面显示文本不变。映射表与 pregenerate_audio.py
+  // 中的 ZH_TO_PINYIN 保持逐字一致，确保本地预生成音频的哈希 key 前后端一致。
+  // 扩展：若课文新增汉字，用 pypinyin 生成无声调拼音后在此表和脚本同步添加。
+  const ZH_TO_PINYIN = { '早': 'zao' };
+  function hanToPinyin(text) {
+    if (!text || !/[\u3400-\u9fff]/.test(text)) return text;
+    return String(text).replace(/[\u3400-\u9fff]/g, function (ch) {
+      return ZH_TO_PINYIN[ch] || ch;
+    });
+  }
   function expandAbbrev(text, lang) {
     if (!text || lang !== 'en-US') return text;
-    return String(text)
+    return hanToPinyin(String(text))
       .replace(/\bMs\.?\s+(?=[A-Z])/g, 'Miz ')
       .replace(/\bMr\.?\s+(?=[A-Z])/g, 'Mister ')
       .replace(/\bMrs\.?\s+(?=[A-Z])/g, 'Missus ')

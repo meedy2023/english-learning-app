@@ -187,7 +187,22 @@ def edge_rate_pct(rate):
     return int(round((synth_rate(rate) - 1) * 100))
 
 
+# 英文朗读文本里偶尔嵌入单个汉字（如课文 'The word is "早".'）。
+# en-US 英文音色会静默跳过汉字导致不发音，发音前把汉字替换成无声调拼音。
+# 此表必须与前端 index.html 的 ZH_TO_PINYIN 逐字一致，否则本地音频哈希 key 对不上。
+# 扩展：若课文新增汉字，用 pypinyin 的 lazy_pinyin(ch)[0] 得到无声调拼音，
+#       在此表和前端同步添加。
+ZH_TO_PINYIN = {"早": "zao"}
+
+
+def han_to_pinyin(text):
+    if not text or not re.search(r"[\u3400-\u9fff]", text):
+        return text
+    return re.sub(r"[\u3400-\u9fff]", lambda m: ZH_TO_PINYIN.get(m.group(0), m.group(0)), text)
+
+
 def expand_abbrev(text):
+    text = han_to_pinyin(text)
     text = re.sub(r"\bMs\.?\s+(?=[A-Z])", "Miz ", text)
     text = re.sub(r"\bMr\.?\s+(?=[A-Z])", "Mister ", text)
     text = re.sub(r"\bMrs\.?\s+(?=[A-Z])", "Missus ", text)
