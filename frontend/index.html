@@ -6455,6 +6455,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // （该模式下 view 被移出 .view 且去掉 active，按 view.classList 判断会漏掉）。
   function stabilizeQuizScroll(viewSel, cardSel) {
     cardSel = cardSel || ((viewSel || '#view-quiz') + ' .quiz-card');
+    // 导航按钮（跳过 / 上一题 / 下一题等）由下方 pointerdown 视口锁做绝对还原。
+    // 此处再做「顶栏遮挡校正」会与还原竞争：快速连点时旧锁被新锁取代，
+    // 校正造成的上移会被新锁当成基准固化，表现为连续跳过时页面焦点一路上移。
+    // 锁活跃期间直接让位；键盘触发等无 pointerdown 的路径仍保留本兜底。
+    if (_navScrollLock) return;
     setTimeout(function () {
       try {
         var card = document.querySelector(cardSel);
