@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v247</div>
+          <div class="settings-row-sub" id="settings-version">v248</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -1446,7 +1446,7 @@
     <div id="toefl-content-list"></div>
   </div>
   <div id="toefl-plan-area" style="display:none">
-    <button class="btn btn-secondary nav-back-btn" onclick="toeflPlanNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回计划列表"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
+    <button class="btn btn-secondary nav-back-btn" onclick="toeflPlanNodeBack()" style="position:sticky;top:78px;z-index:95;margin-bottom:16px;display:flex;align-items:center;gap:6px;padding:10px 16px;font-size:14px;border-radius:999px;font-weight:600" type="button" aria-label="返回分类"><span class="nav-back-ico" aria-hidden="true">←</span> 返回分类</button>
     <div id="toefl-plan-header"></div>
     <div id="toefl-plan-entry" style="margin-bottom:12px"></div>
     <div id="toefl-plan-nav" style="display:flex;gap:8px;align-items:center;margin:12px 0"></div>
@@ -2795,7 +2795,9 @@ const API = ".";
     if (_lbh) _lbh.style.top = '84px';
     document.getElementById('word-detail-area').style.display = 'none';
     document.getElementById('word-list').style.display = 'block';
-    showTextbookList();
+    // 直接回当前模块的篇列表：showTextbookList() 会按 currentModule 误跳到别的模块或全部模块列表
+    if (currentLessonModule) openLessonModule(currentLessonModule, currentLessonGrade);
+    else showTextbookList(true);
   }
 
   function getRoleColor(role) {
@@ -5019,10 +5021,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v247';
+          vEl.textContent = m ? ('v' + m[1]) : 'v248';
         })
-        .catch(function () { vEl.textContent = 'v247'; });
-    } catch (e) { vEl.textContent = 'v247'; }
+        .catch(function () { vEl.textContent = 'v248'; });
+    } catch (e) { vEl.textContent = 'v248'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -7113,7 +7115,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (unitLabel) unitLabel.textContent = this.unitLabel();
       var backLabel = this.backLabel();
       var backBtns = [document.getElementById('match-back-btn')];
-      backBtns.forEach(function (b) { if (b) b.textContent = backLabel; });
+      backBtns.forEach(function (b) {
+        if (!b) return;
+        b.textContent = backLabel;
+        b.setAttribute('aria-label', backLabel);   // 可见文案与读屏名称同步
+      });
 
       this.renderBoard();
       this.updateHud();
@@ -7152,10 +7158,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
     // 返回：单元内回单词表，其它作用域退出游戏
     backOut() {
-      if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active) { extFeatureRestore(); return; }
+      if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active) {
+        extFeatureRestore();
+        if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
+        return;
+      }
       var _t = this.scope && this.scope.type;
-      if (this.isUnit()) { showWordList(); return; }
+      if (this.isUnit()) {
+        showWordList();
+        if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
+        return;
+      }
       this.exit();
+      if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
       // 模块功能：退出游戏后 tab 栏回到「单词表」高亮
     },
 
@@ -7772,9 +7787,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
 
   function showLessonList() {
-    switchView('home');
-  // 直接跳转到课文模块列表
-    showTextbookList();
+    // 明确回课文模块列表，避免 showTextbookList() 按 currentModule 智能跳到别的模块
+    showTextbookList(true);
   }
 
   // ---- KET 单词学习入口 ----
@@ -9473,10 +9487,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     },
 
     back() {
-      if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active) { extFeatureRestore(); return; }
+      if (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active) {
+        extFeatureRestore();
+        if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
+        return;
+      }
       const type = this.scope && this.scope.type;
       this.exit();
       if (type === 'unit' && typeof showWordList === 'function') showWordList();
+      if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
       // 模块功能：退出随手拼后 tab 栏回到「单词表」高亮
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
     },
@@ -9719,6 +9738,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  // 40天计划顶部返回按钮文案：游戏进行中先退回本天，否则回分类列表
+  function syncToeflPlanBackLabel() {
+    var btn = document.querySelector('#toefl-plan-area .nav-back-btn');
+    if (!btn) return;
+    var inGame = (typeof Match !== 'undefined' && Match.scope && Match.scope.type === 'toefl-plan') ||
+                 (typeof Doodle !== 'undefined' && Doodle.scope && Doodle.scope.type === 'toefl-plan');
+    var label = inGame ? '返回本天' : '返回分类';
+    btn.innerHTML = '<span class="nav-back-ico" aria-hidden="true">←</span> ' + label;
+    btn.setAttribute('aria-label', label);
+  }
+
   // 分类/分组节点页顶部的「返回」：若当前正打开该节点下的消消乐/随手拼，
   // 则先退出游戏回到本节点页（而非直接跳到分类列表）——与单词学习/测验的上一级语义一致。
   function exitActiveGame(scopeType) {
@@ -9729,7 +9759,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 各模块节点页顶部返回：游戏进行中先退回本节点页，否则执行原有的返回列表逻辑
   function ketNodeBack() { if (exitActiveGame('ket')) return; backToKetCategories(); }
   function toeflNodeBack() { if (exitActiveGame('toefl')) return; backToToeflCategories(); }
-  function toeflPlanNodeBack() { if (exitActiveGame('toefl-plan')) return; exitToeflPlan(); }
+  function toeflPlanNodeBack() {
+    if (exitActiveGame('toefl-plan')) { syncToeflPlanBackLabel(); return; }
+    exitToeflPlan();
+  }
   function phonicsNodeBack() { if (exitActiveGame('phonics')) return; backToPhonicsGroups(); }
 
   // ---- 单元：随手拼 ----
@@ -11826,6 +11859,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     toeflCurrentCategory = '';
     toeflCurrentItems = [];
     restoreToeflView();
+    if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
   }
 
   function renderToeflPlanDay() {
@@ -11835,6 +11869,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     toeflCurrentItems = d.words;
     toeflCurrentCategory = '40天计划 Day' + d.day + ' ' + d.title;
     showToeflPlanView();
+    if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
 
     var total = toeflPlanDays.length;
     document.getElementById('toefl-plan-header').innerHTML =
@@ -11939,6 +11974,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     };
     Match.hideSiblings(['toefl-plan-passage', 'toefl-plan-words']);
     Match.start({});
+    if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -11956,6 +11992,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       words: words,
       hide: ['toefl-plan-passage', 'toefl-plan-words']
     });
+    if (typeof syncToeflPlanBackLabel === 'function') syncToeflPlanBackLabel();
     if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
