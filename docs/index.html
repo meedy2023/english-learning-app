@@ -2863,16 +2863,16 @@ const API = ".";
   // xfPitch+speed 走讯飞（catherine/henry 的音调语速变体），edge 走网络兜底，
   // sysPitch 用于本机 speechSynthesis 降级，label 显示在角色标识上。
   const ROLE_VOICE_POOL = [
-    { id: 'role_f1', gender: 'female', vcn: 'catherine', xfPitch: 50, speed: 50, edge: 'en-GB-SoniaNeural',      sysPitch: 1.35, label: '清亮女声' },
-    { id: 'role_f2', gender: 'female', vcn: 'catherine', xfPitch: 60, speed: 52, edge: 'en-US-JennyNeural',       sysPitch: 1.26, label: '柔美女声' },
-    { id: 'role_f3', gender: 'female', vcn: 'catherine', xfPitch: 70, speed: 55, edge: 'en-GB-LibbyNeural',       sysPitch: 1.46, label: '少女音' },
-    { id: 'role_f4', gender: 'female', vcn: 'catherine', xfPitch: 42, speed: 46, edge: 'en-US-AriaNeural',        sysPitch: 1.14, label: '成熟女声' },
-    { id: 'role_f5', gender: 'female', vcn: 'catherine', xfPitch: 34, speed: 44, edge: 'en-GB-MaisieNeural',      sysPitch: 1.05, label: '沉稳女声' },
-    { id: 'role_m1', gender: 'male',   vcn: 'henry',     xfPitch: 50, speed: 50, edge: 'en-GB-RyanNeural',        sysPitch: 0.80, label: '青年男声' },
-    { id: 'role_m2', gender: 'male',   vcn: 'henry',     xfPitch: 40, speed: 46, edge: 'en-GB-ThomasNeural',      sysPitch: 0.64, label: '低沉男声' },
-    { id: 'role_m3', gender: 'male',   vcn: 'henry',     xfPitch: 58, speed: 55, edge: 'en-US-GuyNeural',         sysPitch: 0.92, label: '活泼男声' },
-    { id: 'role_m4', gender: 'male',   vcn: 'henry',     xfPitch: 32, speed: 42, edge: 'en-US-ChristopherNeural', sysPitch: 0.55, label: '沉稳男声' },
-    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 46, speed: 48, edge: 'en-US-EricNeural',        sysPitch: 0.73, label: '温和男声' }
+    { id: 'role_f1', gender: 'female', vcn: 'catherine', xfPitch: 50, speed: 50, edge: 'en-GB-SoniaNeural',      sysPitch: 1.24, label: '清亮女声' },
+    { id: 'role_f2', gender: 'female', vcn: 'catherine', xfPitch: 58, speed: 52, edge: 'en-US-JennyNeural',       sysPitch: 1.18, label: '柔美女声' },
+    { id: 'role_f3', gender: 'female', vcn: 'catherine', xfPitch: 60, speed: 55, edge: 'en-GB-LibbyNeural',       sysPitch: 1.30, label: '少女音' },
+    { id: 'role_f4', gender: 'female', vcn: 'catherine', xfPitch: 44, speed: 46, edge: 'en-US-AriaNeural',        sysPitch: 1.10, label: '成熟女声' },
+    { id: 'role_f5', gender: 'female', vcn: 'catherine', xfPitch: 40, speed: 44, edge: 'en-GB-MaisieNeural',      sysPitch: 1.02, label: '沉稳女声' },
+    { id: 'role_m1', gender: 'male',   vcn: 'henry',     xfPitch: 50, speed: 50, edge: 'en-GB-RyanNeural',        sysPitch: 0.88, label: '青年男声' },
+    { id: 'role_m2', gender: 'male',   vcn: 'henry',     xfPitch: 42, speed: 46, edge: 'en-GB-ThomasNeural',      sysPitch: 0.76, label: '低沉男声' },
+    { id: 'role_m3', gender: 'male',   vcn: 'henry',     xfPitch: 57, speed: 55, edge: 'en-US-GuyNeural',         sysPitch: 0.98, label: '活泼男声' },
+    { id: 'role_m4', gender: 'male',   vcn: 'henry',     xfPitch: 40, speed: 42, edge: 'en-US-ChristopherNeural', sysPitch: 0.70, label: '沉稳男声' },
+    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 47, speed: 48, edge: 'en-US-EricNeural',        sysPitch: 0.82, label: '温和男声' }
   ];
   const ROLE_VOICE_BY_ID = {};
   const ROLE_VOICE_TTS_PROFILES = {};
@@ -3081,9 +3081,10 @@ const API = ".";
       const voice = voiceOverride || (lang === 'zh-CN' ? zhVoice : enVoice);
       const vp = VOICE_PROFILES[voice] || { vcn: voice, pitch: 50, speed: 50 };
       // 真人节奏：按句型微调音调/语速，制造可感知的语调起伏（疑问升调、感叹加重、陈述平稳）
-      const pitch = Math.max(0, Math.min(100, Math.round(vp.pitch + (pitchAdj || 0))));
-      // 语速统一由播放端 audio.playbackRate 控制；合成端用基准速度，仅保留句型节奏微调
-      const speed = Math.max(0, Math.min(100, Math.round(vp.speed + (speedAdj || 0))));
+      // pitch 收敛到 40~60：远离 50 越多讯飞合成越容易带金属电音，角色区分主要靠 vcn 与 Edge 音色
+      const pitch = Math.max(40, Math.min(60, Math.round(vp.pitch + (pitchAdj || 0))));
+      // 语速在合成端按用户设定生成（音质无损），只叠加极小的句型节奏微调；播放端残余接近 1
+      const speed = Math.max(0, Math.min(100, Math.round(xfSynthSpeed() + (speedAdj || 0))));
       (async () => {
       try {
       const { date, auth } = await this._signature();
@@ -4246,6 +4247,38 @@ const API = ".";
   // 整篇朗读时句子之间的停顿（越慢停顿越长，给孩子反应时间）
   function lessonLineGap() { return Math.round(450 / speechRate); }
 
+  // ---- 语速分工：网络合成端承担主要变速，播放端只补极小残余 ----
+  // 背景：audio.playbackRate 远离 1 时，浏览器做的是实时重采样（无音高补偿），
+  // 0.8 倍尤其 0.5 倍会产生明显的金属音/电子杂音。而合成端（讯飞 speed / Edge prosody rate）
+  // 是引擎按目标语速重新生成，音质无损。实测讯飞 speed 0~100 对应约 0.78x~1.39x 语速。
+  // 这里让合成端尽量贴近目标语速，播放端残余系数始终接近 1，从根源消除重采样杂音。
+  var RATE_SYNTH_TABLE = [
+    { user: 0.5, synth: 0.775, xfSpeed: 0 },
+    { user: 0.8, synth: 0.830, xfSpeed: 12 },
+    { user: 1.0, synth: 1.000, xfSpeed: 50 },
+    { user: 1.2, synth: 1.180, xfSpeed: 78 },
+    { user: 1.5, synth: 1.390, xfSpeed: 100 }
+  ];
+  function rateSynthPoint(rate) {
+    var r = Math.max(0.5, Math.min(1.5, Number(rate) || 1));
+    for (var i = 0; i < RATE_SYNTH_TABLE.length - 1; i++) {
+      var a = RATE_SYNTH_TABLE[i], b = RATE_SYNTH_TABLE[i + 1];
+      if (r <= b.user) {
+        var t = (r - a.user) / (b.user - a.user);
+        return { synth: a.synth + t * (b.synth - a.synth), xfSpeed: a.xfSpeed + t * (b.xfSpeed - a.xfSpeed) };
+      }
+    }
+    return RATE_SYNTH_TABLE[RATE_SYNTH_TABLE.length - 1];
+  }
+  // 播放端残余变速（默认 0.8 档约 0.96，几乎接近 1，无重采样杂音）
+  function audioPlaybackRate() {
+    return (Number(speechRate) || 1) / rateSynthPoint(speechRate).synth;
+  }
+  // 讯飞合成语速参数（覆盖角色音色里用于变速的 speed 微调，音色区分仍靠 pitch/vcn）
+  function xfSynthSpeed() { return Math.round(rateSynthPoint(speechRate).xfSpeed); }
+  // Edge 合成端语速百分比（服务端按目标语速重新生成，播放端残余为 1）
+  function edgeSynthRatePct() { return Math.round((rateSynthPoint(speechRate).synth - 1) * 100); }
+
   // 英文缩写展开：TTS 引擎（讯飞/Edge）对 Ms / Mr / Mrs 等缩写常按字母或错误音节拼读，
   // 这里在发音前把它们展开成正确读音（只改发音，不改页面显示文本）。
   // 边界：仅匹配「缩写(可带点) + 空格 + 大写字母开头的人名」，避免误伤普通词。
@@ -4348,7 +4381,8 @@ const API = ".";
             outputFormat: 'audio-24khz-48kbitrate-mono-mp3'
           } } }
         }));
-        const style = lang === 'zh-CN' ? 'friendly' : 'friendly';
+        // 不使用 express-as style：并非所有音色都支持 friendly，指定不支持的 style 会让 Edge 直接拒绝合成。
+        // 自然度由下方标点停顿 + 句末 contour 实现，音质更稳。
         let spoken = escapeXml(text);
         if (ipa) {
           spoken = "<phoneme alphabet='ipa' ph='" + ipa + "'>" + spoken + "</phoneme>";
@@ -4386,14 +4420,14 @@ const API = ".";
         }
         // 多音词 live：句子中的「居住」读音用局部 phoneme 强制 /lɪv/（整词发音 ipa 分支已整体包裹，跳过）
         if (fixLive && !ipa && lang === 'en-US') spoken = markLiveIpa(spoken);
-        // 语速统一由播放端 audio.playbackRate 控制；合成端固定基准速度，避免双重变速
-        const ratePct = 0;
+        // 语速在合成端按用户设定生成（服务端重新合成，音质无损），播放端只补极小残余。
+        // 避免用 playbackRate 大幅拉伸导致的重采样金属音。
+        const ratePct = edgeSynthRatePct();
         const xmlLang = lang === 'zh-CN' ? 'zh-CN' : 'en-GB';
         const ssml = "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis' xmlns:mstts='https://www.w3.org/2001/mstts' xml:lang='" + xmlLang + "'>"
           + "<voice name='" + voice + "'>"
-          + "<mstts:express-as style='" + style + "' styledegree='1.0'>"
           + "<prosody rate='" + ratePct + "%' pitch='0%'>" + spoken + "</prosody>"
-          + "</mstts:express-as></voice></speak>";
+          + "</voice></speak>";
         const header = "X-RequestId:" + uuid + "\r\nContent-Type:application/ssml+xml\r\nX-Timestamp:" + ts + "Z\r\n\r\n";
         ws.send(header + ssml);
       };
@@ -4433,8 +4467,8 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
   const audio = new Audio();
   window._activeAudio = audio;
   audio.src = url;
-  // 语速统一由播放端控制（合成端固定基准速度，避免双重变速）
-  try { audio.playbackRate = speechRate; } catch (e) {}
+  // 语速主要在合成端完成，播放端只补极小残余（接近 1），避免 playbackRate 重采样金属音
+  try { audio.playbackRate = audioPlaybackRate(); } catch (e) {}
   const cleanup = () => {
     if (token !== window._audioToken) return;
     if (window._activeAudio === audio) window._activeAudio = null;
@@ -4576,8 +4610,8 @@ function playAudioBlob(blob, onEnd) {
     const audio = new Audio();
     window._activeAudio = audio;
     audio.src = url;
-    // 语速统一由播放端控制（合成端固定基准速度，避免双重变速）
-    try { audio.playbackRate = speechRate; } catch (e) {}
+    // 语速主要在合成端完成，播放端只补极小残余（接近 1），避免 playbackRate 重采样金属音
+    try { audio.playbackRate = audioPlaybackRate(); } catch (e) {}
     // 播放前显式复位播放位置（防御：避免播放器停在结尾导致无法重播）
     try { audio.currentTime = 0; } catch (e) {}
     const finish = () => {
@@ -4700,7 +4734,7 @@ function playAudioBlob(blob, onEnd) {
       // 缓存 key 加 homo 前缀，避免命中之前误读音频，也不污染普通发音缓存。
       const ipa = (lang === 'en-US') ? homographIpa(text) : null;
       const needLive = !ipa && sentenceNeedLiveIpa(text, lang);
-      const key = (ipa || needLive) ? ('homo|' + voice + '|' + text + '|' + (ipa || 'live')) : ttsCacheKey(text, lang, voice);
+      const key = (ipa || needLive) ? ('homo|' + speechRate + '|' + voice + '|' + text + '|' + (ipa || 'live')) : ttsCacheKey(text, lang, voice);
       const cached = ttsCacheGet(key);
       if (cached) { playAudioBlob(cached, cb); return; }
       const toSystem = G(() => {
@@ -4752,7 +4786,7 @@ function playAudioBlob(blob, onEnd) {
           handle.kind = 'audio';
           handle.el = audio;
           handle.pause = () => { try { audio.pause(); } catch (e) {} };
-          handle.resume = () => { try { audio.playbackRate = speechRate; const p = audio.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
+          handle.resume = () => { try { audio.playbackRate = audioPlaybackRate(); const p = audio.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} };
           handle.stop = () => { try { audio.pause(); } catch (e) {} };
           opts.onReady && opts.onReady(audio);
         } else {
@@ -4788,17 +4822,18 @@ function playAudioBlob(blob, onEnd) {
       if (lang !== 'en-US') return { pitchAdj: 0, speedAdj: 0 };
       const t = String(text || '').trim();
       const last = t.slice(-1);
-      if (last === '?') return { pitchAdj: 15, speedAdj: -2 };       // 疑问句：升调
-      if (last === '!') return { pitchAdj: 8, speedAdj: -3 };        // 感叹句：加重、稍慢强调
-      if (last === '.' || last === ',' || last === ';' || last === ':') return { pitchAdj: 3, speedAdj: 0 }; // 陈述：轻微起伏
-      return { pitchAdj: 2, speedAdj: 0 };
+      // 幅度收敛：pitch 偏离 50 过远会让讯飞合成带金属电音，语调起伏靠 Edge contour 实现更自然
+      if (last === '?') return { pitchAdj: 7, speedAdj: -1 };        // 疑问句：升调
+      if (last === '!') return { pitchAdj: 5, speedAdj: -2 };        // 感叹句：加重、稍慢强调
+      if (last === '.' || last === ',' || last === ';' || last === ':') return { pitchAdj: 2, speedAdj: 0 }; // 陈述：轻微起伏
+      return { pitchAdj: 1, speedAdj: 0 };
     },
     // 只合成、不播放（返回 blob 或 null）
     synthOnce(text, lang, cb, human, voiceId) {
       const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
       const edgeVoice = edgeVoiceFor(voiceId);
       const needLive = sentenceNeedLiveIpa(text, lang);
-      const key = (needLive ? 'homo|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
+      const key = (needLive ? 'homo|' + speechRate + '|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
@@ -4830,7 +4865,7 @@ function playAudioBlob(blob, onEnd) {
       const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
       const edgeVoice = edgeVoiceFor(voiceId);
       const needLive = sentenceNeedLiveIpa(text, lang);
-      const key = (needLive ? 'homo|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
+      const key = (needLive ? 'homo|' + speechRate + '|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       if (_ttsCache.has(key)) return;
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
       const ok = (blob) => {
@@ -7028,21 +7063,25 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         var ctx = this._ac || (this._ac = new AC());
         if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
         var now = ctx.currentTime + 0.02;
+        // 低通滤波柔化三角波高次谐波（"电子感"来源）；attack 30ms 消除咔哒爆音
+        var lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 2600; lp.Q.value = 0.0001;
+        lp.connect(ctx.destination);
         [523.25, 659.25, 783.99, 1046.5].forEach(function (f, i) {
           var t = now + i * 0.11;
           var o = ctx.createOscillator(), g = ctx.createGain();
           o.type = 'triangle'; o.frequency.value = f;
           g.gain.setValueAtTime(0, t);
-          g.gain.linearRampToValueAtTime(0.22, t + 0.02);
+          g.gain.linearRampToValueAtTime(0.20, t + 0.03);
           g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
-          o.connect(g); g.connect(ctx.destination);
+          o.connect(g); g.connect(lp);
           o.start(t); o.stop(t + 0.55);
           var o2 = ctx.createOscillator(), g2 = ctx.createGain();
           o2.type = 'sine'; o2.frequency.value = f * 2;
           g2.gain.setValueAtTime(0, t);
-          g2.gain.linearRampToValueAtTime(0.06, t + 0.02);
+          g2.gain.linearRampToValueAtTime(0.05, t + 0.03);
           g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-          o2.connect(g2); g2.connect(ctx.destination);
+          o2.connect(g2); g2.connect(lp);
           o2.start(t); o2.stop(t + 0.4);
         });
       } catch (e) {}
@@ -7058,15 +7097,19 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         var ctx = this._ac || (this._ac = new AC());
         if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
         var now = ctx.currentTime + 0.01;
+        // 低通滤波柔化高次谐波，attack 30ms 消除咔哒爆音
+        var lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 2600; lp.Q.value = 0.0001;
+        lp.connect(ctx.destination);
         freqs.forEach(function (f, i) {
           var t = now + i * gap;
           var o = ctx.createOscillator(), g = ctx.createGain();
           o.type = type || 'triangle';
           o.frequency.value = f;
           g.gain.setValueAtTime(0, t);
-          g.gain.linearRampToValueAtTime(peak, t + 0.015);
+          g.gain.linearRampToValueAtTime(peak, t + 0.03);
           g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
-          o.connect(g); g.connect(ctx.destination);
+          o.connect(g); g.connect(lp);
           o.start(t); o.stop(t + decay + 0.05);
         });
       } catch (e) {}
@@ -7103,24 +7146,28 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (ctx.state === 'suspended' && ctx.resume) ctx.resume();
         var base = ctx.currentTime + 0.03;
         peak = peak || 0.18;
+        // 低通滤波柔化高次谐波，attack 30ms 消除咔哒爆音
+        var lp = ctx.createBiquadFilter();
+        lp.type = 'lowpass'; lp.frequency.value = 2600; lp.Q.value = 0.0001;
+        lp.connect(ctx.destination);
         for (var i = 0; i < notes.length; i++) {
           var f = notes[i][0], st = notes[i][1] || 0, dur = notes[i][2] || 0.3;
           var t = base + st;
           var o = ctx.createOscillator(), g = ctx.createGain();
           o.type = type || 'triangle'; o.frequency.value = f;
           g.gain.setValueAtTime(0, t);
-          g.gain.linearRampToValueAtTime(peak, t + 0.02);
-          g.gain.setValueAtTime(peak, t + Math.max(0.03, dur - 0.1));
+          g.gain.linearRampToValueAtTime(peak, t + 0.03);
+          g.gain.setValueAtTime(peak, t + Math.max(0.05, dur - 0.1));
           g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-          o.connect(g); g.connect(ctx.destination);
+          o.connect(g); g.connect(lp);
           o.start(t); o.stop(t + dur + 0.03);
           // 高八度正弦泛音，音色更饱满
           var o2 = ctx.createOscillator(), g2 = ctx.createGain();
           o2.type = 'sine'; o2.frequency.value = f * 2;
           g2.gain.setValueAtTime(0, t);
-          g2.gain.linearRampToValueAtTime(peak * 0.28, t + 0.02);
+          g2.gain.linearRampToValueAtTime(peak * 0.24, t + 0.03);
           g2.gain.exponentialRampToValueAtTime(0.0001, t + dur * 0.8);
-          o2.connect(g2); g2.connect(ctx.destination);
+          o2.connect(g2); g2.connect(lp);
           o2.start(t); o2.stop(t + dur);
         }
       } catch (e) {}
