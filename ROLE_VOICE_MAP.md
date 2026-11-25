@@ -1,7 +1,7 @@
 # 课文朗读 · 角色音色分配表
 
 > 代码位置：`frontend/index.html` 与 `docs/index.html` 中 `// ========== 课文分角色朗读` 段落，**两份必须完全一致**。
-> 当前 SW 缓存版本：`english-app-v259`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
+> 当前 SW 缓存版本：`english-app-v260`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
 
 ## 1. 音色池（10 组）
 
@@ -50,6 +50,7 @@
 | `role_teacher` | 成年女声·老师 | **Teacher** |
 | `role_child_f` | 女童声 | **Girl、Student、Students** |
 | `role_child_m` | 男童声 | **Boy、Kids、Children** |
+| `role_m2` | 低沉男声 | Dad、Father 等 + **Barbapapa（孩子们的 Dad，避免与 Tom 撞音）** |
 
 > 用户举例的三个角色：**Tom = 青年男声、Mum = 成熟女声、Dad = 低沉男声**，三者音色互不相同。
 > 年龄匹配：**Teacher = 成年女声（不再用偏童声的 Maisie）**；学生标签（Girl/Boy/Student/Students/Kids/Children）统一用儿童音。
@@ -58,13 +59,20 @@
 
 | 情况 | 规则 |
 |---|---|
+| 命中默认音规则（见下） | 返回 `null`，沿用设置页发音人 |
 | 能识别性别 | 在同性别 5 组里按角色名做 FNV-1a 哈希，同一角色每次声音一致 |
 | 无性别但属于人物 | 在全部 10 组里按名字哈希（白名单见下） |
-| 动物 / 物体 / 自然景物 / 男女合读（如 Sam & Amy） | 返回 `null`，沿用设置页发音人 |
+| 其它（物体 / 自然景物） | 返回 `null`，沿用设置页发音人 |
+
+**默认音规则 `roleShouldDefault()`（前端）/ `role_should_default()`（脚本）——优先于固定分配与性别判定，命中任一即返回 `null`：**
+- **多人合读**：角色名含 `&` / `,` / ` and ` 分隔符（如 `Sam & Amy`、`Daming and Sam`），整句不该只像一个人发声。
+- **群体齐读**：`ROLE_GROUP_CHORUS` = both / everyone / everybody / all / family / children / kids / students / people。
+- **动物**：`ROLE_ANIMAL` = susu、baby、mother hen、mum bird、dad dog、little chicken、little dog、bird、dog、duck、frog、rabbit、bear、mouse 1、mouse 2、night owl、silkworm、giraffe（含真实动物与会说话的拟人动物）。
 
 - 女性名字表 `ROLE_FEMALE_NAMES`：amy, lingling, wenwen, yanyan, jingjing, lanlan, huahua, weiwei, nana, jiajia, yoyo, lulu, coco, susu, mia, tippi, mum, mother, grandma, sister, girl, woman, baby, ms smart, ms li, ms olivia, mother hen, mum bird, duoduo, zuzu
 - 男性名字表 `ROLE_MALE_NAMES`：sam, daming, tom, ben, bob, bobo, david, terry, jay, ray, jim, bobby, taotao, yangyang, li han, liu fei, lu xun, fabre, yang shanzhou, samuel pepys, detective sharp, dad, father, grandpa, boy, man, old man, dad dog
 - 无性别人物白名单 `ROLE_HUMAN_NEUTRAL`（正则）：teacher, narrator, student, students, kids, children, everyone, all, both, family, friend, my new friend, host, old friends, zookeeper, police officer, forest keeper, barbapapa, tutu, lin jia
+- 注：`susu`/`baby`/`mother hen`/`mum bird`/`dad dog`/`little chicken` 虽仍在性别表里，但会被默认音规则先拦截，不会发人声；保留在表中仅为兼容其它调用。
 
 ## 4. 语速与音质策略（消除电子杂音）
 
@@ -101,7 +109,7 @@
 - 生成脚本：`pregenerate_audio.py`（根目录），依赖 `pip install --upgrade edge-tts`，不需要 API Key。
 - 输出目录：`docs/audio/lesson/<哈希前2位>/<哈希>.mp3`。
 - 哈希规则：`FNV-1a("edge|" + roleVoiceId + "|" + speechRate + "|1|" + expandAbbrev(text))`，与前端 `preAudioUrl()` 完全一致，无需 manifest。
-- 默认只生成 0.8 档；`--all-rates` 生成 5 档。当前 1253 行去重后 1238 条（0.8 档）。
+- 默认只生成 0.8 档；`--all-rates` 生成 5 档。当前五档合计 6180 条（合读/群体/动物走默认音，无需预生成独立音色）。
 - 前端接入点：`TTS.speakSentence()` 与 `speakLine()` 先试本地音频；`LessonReader` 播放当前句时预热下一句。
 - 预生成音频按目标语速合成，播放端 `playbackRate = 1`，不再叠加残余系数。
 - 切换角色音色或改名后，必须重新运行脚本覆盖旧文件（文件名随 voiceId 变化，不会互相覆盖）。

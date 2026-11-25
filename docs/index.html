@@ -2892,6 +2892,7 @@ const API = ".";
   // 教材高频人物固定分配，避免同性别角色撞音；未列出的角色按名字哈希稳定落到同性别池
   const ROLE_VOICE_ASSIGN = {
     'teacher':'role_teacher', 'narrator':'role_m4',  // 老师固定成年女声；旁白固定沉稳男声（避开主角撞音）
+    'barbapapa':'role_m2',  // 巴巴爸爸是孩子们的 Dad，固定低沉男声（避免与 Tom 撞青年男声）
     'lingling':'role_f1', 'amy':'role_f2', 'wenwen':'role_f3', 'jingjing':'role_f4', 'yanyan':'role_f5',
     'huahua':'role_f1', 'weiwei':'role_f2', 'lanlan':'role_f3', 'nana':'role_f4', 'jiajia':'role_f5',
     'tippi':'role_f3', 'little chicken':'role_f3', 'baby':'role_f3',
@@ -2921,12 +2922,25 @@ const API = ".";
     for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
     return h >>> 0;
   }
+  // 以下角色一律沿用设置页发音人（不分配独立音色）：
+  // 1) 多人合读：含 & / , / and 分隔符（如 Sam & Amy、Daming and Sam），整句不该只像一个人
+  // 2) 群体齐读：Both / Everyone / All / Family 等众人一起说话
+  // 3) 动物：真实动物（Susu 猫）与拟人会说话的动物（Mother Hen / Mum Bird / Baby 小鸡等）
+  const ROLE_GROUP_CHORUS = /^(both|everyone|everybody|all|family|children|kids|students|people)$/i;
+  const ROLE_ANIMAL = /^(susu|baby|mother hen|mum bird|dad dog|little chicken|little dog|bird|dog|duck|frog|rabbit|bear|mouse 1|mouse 2|night owl|silkworm|giraffe)$/i;
+  function roleShouldDefault(raw, role) {
+    if (/[&,]|\band\b/i.test(raw)) return true;          // 多人合读
+    if (ROLE_GROUP_CHORUS.test(raw)) return true;         // 群体齐读
+    if (ROLE_ANIMAL.test(raw)) return true;               // 动物
+    return false;
+  }
   function roleVoiceId(role) {
     const raw = String(role || '').trim().toLowerCase().replace(/[’]/g, "'");
     if (!raw) return null;
+    if (roleShouldDefault(raw, role)) return null;        // 合读 / 群体 / 动物：默认音
     if (ROLE_VOICE_ASSIGN[raw]) return ROLE_VOICE_ASSIGN[raw];
     const g = roleGender(role);
-    if (!g && !ROLE_HUMAN_NEUTRAL.test(raw)) return null;  // 动物 / 物体 / 男女合读：沿用设置发音人
+    if (!g && !ROLE_HUMAN_NEUTRAL.test(raw)) return null;  // 物体 / 无性别标记：沿用设置发音人
     const ids = g ? ROLE_VOICE_IDS[g] : ROLE_ALL_VOICE_IDS;
     return ids[roleVoiceHash(raw) % ids.length];
   }

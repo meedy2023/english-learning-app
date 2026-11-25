@@ -51,6 +51,7 @@ ROLE_VOICE_POOL = [
 ]
 ROLE_VOICE_ASSIGN = {
     "teacher": "role_teacher", "narrator": "role_m4",
+    "barbapapa": "role_m2",  # 巴巴爸爸是孩子们的 Dad，固定低沉男声（避免与 Tom 撞青年男声）
     "lingling": "role_f1", "amy": "role_f2", "wenwen": "role_f3", "jingjing": "role_f4", "yanyan": "role_f5",
     "huahua": "role_f1", "weiwei": "role_f2", "lanlan": "role_f3", "nana": "role_f4", "jiajia": "role_f5",
     "tippi": "role_f3", "little chicken": "role_f3", "baby": "role_f3",
@@ -83,6 +84,22 @@ ROLE_HUMAN_NEUTRAL = re.compile(
     r"my new friend|host|old friends|zookeeper|police officer|forest keeper|barbapapa|tutu|lin jia)\b",
     re.I,
 )
+# 以下角色一律沿用设置页发音人（不分配独立音色），与前端 roleShouldDefault 保持一致：
+# 1) 多人合读：含 & / , / and；2) 群体齐读；3) 动物（真实动物 + 拟人会说话的动物）
+ROLE_GROUP_CHORUS = re.compile(r"^(both|everyone|everybody|all|family|children|kids|students|people)$", re.I)
+ROLE_ANIMAL = re.compile(
+    r"^(susu|baby|mother hen|mum bird|dad dog|little chicken|little dog|bird|dog|duck|frog|"
+    r"rabbit|bear|mouse 1|mouse 2|night owl|silkworm|giraffe)$", re.I)
+
+
+def role_should_default(raw, role):
+    if re.search(r"[&,]|\band\b", raw, re.I):
+        return True
+    if ROLE_GROUP_CHORUS.match(raw):
+        return True
+    if ROLE_ANIMAL.match(raw):
+        return True
+    return False
 ROLE_BY_ID = {p["id"]: p for p in ROLE_VOICE_POOL}
 ROLE_IDS_BY_GENDER = {
     g: [p["id"] for p in ROLE_VOICE_POOL if p["gender"] == g and not p.get("fixedOnly")]
@@ -139,6 +156,8 @@ def role_gender(role):
 def role_voice_id(role):
     raw = str(role or "").strip().lower().replace("’", "'")
     if not raw:
+        return None
+    if role_should_default(raw, role):
         return None
     if raw in ROLE_VOICE_ASSIGN:
         return ROLE_VOICE_ASSIGN[raw]
