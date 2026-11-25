@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v248</div>
+          <div class="settings-row-sub" id="settings-version">v249</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5021,10 +5021,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v248';
+          vEl.textContent = m ? ('v' + m[1]) : 'v249';
         })
-        .catch(function () { vEl.textContent = 'v248'; });
-    } catch (e) { vEl.textContent = 'v248'; }
+        .catch(function () { vEl.textContent = 'v249'; });
+    } catch (e) { vEl.textContent = 'v249'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -9386,13 +9386,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if (solved) cls += ' ok';
         if (self.badFlash) cls += ' bad';
         slotsHtml += '<div class="' + cls + '" style="--i:' + i + '" onclick="Spell.pickSlot(' + i + ')" data-slot="' + i + '">' +
-                     (s.ch ? String(s.ch).toUpperCase() : '') + '</div>';
+                     (s.ch ? String(s.ch).toLowerCase() : '') + '</div>';
       });
       let tilesHtml = '';
       this.tiles.forEach(function (t) {
         tilesHtml += '<button class="spell-tile' + (t.used ? ' used' : '') + '" id="' + t.id + '" ' +
                      'onclick="Spell.pickTile(\'' + t.id + '\')" ' + (t.used ? 'disabled' : '') + '>' +
-                     String(t.ch).toUpperCase() + '</button>';
+                     String(t.ch).toLowerCase() + '</button>';
       });
       const fbHtml = this.fb
         ? '<div class="spell-fb ' + this.fb.type + '">' + this.fb.html + '</div>'
