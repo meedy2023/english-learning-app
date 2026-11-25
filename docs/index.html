@@ -2869,10 +2869,10 @@ const API = ".";
     { id: 'role_f4', gender: 'female', vcn: 'catherine', xfPitch: 42, speed: 46, edge: 'en-US-AriaNeural',        sysPitch: 1.14, label: '成熟女声' },
     { id: 'role_f5', gender: 'female', vcn: 'catherine', xfPitch: 34, speed: 44, edge: 'en-GB-MaisieNeural',      sysPitch: 1.05, label: '沉稳女声' },
     { id: 'role_m1', gender: 'male',   vcn: 'henry',     xfPitch: 50, speed: 50, edge: 'en-GB-RyanNeural',        sysPitch: 0.80, label: '青年男声' },
-    { id: 'role_m2', gender: 'male',   vcn: 'henry',     xfPitch: 40, speed: 46, edge: 'en-GB-GeorgeNeural',      sysPitch: 0.64, label: '低沉男声' },
+    { id: 'role_m2', gender: 'male',   vcn: 'henry',     xfPitch: 40, speed: 46, edge: 'en-GB-ThomasNeural',      sysPitch: 0.64, label: '低沉男声' },
     { id: 'role_m3', gender: 'male',   vcn: 'henry',     xfPitch: 58, speed: 55, edge: 'en-US-GuyNeural',         sysPitch: 0.92, label: '活泼男声' },
-    { id: 'role_m4', gender: 'male',   vcn: 'henry',     xfPitch: 32, speed: 42, edge: 'en-GB-ChristopherNeural', sysPitch: 0.55, label: '沉稳男声' },
-    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 46, speed: 48, edge: 'en-US-DavidNeural',       sysPitch: 0.73, label: '温和男声' }
+    { id: 'role_m4', gender: 'male',   vcn: 'henry',     xfPitch: 32, speed: 42, edge: 'en-US-ChristopherNeural', sysPitch: 0.55, label: '沉稳男声' },
+    { id: 'role_m5', gender: 'male',   vcn: 'henry',     xfPitch: 46, speed: 48, edge: 'en-US-EricNeural',        sysPitch: 0.73, label: '温和男声' }
   ];
   const ROLE_VOICE_BY_ID = {};
   const ROLE_VOICE_TTS_PROFILES = {};
@@ -4802,16 +4802,25 @@ function playAudioBlob(blob, onEnd) {
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
-      // 合成返回空 blob 视为失败（避免缓存/播放破损音频），继续尝试下一引擎
-      const ok = (blob) => {
-        if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); cb(null); return; }
+      const fallbackVoice = lang === 'zh-CN' ? 'xiaoyan' : 'catherine';  // 角色音色异常时的通用兜底发音人
+      // 合成返回空 blob 不能算成功（否则缓存空音频、播放静音）：继续尝试下一引擎。
+      // 注意：曾在此直接 cb(null)，导致讯飞偶发空音频时跳过 Edge 直接落系统语音；
+      // 移动端 WebView 系统语音常有对象但无声，表现就是「这一句没声音」。
+      const ok = (blob, next) => {
+        if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); if (next) next(); else cb(null); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob); cb(blob);
       };
-      const edge = () => EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, edgeVoice, undefined, human, needLive);
-      if (needLive) { edge(); return; }  // 讯飞不支持音标，多音词句子直接走 Edge
-      XFYunTTS.synth(text, lang, ok, () => {
-        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, edgeVoice, undefined, human);
-      }, voice, pros.pitchAdj, pros.speedAdj);
+      const edge = (onFail) => EdgeTTS.synthesize(text, lang, (b) => ok(b, onFail), () => {
+        TTS_NET.onFail();
+        if (onFail) onFail(); else cb(null);
+      }, edgeVoice, undefined, human, needLive);
+      if (needLive) { edge(null); return; }  // 讯飞不支持音标，多音词句子直接走 Edge
+      // 讯飞 → Edge → 用通用发音人重试讯飞一次 → 放弃（由调用方降级系统语音）
+      XFYunTTS.synth(text, lang, (b) => ok(b, () => edge(() => {
+        XFYunTTS.synth(text, lang, (b2) => ok(b2, null), () => { TTS_NET.onFail(); cb(null); }, fallbackVoice, pros.pitchAdj, pros.speedAdj);
+      })), () => edge(() => {
+        XFYunTTS.synth(text, lang, (b2) => ok(b2, null), () => { TTS_NET.onFail(); cb(null); }, fallbackVoice, pros.pitchAdj, pros.speedAdj);
+      }), voice, pros.pitchAdj, pros.speedAdj);
     },
     // 预合成（不播放）：整篇朗读时提前把下一句缓存好，弱网下也能连贯地播下去
     prefetch(text, lang, human, voiceId) {

@@ -13,15 +13,16 @@
 | `role_f4` | 女 | 成熟女声 | catherine | 42 | 46 | en-US-AriaNeural | 1.14 |
 | `role_f5` | 女 | 沉稳女声 | catherine | 34 | 44 | en-GB-MaisieNeural | 1.05 |
 | `role_m1` | 男 | 青年男声 | henry | 50 | 50 | en-GB-RyanNeural | 0.80 |
-| `role_m2` | 男 | 低沉男声 | henry | 40 | 46 | en-GB-GeorgeNeural | 0.64 |
+| `role_m2` | 男 | 低沉男声 | henry | 40 | 46 | en-GB-ThomasNeural | 0.64 |
 | `role_m3` | 男 | 活泼男声 | henry | 58 | 55 | en-US-GuyNeural | 0.92 |
-| `role_m4` | 男 | 沉稳男声 | henry | 32 | 42 | en-GB-ChristopherNeural | 0.55 |
-| `role_m5` | 男 | 温和男声 | henry | 46 | 48 | en-US-DavidNeural | 0.73 |
+| `role_m4` | 男 | 沉稳男声 | henry | 32 | 42 | en-US-ChristopherNeural | 0.55 |
+| `role_m5` | 男 | 温和男声 | henry | 46 | 48 | en-US-EricNeural | 0.73 |
 
 - 讯飞只有 `catherine`（女）和 `henry`（男）两个真实 vcn，靠 pitch / speed 变体拉开同性别差异。
 - Edge 每组用不同真实音色，是网络链路上听感差异的主要来源。
 - 系统语音（无网络 / 本机 TTS）靠 `sysPitch` 区分。
 - `role_f*` / `role_m*` 是**虚拟 id**，必须在 `VOICE_PROFILES` 里注册真实 vcn/pitch/speed。代码已通过 `Object.assign({...}, ROLE_VOICE_TTS_PROFILES)` 自动注册，不要改回普通对象字面量。
+- **Edge 音色名必须是 Edge TTS 真实存在的 ShortName**（如 Christopher 只有 `en-US-ChristopherNeural`，没有 `en-GB-` 版；George/David 不是有效音色）。写错会导致 Edge 链路连接即失败，只能落系统语音——移动端 WebView 系统语音常无声，表现为"某句没声音"。改音色名后对照 Edge 官方音色表核验。
 
 ## 2. 固定分配（按音色查角色）
 
