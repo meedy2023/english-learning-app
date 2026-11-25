@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v251</div>
+          <div class="settings-row-sub" id="settings-version">v252</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -2683,14 +2683,18 @@ const API = ".";
     let dialogueHTML = '';
     unit.content.forEach((line, idx) => {
       const roleColor = getRoleColor(line.role);
+      const lineGender = roleGender(line.role);
+      const roleBadge = lineGender
+        ? ' <span title="分角色朗读：' + ROLE_VOICE_PROFILES[lineGender].label + '" style="font-size:12px;opacity:.85">' + (lineGender === 'female' ? '♀' : '♂') + '</span>'
+        : '';
       const lineId = 'ra-line-' + idx;
       dialogueHTML += `
         <div class="ra-line-item lr-line" id="${lineId}" data-idx="${idx}" style="margin-bottom:16px;padding:12px;background:#f9f9ff;border-radius:12px;border-left:4px solid ${roleColor}">
-          <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}</div>
+          <div style="font-weight:600;color:${roleColor};margin-bottom:4px;font-size:14px">${line.role}${roleBadge}</div>
           <div id="${lineId}-text" class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${lrWordsHtml(line.text)}</div>
           <div style="font-size:14px;color:#8a6d3b;line-height:1.6;margin:2px 0 8px;padding:6px 10px;background:#fff8e8;border-radius:6px">${line.translation || '（暂无翻译）'}</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
+            <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}', '${escapeForJS(line.role || '')}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggle(document.getElementById('${lineId}-text'), '${escapeForJS(line.text)}', ${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
               🎤 跟读
             </button>
@@ -2722,6 +2726,9 @@ const API = ".";
         </div>
         <div class="lr-bar" id="lesson-read-bar" style="display:none"><i></i></div>
         <div class="lr-progress" id="lesson-read-progress" style="display:none"></div>
+        <div style="margin-top:8px">
+          <button id="lesson-role-read-btn" onclick="LessonReader.toggleRoleRead()" type="button" aria-pressed="true" title="开启后：女生用女声、男生用男声" style="width:100%;padding:9px 12px;font-size:13px;border-radius:10px;font-weight:600;border:1px solid #e0e6ff;background:#f5f7ff;color:#6c63ff;cursor:pointer;min-height:38px">🎭 分角色：开</button>
+        </div>
         <div class="lr-nav">
           <button class="quiz-nav-btn" style="flex:1;display:none" id="lesson-prev-unit-btn">
             ⬅️ 上一篇
@@ -2749,7 +2756,7 @@ const API = ".";
       replayBtn.onclick = function() { LessonReader.replay(); };
     }
     // 绑定句子：采集朗读行
-    LessonReader.bind(unit.content);
+    LessonReader.bind(unit.content, { roleBtn: 'lesson-role-read-btn' });
 
     // 计算当前单元在模块中的位置
     var unitIndex = -1;
@@ -2817,6 +2824,63 @@ const API = ".";
     return colors[role] || '#6c63ff';
   }
 
+  // ========== 课文分角色朗读：角色 → 性别 → 音色 ==========
+  // 教材固定人物按设定标注；未收录角色按称谓/名字关键词推断。
+  // 动物、旁白、群体等无固定性别的角色返回 null，沿用设置页选中的发音人。
+  const ROLE_FEMALE_NAMES = [
+    'amy', 'lingling', 'wenwen', 'yanyan', 'jingjing', 'lanlan', 'huahua', 'weiwei',
+    'nana', 'jiajia', 'yoyo', 'lulu', 'coco', 'susu', 'mia', 'tippi',
+    'mum', 'mother', 'grandma', 'sister', 'girl', 'woman', 'baby',
+    'ms smart', 'ms li', 'ms olivia', 'mother hen', 'mum bird'
+  ];
+  const ROLE_MALE_NAMES = [
+    'sam', 'daming', 'tom', 'ben', 'bob', 'bobo', 'david', 'terry', 'jay', 'ray',
+    'jim', 'bobby', 'taotao', 'yangyang', 'li han', 'liu fei', 'lu xun', 'fabre',
+    'yang shanzhou', 'samuel pepys', 'detective sharp', 'dad', 'father', 'grandpa',
+    'boy', 'man', 'old man', 'dad dog'
+  ];
+  function singleRoleGender(p) {
+    if (ROLE_FEMALE_NAMES.indexOf(p) >= 0) return 'female';
+    if (ROLE_MALE_NAMES.indexOf(p) >= 0) return 'male';
+    // 先判女：woman / mother hen 都含 man，若先判男会把女性角色误判
+    if (/^(ms|mrs|miss)\b|mum|mother|grandma|sister|girl|woman/.test(p)) return 'female';
+    if (/^(mr|sir)\b|dad|father|grandpa|boy|man/.test(p)) return 'male';
+    return null;
+  }
+  function roleGender(role) {
+    const raw = String(role || '').trim().toLowerCase().replace(/[’]/g, "'");
+    if (!raw) return null;
+    // 多人合读（如 Sam & Amy）：拆开判断，男女混合时按中性处理，避免整句只像一个人
+    // "and" 必须按独立单词拆：grandma / grandpa 内部也含 and 子串，不能把它们截断
+    const parts = raw.split(/\s*(?:&|,|\band\b)\s*/i).map(s => s.trim()).filter(Boolean);
+    const gs = parts.map(singleRoleGender);
+    if (gs.length > 1) {
+      if (gs.every(g => g === 'female')) return 'female';
+      if (gs.every(g => g === 'male')) return 'male';
+      return null;
+    }
+    return gs[0] || null;
+  }
+  // 音色：讯飞发音人 id（与设置页同源）；Edge 网络兜底用同性别音色；系统语音用 pitch 拉开差异
+  const ROLE_VOICE_PROFILES = {
+    female: { xf: 'catherine', edge: 'en-GB-SoniaNeural', pitch: 1.35, label: '女声' },
+    male:   { xf: 'henry',     edge: 'en-GB-RyanNeural',  pitch: 0.72, label: '男声' }
+  };
+  const VOICE_ID_GENDER = { catherine: 'female', henry: 'male', child_en: 'female' };
+  function roleVoiceId(role) {
+    const g = roleGender(role);
+    return g ? ROLE_VOICE_PROFILES[g].xf : null;
+  }
+  function edgeVoiceFor(voiceId) {
+    if (voiceId === 'henry') return ROLE_VOICE_PROFILES.male.edge;
+    if (voiceId === 'catherine' || voiceId === 'child_en') return ROLE_VOICE_PROFILES.female.edge;
+    return null;
+  }
+  function voicePitchFor(voiceId) {
+    const g = VOICE_ID_GENDER[voiceId];
+    return g ? ROLE_VOICE_PROFILES[g].pitch : null;
+  }
+
   function escapeForJS(str) {
     // 先转义反斜杠，再转义引号/换行/脚本结束标记，避免拼进 inline onclick 时破坏字符串或提前闭合 script
     return String(str)
@@ -2830,8 +2894,10 @@ const API = ".";
       .replace(/\u2029/g, '\\u2029');
   }
 
-  function speakLine(text) {
-    speakWord(text);
+  function speakLine(text, role) {
+    // 单句朗读同样按角色发声；关闭分角色开关时沿用设置里的统一发音人
+    const voiceId = (typeof LessonReader !== 'undefined' && LessonReader.roleRead) ? roleVoiceId(role) : null;
+    TTS.speak(text, 'en-US', null, voiceId);
   }
 
 // ========== 跟读功能（麦克风录音）==========
@@ -3705,7 +3771,9 @@ const API = ".";
     startAt: 0,       // 当前句开始时间（系统语音用）
     estMs: 2000,      // 当前句估算时长（系统语音无 currentTime 时用）
     paused: false,
-    ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
+    // 课文分角色朗读开关：女生女声、男生男声；用户可在控制条里关掉，回到统一发音人
+    roleRead: localStorage.getItem('lesson_role_read') !== '0',
+    ui: null,           // {main, replay, progress, bar, dock, label, roleBtn} —— 可绑定任意页面的悬浮控制条
     // 取 UI 元素：优先本次绑定的 ids，回落到课文页默认 id
     UI(key, defId) {
       const id = (this.ui && this.ui[key]) || defId;
@@ -3738,6 +3806,7 @@ const API = ".";
         this.lines.push({
           item: item,
           text: (src && (src.text || src.en)) || '',
+          role: (src && (src.role || src.speaker)) || '',
           words: words,
           total: acc
         });
@@ -3767,6 +3836,14 @@ const API = ".";
       this.updateUI();
     },
     replay() { this.start(0); },
+    // 分角色朗读开关：切换后立即生效（播放中重播当前句，让用户马上听到音色变化）
+    toggleRoleRead() {
+      this.roleRead = !this.roleRead;
+      try { localStorage.setItem('lesson_role_read', this.roleRead ? '1' : '0'); } catch (e) {}
+      this.updateUI();
+      toast(this.roleRead ? '🎭 已开启分角色朗读：女生女声、男生男声' : '已关闭分角色朗读，使用统一发音人');
+      if (this.state === 'playing' && this.idx >= 0) this.start(this.idx);
+    },
     jump(idx) {
       if (this.state === 'idle' || this.state === 'finished') {
         // 未开始或已读完：点击某句 → 从头/该句开始读
@@ -3851,11 +3928,15 @@ const API = ".";
       this._audioStartAt = null;
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
       this.estMs = Math.max(1200, (line.total / 14) * 1000 / (speechRate || 0.75) + 400);
-      // 预合成下一句（真人节奏：用 human 缓存键，弱网时下一句衔接更顺）
+      // 分角色朗读：按本句角色选发音人；预合成下一句也要用下一句角色的音色，否则会串成同一个声音
+      const voiceId = this.roleRead ? roleVoiceId(line.role) : null;
       const nextLine = this.lines[this.idx + 1];
-      if (nextLine && nextLine.text) TTS.prefetch(nextLine.text, 'en-US', true);
+      if (nextLine && nextLine.text) {
+        TTS.prefetch(nextLine.text, 'en-US', true, this.roleRead ? roleVoiceId(nextLine.role) : null);
+      }
       this.handle = TTS.speakSentence(line.text, 'en-US', {
         human: true,   // 差异化标点停顿 + 语调
+        voiceId: voiceId,
         onReady: function(audio) {
           if (tk !== self.token) return;
           self._audioStartAt = Date.now();  // 音频真正开始播，重置高亮计时起点
@@ -4034,6 +4115,8 @@ const API = ".";
       const rp = this.UI('replay', 'lesson-replay-btn');
       const pg = this.UI('progress', 'lesson-read-progress');
       const bar = this.UI('bar', 'lesson-read-bar');
+      // 只在显式传入 roleBtn 的页面（课文详情）更新开关，避免误改其它模块隐藏的按钮
+      const rb = (this.ui && this.ui.roleBtn) ? document.getElementById(this.ui.roleBtn) : null;
       const total = this.lines.length;
       const idleTxt = (this.ui && this.ui.label) || '🔊 朗读整篇课文';
       let txt = idleTxt;
@@ -4047,6 +4130,13 @@ const API = ".";
         if (showPg && total) pg.textContent = '正在朗读第 ' + (this.idx + 1) + ' / ' + total + ' 句' + (this.state === 'paused' ? '（已暂停）' : '');
       }
       if (bar) bar.style.display = showPg ? '' : 'none';
+      if (rb) {
+        rb.textContent = this.roleRead ? '🎭 分角色：开' : '🎭 分角色：关';
+        rb.style.background = this.roleRead ? 'linear-gradient(135deg,#a855f7,#ec4899)' : '#f5f7ff';
+        rb.style.color = this.roleRead ? '#fff' : '#6c63ff';
+        rb.style.borderColor = this.roleRead ? 'transparent' : '#e0e6ff';
+        rb.setAttribute('aria-pressed', this.roleRead ? 'true' : 'false');
+      }
     },
     updateBar(p) {
       const bar = this.UI('bar', 'lesson-read-bar');
@@ -4494,7 +4584,7 @@ function playAudioBlob(blob, onEnd) {
       return TTS_NET.usable();
     },
     // 每次发音分配序号：迟到的网络结果（如超时后姗姗来迟的音频）不允许覆盖新的发音
-    speak(text, lang, onEnd) {
+    speak(text, lang, onEnd, voiceId) {
       if (!text) { if (onEnd) onEnd(); return; }
       stopAllAudio();
       lang = lang || 'en-US';
@@ -4504,10 +4594,10 @@ function playAudioBlob(blob, onEnd) {
         if (typeof fn !== 'function') return undefined;
         return function () { if (token === TTS._seq) return fn.apply(null, arguments); };
       };
-      if (this.useNetwork(lang)) this.speakNetwork(text, lang, G(onEnd), G);
-      else this.speakSystem(text, lang, G(onEnd), G);
+      if (this.useNetwork(lang)) this.speakNetwork(text, lang, G(onEnd), G, voiceId);
+      else this.speakSystem(text, lang, G(onEnd), G, voiceId);
     },
-    speakSystem(text, lang, onEnd, G) {
+    speakSystem(text, lang, onEnd, G, voiceId) {
       const cb = G ? G(onEnd) : onEnd;
       if (!window.speechSynthesis) {
         toast('发音不可用：网络连不上，本机也没有语音引擎');
@@ -4525,8 +4615,22 @@ function playAudioBlob(blob, onEnd) {
         u.rate = (lang === 'en-US' ? 0.85 : 0.95) * speechRate;
         if (lang === 'en-US') u.pitch = 1.2;
         const prefix = lang === 'zh-CN' ? 'zh' : 'en';
-        const v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
-               || speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(prefix));
+        let v = this._voices.find(x => x.lang && x.lang.toLowerCase().startsWith(prefix))
+             || speechSynthesis.getVoices().find(x => x.lang && x.lang.toLowerCase().startsWith(prefix));
+        // 分角色朗读：系统语音也要听出男女差异。优先挑同性别的本地音色；
+        // 没有合适音色时至少用 pitch 拉开（女声偏高、男声偏低）。
+        const _gender = voiceId ? VOICE_ID_GENDER[voiceId] : null;
+        if (_gender && lang === 'en-US') {
+          u.pitch = ROLE_VOICE_PROFILES[_gender].pitch;
+          const prefer = _gender === 'female' ? /female|sonia|jenny|aria|zira|samantha|karen|moira|tessa/i
+                                              : /male|ryan|guy|david|christopher|george|mark/i;
+          const oppose = _gender === 'female' ? /male|ryan|guy|david|christopher|george|mark/i
+                                              : /female|sonia|jenny|aria|zira|samantha|karen|moira|tessa/i;
+          const all = this._voices.concat(speechSynthesis.getVoices());
+          const match = all.find(x => x.lang && x.lang.toLowerCase().startsWith('en')
+            && prefer.test(x.name || '') && !oppose.test(x.name || ''));
+          if (match) v = match;
+        }
         if (v) u.voice = v;
         // 全局持有 utterance：局部变量被 GC 时 Chrome 会丢 onend / 不发声
         window._ttsUtterance = u;
@@ -4535,7 +4639,7 @@ function playAudioBlob(blob, onEnd) {
           if (window._ttsUtterance === u) window._ttsUtterance = null;
           // 本机语音引擎出错（部分安卓机型缺 TTS 引擎）：网络可用时再试一次网络
           if (TTS_NET.usable() && ttsEngine !== 'system') {
-            this.speakNetworkOnce(text, lang, cb, _G, true);
+            this.speakNetworkOnce(text, lang, cb, _G, true, voiceId);
           } else {
             toast('本机语音引擎不可用，请到设置里切换发音引擎');
             if (cb) cb();
@@ -4551,20 +4655,22 @@ function playAudioBlob(blob, onEnd) {
       } catch (e) { if (cb) cb(); }
     },
     // 网络链路：讯飞 → Edge → 降级本机发音（silent=true 时不再提示，避免重复打扰）
-    speakNetworkOnce(text, lang, cb, G, silent) {
-      const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
+    speakNetworkOnce(text, lang, cb, G, silent, voiceId) {
+      // 分角色朗读时 voiceId 覆盖设置页发音人；缓存键包含发音人，避免男女声互相命中
+      const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
+      const edgeVoice = edgeVoiceFor(voiceId);
       // 多音词（如 live=/lɪv/ 居住）：单独读或句中都易被 TTS 读成 /laɪv/（现场的）。
       // 用 Edge SSML <phoneme> 强制音标；讯飞不支持音标，故多音词一律直接走 Edge。
       // 缓存 key 加 homo 前缀，避免命中之前误读音频，也不污染普通发音缓存。
       const ipa = (lang === 'en-US') ? homographIpa(text) : null;
       const needLive = !ipa && sentenceNeedLiveIpa(text, lang);
-      const key = (ipa || needLive) ? ('homo|' + text + '|' + (ipa || 'live')) : ttsCacheKey(text, lang, voice);
+      const key = (ipa || needLive) ? ('homo|' + voice + '|' + text + '|' + (ipa || 'live')) : ttsCacheKey(text, lang, voice);
       const cached = ttsCacheGet(key);
       if (cached) { playAudioBlob(cached, cb); return; }
       const toSystem = G(() => {
         TTS_NET.onFail();
         if (!silent) TTS_NET.notifyFallback();
-        TTS.speakSystem(text, lang, cb, G);
+        TTS.speakSystem(text, lang, cb, G, voiceId);
       });
       const okNode = G((blob) => {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); toSystem(); return; }
@@ -4574,17 +4680,17 @@ function playAudioBlob(blob, onEnd) {
         EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
           console.warn('多音词音标发音失败，降级本机发音', e2);
           toSystem();
-        }), undefined, ipa, false, needLive);
+        }), edgeVoice, ipa, false, needLive);
         return;
       }
       XFYunTTS.synth(text, lang, okNode, G(() => {
         EdgeTTS.synthesize(text, lang, okNode, G((e2) => {
           console.warn('网络发音失败，降级本机发音', e2);
           toSystem();
-        }));
-      }));
+        }), edgeVoice);
+      }), voice);
     },
-    speakNetwork(text, lang, onEnd, G) { this.speakNetworkOnce(text, lang, onEnd, G, false); },
+    speakNetwork(text, lang, onEnd, G, voiceId) { this.speakNetworkOnce(text, lang, onEnd, G, false, voiceId); },
     // 整篇朗读：单句播放句柄（可暂停/继续），供 LessonReader 使用
     speakSentence(text, lang, opts, G) {
       opts = opts || {};
@@ -4592,12 +4698,13 @@ function playAudioBlob(blob, onEnd) {
       text = expandAbbrev(text, lang);  // Ms/Mr/Mrs 等缩写展开为正确读音（仅发音，不影响显示）
       const handle = { kind: 'none', el: null, pause: null, resume: null, stop: null };
       const useNet = this.useNetwork(lang);
+      const voiceId = opts.voiceId || null;
       const goSystem = () => {
         handle.kind = 'system';
         handle.pause = () => { try { speechSynthesis.pause(); } catch (e) {} };
         handle.resume = () => { try { speechSynthesis.resume(); } catch (e) {} };
         handle.stop = () => { try { speechSynthesis.cancel(); } catch (e) {} };
-        TTS.speakSystem(text, lang, opts.onEnd, G);
+        TTS.speakSystem(text, lang, opts.onEnd, G, voiceId);
       };
       if (!useNet) { goSystem(); return handle; }
       this.synthOnce(text, lang, (blob) => {
@@ -4616,7 +4723,7 @@ function playAudioBlob(blob, onEnd) {
           TTS_NET.onFail();
           goSystem();
         }
-      }, opts.human);
+      }, opts.human, voiceId);
       return handle;
     },
     // 音标发音（自然拼读）：网络走 Edge SSML <phoneme>，本机模式读代表词；
@@ -4651,10 +4758,11 @@ function playAudioBlob(blob, onEnd) {
       return { pitchAdj: 2, speedAdj: 0 };
     },
     // 只合成、不播放（返回 blob 或 null）
-    synthOnce(text, lang, cb, human) {
-      const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
+    synthOnce(text, lang, cb, human, voiceId) {
+      const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
+      const edgeVoice = edgeVoiceFor(voiceId);
       const needLive = sentenceNeedLiveIpa(text, lang);
-      const key = (needLive ? 'homo|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
+      const key = (needLive ? 'homo|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       const cached = ttsCacheGet(key);
       if (cached) { cb(cached); return; }
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
@@ -4663,30 +4771,31 @@ function playAudioBlob(blob, onEnd) {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); cb(null); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob); cb(blob);
       };
-      const edge = () => EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, undefined, undefined, human, needLive);
+      const edge = () => EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, edgeVoice, undefined, human, needLive);
       if (needLive) { edge(); return; }  // 讯飞不支持音标，多音词句子直接走 Edge
       XFYunTTS.synth(text, lang, ok, () => {
-        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, undefined, undefined, human);
-      }, undefined, pros.pitchAdj, pros.speedAdj);
+        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); cb(null); }, edgeVoice, undefined, human);
+      }, voice, pros.pitchAdj, pros.speedAdj);
     },
     // 预合成（不播放）：整篇朗读时提前把下一句缓存好，弱网下也能连贯地播下去
-    prefetch(text, lang, human) {
+    prefetch(text, lang, human, voiceId) {
       if (!text || !this.useNetwork(lang)) return;
       lang = lang || 'en-US';
       text = expandAbbrev(text, lang);  // 与 speakSentence 展开保持一致，否则缓存 key 不一致导致预合成白做
-      const voice = (lang === 'zh-CN' ? zhVoice : enVoice);
+      const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
+      const edgeVoice = edgeVoiceFor(voiceId);
       const needLive = sentenceNeedLiveIpa(text, lang);
-      const key = (needLive ? 'homo|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
+      const key = (needLive ? 'homo|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       if (_ttsCache.has(key)) return;
       const pros = human ? this.humanProsody(text, lang) : { pitchAdj: 0, speedAdj: 0 };
       const ok = (blob) => {
         if (!blob || (blob.size != null && blob.size === 0)) { TTS_NET.onFail(); return; }
         TTS_NET.onOk(); ttsCacheSet(key, blob);
       };
-      if (needLive) { EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, undefined, undefined, human, needLive); return; }
+      if (needLive) { EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, edgeVoice, undefined, human, needLive); return; }
       XFYunTTS.synth(text, lang, ok, () => {
-        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, undefined, undefined, human);
-      }, undefined, pros.pitchAdj, pros.speedAdj);
+        EdgeTTS.synthesize(text, lang, ok, () => { TTS_NET.onFail(); }, edgeVoice, undefined, human);
+      }, voice, pros.pitchAdj, pros.speedAdj);
     }
   };
 
@@ -5025,10 +5134,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v251';
+          vEl.textContent = m ? ('v' + m[1]) : 'v252';
         })
-        .catch(function () { vEl.textContent = 'v251'; });
-    } catch (e) { vEl.textContent = 'v251'; }
+        .catch(function () { vEl.textContent = 'v252'; });
+    } catch (e) { vEl.textContent = 'v252'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
