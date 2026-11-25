@@ -1,7 +1,7 @@
 # 课文朗读 · 角色音色分配表
 
 > 代码位置：`frontend/index.html` 与 `docs/index.html` 中 `// ========== 课文分角色朗读` 段落，**两份必须完全一致**。
-> 当前 SW 缓存版本：`english-app-v261`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
+> 当前 SW 缓存版本：`english-app-v262`；改完两份 HTML 后，把两份 `sw.js` 的版本号 +1。
 
 ## 1. 音色池（10 组）
 
@@ -102,27 +102,35 @@
 - 每个增益节点后串一个 `lowpass` 滤波（2600Hz），柔化三角波高次谐波的"电子感"；
 - 高八度泛音峰值略降（0.28 → 0.24）。
 
-## 6. P0 预生成音频（固定课文）
+## 6. P0 预生成音频（固定文本）
 
-固定课文不再完全依赖浏览器端 WebSocket / 讯飞接口，而是由脚本离线生成逐句 MP3，前端优先播放本地文件；文件缺失或加载失败时静默回退原 TTS 链路。
+固定文本不再完全依赖浏览器端 WebSocket / 讯飞接口，而是由脚本离线生成 MP3，前端优先播放本地文件；文件缺失或加载失败时静默回退原 TTS 链路。
 
 - 生成脚本：`pregenerate_audio.py`（根目录），依赖 `pip install --upgrade edge-tts`，不需要 API Key。
 - 输出目录：`docs/audio/lesson/<哈希前2位>/<哈希>.mp3`。
-- 哈希规则：`FNV-1a("edge|" + roleVoiceId + "|" + speechRate + "|1|" + expandAbbrev(text))`，与前端 `preAudioUrl()` 完全一致，无需 manifest。
-- 默认只生成 0.8 档；`--all-rates` 生成 5 档。当前五档合计 6180 条（合读/群体/动物走默认音，无需预生成独立音色）。
-- 前端接入点：`TTS.speakSentence()` 与 `speakLine()` 先试本地音频；`LessonReader` 播放当前句时预热下一句。
+- 哈希规则：`FNV-1a("edge|" + roleVoiceId + "|" + speechRate + "|" + human + "|" + expandAbbrev(text))`，与前端 `preAudioUrl()` 完全一致，无需 manifest。
+  - `human=1`：课文逐句/短文（`speakSentence`，分角色 + 人性化停顿），roleVoiceId 参与哈希。
+  - `human=0`：单词 / 例句 / KET 短文单句（`speak`，普通发音），一律默认音（voiceId=null → `default`）。
+- 三类数据源（`--kind` 切换，默认 lesson）：
+  - `lesson`：`textbook.json` 逐句，五档 6180 条（合读/群体/动物走默认音）。
+  - `words`：`words.json` 的 `word` 字段，默认音，五档约 6410 条（1756 词去重后）。
+  - `ket-reading`：`ket.json` 的 `短文[].sentences[].en`，默认音，五档约 490 条。
+- 前端接入点：`TTS.speakSentence()` / `speakLine()`（human=1）与 `TTS.speak()`（human=0）都先试本地音频；`LessonReader` 播放当前句时预热下一句。`speak()` 覆盖单词发音、例句、测验/PK/拼写/跟读自动播放等全部短朗读。
 - 预生成音频按目标语速合成，播放端 `playbackRate = 1`，不再叠加残余系数。
 - SW 策略：`sw.js` 中音频走**缓存优先**（命中即返回，弱网/离线秒开），未命中才走网络并写缓存；文件名带内容哈希，内容变了名字就变，不存在缓存陈旧问题。`index.html` 仍走网络优先，避免缓存旧页面。
-- 切换角色音色或改名后，必须重新运行脚本覆盖旧文件（文件名随 voiceId 变化，不会互相覆盖）。
+- 切换角色音色或改名后，必须重新运行对应 `--kind` 覆盖旧文件（文件名随 voiceId 变化，不会互相覆盖）。
 
 常用命令：
 
 ```bash
-python pregenerate_audio.py --dry-run
+python pregenerate_audio.py --dry-run                        # 课文统计
+python pregenerate_audio.py --kind words --all-rates         # 单词五档
+python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句五档
 python pregenerate_audio.py --limit 20
-python pregenerate_audio.py --workers 6
 python pregenerate_audio.py --all-rates
 ```
+
+无法预生成（保持实时 TTS）：小托福/拼读分类短文是运行时抽样套模板动态拼装的整段文本；中文语音引导与设置预览被 `preAudioUrl()` 的 `lang !== 'en-US'` 挡住；自然拼读音素已有独立真人 WAV（`docs/phonics/`）。
 
 ## 7. 以后怎么改
 
@@ -131,7 +139,7 @@ python pregenerate_audio.py --all-rates
 3. **新增人物名字**：加进 `ROLE_FEMALE_NAMES` / `ROLE_MALE_NAMES`；无性别标记的人物名（老师、主持人等）加进 `ROLE_HUMAN_NEUTRAL` 正则。
    - 如果是老师/学生这类要锁定年龄身份的角色，直接用 `ROLE_VOICE_ASSIGN` 固定到 `role_teacher` / `role_child_f` / `role_child_m`，不要只靠性别哈希。
 4. **调语速/音质**：改 `RATE_SYNTH_TABLE` 或第 4 节提到的三个函数；改 `humanProsody` 的 pitchAdj 幅度；改 `Celebrate` 三处音效的滤波/包络。
-5. **重新生成音频**：改过角色音色、语速映射或课文文本后，重跑 `pregenerate_audio.py`；只改 HTML 不重跑会继续播放旧音色/旧语速的预生成文件。
+5. **重新生成音频**：改过角色音色、语速映射或课文文本后，重跑 `pregenerate_audio.py --kind <类型>`；只改 HTML 不重跑会继续播放旧音色/旧语速的预生成文件。单词/KET 单句用默认音，不受角色音色改动影响，但改课文文本或语速映射仍需重跑。
 6. **同步与发布**：两份 HTML 改完后两份 `sw.js` 版本号 +1，提交并 push（`origin main`），GitHub Pages 约 1 分钟后生效。
 
 > TTS 音频缓存是页面内存 `Map`，刷新即清空，改音色参数后刷新页面就能听到新声音；但 HTML 被 SW 缓存，不升版本号用户拿不到新表。

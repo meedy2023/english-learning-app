@@ -9,10 +9,11 @@
 前端可用同样算法直接定位文件，无需 manifest。缺失文件自动回退现有 TTS 链路。
 
 用法：
-    python pregenerate_audio.py --dry-run              # 只看将生成多少条
-    python pregenerate_audio.py --limit 20             # 试生成前 20 条
-    python pregenerate_audio.py --all-rates            # 生成 5 个语速档
-    python pregenerate_audio.py --rate 0.8 --workers 8 # 指定档位与并发
+    python pregenerate_audio.py --dry-run                        # 课文：只看将生成多少条
+    python pregenerate_audio.py --kind words --all-rates         # 单词发音：5 档全量
+    python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句：5 档全量
+    python pregenerate_audio.py --limit 20                       # 试生成前 20 条
+    python pregenerate_audio.py --all-rates --workers 8          # 课文：5 档全量
 
 依赖：
     pip install --upgrade edge-tts
@@ -195,13 +196,17 @@ def expand_abbrev(text):
     return text
 
 
-def audio_key(text, voice_id, rate):
-    canon = "edge|" + (voice_id or "default") + "|" + format(float(rate), "g") + "|1|" + text
+def audio_key(text, voice_id, rate, human=True):
+    # human=1：课文逐句/短文（speakSentence，分角色 human prosody）
+    # human=0：单词/例句/KET短文单句（speak，普通发音）
+    # 与前端 preAudioUrl 的 canon：'edge|' + (voiceId||'default') + '|' + speechRate + '|' + (human?'1':'0') + '|' + text
+    h = "1" if human else "0"
+    canon = "edge|" + (voice_id or "default") + "|" + format(float(rate), "g") + "|" + h + "|" + text
     return format(fnv1a32(canon), "08x")
 
 
-def audio_path(out_dir, text, voice_id, rate):
-    key = audio_key(text, voice_id, rate)
+def audio_path(out_dir, text, voice_id, rate, human=True):
+    key = audio_key(text, voice_id, rate, human)
     return Path(out_dir) / key[:2] / (key + ".mp3")
 
 
@@ -230,8 +235,8 @@ async def synth_async(text, voice, rate_pct, timeout):
 
 
 def generate_one(job, out_dir, timeout, retries):
-    text, voice_id, rate, voice = job
-    target = audio_path(out_dir, text, voice_id, rate)
+    text, voice_id, rate, voice, human = job
+    target = audio_path(out_dir, text, voice_id, rate, human)
     if target.exists() and target.stat().st_size > 0:
         return "skip", target, None
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -251,35 +256,75 @@ def generate_one(job, out_dir, timeout, retries):
     return "fail", target, last_error
 
 
-def collect_jobs(source, rates, limit):
+def _add_jobs(jobs, seen, texts, rates, human=True, role=""):
+    """把一批文本按 (spoken, voice_id, rate, edge_voice, human) 加入 job 列表。"""
+    voice_id = role_voice_id(role) if role else None
+    edge = edge_voice_for(voice_id)
+    for raw in texts:
+        spoken = expand_abbrev(str(raw or "").strip())
+        if not spoken:
+            continue
+        for rate in rates:
+            key = audio_key(spoken, voice_id, rate, human)
+            if key in seen:
+                continue
+            seen.add(key)
+            jobs.append((spoken, voice_id, rate, edge, human))
+
+
+KIND_LABELS = {
+    "lesson": "课文逐句",
+    "words": "单词发音",
+    "ket-reading": "KET短文单句",
+}
+# 各 kind 的默认数据源；--source 可显式覆盖
+DEFAULT_SOURCE_BY_KIND = {
+    "lesson": ROOT / "docs" / "data" / "textbook.json",
+    "words": ROOT / "docs" / "data" / "words.json",
+    "ket-reading": ROOT / "docs" / "data" / "ket.json",
+}
+
+
+def collect_jobs(source, rates, limit, kind="lesson"):
+    """按 kind 收集音频任务，每条 job 为 (spoken, voice_id, rate, edge_voice, human)：
+    - lesson：课文逐句（human=1，分角色音色），5 层嵌套的 content[].text/role
+    - words：单词发音（human=0，默认音），words.json 的 word 字段
+    - ket-reading：KET 短文单句（human=0，默认音），ket.json 的 短文[].sentences[].en
+    """
+    jobs, seen = [], set()
     with open(source, "r", encoding="utf-8") as f:
         data = json.load(f)
-    jobs, seen = [], set()
-    for grades in data.values():
-        for terms in grades.values():
-            for units in terms.values():
-                for lessons in units.values():
-                    for lesson in lessons:
-                        for line in lesson.get("content", []):
-                            text = str(line.get("text") or "").strip()
-                            if not text:
-                                continue
-                            voice_id = role_voice_id(line.get("role") or "")
-                            spoken = expand_abbrev(text)
-                            for rate in rates:
-                                key = audio_key(spoken, voice_id, rate)
-                                if key in seen:
-                                    continue
-                                seen.add(key)
-                                jobs.append((spoken, voice_id, rate, edge_voice_for(voice_id)))
+
+    if kind == "lesson":
+        for grades in data.values():
+            for terms in grades.values():
+                for units in terms.values():
+                    for lessons in units.values():
+                        for lesson in lessons:
+                            for line in lesson.get("content", []):
+                                _add_jobs(jobs, seen, [line.get("text")], rates, True, line.get("role") or "")
+    elif kind == "words":
+        texts = [w.get("word") for w in data if isinstance(w, dict)] if isinstance(data, list) else []
+        _add_jobs(jobs, seen, texts, rates, False, "")
+    elif kind == "ket-reading":
+        texts = []
+        for item in (data.get("短文") or {}).values():
+            for sent in (item.get("sentences") or []):
+                texts.append(sent.get("en"))
+        _add_jobs(jobs, seen, texts, rates, False, "")
+    else:
+        raise ValueError("未知 kind: " + kind)
+
     if limit:
         jobs = jobs[:limit]
     return jobs
 
 
 def main():
-    ap = argparse.ArgumentParser(description="预生成课文逐句音频（Edge Neural）")
-    ap.add_argument("--source", default=str(DEFAULT_SOURCE), help="教材 JSON 路径")
+    ap = argparse.ArgumentParser(description="预生成固定文本音频（Edge Neural）")
+    ap.add_argument("--kind", default="lesson", choices=list(KIND_LABELS),
+                    help="数据源类型：lesson=课文逐句 / words=单词发音 / ket-reading=KET短文单句")
+    ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
     ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")
     ap.add_argument("--all-rates", action="store_true", help="生成全部 5 个语速档")
@@ -290,16 +335,18 @@ def main():
     ap.add_argument("--dry-run", action="store_true", help="只统计不合成")
     args = ap.parse_args()
 
+    source = Path(args.source) if args.source else DEFAULT_SOURCE_BY_KIND[args.kind]
     rates = ALL_RATES if args.all_rates else (args.rate or [0.8])
     for r in rates:
         if r not in ALL_RATES:
             ap.error("不支持的语速 " + str(r) + "，可选：" + ", ".join(map(str, ALL_RATES)))
 
-    jobs = collect_jobs(Path(args.source), rates, args.limit)
-    print("待处理：" + str(len(jobs)) + " 条，语速=" + ", ".join(format(r, "g") for r in rates))
+    jobs = collect_jobs(source, rates, args.limit, args.kind)
+    print("类型：" + KIND_LABELS[args.kind] + "  数据源：" + source.name +
+          "  待处理：" + str(len(jobs)) + " 条，语速=" + ", ".join(format(r, "g") for r in rates))
     if args.dry_run:
         for job in jobs[:5]:
-            print("  " + audio_path(args.out_dir, job[0], job[1], job[2]).name +
+            print("  " + audio_path(args.out_dir, job[0], job[1], job[2], job[4]).name +
                   "  " + job[3] + "  " + job[0][:50])
         return 0
 

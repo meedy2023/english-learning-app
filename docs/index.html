@@ -4767,8 +4767,19 @@ function playAudioBlob(blob, onEnd) {
         if (typeof fn !== 'function') return undefined;
         return function () { if (token === TTS._seq) return fn.apply(null, arguments); };
       };
-      if (this.useNetwork(lang)) this.speakNetwork(text, lang, G(onEnd), G, voiceId);
-      else this.speakSystem(text, lang, G(onEnd), G, voiceId);
+      const goNetOrSystem = () => {
+        if (this.useNetwork(lang)) this.speakNetwork(text, lang, G(onEnd), G, voiceId);
+        else this.speakSystem(text, lang, G(onEnd), G, voiceId);
+      };
+      // P0：固定英文文本（单词/例句/KET短文单句等）优先播本地预生成音频。
+      // human=false 对应 |0| key；中文被 preAudioUrl 的 lang 限制挡住，自然走原链路。
+      // 文件不存在或加载失败时静默回退原网络→本机链路，行为与 speakSentence 一致。
+      const preUrl = preAudioUrl(text, lang, voiceId, false);
+      if (preUrl) {
+        const preEl = playPreAudio(preUrl, G(onEnd), G(goNetOrSystem));
+        if (preEl) return;
+      }
+      goNetOrSystem();
     },
     speakSystem(text, lang, onEnd, G, voiceId) {
       const cb = G ? G(onEnd) : onEnd;
