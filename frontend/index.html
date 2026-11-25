@@ -1368,7 +1368,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v250</div>
+          <div class="settings-row-sub" id="settings-version">v251</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5025,10 +5025,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v250';
+          vEl.textContent = m ? ('v' + m[1]) : 'v251';
         })
-        .catch(function () { vEl.textContent = 'v250'; });
-    } catch (e) { vEl.textContent = 'v250'; }
+        .catch(function () { vEl.textContent = 'v251'; });
+    } catch (e) { vEl.textContent = 'v251'; }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
@@ -6216,6 +6216,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var next = idx + delta;
     if (next < 0 || next >= currentWords.length) return;
     showWordDetail(currentWords[next], true);
+    if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   // ========== 标记单词状态 ==========
@@ -6231,9 +6232,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         updatePointsDisplay();
       }
 
-      toast(status === 'mastered' ? '⭐ 已掌握！' : '✓ 我学会了！');
-      // 刷新单词列表状态
-      showWordList();
+      // 标记成功后直接进入下一个单词详情，不再返回列表，减少一次交互负担。
+      // 列表状态会在下次进入时由 showWordList() 重新拉取，无需在这里刷新。
+      const idx = (currentWords || []).findIndex(function (x) { return String(x.id) === String(wordId); });
+      if (idx >= 0 && idx < currentWords.length - 1) {
+        showWordDetail(currentWords[idx + 1], true);
+        if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        toast((status === 'mastered' ? '⭐ 已掌握！' : '✓ 我学会了！') + ' · 本单元已全部过一遍');
+      }
     } catch (e) {
       toast('标记失败：' + e.message);
     }
