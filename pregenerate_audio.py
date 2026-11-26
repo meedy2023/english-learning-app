@@ -229,7 +229,8 @@ def audio_path(out_dir, text, voice_id, rate, human=True):
     return Path(out_dir) / key[:2] / (key + ".mp3")
 
 
-async def synth_async(text, voice, rate_pct, timeout):
+async def _synth_edge(text, voice, rate_pct, timeout):
+    """调用 Edge TTS 合成单段文本，返回 mp3 字节。"""
     try:
         import edge_tts
     except ImportError:
@@ -251,6 +252,47 @@ async def synth_async(text, voice, rate_pct, timeout):
     if not chunks:
         raise RuntimeError("Edge 未返回音频数据")
     return b"".join(chunks)
+
+
+# 英文句子里嵌入的单个汉字，展开成拼音后由英文音色读会变成按字母拼读（zao → /zɔː/），
+# 不是汉字本身的音。合成时把这些拼音占位还原成汉字，改用中文音色朗读，再按原顺序拼接 mp3。
+# 哈希 key 仍基于展开后的拼音文本（前端 preAudioUrl 口径），只是音频内容换成了正确的中文发音。
+PINYIN_TO_HAN = {pinyin: han for han, pinyin in ZH_TO_PINYIN.items()}
+ZH_SOLO_VOICE = "zh-CN-YunxiaNeural"   # 单字朗读用清晰女声；音色池见 ROLE_VOICE_POOL 注释
+
+
+async def synth_async(text, voice, rate_pct, timeout):
+    """合成文本；若含有由汉字展开来的拼音占位，则分段用对应中文音色朗读后拼接。"""
+    # 仅当文本里出现已知的拼音占位时才走混合路径；普通文本保持原样，零开销。
+    hits = [p for p in PINYIN_TO_HAN if re.search(r"\b" + re.escape(p) + r"\b", text, re.I)]
+    if not hits:
+        return await _synth_edge(text, voice, rate_pct, timeout)
+
+    # 按拼音占位切段：英文段沿用角色音色，拼音段还原成汉字用中文音色。
+    pattern = re.compile(r"\b(" + "|".join(re.escape(p) for p in hits) + r")\b", re.I)
+    pieces = []
+    pos = 0
+    for m in pattern.finditer(text):
+        if m.start() > pos:
+            seg = text[pos:m.start()]
+            if seg.strip():
+                pieces.append((seg, voice))
+        han = PINYIN_TO_HAN[m.group(1).lower()]
+        pieces.append((han, ZH_SOLO_VOICE))
+        pos = m.end()
+    if pos < len(text) and text[pos:].strip():
+        # 尾部若只剩标点（如 "zao". 的 "）. 英文音色读不出，丢弃不影响语义。
+        pieces.append((text[pos:], voice))
+
+    parts = []
+    for seg, seg_voice in pieces:
+        # Edge 对纯标点（如 "."、""）不返回音频，跳过即可。
+        if not re.search(r"[A-Za-z\u3400-\u9fff0-9]", seg):
+            continue
+        parts.append(await _synth_edge(seg, seg_voice, rate_pct, timeout))
+    if not parts:
+        raise RuntimeError("混合文本未返回任何音频数据")
+    return b"".join(parts)
 
 
 def generate_one(job, out_dir, timeout, retries):
