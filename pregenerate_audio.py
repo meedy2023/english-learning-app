@@ -354,6 +354,7 @@ KIND_LABELS = {
     "plan-reading": "40天计划短文",
     "vocab-extra": "补充词汇短句（KET/小托福/拼读，human=0）",
     "ket-reading-full": "KET短文整篇（human=1）",
+    "phonics-reading": "自然拼读分类短文整段（human=1）",
 }
 # 各 kind 的默认数据源；--source 可显式覆盖（多源聚合 kind 忽略 --source）
 DEFAULT_SOURCE_BY_KIND = {
@@ -364,6 +365,7 @@ DEFAULT_SOURCE_BY_KIND = {
     "plan-reading": ROOT / "docs" / "data" / "toefl-plan.json",
     "vocab-extra": ROOT / "docs" / "data",       # 目录：ket/toefl/phonics 三份 + 固定预览文本
     "ket-reading-full": ROOT / "docs" / "data" / "ket.json",
+    "phonics-reading": ROOT / "docs" / "data" / "phonics.json",
 }
 DATA_DIR = ROOT / "docs" / "data"
 
@@ -391,7 +393,11 @@ def collect_jobs(source, rates, limit, kind="lesson"):
     - ket-reading-full：KET 短文整篇（human=1，默认音）——LessonReader.bind(sentences)
         → speakSentence(human=true, voiceId=null)。单句朗读是 human=0（ket-reading kind），
         哈希 key 不同，必须单独生成，不能复用 ket-reading 的文件。
-    注：小托福/拼读分类短文是运行时抽样拼装的整段，文本不固定，走修复后的
+    - phonics-reading：自然拼读分类短文整段（human=1，默认音）——renderPhonicsReading()
+        按固定模板+分组词表抽样拼装成一段，LessonReader.bind([{text:para}]) → speakSentence
+        (human=true, voiceId=null)。词表/模板/步长全固定，短文文本可精确复现，故可做预生成；
+        必须与前端 renderPhonicsReading() 的抽样算法逐字一致，否则 key 对不上。
+    注：小托福分类短文仍依赖运行时抽样，文本不固定，走
         「预生成 miss → 网络合成+内存缓存 → 本机」回退，不做预生成。
     """
     jobs, seen = [], set()
@@ -483,6 +489,38 @@ def collect_jobs(source, rates, limit, kind="lesson"):
                 texts.append(sent.get("en"))
         # 整篇播放器 bind(sentences) 取 text||en，无 role → voiceId=null，human=1
         _add_jobs(jobs, seen, texts, rates, True, "")
+    elif kind == "phonics-reading":
+        # 复现前端 renderPhonicsReading() + phonicsGroupWords()：
+        #   词表 = 各组 lessons[].words[].w 按出现顺序去重(lower)；
+        #   取样 = step=max(1,floor(len/12))，从 0 起每 step 取一个，最多 12 个；
+        #   模板 = PHONICS_READING_TPL[idx % 8] 套 {w}；整段 = 各句空格拼接。
+        tpl = [
+            "Look at the {w}.", "I can see a {w}.", "This is a {w}.", "I like the {w}.",
+            "Can you find the {w}?", "The {w} is here.", "I have a {w}.", "Where is the {w}?",
+        ]
+        texts = []
+        for group in _load(source):
+            items, seen_w = [], set()
+            for lesson in (group.get("lessons") or []):
+                for w in (lesson.get("words") or []):
+                    word = str(w.get("w") or "").strip()
+                    key = word.lower()
+                    if not key or key in seen_w:
+                        continue
+                    seen_w.add(key)
+                    items.append(word)
+            n = len(items)
+            if not n:
+                continue
+            step = max(1, n // 12)
+            picked, i = [], 0
+            while i < n and len(picked) < 12:
+                picked.append(items[i])
+                i += step
+            para = " ".join(tpl[idx % len(tpl)].replace("{w}", w) for idx, w in enumerate(picked))
+            texts.append(para)
+        # 播放器 bind([{text:para}]) 无 role → voiceId=null，human=1
+        _add_jobs(jobs, seen, texts, rates, True, "")
     else:
         raise ValueError("未知 kind: " + kind)
 
@@ -497,7 +535,8 @@ def main():
                     help="数据源类型：lesson=课文逐句 / words=单词发音 / ket-reading=KET短文单句 / "
                          "examples=四模块词汇例句 / plan-reading=40天计划短文 / "
                          "vocab-extra=补充词汇短句(KET/小托福/拼读,human=0) / "
-                         "ket-reading-full=KET短文整篇(human=1)")
+                         "ket-reading-full=KET短文整篇(human=1) / "
+                         "phonics-reading=自然拼读分类短文整段(human=1)")
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
     ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")
