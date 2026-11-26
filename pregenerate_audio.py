@@ -16,6 +16,8 @@
     python pregenerate_audio.py --kind plan-reading --all-rates  # 40天计划短文：5 档全量
     python pregenerate_audio.py --kind vocab-extra --all-rates   # 补充词汇短句(KET/小托福/拼读)：5 档全量
     python pregenerate_audio.py --kind ket-reading-full --all-rates  # KET短文整篇(human=1)：5 档全量
+    python pregenerate_audio.py --kind phonics-reading --all-rates  # 自然拼读分类短文整段(human=1)：5 档全量
+    python pregenerate_audio.py --kind toefl-reading --all-rates   # 小托福分类短文整段(human=1)：5 档全量
     python pregenerate_audio.py --limit 20                       # 试生成前 20 条
     python pregenerate_audio.py --all-rates --workers 8          # 课文：5 档全量
 
@@ -355,6 +357,7 @@ KIND_LABELS = {
     "vocab-extra": "补充词汇短句（KET/小托福/拼读，human=0）",
     "ket-reading-full": "KET短文整篇（human=1）",
     "phonics-reading": "自然拼读分类短文整段（human=1）",
+    "toefl-reading": "小托福分类短文整段（human=1）",
 }
 # 各 kind 的默认数据源；--source 可显式覆盖（多源聚合 kind 忽略 --source）
 DEFAULT_SOURCE_BY_KIND = {
@@ -366,6 +369,7 @@ DEFAULT_SOURCE_BY_KIND = {
     "vocab-extra": ROOT / "docs" / "data",       # 目录：ket/toefl/phonics 三份 + 固定预览文本
     "ket-reading-full": ROOT / "docs" / "data" / "ket.json",
     "phonics-reading": ROOT / "docs" / "data" / "phonics.json",
+    "toefl-reading": ROOT / "docs" / "data" / "toefl.json",
 }
 DATA_DIR = ROOT / "docs" / "data"
 
@@ -397,8 +401,11 @@ def collect_jobs(source, rates, limit, kind="lesson"):
         按固定模板+分组词表抽样拼装成一段，LessonReader.bind([{text:para}]) → speakSentence
         (human=true, voiceId=null)。词表/模板/步长全固定，短文文本可精确复现，故可做预生成；
         必须与前端 renderPhonicsReading() 的抽样算法逐字一致，否则 key 对不上。
-    注：小托福分类短文仍依赖运行时抽样，文本不固定，走
-        「预生成 miss → 网络合成+内存缓存 → 本机」回退，不做预生成。
+    - toefl-reading：小托福分类短文整段（human=1，默认音）——renderToeflCategoryReading()
+        按分类词表自带的 example 例句，均匀抽样最多 12 句拼成一段，句尾补齐标点；
+        LessonReader.bind([{text:para}]) → speakSentence(human=true, voiceId=null)。
+        词表来自静态 toefl.json（api-shim 原样返回），顺序/步长全固定，文本可精确复现；
+        必须与前端 renderToeflCategoryReading() 的取样算法逐字一致，否则 key 对不上。
     """
     jobs, seen = [], set()
 
@@ -521,6 +528,35 @@ def collect_jobs(source, rates, limit, kind="lesson"):
             texts.append(para)
         # 播放器 bind([{text:para}]) 无 role → voiceId=null，human=1
         _add_jobs(jobs, seen, texts, rates, True, "")
+    elif kind == "toefl-reading":
+        # 复现前端 renderToeflCategoryReading()：
+        #   withEx = 本类词表中 example 非空的词（保留原顺序，不排序不去重）；
+        #   取样 = step=max(1,floor(len/12))，从 0 起每 step 取一个，最多 12 个；
+        #   每句 = example.trim()，若句尾不是 [.!?]["'）〃]? 则补 '.'；
+        #   整段 = 各句空格拼接。词表来自 api-shim 原样返回的 toefl.json 分类数组。
+        tail = re.compile(r'[.!?]["\'）〃]?$')
+        texts = []
+        toefl = _load(source)
+        for cat in (toefl.get("词汇", {}).get("分类") or {}).values():
+            with_ex = [w for w in (cat or [])
+                       if w and (w.get("example") or "") and str(w.get("example") or "").strip()]
+            n = len(with_ex)
+            if not n:
+                continue
+            step = max(1, n // 12)
+            picked, i = [], 0
+            while i < n and len(picked) < 12:
+                picked.append(with_ex[i])
+                i += step
+            sents = []
+            for w in picked:
+                en = str(w.get("example") or "").strip()
+                if not tail.search(en):
+                    en += "."
+                sents.append(en)
+            texts.append(" ".join(sents))
+        # 播放器 bind([{text:para}]) 无 role → voiceId=null，human=1
+        _add_jobs(jobs, seen, texts, rates, True, "")
     else:
         raise ValueError("未知 kind: " + kind)
 
@@ -536,7 +572,8 @@ def main():
                          "examples=四模块词汇例句 / plan-reading=40天计划短文 / "
                          "vocab-extra=补充词汇短句(KET/小托福/拼读,human=0) / "
                          "ket-reading-full=KET短文整篇(human=1) / "
-                         "phonics-reading=自然拼读分类短文整段(human=1)")
+                         "phonics-reading=自然拼读分类短文整段(human=1) / "
+                         "toefl-reading=小托福分类短文整段(human=1)")
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
     ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")
