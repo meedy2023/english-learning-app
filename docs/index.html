@@ -2643,7 +2643,7 @@ const API = ".";
           <div id="${lineId}-text" class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:18px;color:#333;margin-bottom:4px;line-height:1.6">${lrWordsHtml(line.text)}</div>
           <div style="font-size:14px;color:#8a6d3b;line-height:1.6;margin:2px 0 8px;padding:6px 10px;background:#fff8e8;border-radius:6px">${line.translation || '（暂无翻译）'}</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <button class="btn btn-secondary btn-sm" onclick="speakLine('${escapeForJS(line.text)}', '${escapeForJS(line.role || '')}')" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
+            <button class="btn btn-secondary btn-sm lr-speak-btn" data-idx="${idx}" style="padding:4px 12px;font-size:12px;border-radius:6px">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggle(document.getElementById('${lineId}-text'), '${escapeForJS(line.text)}', ${idx})" style="padding:4px 12px;font-size:12px;border-radius:6px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">
               🎤 跟读
             </button>
@@ -2703,6 +2703,15 @@ const API = ".";
     }
     // 绑定句子：采集朗读行
     LessonReader.bind(unit.content);
+    // 单句朗读按钮：不再用 inline onclick 传文本（文本含双引号时会被 HTML 属性截断，
+    // 如 The word is "早". 导致点击无响应）；改为按 data-idx 从已绑定的行数据取原文。
+    area.querySelectorAll('.lr-speak-btn').forEach(function (btn) {
+      btn.onclick = function () {
+        var i = parseInt(btn.getAttribute('data-idx'), 10);
+        var line = LessonReader.lines[i];
+        if (line) speakLine(line.text, line.role);
+      };
+    });
 
     // 计算当前单元在模块中的位置
     var unitIndex = -1;
@@ -4000,7 +4009,9 @@ const API = ".";
       this.stopTick();
       this.state = 'finished';
       this.handle = null;
-      this.paintStates();
+      // 全文读完后清除「已读」置灰：lr-read 会让整行 opacity:.45（含朗读/跟读按钮），
+      // 读完后这些句子应恢复正常可点、可重听，不能一直显示成灰色不可用。
+      this.clearPaint();
       this.updateUI();
       this.restoreReadingSpace();
       const result = Points.earn('lesson_full_read');
