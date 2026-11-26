@@ -572,6 +572,8 @@
   .lr-w.lr-reading { background: #ffe58f; color: #5c3b00; box-shadow: 0 0 0 1px #ffd666; }
   /* 已经读过的单词（本句内） */
   .lr-w.lr-word-done { color: #8c8c8c; }
+  /* 整段短文朗读：当前词的焦点态（视觉焦点环 + DOM 焦点），与滚动跟随配套 */
+  .lr-w.lr-word-focus { background:#ffd54f !important; color:#3d2600 !important; font-weight:700; box-shadow:0 0 0 3px rgba(255,167,38,.45),0 2px 10px rgba(255,145,0,.35) !important; outline:none; }
   /* 短文阅读（KET/小托福/拼读）：本章节/本类词汇高亮（朗读时让位于朗读高亮） */
   .lr-w.lr-keyword:not(.lr-reading) { color:#c0392b; background:#fff1b8; font-weight:700; box-shadow:0 0 0 1px #ffd666; }
   /* 40天计划预读短文：整段布局不改动——抑制句级紫色卡片/淡出，仅保留词级跟随高亮；当天词汇高亮样式与原 <strong> 一致 */
@@ -3843,8 +3845,10 @@ const API = ".";
       const items = scope.querySelectorAll('.lr-line');
       items.forEach((item, i) => {
         const wordEls = Array.prototype.slice.call(item.querySelectorAll('.lr-w'));
+        const useWordFocus = !!(ui && ui.wordFocus);
         let acc = 0;
         const words = wordEls.map(el => {
+          if (useWordFocus) { try { el.setAttribute('tabindex', '-1'); } catch (e) {} }
           const len = (el.textContent || '').length + 1;
           const w = { el: el, start: acc, end: acc + len };
           acc += len;
@@ -3963,7 +3967,9 @@ const API = ".";
       const tk = ++this.token;
       this.paintStates();
       this.ensureReadingSpace();
-      this.scrollIntoView(line.item);
+      // 整段短文启用词级焦点后，滚动完全由 followWord 按当前词接管，
+      // 不再用句级 scrollIntoView 把长段落整段拉到中间（会覆盖词级跟随）
+      if (!(this.ui && this.ui.wordFocus)) this.scrollIntoView(line.item);
       this.startAt = Date.now();
       this._audioStartAt = null;
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
@@ -4090,6 +4096,7 @@ const API = ".";
         it.item.classList.remove('lr-read', 'lr-current');
         it.words.forEach(w => { if (w.el) w.el.classList.remove('lr-reading', 'lr-word-done'); });
       }
+      this.clearWordFocus();
       this.updateBar(0);
     },
     markWord(line, p) {
@@ -4099,7 +4106,10 @@ const API = ".";
         const w = line.words[i];
         if (!w.el) continue;
         if (target >= w.start && target < w.end) {
-          if (!w.el.classList.contains('lr-reading')) w.el.classList.add('lr-reading');
+          if (!w.el.classList.contains('lr-reading')) {
+            w.el.classList.add('lr-reading');
+            if (this.ui && this.ui.wordFocus) this.focusWord(w);
+          }
           w.el.classList.remove('lr-word-done');
         } else if (target >= w.end) {
           w.el.classList.add('lr-word-done');
@@ -4116,6 +4126,7 @@ const API = ".";
         w.el.classList.remove('lr-reading');
         if (done) w.el.classList.add('lr-word-done');
       });
+      if (done) this.clearWordFocus();
     },
     // ---- 朗读可视区保障：动态测量底部悬浮控制条 + 底部导航的实际遮挡高度 ----
     dockCoverHeight() {
@@ -4151,6 +4162,41 @@ const API = ".";
         if (r.top < 90 || r.bottom > bottomLimit) {
           item.scrollIntoView({ block: 'center', behavior: 'smooth' });
         }
+      } catch (e) {}
+    },
+    // ---- 词级焦点转移 + 滚动跟随（整段短文：焦点随朗读词移动，页面自动跟随）----
+    focusWord(w) {
+      if (!w || !w.el) return;
+      const el = w.el;
+      if (this._focusEl === el) return;      // 同一个词不重复聚焦/滚动
+      this.clearWordFocus();
+      this._focusEl = el;
+      el.classList.add('lr-word-focus');
+      // preventScroll 避免浏览器自动跳动，滚动交给下面的 followWord 统一控制
+      try { if (el.focus) el.focus({ preventScroll: true }); }
+      catch (e) { try { el.focus(); } catch (e2) {} }
+      this.followWord(el);
+    },
+    clearWordFocus() {
+      const el = this._focusEl;
+      if (el) {
+        el.classList.remove('lr-word-focus');
+        try { if (el.blur) el.blur(); } catch (e) {}
+      }
+      this._focusEl = null;
+    },
+    followWord(el) {
+      if (!el || !el.getBoundingClientRect) return;
+      try {
+        const r = el.getBoundingClientRect();
+        const topLimit = 96;                                  // 顶栏/标题占位
+        const bottomLimit = window.innerHeight - this.dockCoverHeight() - 16;
+        if (bottomLimit <= topLimit) return;
+        // 词完整落在舒适区内就不滚动，避免每 70ms 抖动
+        if (r.top >= topLimit + 8 && r.bottom <= bottomLimit - 8) return;
+        // 把当前词锚定到可视区上方 42% 处，方便同时看到后续内容
+        const anchor = topLimit + (bottomLimit - topLimit) * 0.42;
+        window.scrollBy({ top: r.top - anchor + r.height / 2, behavior: 'smooth' });
       } catch (e) {}
     },
     // ---- 控制条 UI ----
@@ -11387,6 +11433,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var raBtn = document.getElementById('toefl-ra-btn');
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
+      wordFocus: true,
       scope: 'toefl-feature-stage',
       dock: 'toefl-reading-dock',
       main: 'toefl-reading-full-btn',
@@ -11496,6 +11543,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var raBtn = document.getElementById('phonics-ra-btn');
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
+      wordFocus: true,
       scope: 'phonics-feature-stage',
       dock: 'phonics-reading-dock',
       main: 'phonics-reading-full-btn',
@@ -12530,6 +12578,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '</div>';
         // 整段作为一行绑定 LessonReader：只取词级跟随高亮，不显示句级卡片/控制条
         LessonReader.bind([{ en: d.passage.en }], {
+          wordFocus: true,
           scope: 'toefl-plan-passage',
           main: 'toefl-plan-full-speak-btn',
           label: '🔊 朗读全文'
