@@ -2934,10 +2934,18 @@ const API = ".";
     const voiceId = roleVoiceId(role);
     const spoken = expandAbbrev(text, 'en-US');
     const preUrl = preAudioUrl(spoken, 'en-US', voiceId, true);
-    if (preUrl && playPreAudio(preUrl, null, function () {
-      TTS.speak(text, 'en-US', null, voiceId);
-    })) return;
-    TTS.speak(text, 'en-US', null, voiceId);
+    // 真人音兜底：首次播放失败多为设备缓存了旧/坏音频。human 参数只影响 key、不影响音频内容，
+    // 且课文 human=true 音频已全覆盖，故用破缓存参数重试同一真人音文件，绕过
+    // SW(缓存优先)/HTTP/Blob 三级缓存重新拉取；仍失败才降级到网络 TTS。
+    // 这样无需生成一批内容完全相同、仅 key 不同的 human=false 副本，避免站点体积暴涨。
+    const goNetwork = function () { TTS.speak(text, 'en-US', null, voiceId); };
+    const retryRealAudio = function () {
+      const bust = preUrl ? preUrl + (preUrl.indexOf('?') >= 0 ? '&' : '?') + '_retry=1' : null;
+      if (bust && playPreAudio(bust, null, goNetwork)) return;
+      goNetwork();
+    };
+    if (preUrl && playPreAudio(preUrl, null, retryRealAudio)) return;
+    goNetwork();
   }
 
 // ========== 跟读功能（麦克风录音）==========
