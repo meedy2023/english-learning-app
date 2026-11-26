@@ -1057,7 +1057,7 @@
   <div class="topbar-right" id="topbar-right" style="display:flex;align-items:center;gap:12px">
       <span id="report-btn" onclick="openReport()" title="学习报告" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">📊</span>
       <span id="settings-btn" onclick="openSettings()" title="设置" style="font-size:17px;line-height:1;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.2);border-radius:50%;cursor:pointer;flex-shrink:0">⚙️</span>
-      <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 0分</span>
+      <span id="points-display" style="font-size:14px;background:rgba(255,255,255,0.2);padding:4px 10px;border-radius:12px;cursor:pointer" onclick="showPointsDetail()">🏆 …</span>
       <span id="grade-display" style="display:none">三年级</span>
     </div>
 </div>
@@ -1299,7 +1299,7 @@
           <div class="settings-row-title">🔍 大字模式</div>
           <div class="settings-row-sub">整体放大页面文字，方便阅读</div>
         </div>
-        <span id="bigfont-toggle" class="settings-switch" onclick="toggleBigFont()">已关闭</span>
+        <span id="bigfont-toggle" class="settings-switch" onclick="toggleBigFont()">…</span>
       </div>
     </div>
 
@@ -10506,7 +10506,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const overviewEl = document.getElementById('report-overview');
     const isLesson = (reportModule === 'lesson');
     if (gradeTabsEl) gradeTabsEl.style.display = isLesson ? 'flex' : 'none';
-    if (overviewEl) overviewEl.style.display = isLesson ? '' : 'none';
+    // 总览区含写死的初始统计值(0%/0/0/0)，先隐藏，数据加载完再显示，
+    // 避免每次进入课文报告都先闪一下 0 再跳到真实值（与设置页版本号跳变同源）。
+    if (overviewEl) overviewEl.style.display = 'none';
     // 分发到各模块报告
     if (reportModule === 'lesson') loadLessonReport();
     else if (reportModule === 'ket') loadKetReport();
@@ -10560,6 +10562,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       document.getElementById("stat-total").textContent = total.total || 0;
       document.getElementById("stat-learned").textContent = total.learned || 0;
       document.getElementById("stat-mastered").textContent = total.mastered || 0;
+      // 统计值已填真值，此时才显示总览区，避免先闪写死的 0
+      if (reportModule === 'lesson') {
+        const ov = document.getElementById('report-overview');
+        if (ov) ov.style.display = '';
+      }
 
       // ========== 按年级分组 ==========
       const byGrade = {};
