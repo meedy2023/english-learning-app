@@ -1282,36 +1282,12 @@
     <div class="settings-card">
       <div class="settings-row">
         <div style="min-width:0">
-          <div class="settings-row-title">📡 发音引擎</div>
-          <div class="settings-row-sub">自动（无音时切网络）/ 系统 / 网络</div>
-          <div style="font-size:12px;color:#6c63ff;margin-top:4px" id="settings-tts-engine-hint"></div>
-        </div>
-        <div class="settings-row-ctl">
-          <select id="settings-tts-engine-select" class="settings-select" onchange="setTtsEngine(this.value)">
-            <option value="auto">自动（推荐）</option>
-            <option value="system">系统发音</option>
-            <option value="network">网络发音</option>
-          </select>
-        </div>
-      </div>
-      <div class="settings-row">
-        <div style="min-width:0">
           <div class="settings-row-title">🐢 朗读速度</div>
           <div class="settings-row-sub">0.5 / 0.8 / 1.0 / 1.2 / 1.5 倍，切换即刻生效</div>
         </div>
         <div class="settings-row-ctl">
           <select id="speech-rate-select" class="settings-select" onchange="setSpeechRate(this.value)"></select>
           <span class="settings-mini-btn" onclick="previewSpeechRate()">试听</span>
-        </div>
-      </div>
-      <div class="settings-row">
-        <div style="min-width:0">
-          <div class="settings-row-title">🗣️ 英文发音</div>
-          <div class="settings-row-sub">女声 / 男声 / 儿童音</div>
-        </div>
-        <div class="settings-row-ctl">
-          <select id="en-voice-select" class="settings-select" onchange="setEnVoice(this.value)"></select>
-          <span class="settings-mini-btn" onclick="previewEnVoice()">试听</span>
         </div>
       </div>
     </div>
@@ -4873,13 +4849,13 @@ function playAudioBlob(blob, onEnd) {
     },
     useNetwork(lang) {
       if (ttsEngine === 'system') return false;
-      // auto / network 都先试网络（确保设置里的发音人生效）；网络不可用时由 speakNetwork 自动降级本机发音
+      // auto / network 都先试网络（网络音色更稳）；网络不可用时由 speakNetwork 自动降级本机发音
       return TTS_NET.usable();
     },
     // 每次发音分配序号：迟到的网络结果（如超时后姗姗来迟的音频）不允许覆盖新的发音
     // opts.preAudio=false：跳过预生成音频，强制走实时网络/系统链路。
-    //   预生成音频英文固定用 default 单一音色，无法体现设置页「英文发音/发音引擎」的差异；
-    //   设置页试听必须传此项，才能让学生听到所选发音人/引擎的真实声音。日常学习不传，仍优先真人音。
+    //   预生成音频英文固定用 default 单一音色，日常学习不传此项、仍优先真人音；
+    //   语速试听传此项，确保语速档位差异真实可听。
     speak(text, lang, onEnd, voiceId, opts) {
       if (!text) { if (onEnd) onEnd(); return; }
       stopAllAudio();
@@ -4956,7 +4932,7 @@ function playAudioBlob(blob, onEnd) {
           if (TTS_NET.usable() && ttsEngine !== 'system') {
             this.speakNetworkOnce(text, lang, cb, _G, true, voiceId);
           } else {
-            toast('本机语音引擎不可用，请到设置里切换发音引擎');
+            toast('本机语音引擎不可用，请检查网络后重试');
             if (cb) cb();
           }
         };
@@ -5281,41 +5257,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   TTS.init();
 
-  function setTtsEngine(v) {
-    ttsEngine = v;
-    try { localStorage.setItem('tts_engine', v); } catch (e) {}
-    const map = { auto: '自动（无音时切网络）', system: '系统发音', network: '网络发音' };
-    const sel = document.getElementById('settings-tts-engine-select');
-    if (sel) sel.value = v;
-    const hint = document.getElementById('settings-tts-engine-hint');
-    if (hint) hint.textContent = '当前：' + (map[v] || v);
-  }
-  setTtsEngine(ttsEngine);
-
-  function setEnVoice(v) {
-    enVoice = v;
-    try { localStorage.setItem('en_voice', v); } catch (e) {}
-    const sel = document.getElementById('en-voice-select');
-    if (sel) sel.value = v;
-  }
-  function previewEnVoice() {
-    // 试听必须跳过预生成音频：预生成英文固定是 default 单一音色，命中后三个发音人听起来一模一样。
-    // 显式传当前 enVoice 作为 voiceId + preAudio=false，强制走实时网络/系统链路，真实反映所选发音人。
-    const sel = document.getElementById('en-voice-select');
-    if (sel) setEnVoice(sel.value);
-    TTS.speak('Hello! How are you today?', 'en-US', null, enVoice, { preAudio: false });
-  }
-  // 初始化发音类型下拉选项（中文发音设置已移除，zhVoice 保留默认值供中文朗读使用）
+  // 发音引擎 / 英文发音设置项已移除：日常朗读优先播预生成真人音，这两项
+  // 实际只在旧版试听里生效，对学习无影响。ttsEngine / enVoice / zhVoice 三个
+  // 变量保留默认值与合法性校验，TTS 链路（useNetwork、降级兜底、中文朗读）仍依赖。
   function initVoiceSelects() {
-    // 兜底：清理已被移除的旧发音人选项，回退到默认值
     if (!VOICE_OPTIONS.en.some(function(o) { return o.id === enVoice; })) { enVoice = 'catherine'; try { localStorage.setItem('en_voice', enVoice); } catch (e) {} }
     if (!VOICE_OPTIONS.zh.some(function(o) { return o.id === zhVoice; })) { zhVoice = 'xiaoyan'; try { localStorage.setItem('zh_voice', zhVoice); } catch (e) {} }
-    const enSel = document.getElementById('en-voice-select');
-    if (enSel) {
-      enSel.innerHTML = VOICE_OPTIONS.en.map(function(o) {
-        return '<option value="' + o.id + '"' + (o.id === enVoice ? ' selected' : '') + '>' + o.label + '</option>';
-      }).join('');
-    }
+    if (['auto', 'system', 'network'].indexOf(ttsEngine) < 0) { ttsEngine = 'auto'; try { localStorage.setItem('tts_engine', ttsEngine); } catch (e) {} }
   }
   initVoiceSelects();
 
@@ -5344,8 +5292,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function previewSpeechRate() {
     stopAllAudio();
-    // 同英文发音试听：跳过预生成（预生成按档位存固定音频，但音色单一），
-    // 显式传 enVoice 走实时链路，确保语速档位差异在同一发音人下真实可听。
+    // 跳过预生成走实时链路，确保语速档位的差异在试听里真实可听。
     TTS.speak('Hello! How are you today?', 'en-US', null, enVoice, { preAudio: false });
   }
   initSpeechRateSelect();
@@ -5433,11 +5380,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
   function refreshSettingsInfo() {
-    const sel = document.getElementById('settings-tts-engine-select');
-    if (sel) sel.value = ttsEngine;
-    // 同步发音人与语速下拉，避免历史/恢复数据后显示与实际发音不一致
-    const enSel = document.getElementById('en-voice-select');
-    if (enSel) enSel.value = enVoice;
     const rateSel = document.getElementById('speech-rate-select');
     if (rateSel) rateSel.value = String(speechRate);
     applyBigFont();
@@ -5459,7 +5401,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
-    if (!window.confirm('确定恢复默认设置吗？\n发音引擎、语速、发音人、大字模式都会还原为初始值。\n（学习数据与积分不受影响）')) {
+    if (!window.confirm('确定恢复默认设置吗？\n语速、大字模式都会还原为初始值。\n（学习数据与积分不受影响）')) {
       toast('已取消');
       return;
     }
@@ -5474,7 +5416,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     speechRate = SPEECH_RATE_DEFAULT;
     bigFontOn = false;
     try { stopAllAudio(); } catch (e) {}
-    setTtsEngine('auto');
     initVoiceSelects();
     initSpeechRateSelect();
     applyBigFont();
