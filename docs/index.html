@@ -4918,7 +4918,10 @@ function playAudioBlob(blob, onEnd) {
         // 紧接着的 speak() 可能被静默丢弃（「第二次点播放不发声」）
         try { speechSynthesis.resume(); } catch (e) {}
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = lang === 'zh-CN' ? 'zh-CN' : (enVoice.startsWith('en-US') ? 'en-US' : 'en-GB');
+        // 修复：enVoice 存的是发音人 id（catherine/henry/child_en），并非 en-US/en-GB 语言码，
+        // 旧判断恒为 false，导致英文 utterance 被错误标记为 en-GB。直接用调用方 lang，
+        // 并在下方选定音色后让 u.lang 跟随实际 voice，保证语言标记与音色一致。
+        u.lang = lang;
         u.rate = (lang === 'en-US' ? 0.85 : 0.95) * speechRate;
         if (lang === 'en-US') u.pitch = 1.2;
         const prefix = lang === 'zh-CN' ? 'zh' : 'en';
@@ -4941,6 +4944,9 @@ function playAudioBlob(blob, onEnd) {
           if (match) v = match;
         }
         if (v) u.voice = v;
+        // utterance 语言标记跟随实际选中的音色：系统可能只有 en-GB 或只有 en-US 音色，
+        // 与其强行写死 en-US/en-GB，不如以真实 voice 的 lang 为准，避免标记与音色不符。
+        if (v && v.lang) u.lang = v.lang;
         // 全局持有 utterance：局部变量被 GC 时 Chrome 会丢 onend / 不发声
         window._ttsUtterance = u;
         u.onend = () => { if (window._ttsUtterance === u) window._ttsUtterance = null; if (cb) cb(); };
