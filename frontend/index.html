@@ -1327,7 +1327,7 @@
       <div class="settings-row">
         <div style="min-width:0">
           <div class="settings-row-title">📱 应用版本</div>
-          <div class="settings-row-sub" id="settings-version">v252</div>
+          <div class="settings-row-sub" id="settings-version">…</div>
         </div>
         <div class="settings-row-ctl">
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
@@ -5400,19 +5400,28 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     applyBigFont();
     refreshAppVersion();
   }
-  // 应用版本：以 sw.js 的缓存版本为准，避免设置页写死过期版本号
-  function refreshAppVersion() {
-    const vEl = document.getElementById('settings-version');
-    if (!vEl) return;
+  // 应用版本：以 sw.js 的缓存版本为准。页面加载时预取一次并缓存在内存，
+  // 进入设置页同步渲染缓存值，避免每次进入都先从写死的旧版本号「跳一下」到最新版本。
+  let _cachedAppVersion = '';
+  function loadAppVersion() {
     try {
       fetch('sw.js?_v=' + Date.now(), { cache: 'no-store' })
         .then(function (r) { return r.ok ? r.text() : ''; })
         .then(function (txt) {
           const m = txt && txt.match(/english-app-v(\d+)/);
-          vEl.textContent = m ? ('v' + m[1]) : 'v252';
+          _cachedAppVersion = m ? ('v' + m[1]) : '';
+          applyAppVersion();
         })
-        .catch(function () { vEl.textContent = 'v252'; });
-    } catch (e) { vEl.textContent = 'v252'; }
+        .catch(function () {});
+    } catch (e) {}
+  }
+  function applyAppVersion() {
+    const vEl = document.getElementById('settings-version');
+    if (vEl) vEl.textContent = _cachedAppVersion || '…';
+  }
+  function refreshAppVersion() {
+    // 仅同步渲染已缓存的版本；不再每次进入都异步 fetch 造成跳变。
+    applyAppVersion();
   }
   function clearAppCache() {
     try {
@@ -12634,6 +12643,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // 初始化积分显示
   updatePointsDisplay();
+
+  // 预取应用版本号：页面加载即拉取，进入设置页时直接同步展示，避免版本号跳变
+  loadAppVersion();
 
   // 初始化大字模式（语音引导已移除）
   applyBigFont();
