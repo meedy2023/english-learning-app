@@ -4877,7 +4877,10 @@ function playAudioBlob(blob, onEnd) {
       return TTS_NET.usable();
     },
     // 每次发音分配序号：迟到的网络结果（如超时后姗姗来迟的音频）不允许覆盖新的发音
-    speak(text, lang, onEnd, voiceId) {
+    // opts.preAudio=false：跳过预生成音频，强制走实时网络/系统链路。
+    //   预生成音频英文固定用 default 单一音色，无法体现设置页「英文发音/发音引擎」的差异；
+    //   设置页试听必须传此项，才能让学生听到所选发音人/引擎的真实声音。日常学习不传，仍优先真人音。
+    speak(text, lang, onEnd, voiceId, opts) {
       if (!text) { if (onEnd) onEnd(); return; }
       stopAllAudio();
       lang = lang || 'en-US';
@@ -4894,7 +4897,7 @@ function playAudioBlob(blob, onEnd) {
       // P0：固定英文文本（单词/例句/KET短文单句等）优先播本地预生成音频。
       // human=false 对应 |0| key；中文被 preAudioUrl 的 lang 限制挡住，自然走原链路。
       // 文件不存在或加载失败时静默回退原网络→本机链路，行为与 speakSentence 一致。
-      const preUrl = preAudioUrl(text, lang, voiceId, false);
+      const preUrl = (opts && opts.preAudio === false) ? null : preAudioUrl(text, lang, voiceId, false);
       if (preUrl) {
         const preEl = playPreAudio(preUrl, G(onEnd), G(goNetOrSystem));
         if (preEl) return;
@@ -4926,6 +4929,8 @@ function playAudioBlob(blob, onEnd) {
         const _gender = voiceId ? VOICE_ID_GENDER[voiceId] : null;
         if (_gender && lang === 'en-US') {
           u.pitch = voicePitchFor(voiceId) || ROLE_VOICE_PROFILES[_gender].pitch;
+          // 系统引擎下 child_en 与普通女声同属 female，需显著抬高音调才能听出「儿童音」差异
+          if (voiceId === 'child_en') u.pitch = 1.45;
           const prefer = _gender === 'female' ? /female|sonia|jenny|aria|zira|samantha|karen|moira|tessa/i
                                               : /male|ryan|guy|david|christopher|george|mark/i;
           const oppose = _gender === 'female' ? /male|ryan|guy|david|christopher|george|mark/i
@@ -5280,10 +5285,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (sel) sel.value = v;
   }
   function previewEnVoice() {
-    // 统一走 TTS：遵守发音引擎设置（系统/网络），并自动应用当前选中的英文发音人
+    // 试听必须跳过预生成音频：预生成英文固定是 default 单一音色，命中后三个发音人听起来一模一样。
+    // 显式传当前 enVoice 作为 voiceId + preAudio=false，强制走实时网络/系统链路，真实反映所选发音人。
     const sel = document.getElementById('en-voice-select');
     if (sel) setEnVoice(sel.value);
-    TTS.speak('Hello! How are you today?', 'en-US');
+    TTS.speak('Hello! How are you today?', 'en-US', null, enVoice, { preAudio: false });
   }
   // 初始化发音类型下拉选项（中文发音设置已移除，zhVoice 保留默认值供中文朗读使用）
   function initVoiceSelects() {
@@ -5324,7 +5330,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function previewSpeechRate() {
     stopAllAudio();
-    TTS.speak('Hello! How are you today?', 'en-US');
+    // 同英文发音试听：跳过预生成（预生成按档位存固定音频，但音色单一），
+    // 显式传 enVoice 走实时链路，确保语速档位差异在同一发音人下真实可听。
+    TTS.speak('Hello! How are you today?', 'en-US', null, enVoice, { preAudio: false });
   }
   initSpeechRateSelect();
 
