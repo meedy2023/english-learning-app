@@ -417,7 +417,7 @@ def collect_jobs(source, rates, limit, kind="lesson"):
                 texts.append(lesson.get("sound_word"))
                 for word in lesson.get("words", []):
                     texts.append(word.get("w"))
-        # 设置页发音人/语速预览固定句（前端 previewEnVoice / previewSpeechRate 硬编码）
+        # 设置页语速预览固定句（前端 previewSpeechRate 硬编码）
         texts.append("Hello! How are you today?")
         _add_jobs(jobs, seen, texts, rates, False, "")
     elif kind == "ket-reading-full":

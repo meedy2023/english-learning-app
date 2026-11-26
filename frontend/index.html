@@ -5283,8 +5283,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function previewSpeechRate() {
     stopAllAudio();
-    // 跳过预生成走实时链路，确保语速档位的差异在试听里真实可听。
-    TTS.speak('Hello! How are you today?', 'en-US', null, enVoice, { preAudio: false });
+    // 用预生成真人音试听，与日常单词/课文的听感一致；预览句已按 5 个语速档位全部预生成，
+    // 不传 voiceId 才能命中 default 真人音（传 enVoice 会算成另一套哈希而 miss）。
+    TTS.speak('Hello! How are you today?', 'en-US');
   }
   initSpeechRateSelect();
 
