@@ -4284,6 +4284,18 @@ const API = ".";
       return ZH_TO_PINYIN[ch] || ch;
     });
   }
+  // 含汉字拼音占位的文本，音频内容曾从「英文读拼音」改为「中文音色读汉字」，二者共用同一哈希 key。
+  // 设备一旦缓存旧音频（HTTP/SW cache-first），同名文件会一直命中旧内容。给这类文本的 canon
+  // 追加内容版本 tag 换一个新 key，强制所有缓存层重新拉取。必须与 pregenerate_audio.py 的
+  // audio_content_tag() / AUDIO_ZH_CONTENT_TAG 逐字一致，否则前后端哈希对不上。
+  const AUDIO_ZH_CONTENT_TAG = '|zhmix2';
+  function audioContentTag(text) {
+    if (!text) return '';
+    for (const pinyin in ZH_TO_PINYIN) {
+      if (new RegExp('\\b' + ZH_TO_PINYIN[pinyin] + '\\b', 'i').test(text)) return AUDIO_ZH_CONTENT_TAG;
+    }
+    return '';
+  }
   function expandAbbrev(text, lang) {
     if (!text || lang !== 'en-US') return text;
     return hanToPinyin(String(text))
@@ -4577,7 +4589,7 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
   const PRE_AUDIO_BASE = './audio/lesson/';
   function preAudioUrl(text, lang, voiceId, human) {
     if (lang !== 'en-US' || !text) return null;
-    const canon = 'edge|' + (voiceId || 'default') + '|' + Number(speechRate) + '|' + (human ? '1' : '0') + '|' + text;
+    const canon = 'edge|' + (voiceId || 'default') + '|' + Number(speechRate) + '|' + (human ? '1' : '0') + '|' + text + audioContentTag(text);
     let h = 0x811c9dc5;
     for (let i = 0; i < canon.length; i++) {
       h ^= canon.charCodeAt(i);

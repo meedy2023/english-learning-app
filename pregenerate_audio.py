@@ -215,12 +215,25 @@ def expand_abbrev(text):
     return text
 
 
+# 含汉字拼音占位的文本，音频内容曾从「英文读拼音」改为「中文音色读汉字」，二者共用同一哈希 key。
+# 设备一旦缓存旧音频（HTTP/SW cache-first），同名文件会一直命中旧内容。给这类文本的 canon
+# 追加内容版本 tag 换一个新 key，强制所有缓存层重新拉取。必须与前端 audioContentTag() 逐字一致。
+AUDIO_ZH_CONTENT_TAG = "|zhmix2"
+
+
+def audio_content_tag(text):
+    for pinyin in ZH_TO_PINYIN.values():
+        if re.search(r"\b" + re.escape(pinyin) + r"\b", text, re.I):
+            return AUDIO_ZH_CONTENT_TAG
+    return ""
+
+
 def audio_key(text, voice_id, rate, human=True):
     # human=1：课文逐句/短文（speakSentence，分角色 human prosody）
     # human=0：单词/例句/KET短文单句（speak，普通发音）
-    # 与前端 preAudioUrl 的 canon：'edge|' + (voiceId||'default') + '|' + speechRate + '|' + (human?'1':'0') + '|' + text
+    # 与前端 preAudioUrl 的 canon：'edge|' + (voiceId||'default') + '|' + speechRate + '|' + (human?'1':'0') + '|' + text + audioContentTag(text)
     h = "1" if human else "0"
-    canon = "edge|" + (voice_id or "default") + "|" + format(float(rate), "g") + "|" + h + "|" + text
+    canon = "edge|" + (voice_id or "default") + "|" + format(float(rate), "g") + "|" + h + "|" + text + audio_content_tag(text)
     return format(fnv1a32(canon), "08x")
 
 
