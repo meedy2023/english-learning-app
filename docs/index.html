@@ -2703,8 +2703,8 @@ const API = ".";
     if (replayBtn) {
       replayBtn.onclick = function() { LessonReader.replay(); };
     }
-    // 绑定句子：采集朗读行
-    LessonReader.bind(unit.content);
+    // 绑定句子：采集朗读行；课文整篇朗读同样启用词级焦点转移与滚动跟随
+    LessonReader.bind(unit.content, { wordFocus: true });
     // 单句朗读按钮：不再用 inline onclick 传文本（文本含双引号时会被 HTML 属性截断，
     // 如 The word is "早". 导致点击无响应）；改为按 data-idx 从已绑定的行数据取原文。
     area.querySelectorAll('.lr-speak-btn').forEach(function (btn) {
