@@ -497,12 +497,10 @@ def collect_jobs(source, rates, limit, kind="lesson"):
         # 整篇播放器 bind(sentences) 取 text||en，无 role → voiceId=null，human=1
         _add_jobs(jobs, seen, texts, rates, True, "")
     elif kind == "phonics-reading":
-        # 复现前端 renderPhonicsReading() + phonicsGroupWords()：
-        #   词表 = 各组 lessons[].words[].w 按出现顺序去重(lower)；
-        #   取样 = step=max(1,floor(len/12))，从 0 起每 step 取一个，最多 12 个；
-        #   模板 = PHONICS_READING_TPL[idx % 8] 套 {w}；整段 = 各句空格拼接。
-        #   认读句型：把 {w} 当作"要拼读的词"引用，对任意词性都语法正确、语义连贯，
-        #   避免把 her/short/up 等非名词硬塞进 "This is a {w}" 造成语法错误。
+        # 与前端 renderPhonicsReading() 对齐：优先用 phonics.json 各组的 story.en
+        # （内置约300词记叙文，关键词自然融入情节），前端取 String(story.en).trim()，
+        # 这里同样 .strip() 才能保证含段落换行的文本 hash key 逐字一致。
+        # 无 story 时回退认读句型拼装（把 {w} 当"要拼读的词"引用，对任意词性语法正确）。
         tpl = [
             "I can read {w}.", "Can you say {w}?", "Let us learn {w} together.",
             "Listen to {w} carefully.", "Do you know {w}?", "Say {w} after me.",
@@ -510,6 +508,11 @@ def collect_jobs(source, rates, limit, kind="lesson"):
         ]
         texts = []
         for group in _load(source):
+            story = group.get("story") or {}
+            story_en = str(story.get("en") or "").strip()
+            if story_en:
+                texts.append(story_en)
+                continue
             items, seen_w = [], set()
             for lesson in (group.get("lessons") or []):
                 for w in (lesson.get("words") or []):
