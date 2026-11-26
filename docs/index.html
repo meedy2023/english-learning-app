@@ -1333,15 +1333,6 @@
           <span class="settings-mini-btn" onclick="clearAppCache()" style="background:#f5f7ff;border:1px solid #e0e6ff;color:#6c63ff">清除缓存</span>
         </div>
       </div>
-      <div class="settings-row">
-        <div style="min-width:0">
-          <div class="settings-row-title">♻️ 恢复默认设置</div>
-          <div class="settings-row-sub">发音、语速、发音人、大字模式等还原为初始值</div>
-        </div>
-        <div class="settings-row-ctl">
-          <span class="settings-mini-btn" onclick="resetAllSettings()" style="background:#fff7e6;border:1px solid #ffd591;color:#d48806">恢复默认</span>
-        </div>
-      </div>
       <div class="settings-row" style="display:block">
         <div class="settings-row-sub" style="margin-top:0">学习数据保存在本机浏览器中，清除浏览器数据会重置，建议定期备份。</div>
       </div>
@@ -5398,28 +5389,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         })
         .catch(function () { vEl.textContent = 'v252'; });
     } catch (e) { vEl.textContent = 'v252'; }
-  }
-  // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
-  function resetAllSettings() {
-    if (!window.confirm('确定恢复默认设置吗？\n语速、大字模式都会还原为初始值。\n（学习数据与积分不受影响）')) {
-      toast('已取消');
-      return;
-    }
-    try {
-      ['tts_engine', 'en_voice', 'zh_voice', 'speech_rate', 'big_font'].forEach(function (k) {
-        try { localStorage.removeItem(k); } catch (e) {}
-      });
-    } catch (e) {}
-    ttsEngine = 'auto';
-    enVoice = 'catherine';
-    zhVoice = 'xiaoyan';
-    speechRate = SPEECH_RATE_DEFAULT;
-    bigFontOn = false;
-    try { stopAllAudio(); } catch (e) {}
-    initVoiceSelects();
-    initSpeechRateSelect();
-    applyBigFont();
-    toast('✓ 已恢复默认设置');
   }
   function clearAppCache() {
     try {
