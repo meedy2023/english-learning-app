@@ -501,9 +501,12 @@ def collect_jobs(source, rates, limit, kind="lesson"):
         #   词表 = 各组 lessons[].words[].w 按出现顺序去重(lower)；
         #   取样 = step=max(1,floor(len/12))，从 0 起每 step 取一个，最多 12 个；
         #   模板 = PHONICS_READING_TPL[idx % 8] 套 {w}；整段 = 各句空格拼接。
+        #   认读句型：把 {w} 当作"要拼读的词"引用，对任意词性都语法正确、语义连贯，
+        #   避免把 her/short/up 等非名词硬塞进 "This is a {w}" 造成语法错误。
         tpl = [
-            "Look at the {w}.", "I can see a {w}.", "This is a {w}.", "I like the {w}.",
-            "Can you find the {w}?", "The {w} is here.", "I have a {w}.", "Where is the {w}?",
+            "I can read {w}.", "Can you say {w}?", "Let us learn {w} together.",
+            "Listen to {w} carefully.", "Do you know {w}?", "Say {w} after me.",
+            "Now try to read {w}.", "We practice {w} today.",
         ]
         texts = []
         for group in _load(source):

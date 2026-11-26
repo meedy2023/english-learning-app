@@ -11405,16 +11405,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ========== 自然拼读分类短文：根据本组词汇生成连续短文（格式同小托福） ==========
   let phonicsReadingOpen = false;
 
-  // 拼读友好简单句模板，按本组词汇轮换套用，串成一段连续短文
+  // 拼读认读句型：把 {w} 当作"要拼读的词"引用，对任意词性(名词/动词/形容词/代词/数词)都语法正确、
+  // 语义连贯，避免把 her/short/up 等非名词硬塞进 "This is a {w}" 造成语法错误。按本组词汇轮换串成一段。
   var PHONICS_READING_TPL = [
-    { en: 'Look at the {w}.', zh: '看这个{w}。' },
-    { en: 'I can see a {w}.', zh: '我能看见一个{w}。' },
-    { en: 'This is a {w}.', zh: '这是一个{w}。' },
-    { en: 'I like the {w}.', zh: '我喜欢这个{w}。' },
-    { en: 'Can you find the {w}?', zh: '你能找到这个{w}吗？' },
-    { en: 'The {w} is here.', zh: '这个{w}在这里。' },
-    { en: 'I have a {w}.', zh: '我有一个{w}。' },
-    { en: 'Where is the {w}?', zh: '这个{w}在哪里？' }
+    { en: 'I can read {w}.', zh: '我会读：{w}。' },
+    { en: 'Can you say {w}?', zh: '你会说：{w}吗？' },
+    { en: 'Let us learn {w} together.', zh: '我们一起学：{w}。' },
+    { en: 'Listen to {w} carefully.', zh: '仔细听：{w}。' },
+    { en: 'Do you know {w}?', zh: '你认识这个词吗：{w}？' },
+    { en: 'Say {w} after me.', zh: '跟我读：{w}。' },
+    { en: 'Now try to read {w}.', zh: '现在试着读：{w}。' },
+    { en: 'We practice {w} today.', zh: '今天我们练习：{w}。' }
   ];
 
   function renderPhonicsReading() {
