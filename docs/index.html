@@ -573,7 +573,7 @@
   /* 已经读过的单词（本句内） */
   .lr-w.lr-word-done { color: #8c8c8c; }
   /* 整段短文朗读：当前词的焦点态（视觉焦点环 + DOM 焦点），与滚动跟随配套 */
-  .lr-w.lr-word-focus { background:#ffd54f !important; color:#3d2600 !important; font-weight:700; box-shadow:0 0 0 3px rgba(255,167,38,.45),0 2px 10px rgba(255,145,0,.35) !important; outline:none; }
+  .lr-w.lr-word-focus, .lr-w.lr-single-focus { background:#ffd54f !important; color:#3d2600 !important; font-weight:700; box-shadow:0 0 0 3px rgba(255,167,38,.45),0 2px 10px rgba(255,145,0,.35) !important; outline:none; }
   /* 短文阅读（KET/小托福/拼读）：本章节/本类词汇高亮（朗读时让位于朗读高亮） */
   .lr-w.lr-keyword:not(.lr-reading) { color:#c0392b; background:#fff1b8; font-weight:700; box-shadow:0 0 0 1px #ffd666; }
   /* 40天计划预读短文：整段布局不改动——抑制句级紫色卡片/淡出，仅保留词级跟随高亮；当天词汇高亮样式与原 <strong> 一致 */
@@ -2711,7 +2711,7 @@ const API = ".";
       btn.onclick = function () {
         var i = parseInt(btn.getAttribute('data-idx'), 10);
         var line = LessonReader.lines[i];
-        if (line) speakLine(line.text, line.role);
+        if (line) speakLine(line.text, line.role, line);
       };
     });
 
@@ -2931,22 +2931,104 @@ const API = ".";
       .replace(/\u2029/g, '\\u2029');
   }
 
-  function speakLine(text, role) {
+  // 单句朗读的词级焦点：与整篇朗读共用受控滚动算法，但用独立的焦点类，
+  // 避免整篇朗读与单句朗读同时存在时互相覆盖。line 由课文单句按钮传入
+  // （LessonReader.lines[i]，含 words/total），其它调用点不传则不启用。
+  const SingleFocus = {
+    line: null,
+    el: null,
+    timer: null,
+    startAt: 0,
+    estMs: 0,
+    _el: null,
+    // 延迟引用 LessonReader：本对象在 LessonReader 声明之前初始化，不能在字面量里直接取属性
+    UI(key, defId) { return LessonReader.UI.call(this, key, defId); },
+    dockCoverHeight() { return LessonReader.dockCoverHeight.call(this); },
+    start(line, audio) {
+      this.stop();
+      if (!line || !line.words || !line.words.length) return;
+      this.line = line;
+      this.el = audio || null;
+      this.startAt = Date.now();
+      this.estMs = Math.max(700, (line.total / 14) * 1000 / (speechRate || 0.75) + 300);
+      line.words.forEach(function (w) {
+        if (w && w.el) { try { w.el.setAttribute('tabindex', '-1'); } catch (e) {} }
+      });
+      const self = this;
+      this.timer = setInterval(function () { self.tick(); }, 70);
+      this.tick();
+    },
+    stop() {
+      if (this.timer) { clearInterval(this.timer); this.timer = null; }
+      this.clear();
+      this.line = null;
+      this.el = null;
+    },
+    clear() {
+      const el = this._el;
+      if (el) {
+        el.classList.remove('lr-single-focus');
+        try { if (el.blur) el.blur(); } catch (e) {}
+      }
+      this._el = null;
+    },
+    focus(w) {
+      if (!w || !w.el || this._el === w.el) return;
+      this.clear();
+      this._el = w.el;
+      w.el.classList.add('lr-single-focus');
+      try { if (w.el.focus) w.el.focus({ preventScroll: true }); }
+      catch (e) { try { w.el.focus(); } catch (e2) {} }
+      // 复用整篇朗读的受控滚动：只在焦点词离开舒适区时滚动
+      try { LessonReader.followWord.call(this, w.el); } catch (e) {}
+    },
+    tick() {
+      const line = this.line;
+      if (!line || !line.total) return;
+      let p;
+      const el = this.el;
+      if (el && isFinite(el.duration) && el.duration > 0) p = el.currentTime / el.duration;
+      else p = (Date.now() - this.startAt) / this.estMs;
+      p = Math.max(0, Math.min(1, p));
+      const target = Math.floor(p * line.total);
+      for (let i = 0; i < line.words.length; i++) {
+        const w = line.words[i];
+        if (w && target >= w.start && target < w.end) { this.focus(w); return; }
+      }
+      // 进度已过最后一个词：保持在末词，等 onEnd 再清理
+      const last = line.words[line.words.length - 1];
+      if (last) this.focus(last);
+    }
+  };
+
+  function speakLine(text, role, line) {
     // 单句朗读同样按角色发声（女生女声、男生男声）；优先用预生成音频，缺失再走网络 TTS
+    SingleFocus.stop();
     const voiceId = roleVoiceId(role);
     const spoken = expandAbbrev(text, 'en-US');
     const preUrl = preAudioUrl(spoken, 'en-US', voiceId, true);
+    const onDone = function () { SingleFocus.stop(); };
     // 真人音兜底：首次播放失败多为设备缓存了旧/坏音频。human 参数只影响 key、不影响音频内容，
     // 且课文 human=true 音频已全覆盖，故用破缓存参数重试同一真人音文件，绕过
     // SW(缓存优先)/HTTP/Blob 三级缓存重新拉取；仍失败才降级到网络 TTS。
     // 这样无需生成一批内容完全相同、仅 key 不同的 human=false 副本，避免站点体积暴涨。
-    const goNetwork = function () { TTS.speak(text, 'en-US', null, voiceId); };
+    const goNetwork = function () {
+      SingleFocus.start(line, null);
+      TTS.speak(text, 'en-US', onDone, voiceId);
+    };
     const retryRealAudio = function () {
+      SingleFocus.stop();
       const bust = preUrl ? preUrl + (preUrl.indexOf('?') >= 0 ? '&' : '?') + '_retry=1' : null;
-      if (bust && playPreAudio(bust, null, goNetwork)) return;
+      if (bust) {
+        const el = playPreAudio(bust, onDone, goNetwork);
+        if (el) { SingleFocus.start(line, el); return; }
+      }
       goNetwork();
     };
-    if (preUrl && playPreAudio(preUrl, null, retryRealAudio)) return;
+    if (preUrl) {
+      const el = playPreAudio(preUrl, onDone, retryRealAudio);
+      if (el) { SingleFocus.start(line, el); return; }
+    }
     goNetwork();
   }
 
