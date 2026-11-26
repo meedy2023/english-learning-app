@@ -1314,23 +1314,6 @@
           <span class="settings-mini-btn" onclick="previewEnVoice()">试听</span>
         </div>
       </div>
-      <div class="settings-row">
-        <div style="min-width:0">
-          <div class="settings-row-title">🗣️ 中文发音</div>
-          <div class="settings-row-sub">男声 / 女声 / 儿童声</div>
-        </div>
-        <div class="settings-row-ctl">
-          <select id="zh-voice-select" class="settings-select" onchange="setZhVoice(this.value)"></select>
-          <span class="settings-mini-btn" onclick="previewZhVoice()">试听</span>
-        </div>
-      </div>
-      <div class="settings-row">
-        <div style="min-width:0">
-          <div class="settings-row-title">🔔 语音引导</div>
-          <div class="settings-row-sub">切换页面时自动朗读提示</div>
-        </div>
-        <span id="voice-guide-toggle" class="settings-switch" onclick="toggleVoiceGuide()">已关闭</span>
-      </div>
     </div>
 
     <div class="settings-group-title">👀 显示</div>
@@ -1930,7 +1913,7 @@ const API = ".";
           k.indexOf('review_') === 0 || k.indexOf('last_study_') === 0 ||
           k.indexOf('wordlearn_') === 0 || k.indexOf('pk_last_') === 0 ||
           k.indexOf('tts_engine') === 0 || k === 'en_voice' || k === 'zh_voice' ||
-          k === 'speech_rate' || k === 'big_font' || k === 'voice_guide') {
+          k === 'speech_rate' || k === 'big_font') {
         keys.push(k);
       }
     }
@@ -2390,7 +2373,6 @@ const API = ".";
     document.getElementById("view-" + name).classList.add("active");
     const titles = { grade: "📚 英语学习", home: "📚 英语学习", learn: "📚 英语学习", quiz: "✏️ 测验", review: "🔴 错词复习", report: "📊 学习报告", ket: "🪜 KET 学习", "ket-quiz": ketQuizTitle(), toefl: "🎓 小托福", phonics: "🔤 自然拼读", pk: "⚔️ 单词 PK", settings: "⚙️ 设置" };
     document.getElementById("topbar-title").textContent = titles[name] || "";
-    guideSpeak((titles[name] || '').replace(/[^\u4e00-\u9fa5A-Za-z0-9]/g, ''));
     // 年级选择页不显示右上角
     // 顶栏年级标签已按需求全局移除（仅保留元素供文本更新，不再显示）
     document.getElementById("grade-display").style.display = "none";
@@ -5255,11 +5237,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     TTS.speak(word, 'en-US');
   }
 
-  function speakChinese(text) {
-    if (!text) return;
-    TTS.speak(text, 'zh-CN');
-  }
-
   function speakAll(word, chinese, exampleEn, exampleCn) {
     // 朗读顺序：单词 -> 中文 -> 英文例句 -> 例句中文（callback 链驱动，播完一段再播下一段）
     const parts = [
@@ -5302,39 +5279,21 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     const sel = document.getElementById('en-voice-select');
     if (sel) sel.value = v;
   }
-  function setZhVoice(v) {
-    zhVoice = v;
-    try { localStorage.setItem('zh_voice', v); } catch (e) {}
-    const sel = document.getElementById('zh-voice-select');
-    if (sel) sel.value = v;
-  }
   function previewEnVoice() {
     // 统一走 TTS：遵守发音引擎设置（系统/网络），并自动应用当前选中的英文发音人
     const sel = document.getElementById('en-voice-select');
     if (sel) setEnVoice(sel.value);
     TTS.speak('Hello! How are you today?', 'en-US');
   }
-  function previewZhVoice() {
-    // 统一走 TTS：遵守发音引擎设置（系统/网络），并自动应用当前选中的中文发音人
-    const sel = document.getElementById('zh-voice-select');
-    if (sel) setZhVoice(sel.value);
-    TTS.speak('你好，欢迎学习英语！', 'zh-CN');
-  }
-  // 初始化发音类型下拉选项
+  // 初始化发音类型下拉选项（中文发音设置已移除，zhVoice 保留默认值供中文朗读使用）
   function initVoiceSelects() {
     // 兜底：清理已被移除的旧发音人选项，回退到默认值
     if (!VOICE_OPTIONS.en.some(function(o) { return o.id === enVoice; })) { enVoice = 'catherine'; try { localStorage.setItem('en_voice', enVoice); } catch (e) {} }
     if (!VOICE_OPTIONS.zh.some(function(o) { return o.id === zhVoice; })) { zhVoice = 'xiaoyan'; try { localStorage.setItem('zh_voice', zhVoice); } catch (e) {} }
     const enSel = document.getElementById('en-voice-select');
-    const zhSel = document.getElementById('zh-voice-select');
     if (enSel) {
       enSel.innerHTML = VOICE_OPTIONS.en.map(function(o) {
         return '<option value="' + o.id + '"' + (o.id === enVoice ? ' selected' : '') + '>' + o.label + '</option>';
-      }).join('');
-    }
-    if (zhSel) {
-      zhSel.innerHTML = VOICE_OPTIONS.zh.map(function(o) {
-        return '<option value="' + o.id + '"' + (o.id === zhVoice ? ' selected' : '') + '>' + o.label + '</option>';
       }).join('');
     }
   }
@@ -5369,15 +5328,13 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   initSpeechRateSelect();
 
-  // ========== P3 优化：大字模式 + 语音引导 ==========
+  // ========== P3 优化：大字模式 ==========
   let bigFontOn = localStorage.getItem('big_font') === '1';
-  let voiceGuideOn = localStorage.getItem('voice_guide') === '1';
 
   function toggleBigFont() {
     bigFontOn = !bigFontOn;
     try { localStorage.setItem('big_font', bigFontOn ? '1' : '0'); } catch (e) {}
     applyBigFont();
-    if (voiceGuideOn) speakChinese(bigFontOn ? '已切换到大字模式' : '已恢复正常字号');
   }
   function applyBigFont() {
     if (bigFontOn) document.body.classList.add('big-font');
@@ -5386,19 +5343,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (el) {
       el.textContent = bigFontOn ? '已开启' : '已关闭';
       if (bigFontOn) el.classList.add('on'); else el.classList.remove('on');
-    }
-  }
-  function toggleVoiceGuide() {
-    voiceGuideOn = !voiceGuideOn;
-    try { localStorage.setItem('voice_guide', voiceGuideOn ? '1' : '0'); } catch (e) {}
-    applyVoiceGuide();
-    speakChinese(voiceGuideOn ? '语音引导已开启' : '语音引导已关闭');
-  }
-  function applyVoiceGuide() {
-    const el = document.getElementById('voice-guide-toggle');
-    if (el) {
-      el.textContent = voiceGuideOn ? '已开启' : '已关闭';
-      if (voiceGuideOn) el.classList.add('on'); else el.classList.remove('on');
     }
   }
 
@@ -5472,12 +5416,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // 同步发音人与语速下拉，避免历史/恢复数据后显示与实际发音不一致
     const enSel = document.getElementById('en-voice-select');
     if (enSel) enSel.value = enVoice;
-    const zhSel = document.getElementById('zh-voice-select');
-    if (zhSel) zhSel.value = zhVoice;
     const rateSel = document.getElementById('speech-rate-select');
     if (rateSel) rateSel.value = String(speechRate);
     applyBigFont();
-    applyVoiceGuide();
     refreshAppVersion();
   }
   // 应用版本：以 sw.js 的缓存版本为准，避免设置页写死过期版本号
@@ -5496,12 +5437,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   // 恢复默认设置：一键把发音/语速/显示相关设置还原为初始值（不影响学习数据与积分）
   function resetAllSettings() {
-    if (!window.confirm('确定恢复默认设置吗？\n发音引擎、语速、发音人、大字模式、语音引导都会还原为初始值。\n（学习数据与积分不受影响）')) {
+    if (!window.confirm('确定恢复默认设置吗？\n发音引擎、语速、发音人、大字模式都会还原为初始值。\n（学习数据与积分不受影响）')) {
       toast('已取消');
       return;
     }
     try {
-      ['tts_engine', 'en_voice', 'zh_voice', 'speech_rate', 'big_font', 'voice_guide'].forEach(function (k) {
+      ['tts_engine', 'en_voice', 'zh_voice', 'speech_rate', 'big_font'].forEach(function (k) {
         try { localStorage.removeItem(k); } catch (e) {}
       });
     } catch (e) {}
@@ -5510,13 +5451,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     zhVoice = 'xiaoyan';
     speechRate = SPEECH_RATE_DEFAULT;
     bigFontOn = false;
-    voiceGuideOn = false;
     try { stopAllAudio(); } catch (e) {}
     setTtsEngine('auto');
     initVoiceSelects();
     initSpeechRateSelect();
     applyBigFont();
-    applyVoiceGuide();
     toast('✓ 已恢复默认设置');
   }
   function clearAppCache() {
@@ -5525,12 +5464,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         caches.keys().then(function(keys) { keys.forEach(function(k) { caches.delete(k); }); });
       }
     } catch (e) {}
-    if (window.speakChinese && voiceGuideOn) speakChinese('缓存已清除，正在重新加载');
     setTimeout(function() { location.reload(); }, 400);
-  }
-  function guideSpeak(text) {
-    if (!voiceGuideOn || !text) return;
-    speakChinese(text);
   }
 
   // ========== API 请求 ==========
@@ -12745,9 +12679,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 初始化积分显示
   updatePointsDisplay();
 
-  // 初始化 P3 优化（大字模式 + 语音引导）
+  // 初始化大字模式（语音引导已移除）
   applyBigFont();
-  applyVoiceGuide();
 
   // 注册 Service Worker（PWA 离线支持）
   if ('serviceWorker' in navigator) {
