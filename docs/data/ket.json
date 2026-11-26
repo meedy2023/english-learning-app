@@ -5486,459 +5486,563 @@
    "title": "My New Friend",
    "sentences": [
     {
-     "en": "Hello! My name is Anna Smith.",
-     "zh": "你好！我叫安娜·史密斯。"
+     "en": "On the first day of school, a girl with a red bag sat next to me.",
+     "zh": "开学第一天，一个背着红色书包的女孩坐到我旁边。"
     },
     {
-     "en": "I am ten years old.",
-     "zh": "我十岁了。"
+     "en": "\"My name is Anna Smith,\" she said with a shy smile.",
+     "zh": "“我叫安娜·史密斯，”她腼腆地笑着说。"
     },
     {
-     "en": "My birthday is on June 1st.",
-     "zh": "我的生日是六月一日。"
+     "en": "\"Anna is my first name and Smith is my surname.\"",
+     "zh": "“安娜是我的名，史密斯是我的姓。”"
     },
     {
-     "en": "I am from China.",
-     "zh": "我来自中国。"
+     "en": "She told me she was ten years old, the same age as me.",
+     "zh": "她告诉我她十岁，和我同岁。"
     },
     {
-     "en": "I am a girl.",
-     "zh": "我是一个女孩。"
+     "en": "Her birthday was on June 1st, and mine was in May.",
+     "zh": "她的生日是六月一日，我的在五月。"
     },
     {
-     "en": "I speak Chinese and English.",
-     "zh": "我说中文和英语。"
+     "en": "She came from Canada, but her family now lived in China.",
+     "zh": "她来自加拿大，但现在全家住在中国。"
     },
     {
-     "en": "My address is 123 Main Street.",
-     "zh": "我的地址是主街 123 号。"
+     "en": "We both spoke English, and she was learning Chinese too.",
+     "zh": "我们都说英语，她也在学中文。"
     },
     {
-     "en": "My phone number is 123-4567.",
-     "zh": "我的电话号码是 123-4567。"
+     "en": "After school, she wrote her address and phone number on a small card for me.",
+     "zh": "放学后，她把地址和电话号码写在一张小卡片上送给我。"
     },
     {
-     "en": "My email is anna@mail.com.",
-     "zh": "我的邮箱是 anna@mail.com。"
+     "en": "\"You can email me when you want to practice,\" she said.",
+     "zh": "“你想练习的时候可以给我发邮件，”她说。"
+    },
+    {
+     "en": "I put the card in my book and smiled all the way home.",
+     "zh": "我把卡片夹进书里，一路笑着回家。"
+    },
+    {
+     "en": "That day I found a new friend, and my world felt a little bigger.",
+     "zh": "那天我交到了新朋友，世界好像变大了一点。"
     }
    ]
   },
   "家庭与朋友": {
-   "title": "My Family",
+   "title": "Sunday at Grandma's",
    "sentences": [
     {
-     "en": "I have a big family.",
-     "zh": "我有一个大家庭。"
+     "en": "Every Sunday, my family goes to Grandma's house for lunch.",
+     "zh": "每个星期天，我们全家都去奶奶家吃午饭。"
     },
     {
-     "en": "My father is a doctor.",
-     "zh": "我的爸爸是一名医生。"
+     "en": "My mother brings fruit, and my father carries a big bag of drinks.",
+     "zh": "妈妈带水果，爸爸提着一大袋饮料。"
     },
     {
-     "en": "My mother is a teacher.",
-     "zh": "我的妈妈是一名老师。"
+     "en": "My sister helps Grandma in the kitchen, while my brother sets the table.",
+     "zh": "姐姐在厨房帮奶奶，弟弟摆桌子。"
     },
     {
-     "en": "I have one sister and one brother.",
-     "zh": "我有一个妹妹和一个弟弟。"
+     "en": "My grandparents always sit by the window and watch us with a smile.",
+     "zh": "爷爷奶奶总坐在窗边，微笑着看着我们。"
     },
     {
-     "en": "My grandparents live with us.",
-     "zh": "我的祖父母和我们住在一起。"
+     "en": "This Sunday, my aunt and uncle came with my little cousin.",
+     "zh": "这个星期天，姑姑和姑父带着小表弟来了。"
     },
     {
-     "en": "My aunt and uncle have a cute baby.",
-     "zh": "我的姑姑和姑父有一个可爱的宝宝。"
+     "en": "He was only two, and everyone wanted to hold him.",
+     "zh": "他才两岁，每个人都想抱抱他。"
     },
     {
-     "en": "I have many friends at school.",
-     "zh": "我在学校有很多朋友。"
+     "en": "My best friend Lily came too, because she lives next door.",
+     "zh": "我最好的朋友莉莉也来了，她就住在隔壁。"
     },
     {
-     "en": "My best friend is Lily.",
-     "zh": "我最好的朋友是莉莉。"
+     "en": "We played in the garden while the adults talked inside.",
+     "zh": "大人们在屋里聊天，我们在花园里玩。"
     },
     {
-     "en": "We play together every day.",
-     "zh": "我们每天一起玩。"
+     "en": "Before we left, Grandma gave each of us a warm hug.",
+     "zh": "临走前，奶奶给了我们每人一个温暖的拥抱。"
+    },
+    {
+     "en": "I love these days because family and friends make a house feel like home.",
+     "zh": "我爱这样的日子，因为家人和朋友让房子变成了家。"
     }
    ]
   },
   "学校与学习": {
-   "title": "My School Day",
+   "title": "The Science Lesson",
    "sentences": [
     {
-     "en": "I go to school every day.",
-     "zh": "我每天去上学。"
+     "en": "I am a student at a small school near my home.",
+     "zh": "我是家附近一所小学的学生。"
     },
     {
-     "en": "My classroom is big and bright.",
-     "zh": "我的教室又大又明亮。"
+     "en": "My classroom is bright, and my desk is by the window.",
+     "zh": "我的教室很明亮，我的课桌靠窗。"
     },
     {
-     "en": "My teacher is very kind.",
-     "zh": "我的老师非常和蔼。"
+     "en": "Miss Chen is my favorite teacher, and she makes every lesson interesting.",
+     "zh": "陈老师是我最喜欢的老师，她让每节课都有趣。"
     },
     {
-     "en": "My favorite subject is science.",
-     "zh": "我最喜欢的科目是科学。"
+     "en": "My favorite subject is science because I love asking questions.",
+     "zh": "我最喜欢的科目是科学，因为我喜欢问问题。"
     },
     {
-     "en": "I like math and art too.",
-     "zh": "我也喜欢数学和美术。"
+     "en": "Last week we read a book about plants in the library.",
+     "zh": "上周我们在图书馆读了一本关于植物的书。"
     },
     {
-     "en": "I have a lot of homework today.",
-     "zh": "我今天有很多家庭作业。"
+     "en": "When I did not know a word, I looked it up in my dictionary.",
+     "zh": "遇到不认识的词，我就查字典。"
     },
     {
-     "en": "I use my dictionary in English lessons.",
-     "zh": "我在英语课上使用词典。"
+     "en": "I wrote my ideas in my notebook and shared them with my class.",
+     "zh": "我把想法写进笔记本，再和同学们分享。"
     },
     {
-     "en": "I sit at my desk and read books.",
-     "zh": "我坐在书桌前读书。"
+     "en": "We had a short exam on Friday, and I felt nervous at first.",
+     "zh": "星期五我们有一次小测验，一开始我很紧张。"
     },
     {
-     "en": "I have a test tomorrow.",
-     "zh": "我明天有一场考试。"
+     "en": "My teacher said my answers were thoughtful and clear.",
+     "zh": "老师说我的答案思考周密又清楚。"
+    },
+    {
+     "en": "That evening my homework was easy, because I understood the lesson.",
+     "zh": "那天晚上的作业很轻松，因为我听懂了课。"
+    },
+    {
+     "en": "Learning feels good when you can see your own progress.",
+     "zh": "能看见自己的进步时，学习就成了一件开心的事。"
     }
    ]
   },
   "日常生活": {
-   "title": "My Daily Life",
+   "title": "A Weekend to Remember",
    "sentences": [
     {
-     "en": "I get up early in the morning.",
-     "zh": "我早上起得很早。"
+     "en": "I get up early on Saturday because the morning is my favorite time.",
+     "zh": "星期六我起得很早，因为早晨是我最喜欢的时候。"
     },
     {
-     "en": "I have breakfast at seven o'clock.",
-     "zh": "我七点吃早餐。"
+     "en": "Mom makes breakfast, and the smell of bread wakes the whole house.",
+     "zh": "妈妈做早餐，面包的香味唤醒了整座房子。"
     },
     {
-     "en": "I go to school on weekdays.",
-     "zh": "我在工作日去上学。"
+     "en": "After breakfast, I help clean the table and water the plants.",
+     "zh": "早饭后，我帮忙收拾桌子、给植物浇水。"
     },
     {
-     "en": "On Saturday I play with my friends.",
-     "zh": "周六我和朋友们一起玩。"
+     "en": "In the afternoon, my friends and I play in the park.",
+     "zh": "下午，我和朋友们在公园里玩。"
     },
     {
-     "en": "On Sunday I visit my grandma.",
-     "zh": "周日我去看望奶奶。"
+     "en": "We run, laugh, and talk about our week.",
+     "zh": "我们奔跑、欢笑，聊着这一周发生的事。"
     },
     {
-     "en": "I have lunch at school.",
-     "zh": "我在学校吃午饭。"
+     "en": "On Sunday, we visit Grandma, who always has lunch ready for us.",
+     "zh": "星期天我们去看奶奶，她总已为我们准备好午饭。"
     },
     {
-     "en": "I have dinner with my family in the evening.",
-     "zh": "晚上我和家人一起吃晚饭。"
+     "en": "In the evening, we have dinner together and tell funny stories.",
+     "zh": "傍晚，我们一起吃晚饭，讲有趣的故事。"
     },
     {
-     "en": "I go to bed at nine o'clock at night.",
-     "zh": "我晚上九点睡觉。"
+     "en": "My father says the weekend is the best part of the week.",
+     "zh": "爸爸说周末是一周里最美好的部分。"
+    },
+    {
+     "en": "I go to bed at nine, feeling happy and a little tired.",
+     "zh": "我九点上床，心里开心，身体有点累。"
+    },
+    {
+     "en": "A quiet weekend gives me energy for the new week.",
+     "zh": "安静的周末给了我迎接新一周的能量。"
     }
    ]
   },
   "食物与饮料": {
-   "title": "Yummy Food",
+   "title": "Soup for Everyone",
    "sentences": [
     {
-     "en": "I like eating good food.",
-     "zh": "我喜欢吃美食。"
+     "en": "Food always tastes better when someone you love makes it.",
+     "zh": "爱的人做的食物，总是格外香。"
     },
     {
-     "en": "For breakfast I have bread and milk.",
-     "zh": "早餐我吃面包和喝牛奶。"
+     "en": "At breakfast, I drink milk and eat bread with a little butter.",
+     "zh": "早餐我喝牛奶，吃抹了黄油的面包。"
     },
     {
-     "en": "For lunch I eat rice, chicken and vegetables.",
-     "zh": "午餐我吃米饭、鸡肉和蔬菜。"
+     "en": "At noon I wash my hands and help my mother prepare lunch.",
+     "zh": "中午我洗好手，帮妈妈准备午饭。"
     },
     {
-     "en": "My favorite food is pizza.",
-     "zh": "我最喜欢的食物是披萨。"
+     "en": "She cuts vegetables and chicken, then puts rice on the table.",
+     "zh": "她切好蔬菜和鸡肉，再把米饭端上桌。"
     },
     {
-     "en": "I like hamburgers and sandwiches too.",
-     "zh": "我也喜欢汉堡和三明治。"
+     "en": "I pour water and juice for everyone.",
+     "zh": "我给大家倒上水和果汁。"
     },
     {
-     "en": "I drink water and juice.",
-     "zh": "我喝水和果汁。"
+     "en": "On cold days, Mom makes soup, and the kitchen feels warm.",
+     "zh": "冷天妈妈会煮汤，厨房里暖洋洋的。"
     },
     {
-     "en": "My mother makes delicious soup and dumplings.",
-     "zh": "我妈妈做的汤和饺子很好吃。"
+     "en": "Last Sunday we made dumplings together as a family.",
+     "zh": "上周日，我们全家一起包饺子。"
     },
     {
-     "en": "I love cake and chocolate.",
-     "zh": "我爱吃蛋糕和巧克力。"
+     "en": "Mine were not beautiful, but they were the best I had ever eaten.",
+     "zh": "我包得不好看，却是我吃过最香的饺子。"
+    },
+    {
+     "en": "For dinner, father brought a small cake to say thank you.",
+     "zh": "晚饭时，爸爸带来一个小蛋糕，表示感谢。"
+    },
+    {
+     "en": "We shared every bite, and the table was full of smiles.",
+     "zh": "我们分享每一口，餐桌上满是笑容。"
+    },
+    {
+     "en": "Good food is not only about taste; it is about love.",
+     "zh": "美食不只关乎味道，更关乎爱。"
     }
    ]
   },
   "爱好与运动": {
-   "title": "My Hobbies",
+   "title": "The Little Coach",
    "sentences": [
     {
-     "en": "My hobby is swimming.",
-     "zh": "我的爱好是游泳。"
+     "en": "My hobby is swimming, and I go to the pool every Friday.",
+     "zh": "我的爱好是游泳，每周五我都会去泳池。"
     },
     {
-     "en": "I also like playing football and basketball.",
-     "zh": "我也喜欢踢足球和打篮球。"
+     "en": "My friend Tom likes football and basketball more than water.",
+     "zh": "我的朋友汤姆比起水，更喜欢足球和篮球。"
     },
     {
-     "en": "I like reading books and drawing pictures.",
-     "zh": "我喜欢读书和画画。"
+     "en": "On weekends we go hiking with our coach, Mr. Lin.",
+     "zh": "周末我们和教练林先生一起去远足。"
     },
     {
-     "en": "I listen to music and sing songs.",
-     "zh": "我听音乐和唱歌。"
+     "en": "He says exercise is fun when you do it with a team.",
+     "zh": "他说和团队一起锻炼才有趣。"
     },
     {
-     "en": "On weekends I go hiking with my dad.",
-     "zh": "周末我和爸爸去远足。"
+     "en": "I am not fast, but I never stop before the end.",
+     "zh": "我游得不快，但从来不会在终点前停下。"
     },
     {
-     "en": "I love traveling to new places.",
-     "zh": "我喜欢去新的地方旅行。"
+     "en": "Last month our team had a match, and I was nervous.",
+     "zh": "上个月我们队有场比赛，我很紧张。"
     },
     {
-     "en": "Sport is good for my health.",
-     "zh": "运动对我的健康有好处。"
+     "en": "Tom scored, and everyone shouted his name.",
+     "zh": "汤姆得分了，大家都喊着他的名字。"
     },
     {
-     "en": "I exercise every day.",
-     "zh": "我每天锻炼。"
+     "en": "After the match, we sat under a tree and drew pictures.",
+     "zh": "比赛后，我们坐在树下画画。"
+    },
+    {
+     "en": "I like reading and music, too, because they calm me down.",
+     "zh": "我也喜欢阅读和音乐，因为它们能让我平静下来。"
+    },
+    {
+     "en": "A hobby gives you something to look forward to every week.",
+     "zh": "爱好让你每一周都有所期待。"
     }
    ]
   },
   "身体与健康": {
-   "title": "My Body",
+   "title": "Take Care of Yourself",
    "sentences": [
     {
-     "en": "My body has many parts.",
-     "zh": "我的身体有很多部位。"
+     "en": "Our body is like a small garden that needs daily care.",
+     "zh": "我们的身体像一座需要每天照料的小花园。"
     },
     {
-     "en": "I have two eyes and two ears.",
-     "zh": "我有两只眼睛和两只耳朵。"
+     "en": "I use my eyes to read and my ears to hear my friends.",
+     "zh": "我用眼睛阅读，用耳朵听朋友说话。"
     },
     {
-     "en": "My nose and mouth are on my face.",
-     "zh": "我的鼻子和嘴在脸上。"
+     "en": "My nose knows the smell of breakfast before I open my eyes.",
+     "zh": "我还没睁开眼睛，鼻子就闻到了早餐的香味。"
     },
     {
-     "en": "I use my hands to write.",
-     "zh": "我用手写字。"
+     "en": "I brush my teeth every morning so they stay strong.",
+     "zh": "我每天早上刷牙，让牙齿保持坚固。"
     },
     {
-     "en": "I brush my teeth every day.",
-     "zh": "我每天刷牙。"
+     "en": "I wash my hands before meals and after playing outside.",
+     "zh": "饭前和在外面玩过之后，我都会洗手。"
     },
     {
-     "en": "My hair is long and black.",
-     "zh": "我的头发又长又黑。"
+     "en": "My hair is short, and my legs are strong from running.",
+     "zh": "我的头发短短的，双腿因为跑步而结实。"
     },
     {
-     "en": "I have two legs and two feet.",
-     "zh": "我有两条腿和两只脚。"
+     "en": "Last winter I was sick and had a fever.",
+     "zh": "去年冬天我生病了，还发着烧。"
     },
     {
-     "en": "I eat healthy food to keep my body strong.",
-     "zh": "我吃健康的食物让身体强壮。"
+     "en": "The doctor checked my head and gave me medicine.",
+     "zh": "医生检查了我的头，给我开了药。"
+    },
+    {
+     "en": "She said rest and healthy food are the best medicine.",
+     "zh": "她说休息和健康的食物才是最好的药。"
+    },
+    {
+     "en": "Now I sleep early and drink water, and I feel energetic every day.",
+     "zh": "现在我早睡、多喝水，每天都精力充沛。"
+    },
+    {
+     "en": "When you care for your body, it takes care of you.",
+     "zh": "你照顾好身体，身体也会照顾你。"
     }
    ]
   },
   "衣服与购物": {
-   "title": "My Clothes",
+   "title": "A Coat for Winter",
    "sentences": [
     {
-     "en": "I like buying clothes.",
-     "zh": "我喜欢买衣服。"
+     "en": "Clothes tell a little story about the weather and our plans.",
+     "zh": "衣服会讲一点关于天气和计划的小故事。"
     },
     {
-     "en": "Today I wear a T-shirt and jeans.",
-     "zh": "今天我穿 T 恤和牛仔裤。"
+     "en": "Today I wear a T-shirt and jeans because it is warm.",
+     "zh": "今天天气暖和，我穿着T恤和牛仔裤。"
     },
     {
-     "en": "In winter I wear a coat and a scarf.",
-     "zh": "冬天我穿外套和戴围巾。"
+     "en": "In winter I need a coat, a scarf, and warm gloves.",
+     "zh": "冬天我需要外套、围巾和保暖的手套。"
     },
     {
-     "en": "I have a nice dress for parties.",
-     "zh": "我有一条聚会穿的漂亮连衣裙。"
+     "en": "Last Saturday Mom and I went to a shop near the market.",
+     "zh": "上周六，我和妈妈去了市场附近的一家商店。"
     },
     {
-     "en": "My shoes are new.",
-     "zh": "我的鞋子是新的。"
+     "en": "I tried a blue coat, but the size was too large.",
+     "zh": "我试了一件蓝色外套，可是尺码太大了。"
     },
     {
-     "en": "I wear socks every day.",
-     "zh": "我每天穿袜子。"
+     "en": "Then I found a smaller one with a nice price.",
+     "zh": "后来我找到一件小一些的，价格也很合适。"
     },
     {
-     "en": "On cold days I wear gloves and a hat.",
-     "zh": "在寒冷的天气我戴手套和帽子。"
+     "en": "The shop gave us a discount, so Mom bought it for me.",
+     "zh": "商店给了我们折扣，妈妈就把它买给了我。"
     },
     {
-     "en": "I like shopping with my mother.",
-     "zh": "我喜欢和妈妈一起购物。"
+     "en": "I also got new shoes, socks, and a yellow hat.",
+     "zh": "我还买了新鞋、袜子和一顶黄色的帽子。"
+    },
+    {
+     "en": "On the way home, I wore the scarf and felt like spring.",
+     "zh": "回家的路上，我围着围巾，感觉像春天一样。"
+    },
+    {
+     "en": "Shopping with Mom is not only about buying things.",
+     "zh": "和妈妈一起购物，不只是买东西。"
+    },
+    {
+     "en": "It is about walking together and talking all the way.",
+     "zh": "而是一路并肩走着、聊着。"
     }
    ]
   },
   "交通与旅行": {
-   "title": "Travel and Transport",
+   "title": "The Trip to Grandma's",
    "sentences": [
     {
-     "en": "I like traveling.",
-     "zh": "我喜欢旅行。"
+     "en": "Travel always makes me curious about the road ahead.",
+     "zh": "旅行总让我对前方的路充满好奇。"
     },
     {
-     "en": "I go to school by bus.",
-     "zh": "我坐公交车去上学。"
+     "en": "On school days I go by bus, and the driver knows my name.",
+     "zh": "上学日我坐公交车，司机知道我的名字。"
     },
     {
-     "en": "My father drives a car to work.",
-     "zh": "我爸爸开车去上班。"
+     "en": "My father drives a car to work along the busy road.",
+     "zh": "爸爸沿着繁忙的道路开车去上班。"
     },
     {
-     "en": "We take a train to visit my grandparents.",
-     "zh": "我们坐火车去看望祖父母。"
+     "en": "On weekends I ride my bike in the park.",
+     "zh": "周末我在公园里骑自行车。"
     },
     {
-     "en": "I ride my bike in the park.",
-     "zh": "我在公园里骑自行车。"
+     "en": "Last summer we took a train to visit my grandparents.",
+     "zh": "去年夏天，我们坐火车去看爷爷奶奶。"
     },
     {
-     "en": "When I go far away, I take a plane.",
-     "zh": "我去远方时坐飞机。"
+     "en": "At the station, father bought the tickets while I watched the map.",
+     "zh": "在车站，爸爸买票，我看着地图。"
     },
     {
-     "en": "The airport is very big.",
-     "zh": "机场非常大。"
+     "en": "As a passenger, I had a window seat and watched the fields.",
+     "zh": "作为乘客，我坐在靠窗的位置，望着田野。"
     },
     {
-     "en": "Traveling by ship is fun too.",
-     "zh": "坐船旅行也很有趣。"
+     "en": "The journey was long, but we talked and laughed the whole way.",
+     "zh": "旅程很长，但我们一路说笑。"
+    },
+    {
+     "en": "When we go far away, we take a plane from the airport.",
+     "zh": "去很远的地方时，我们会从机场坐飞机。"
+    },
+    {
+     "en": "I like every kind of transport, but the best part is who travels with me.",
+     "zh": "我喜欢每一种交通工具，但最美好的是同行的人。"
     }
    ]
   },
   "房屋与家居": {
-   "title": "My House",
+   "title": "Our Little House",
    "sentences": [
     {
-     "en": "I live in a big house.",
-     "zh": "我住在一栋大房子里。"
+     "en": "Our house is not big, but it feels warm when I open the door.",
+     "zh": "我们的房子不大，但一打开门就暖暖的。"
     },
     {
-     "en": "My house has three bedrooms.",
-     "zh": "我的房子有三间卧室。"
+     "en": "My bedroom is small, with a bed, a desk, and a window.",
+     "zh": "我的卧室很小，有一张床、一张桌子和一扇窗。"
     },
     {
-     "en": "I sleep in my bedroom.",
-     "zh": "我在我的卧室睡觉。"
+     "en": "In the morning, light comes through the window and wakes me.",
+     "zh": "早晨，光透过窗户照进来叫醒我。"
     },
     {
-     "en": "We watch TV in the living room.",
-     "zh": "我们在客厅看电视。"
+     "en": "We have a living room with a soft sofa and a round table.",
+     "zh": "我们有一间客厅，里面放着柔软的沙发和圆桌。"
     },
     {
-     "en": "My mother cooks in the kitchen.",
-     "zh": "我妈妈在厨房做饭。"
+     "en": "Mother cooks in the kitchen, and I like to sit nearby.",
+     "zh": "妈妈在厨房做饭，我喜欢坐在旁边。"
     },
     {
-     "en": "I take a shower in the bathroom.",
-     "zh": "我在浴室洗澡。"
+     "en": "After dinner, I help clean the bathroom and put everything in order.",
+     "zh": "晚饭后，我帮忙打扫浴室，把一切整理好。"
     },
     {
-     "en": "We have a small garden with flowers.",
-     "zh": "我们有一个种满花的小花园。"
+     "en": "Behind the house there is a little garden with flowers.",
+     "zh": "房子后面有一个种着花的小花园。"
     },
     {
-     "en": "I open the window to see the garden.",
-     "zh": "我打开窗户看花园。"
+     "en": "In summer I open the window and smell them.",
+     "zh": "夏天我打开窗户，就能闻到花香。"
+    },
+    {
+     "en": "Grandma says a house becomes a home when people share it.",
+     "zh": "奶奶说，有人分享，房子才会成为家。"
+    },
+    {
+     "en": "I think she is right, because every room holds a memory.",
+     "zh": "我觉得她说得对，因为每个房间都装着一段回忆。"
     }
    ]
   },
   "工作与职业": {
-   "title": "Jobs in My Family",
+   "title": "Jobs Around Me",
    "sentences": [
     {
-     "en": "My father is a doctor.",
-     "zh": "我的爸爸是一名医生。"
+     "en": "Last Friday was Jobs Day at our school.",
+     "zh": "上周五是我们学校的职业日。"
     },
     {
-     "en": "He works in a hospital.",
-     "zh": "他在医院工作。"
+     "en": "My father is a doctor, and he works in a hospital.",
+     "zh": "我爸爸是医生，在医院工作。"
     },
     {
-     "en": "My mother is a teacher.",
-     "zh": "我的妈妈是一名老师。"
+     "en": "He told us how he helps sick children feel safe.",
+     "zh": "他告诉我们，他怎样让生病的小朋友安心。"
     },
     {
-     "en": "She works in a school.",
-     "zh": "她在学校工作。"
+     "en": "My mother is a teacher, and she works in a school nearby.",
+     "zh": "我妈妈是老师，在附近的一所学校工作。"
     },
     {
-     "en": "My uncle is a driver.",
-     "zh": "我的叔叔是一名司机。"
+     "en": "Her students say she makes difficult things easy.",
+     "zh": "她的学生说，她能把难懂的东西讲得简单。"
     },
     {
-     "en": "He drives a bus.",
-     "zh": "他开公交车。"
+     "en": "My uncle is a driver, and he drives a bus every morning.",
+     "zh": "我叔叔是司机，每天早上开公交车。"
     },
     {
-     "en": "My aunt works in an office.",
-     "zh": "我的姑姑在办公室工作。"
+     "en": "My aunt works in an office as a manager.",
+     "zh": "我姑姑在办公室当经理。"
     },
     {
-     "en": "She is a manager.",
-     "zh": "她是一名经理。"
+     "en": "She said her team helps every customer with a smile.",
+     "zh": "她说她的团队微笑着帮助每一位顾客。"
     },
     {
-     "en": "I want to be a teacher when I grow up.",
-     "zh": "我长大后想当一名老师。"
+     "en": "I want to be a teacher when I grow up, like my mother.",
+     "zh": "我长大后想成为老师，像妈妈一样。"
+    },
+    {
+     "en": "Every job has its own story, and every worker has a role.",
+     "zh": "每份工作都有自己的故事，每个劳动者都有自己的角色。"
     }
    ]
   },
   "自然与环境": {
-   "title": "Beautiful Nature",
+   "title": "The River Near Our Home",
    "sentences": [
     {
-     "en": "I love nature.",
-     "zh": "我热爱大自然。"
+     "en": "I love nature, and the best place is the river near my home.",
+     "zh": "我热爱大自然，最美的地方是家附近的小河。"
     },
     {
-     "en": "The world is beautiful.",
-     "zh": "世界很美丽。"
+     "en": "In spring, flowers come out in the garden and along the path.",
+     "zh": "春天，花园里和小路边都开出了花。"
     },
     {
-     "en": "I like the sea and the ocean.",
-     "zh": "我喜欢大海和海洋。"
+     "en": "The sun makes the water shine, and the sky looks very blue.",
+     "zh": "阳光让水面闪闪发亮，天空格外蓝。"
     },
     {
-     "en": "There is a river near my home.",
-     "zh": "我家附近有一条河。"
+     "en": "In summer we climb the small mountain behind the forest.",
+     "zh": "夏天我们爬森林后面的小山。"
     },
     {
-     "en": "We climb the mountain in summer.",
-     "zh": "我们夏天爬山。"
+     "en": "The forest is full of birds, and the air smells clean.",
+     "zh": "森林里有许多鸟，空气闻起来很清新。"
     },
     {
-     "en": "The forest has many trees and animals.",
-     "zh": "森林里有很多树和动物。"
+     "en": "After rain, the river runs faster and the stones look new.",
+     "zh": "雨后河水流得更急，石头也像新的一样。"
     },
     {
-     "en": "I pick flowers in the garden.",
-     "zh": "我在花园里摘花。"
+     "en": "Last month our class went there to clean the bank.",
+     "zh": "上个月我们班去那里清理河岸。"
     },
     {
-     "en": "We must protect our environment.",
-     "zh": "我们必须保护环境。"
+     "en": "We picked up waste and put it in bags.",
+     "zh": "我们捡起废弃物，装进袋子里。"
+    },
+    {
+     "en": "Our teacher said, \"We must protect our environment.\"",
+     "zh": "老师说：“我们必须保护环境。”"
+    },
+    {
+     "en": "On the way home, I saw the sea far away and felt small but happy.",
+     "zh": "回家路上，我看见远处的大海，觉得自己很渺小，却很快乐。"
+    },
+    {
+     "en": "Nature gives us so much, and we should give something back.",
+     "zh": "自然给予我们这么多，我们也该回报它。"
     }
    ]
   }

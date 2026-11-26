@@ -32,7 +32,31 @@ def export_words():
     print(f"[OK] words.json  ({len(words)} 个单词)")
 
 
+def _keep_curated_data(name):
+    """docs/data 下运营维护的数据优先，避免被 backend 里的旧版数据源覆盖。
+
+    KET 分类短文与拼读内置记叙文都是逐句校对过的，backend/ket_data.py、
+    backend/phonics_data.py 中还没有这些字段；旧版重新导出会把它们清空。
+    """
+    target = os.path.join(DATA_DIR, name)
+    if not os.path.exists(target):
+        return False
+    try:
+        with open(target, "r", encoding="utf-8") as f:
+            cur = json.load(f)
+        if name == "ket.json" and isinstance(cur, dict) and "短文" in cur:
+            return True
+        if name == "phonics.json" and isinstance(cur, list) and any("story" in g for g in cur):
+            return True
+    except Exception:
+        return False
+    return False
+
+
 def export_ket():
+    if _keep_curated_data("ket.json"):
+        print("[SKIP] ket.json  (保留 docs/data 下已校对的分类短文)")
+        return
     import ket_data
     ket = getattr(ket_data, "KET_DATA", None)
     with open(os.path.join(DATA_DIR, "ket.json"), "w", encoding="utf-8") as f:
@@ -41,6 +65,9 @@ def export_ket():
 
 
 def export_phonics():
+    if _keep_curated_data("phonics.json"):
+        print("[SKIP] phonics.json  (保留 docs/data 下已校对的内置故事)")
+        return
     import phonics_data
     phonics = getattr(phonics_data, "PHONICS", [])
     with open(os.path.join(DATA_DIR, "phonics.json"), "w", encoding="utf-8") as f:

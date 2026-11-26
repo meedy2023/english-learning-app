@@ -459,6 +459,11 @@
         const list = (DATA.toefl["词汇"] && DATA.toefl["词汇"]["分类"] && DATA.toefl["词汇"]["分类"][c]) || [];
         return json({ words: list });
       }
+      if (api === "toefl/reading") {
+        const c = params.get("category");
+        const r = (DATA.toefl["短文"] && DATA.toefl["短文"][c]) || null;
+        return json({ reading: r });
+      }
       // 40天核心词汇计划：整份 / 按天查询
       if (api === "toefl/plan") return json(DATA.toeflPlan || { title: "", stages: [] });
       if (api === "toefl/plan/day") {

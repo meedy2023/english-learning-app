@@ -535,15 +535,20 @@ def collect_jobs(source, rates, limit, kind="lesson"):
         # 播放器 bind([{text:para}]) 无 role → voiceId=null，human=1
         _add_jobs(jobs, seen, texts, rates, True, "")
     elif kind == "toefl-reading":
-        # 复现前端 renderToeflCategoryReading()：
-        #   withEx = 本类词表中 example 非空的词（保留原顺序，不排序不去重）；
-        #   取样 = step=max(1,floor(len/12))，从 0 起每 step 取一个，最多 12 个；
-        #   每句 = example.trim()，若句尾不是 [.!?]["'）〃]? 则补 '.'；
-        #   整段 = 各句空格拼接。词表来自 api-shim 原样返回的 toefl.json 分类数组。
+        # 与前端 renderToeflCategoryReading() 对齐：优先用 toefl.json 各类别的
+        # story.en（内置约100-150词记叙文，关键词自然融入情节、温暖细腻、完整叙事）。
+        # 前端取 String(story.en).trim()，这里同样 .strip() 保证 hash key 逐字一致。
+        # 无 story 时回退旧的例句拼接口径（把 {w} 当引用，任意词性均语法正确）。
         tail = re.compile(r'[.!?]["\'）〃]?$')
         texts = []
         toefl = _load(source)
-        for cat in (toefl.get("词汇", {}).get("分类") or {}).values():
+        stories = toefl.get("短文") or {}
+        for cat_name, cat in (toefl.get("词汇", {}).get("分类") or {}).items():
+            story = stories.get(cat_name) or {}
+            story_en = str(story.get("en") or "").strip()
+            if story_en:
+                texts.append(story_en)
+                continue
             with_ex = [w for w in (cat or [])
                        if w and (w.get("example") or "") and str(w.get("example") or "").strip()]
             n = len(with_ex)
