@@ -4973,7 +4973,9 @@ function playAudioBlob(blob, onEnd) {
     speakNetworkOnce(text, lang, cb, G, silent, voiceId) {
       // 分角色朗读时 voiceId 覆盖设置页发音人；缓存键包含发音人，避免男女声互相命中
       const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
-      const edgeVoice = edgeVoiceFor(voiceId);
+      // 必须用兜底后的 voice：voiceId 为 null 时（绝大多数日常朗读）设置页发音人仍在 voice 里，
+      // 若传 voiceId 会得到 null，Edge 降级链路固定落回默认 Sonia 女声，男声/童声设置失效。
+      const edgeVoice = edgeVoiceFor(voice);
       // 多音词（如 live=/lɪv/ 居住）：单独读或句中都易被 TTS 读成 /laɪv/（现场的）。
       // 用 Edge SSML <phoneme> 强制音标；讯飞不支持音标，故多音词一律直接走 Edge。
       // 缓存 key 加 homo 前缀，避免命中之前误读音频，也不污染普通发音缓存。
@@ -5081,7 +5083,9 @@ function playAudioBlob(blob, onEnd) {
         TTS_NET.onFail();
         if (!silent) TTS_NET.notifyFallback();
         self.speakSystem(word, lang, onEnd);
-      }, enVoice, ipaCore);
+      // Edge 的 voiceOverride 要的是 Edge 音色名（en-GB-xxx），enVoice 是设置页 id，
+      // 直接传会让 SSML 的 <voice name='catherine'> 非法，音标合成必失败并静默降级本机。
+      }, edgeVoiceFor(enVoice), ipaCore);
     },
     // 真人节奏：按句末标点判定句型，返回 {pitchAdj, speedAdj}，供讯飞引擎做语调/语速微调。
     // 疑问句升调、感叹句加重稍慢、陈述句轻微自然起伏，制造明显可感知的语调差异。
@@ -5098,7 +5102,9 @@ function playAudioBlob(blob, onEnd) {
     // 只合成、不播放（返回 blob 或 null）
     synthOnce(text, lang, cb, human, voiceId) {
       const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
-      const edgeVoice = edgeVoiceFor(voiceId);
+      // 必须用兜底后的 voice：voiceId 为 null 时（绝大多数日常朗读）设置页发音人仍在 voice 里，
+      // 若传 voiceId 会得到 null，Edge 降级链路固定落回默认 Sonia 女声，男声/童声设置失效。
+      const edgeVoice = edgeVoiceFor(voice);
       const needLive = sentenceNeedLiveIpa(text, lang);
       const key = (needLive ? 'homo|' + speechRate + '|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       const cached = ttsCacheGet(key);
@@ -5130,7 +5136,9 @@ function playAudioBlob(blob, onEnd) {
       lang = lang || 'en-US';
       text = expandAbbrev(text, lang);  // 与 speakSentence 展开保持一致，否则缓存 key 不一致导致预合成白做
       const voice = voiceId || (lang === 'zh-CN' ? zhVoice : enVoice);
-      const edgeVoice = edgeVoiceFor(voiceId);
+      // 必须用兜底后的 voice：voiceId 为 null 时（绝大多数日常朗读）设置页发音人仍在 voice 里，
+      // 若传 voiceId 会得到 null，Edge 降级链路固定落回默认 Sonia 女声，男声/童声设置失效。
+      const edgeVoice = edgeVoiceFor(voice);
       const needLive = sentenceNeedLiveIpa(text, lang);
       const key = (needLive ? 'homo|' + speechRate + '|' + voice + '|' + text + '|live' : ttsCacheKey(text, lang, voice)) + (human ? '|human' : '');
       warmPreAudio(preAudioUrl(text, lang, voiceId, !!human));
