@@ -603,7 +603,7 @@
   .lr-ctrl-btn { flex: 1; padding: 12px; font-size: 14px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; }
   .lr-ctrl-main { background: linear-gradient(135deg,#4f9fff,#6c63ff); color: #fff; }
   .lr-ctrl-sub { flex: 0 0 auto; padding: 12px 14px; background: #f5f7ff; border: 1px solid #e0e6ff; color: #6c63ff; }
-  #toefl-reading-repeat-sentence-btn, #toefl-reading-loop-btn { padding: 12px 9px; font-size: 12px; }
+  #toefl-reading-repeat-sentence-btn { padding: 12px 9px; font-size: 12px; }
   .lr-ctrl-btn:active { transform: scale(.97); }
   .lr-progress { margin-top: 8px; font-size: 12px; color: #888; text-align: center; }
   .lr-nav { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8ff; }
@@ -3921,9 +3921,7 @@ const API = ".";
     _lastSentGlobal: -1,
     _repeating: false,
     _repeatResumeAt: null,
-    _repeatLeft: 0,
     _repeatHandler: null,
-    _repeatTimer: null,
     _repeatEndTimer: null,   // 到句尾的定时截停（timeupdate 间隔太粗会串到下一句）
     _repeatWatchTimer: null, // 高频兜底检查 audio.currentTime
     paused: false,
@@ -4354,7 +4352,6 @@ const API = ".";
     },
     // ---- 单句重听：复用当前音频，在真实句边界间回退播放 ----
     cancelRepeat() {
-      if (this._repeatTimer) { try { clearTimeout(this._repeatTimer); } catch (e) {} this._repeatTimer = null; }
       if (this._repeatEndTimer) { try { clearTimeout(this._repeatEndTimer); } catch (e) {} this._repeatEndTimer = null; }
       if (this._repeatWatchTimer) { try { clearInterval(this._repeatWatchTimer); } catch (e) {} this._repeatWatchTimer = null; }
       const a = this._sentAudio;
@@ -4362,7 +4359,6 @@ const API = ".";
       if (a && h) { try { a.removeEventListener('timeupdate', h); } catch (e) {} }
       this._repeatHandler = null;
       this._repeating = false;
-      this._repeatLeft = 0;
     },
     currentSentenceText(line, idx) {
       if (!line || !line.sentences || !line.sentences[idx]) return '';
@@ -4389,7 +4385,7 @@ const API = ".";
       end = Math.min(end, Math.max(start + 0.1, d - 0.06));
       return { start: start, end: end };
     },
-    repeatCurrentSentence(times) {
+    repeatCurrentSentence() {
       if (this.state !== 'playing' && this.state !== 'paused') { toast('请先开始朗读短文'); return; }
       const line = this.lines[this.idx];
       if (!line || !line.sentences || !line.sentences.length) return;
@@ -4405,9 +4401,7 @@ const API = ".";
       const tk = this.token;
       const range = this.sentenceTimeRange(line, idx, audio);
       const resumeAt = audio.currentTime;
-      const count = Math.max(1, parseInt(times, 10) || 1);
       this._repeatResumeAt = resumeAt;
-      this._repeatLeft = count;
       this._repeating = true;
       this.stopTick();
       const self = this;
@@ -4440,10 +4434,7 @@ const API = ".";
           }
           try { audio.removeEventListener('timeupdate', onTime); } catch (e) {}
           if (self._repeatHandler === onTime) self._repeatHandler = null;
-          self._repeatLeft--;
-          self.updateUI();  // 立刻刷新「还剩 N 次」，不要等下一轮 run
-          if (self._repeatLeft > 0) self._repeatTimer = setTimeout(run, 180);
-          else self.finishRepeat();
+          self.finishRepeat();
         };
         const onTime = function () {
           if (ended || !self._repeating || self.token !== tk) return;
@@ -4556,7 +4547,6 @@ const API = ".";
       const pg = this.UI('progress', 'lesson-read-progress');
       const bar = this.UI('bar', 'lesson-read-bar');
       const repBtn = this.UI('repeatSentence');
-      const loopBtn = this.UI('loopSentence');
       const lineTotal = this.lines.length;
       const useSentenceCount = !!(this.ui && this.ui.sentenceFocus && this.sentenceTotal);
       const total = useSentenceCount ? this.sentenceTotal : lineTotal;
@@ -4574,21 +4564,16 @@ const API = ".";
       if (b) { b.textContent = txt; b.dataset.reading = (this.state === 'playing' || this.state === 'paused') ? '1' : '0'; }
       if (rp) rp.style.display = (this.state === 'idle') ? 'none' : '';
       const showPg = this.state === 'playing' || this.state === 'paused';
-      const showRepeat = showPg && !!(this.ui && (this.ui.repeatSentence || this.ui.loopSentence));
+      const showRepeat = showPg && !!(this.ui && this.ui.repeatSentence);
       if (repBtn) repBtn.style.display = showRepeat ? '' : 'none';
-      if (loopBtn) { loopBtn.style.display = showRepeat ? '' : 'none'; loopBtn.dataset.repeating = this._repeating ? '1' : '0'; }
       if (pg) {
         pg.style.display = showPg ? '' : 'none';
         // 计数单位按模块而定：课文一行是一段角色台词（可含多句英文），用「段对话」；
         // KET/短文等按真实句子计数（整段短文虽是一行，仍显示第 N / 总句数 句）。
         const unitLabel = (this.ui && this.ui.unitLabel) || '句';
-        let pgText;
-        if (this._repeating) {
-          pgText = '正在重听第 ' + Math.max(1, Math.min(current, total)) + ' / ' + total + ' ' + unitLabel
-            + (this._repeatLeft > 1 ? '（还剩 ' + this._repeatLeft + ' 次）' : '');
-        } else {
-          pgText = '正在朗读第 ' + Math.max(1, Math.min(current, total)) + ' / ' + total + ' ' + unitLabel;
-        }
+        const pgText = this._repeating
+          ? '正在重听第 ' + Math.max(1, Math.min(current, total)) + ' / ' + total + ' ' + unitLabel
+          : '正在朗读第 ' + Math.max(1, Math.min(current, total)) + ' / ' + total + ' ' + unitLabel;
         if (showPg && total) pg.textContent = pgText + (this.state === 'paused' ? '（已暂停）' : '');
       }
       if (bar) bar.style.display = showPg ? '' : 'none';
@@ -11804,7 +11789,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '<div class="lr-ctrl">'
           + '<button class="lr-ctrl-btn lr-ctrl-main" id="toefl-reading-full-btn" data-reading="0" type="button" aria-label="朗读短文">🔊 朗读短文</button>'
           + '<button class="lr-ctrl-btn lr-ctrl-sub" id="toefl-reading-repeat-sentence-btn" style="display:none" type="button" aria-label="重听本句">↻ 重听本句</button>'
-          + '<button class="lr-ctrl-btn lr-ctrl-sub" id="toefl-reading-loop-btn" style="display:none" type="button" aria-label="单句循环三次">🔁 循环3次</button>'
           + '<button class="lr-ctrl-btn lr-ctrl-sub" id="toefl-reading-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>'
         + '</div>'
         + '<div class="lr-bar" id="toefl-reading-bar" style="display:none"><i></i></div>'
@@ -11816,9 +11800,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var rpBtn = document.getElementById('toefl-reading-replay-btn');
     if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
     var repSentBtn = document.getElementById('toefl-reading-repeat-sentence-btn');
-    if (repSentBtn) repSentBtn.onclick = function () { LessonReader.repeatCurrentSentence(1); };
-    var loopBtn = document.getElementById('toefl-reading-loop-btn');
-    if (loopBtn) loopBtn.onclick = function () { LessonReader.repeatCurrentSentence(3); };
+    if (repSentBtn) repSentBtn.onclick = function () { LessonReader.repeatCurrentSentence(); };
     var raBtn = document.getElementById('toefl-ra-btn');
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
@@ -11830,7 +11812,6 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       progress: 'toefl-reading-progress',
       bar: 'toefl-reading-bar',
       repeatSentence: 'toefl-reading-repeat-sentence-btn',
-      loopSentence: 'toefl-reading-loop-btn',
       label: '🔊 朗读短文'
     });
     toeflReadingOpen = true;
