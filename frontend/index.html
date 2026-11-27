@@ -7025,7 +7025,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         <div class="word-text" id="${wordId}-text">${capitalize(w.word)}</div>
         <div class="word-phonetic">${w.phonetic}</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0">
-          <button class="speak-btn" onclick="speakWord('${esc(w.word)}')">🔊 听发音</button>
+          <button class="speak-btn" onclick="speakWord('${esc(w.word)}')" style="margin:0">🔊 听发音</button>
           <button class="ra-btn" onclick="raToggleWord(document.getElementById('${wordId}-text'), '${esc(w.word)}', this)" style="padding:8px 16px;font-size:14px;border-radius:8px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:4px">🎤 跟读单词</button>
         </div>
         <div class="word-chinese">${w.chinese}</div>
@@ -7033,7 +7033,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="flex:1" id="${wordId}-ex-text">${capitalize(w.example_en)}</span>
             <div style="display:flex;gap:6px;flex-shrink:0">
-              <button class="speak-btn" onclick="speakWord('${esc(w.example_en)}')" style="padding:4px 10px;font-size:12px">🔊 例句</button>
+              <button class="speak-btn" onclick="speakWord('${esc(w.example_en)}')" style="margin:0;padding:4px 10px;font-size:12px">🔊 例句</button>
               <button class="ra-btn" onclick="raToggleWord(document.getElementById('${wordId}-ex-text'), '${esc(w.example_en)}', this)" style="padding:4px 10px;font-size:12px;background:#fff0f0;border:1px solid #ffb3b3;color:#d32f2f;font-weight:600;cursor:pointer;transition:all 0.3s;display:inline-flex;align-items:center;gap:3px">🎤 跟读</button>
             </div>
           </div>
@@ -11694,7 +11694,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
             <span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;flex-shrink:0">${idx + 1}</span>
             <span class="lr-text" onclick="LessonReader.jump(${idx})" title="点击从这一句开始朗读" style="font-size:16px;color:#333;font-weight:500;flex:1;min-width:0;cursor:pointer">${lrWordsHtml(line.en, ketStems)}</span>
-            <button class="speak-btn" onclick="speakReadingLine('${esc(line.en)}')" style="padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
+            <button class="speak-btn" onclick="speakReadingLine('${esc(line.en)}')" style="margin:0;padding:3px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
             <button class="ra-btn" onclick="raToggleKet(this, '${esc(line.en)}')" style="padding:3px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;flex-shrink:0">🎤 跟读</button>
           </div>
           <div style="font-size:13px;color:#999;padding-left:28px">${esc(line.zh)}</div>
@@ -12136,15 +12136,17 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div style="font-size:20px;font-weight:600;color:#4f9fff;margin-bottom:8px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;row-gap:8px">
             <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
             <span style="margin-right:8px">${w.word}</span>
-            <button class="speak-btn" onclick="speakWord('${esc(w.word)}')" style="padding:6px 14px;font-size:13px">🔊 朗读</button>
-            <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.word)}')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;margin-left:auto">🎤 跟读</button>
+            <span style="display:inline-flex;gap:6px;margin-left:auto;flex-shrink:0">
+              <button class="speak-btn" onclick="speakWord('${esc(w.word)}')" style="margin:0;padding:6px 14px;font-size:13px">🔊 朗读</button>
+              <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.word)}')" style="margin:0;padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+            </span>
           </div>
           <div style="font-size:14px;color:#666;margin-bottom:4px">${w.chinese}</div>
           <div style="display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap">
             <span style="font-size:13px;color:#999;font-style:italic;flex:1;line-height:1.5;min-width:0">例：${w.example}</span>
             <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-              <button class="speak-btn" onclick="speakWord('${esc(w.example)}')" style="padding:4px 10px;font-size:12px">🔊 例句</button>
-              <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.example)}')" style="padding:4px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+              <button class="speak-btn" onclick="speakWord('${esc(w.example)}')" style="margin:0;padding:4px 10px;font-size:12px">🔊 例句</button>
+              <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.example)}')" style="margin:0;padding:4px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
             </div>
           </div>
         </div>
@@ -12155,13 +12157,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div style="font-size:18px;font-weight:600;color:#4f9fff;margin-bottom:8px;display:flex;align-items:center;flex-wrap:wrap;gap:6px;row-gap:8px">
             <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
             <span style="margin-right:8px">${s.english}</span>
-            <button class="speak-btn" onclick="speakWord('${esc(s.english)}')" style="padding:6px 14px;font-size:13px">🔊 朗读</button>
-            <button class="ra-btn" onclick="raToggleKet(this, '${esc(s.english)}')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer;margin-left:auto">🎤 跟读</button>
+            <span style="display:inline-flex;gap:6px;margin-left:auto;flex-shrink:0">
+              <button class="speak-btn" onclick="speakWord('${esc(s.english)}')" style="margin:0;padding:6px 14px;font-size:13px">🔊 朗读</button>
+              <button class="ra-btn" onclick="raToggleKet(this, '${esc(s.english)}')" style="margin:0;padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+            </span>
           </div>
           <div style="font-size:14px;color:#666;margin-bottom:4px">${s.chinese}</div>
           <div style="display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap">
             <span style="font-size:12px;color:#999;background:#f0f4ff;padding:4px 8px;border-radius:4px;display:inline-block">用途：${s.usage}</span>
-            <button class="speak-btn" onclick="speakWord('${esc(s.english)}')" style="padding:4px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
+            <button class="speak-btn" onclick="speakWord('${esc(s.english)}')" style="margin:0;padding:4px 10px;font-size:12px;flex-shrink:0">🔊 朗读</button>
           </div>
         </div>
       `).join('');
@@ -12808,8 +12812,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">${start + i + 1}</span>
           <span style="font-size:20px;font-weight:600;color:#333">${w.word}</span>
           ${toeflLevelBadge(w.level)}
-          <button class="speak-btn" onclick="speakWord('${esc(w.word)}')" style="padding:6px 14px;font-size:13px;margin-left:auto">🔊 朗读</button>
-          <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.word)}')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+          <span style="display:inline-flex;gap:6px;margin-left:auto;flex-shrink:0">
+            <button class="speak-btn" onclick="speakWord('${esc(w.word)}')" style="margin:0;padding:6px 14px;font-size:13px">🔊 朗读</button>
+            <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.word)}')" style="margin:0;padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+          </span>
         </div>
         ${w.phonetic ? '<div style="font-size:13px;color:#888;font-style:italic;margin-bottom:4px">' + w.phonetic + '</div>' : ''}
         <div style="font-size:14px;color:#666;margin-bottom:6px">${w.chinese}</div>
@@ -12817,8 +12823,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         <div style="display:flex;align-items:center;gap:8px;margin-top:6px;flex-wrap:wrap;background:#fafafa;border-radius:8px;padding:8px 10px">
           <span style="font-size:13px;color:#999;font-style:italic;flex:1;line-height:1.5;min-width:0">例：${w.example}</span>
           <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-            <button class="speak-btn" onclick="speakWord('${esc(w.example)}')" style="padding:4px 10px;font-size:12px">🔊 例句</button>
-            <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.example)}')" style="padding:4px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+            <button class="speak-btn" onclick="speakWord('${esc(w.example)}')" style="margin:0;padding:4px 10px;font-size:12px">🔊 例句</button>
+            <button class="ra-btn" onclick="raToggleKet(this, '${esc(w.example)}')" style="margin:0;padding:4px 10px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
           </div>
         </div>` : ''}
       </div>
@@ -13059,8 +13065,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           + '<span style="background:#f0f4ff;color:#4f9fff;padding:4px 12px;border-radius:20px;font-size:14px">' + (i + 1) + '</span>'
           + '<span style="font-size:20px;font-weight:600;color:#333">' + w.word + '</span>'
           + toeflLevelBadge(w.level)
-          + '<button class="speak-btn" onclick="speakWord(\'' + esc(w.word) + '\')" style="padding:6px 14px;font-size:13px;margin-left:auto">🔊 朗读</button>'
-          + '<button class="ra-btn" onclick="raToggleKet(this, \'' + esc(w.word) + '\')" style="padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>'
+          + '<span style="display:inline-flex;gap:6px;margin-left:auto;flex-shrink:0">'
+          + '<button class="speak-btn" onclick="speakWord(\'' + esc(w.word) + '\')" style="margin:0;padding:6px 14px;font-size:13px">🔊 朗读</button>'
+          + '<button class="ra-btn" onclick="raToggleKet(this, \'' + esc(w.word) + '\')" style="margin:0;padding:6px 14px;font-size:13px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>'
+          + '</span>'
         + '</div>'
         + '<div style="font-size:14px;color:#666;margin-top:6px">' + w.chinese + '</div>'
       + '</div>';
