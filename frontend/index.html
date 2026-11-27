@@ -3933,6 +3933,8 @@ const API = ".";
       this.restoreReadingSpace();
       this.ui = ui || null;
       this.lines = [];
+      this.sentenceTotal = 0;   // sentenceFocus 场景：按真实句子数计数（整段短文可能只有一行）
+      this._pgSentenceIdx = -1; // 当前正在朗读的全局句序号（0 起），用于进度提示
       const scopeId = (ui && ui.scope) || null;
       const scope = scopeId ? (document.getElementById(scopeId) || document) : document;
       const items = scope.querySelectorAll('.lr-line');
@@ -3973,8 +3975,10 @@ const API = ".";
           role: (src && (src.role || src.speaker)) || '',
           words: words,
           sentences: sentences,
+          sentenceStart: this.sentenceTotal, // 本行第一句在所有句子中的全局序号（0 起）
           total: acc
         });
+        this.sentenceTotal += sentences.length;
       });
       // 同一时刻只允许一个控制条可见（课文 / KET 各自一套）
       const dockId = (ui && ui.dock) || 'lesson-reader-dock';
@@ -4079,8 +4083,11 @@ const API = ".";
       const line = this.lines[this.idx];
       const tk = ++this.token;
       this.paintStates();
-      // 进度文字必须随「行」推进刷新：idx++ 后只走 playCurrent（不再经 start），
-      // 若不在此更新，「正在朗读第 X / Y」会永远停在刚点播放时的第 1 行。
+      // 进度文字必须随当前句推进刷新：idx++ 后只走 playCurrent（不再经 start），
+      // 若不在此更新，「正在朗读第 X / Y」会永远停在刚点播放时的第 1 句。
+      // 整段短文只有一行但含多句时，起点取本行第一句的全局序号。
+      this._pgSentenceIdx = (this.ui && this.ui.sentenceFocus && line.sentences && line.sentences.length)
+        ? (line.sentenceStart || 0) : -1;
       this.updateUI();
       this.ensureReadingSpace();
       // 整段短文启用词级焦点后，滚动完全由 followWord 按当前词接管，
@@ -4216,6 +4223,7 @@ const API = ".";
       this.clearWordFocus();
       this._sentIdx = -1;
       this._sentLine = null;
+      this._pgSentenceIdx = -1;
       this.updateBar(0);
     },
     // 整句高亮：按进度定位当前句，整句一起亮；焦点与滚动锚定句首词。
@@ -4232,6 +4240,13 @@ const API = ".";
       if (this._sentLine === line && this._sentIdx === cur) return;  // 同一句不重复重绘/聚焦
       this._sentLine = line;
       this._sentIdx = cur;
+      // 整段短文是一个 .lr-line，但切分出多个句子；进度提示必须按真实句子推进，
+      // 否则整篇朗读始终显示「第 1 / 1 句」。
+      const globalIdx = (line.sentenceStart || 0) + cur;
+      if (this._pgSentenceIdx !== globalIdx) {
+        this._pgSentenceIdx = globalIdx;
+        this.updateUI();
+      }
       const self = this;
       sents.forEach(function (s, i) {
         s.words.forEach(function (w) {
@@ -4356,7 +4371,16 @@ const API = ".";
       const rp = this.UI('replay', 'lesson-replay-btn');
       const pg = this.UI('progress', 'lesson-read-progress');
       const bar = this.UI('bar', 'lesson-read-bar');
-      const total = this.lines.length;
+      const lineTotal = this.lines.length;
+      const useSentenceCount = !!(this.ui && this.ui.sentenceFocus && this.sentenceTotal);
+      const total = useSentenceCount ? this.sentenceTotal : lineTotal;
+      let current = this.idx + 1;
+      if (useSentenceCount) {
+        // 整段短文可能只绑定一行，但内部按标点切成多句；用 markSentence 同步的全局句序号。
+        const line = this.lines[this.idx];
+        const fallback = line ? (line.sentenceStart || 0) + 1 : 1;
+        current = this._pgSentenceIdx >= 0 ? this._pgSentenceIdx + 1 : fallback;
+      }
       const idleTxt = (this.ui && this.ui.label) || '🔊 朗读整篇课文';
       let txt = idleTxt;
       if (this.state === 'playing') txt = '⏸ 暂停';
@@ -4367,9 +4391,9 @@ const API = ".";
       if (pg) {
         pg.style.display = showPg ? '' : 'none';
         // 计数单位按模块而定：课文一行是一段角色台词（可含多句英文），用「段对话」；
-        // KET/短文等一行即一句，沿用默认「句」。
+        // KET/短文等按真实句子计数（整段短文虽是一行，仍显示第 N / 总句数 句）。
         const unitLabel = (this.ui && this.ui.unitLabel) || '句';
-        if (showPg && total) pg.textContent = '正在朗读第 ' + (this.idx + 1) + ' / ' + total + ' ' + unitLabel + (this.state === 'paused' ? '（已暂停）' : '');
+        if (showPg && total) pg.textContent = '正在朗读第 ' + Math.max(1, Math.min(current, total)) + ' / ' + total + ' ' + unitLabel + (this.state === 'paused' ? '（已暂停）' : '');
       }
       if (bar) bar.style.display = showPg ? '' : 'none';
     },
