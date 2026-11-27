@@ -11402,7 +11402,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 音素音频文件名规则：把 IPA 字符按 UTF-8 逐字节转十六进制，ASCII 字符保留原样
   // 例：/æ/ → c3a6.wav，/æt/ → c3a6t.wav，/iː/ → icb90.wav
   // 音频版本号：换音频时改这个值，URL 变了浏览器才会重新下载（否则可能播本地缓存里的旧 wav）
-  const PHONICS_AUDIO_VER = '90';
+  const PHONICS_AUDIO_VER = '91';
   function phonicsWavUrl(core) {
     return 'phonics/' + encodeURIComponent(core).replace(/%/g, '').toLowerCase() + '.wav?v=' + PHONICS_AUDIO_VER;
   }
@@ -11508,18 +11508,25 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     return wordCap ? wordCap + '.' : '';
   }
 
-  // 自然拼读发音：优先真人「字母名+例词」音；缺音频再退回本地音素录音/分音合成
+  // 自然拼读发音：优先播本地真人音素录音（A 发 /æ/ 这样的实际发音，即字母在单词里的音），
+  // 这是拼读要学的目标音。音素音频缺失才退回真人「字母名+例词」音，让孩子仍能从例词听到目标音。
   function speakPhonicsSound(ipa, word, audioKey, letterTitle) {
-    // 真人朗读（human=1，voiceId=null）：与 pregenerate_audio.py --kind phonics-letter 对齐
+    const ph = String(ipa || '').trim();
+    // 合法 IPA 音素 → 直接走本地真人音素录音（/æ/→c3a6.wav 等录音棚真人切分音）
+    if (ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && ph.length > 2 && !/[\u4e00-\u9fa5]/.test(ph)) {
+      playPhonicsFallback(ipa, word, audioKey);
+      return;
+    }
+    // 无音素信息（如描述性标题）→ 真人「字母名+例词」音兜底
     const humanText = phonicsLetterText(letterTitle || '', word);
     if (humanText) {
       const url = preAudioUrl(humanText, 'en-US', null, true);
       if (url) {
-        const done = playPreAudio(url, function () {}, function () { playPhonicsFallback(ipa, word, audioKey); });
+        const done = playPreAudio(url, function () {}, function () { speakWord(word || ''); });
         if (done) return;
       }
     }
-    playPhonicsFallback(ipa, word, audioKey);
+    speakWord(word || '');
   }
 
   // 回退：本地音素录音 + espeak 组合音 + 分音合成（真人音不可用时才走）
