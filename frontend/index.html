@@ -11396,6 +11396,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // ========== 自然拼读功能 ==========
   let phonicsGroups = [];
   let phonicsCurrentGroup = null;
+  let phonicsOpenLesson = null;   // 一课一主线：当前展开的 lesson.id，null = 全部收起
+  let phonicsWordStep = {};       // 例词分批：{ lessonId: 已显示数 }，默认 2
 
   // 音素音频文件名规则：把 IPA 字符按 UTF-8 逐字节转十六进制，ASCII 字符保留原样
   // 例：/æ/ → c3a6.wav，/æt/ → c3a6t.wav，/iː/ → icb90.wav
@@ -11562,56 +11564,54 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     }
   }
 
-  async function openPhonicsGroup(groupId) {
-    try {
-      const data = await apiGET('/api/phonics/' + groupId);
-      const group = data.group;
-      if (!group) { toast('未找到该拼读分组'); return; }
-      phonicsCurrentGroup = group;
-      document.getElementById('phonics-group-list').style.display = 'none';
-      const area = document.getElementById('phonics-lesson-area');
-      area.style.display = 'block';
-      document.getElementById('phonics-lesson-title').textContent = group.title;
-      // 本组单词消消乐入口（有词才显示）
-      const pme = document.getElementById('phonics-match-entry');
-      if (pme) {
-        const words = phonicsGroupWords(group);
-        if (words.length >= 2) {
-          pme.style.display = 'block';
-          pme.innerHTML =
-          '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'phonics\',\'choice\')">🎯 单词学习</button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'phonics\',\'pk\')">⚔️ 单词PK</button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'phonics\',\'match\')">🎴 消消乐</button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'phonics\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'phonics\',\'doodle\')">✍️ 随手拼</button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="spell" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#26de81,#20bf6b)" onclick="extFeatureGo(\'phonics\',\'spell\')">🔤 单词拼写</button>' +
-            '<button class="btn btn-primary ext-feature-btn" data-extkey="reading" id="phonics-reading-btn" style="grid-column:1 / -1;padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="extFeatureGo(\'phonics\',\'reading\')">📖 短文阅读</button>'
-          '</div>';
-        } else {
-          pme.style.display = 'none';
-          pme.innerHTML = '';
-        }
-      }
-      Match.exit();   // 切换分组时收起上一局的消消乐面板
-      if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();   // 顺手拼面板也一起收起
-      if (typeof Spell !== 'undefined' && Spell.scope) Spell.exit();      // 单词拼写面板也一起收起
-      const list = document.getElementById('phonics-lesson-list');
-      list.innerHTML = '';
-      group.lessons.forEach(lesson => {
-        // 音标课时播本地音素音频；组合音课时没有单一音素，按钮注明读的是代表词
-        const _sound = String(lesson.sound || '').trim();
-        const _soundIsIpa = _sound.charAt(0) === '/' && _sound.charAt(_sound.length - 1) === '/' && !/[\u4e00-\u9fa5]/.test(_sound);
-        const _soundBtnText = (_soundIsIpa && !PHONEME_NO_AUDIO[_sound]) ? ('🔊 读 ' + _sound) : '🔊 读代表词';
-        const card = document.createElement('div');
-        card.className = 'word-detail-card';
-        card.style = 'background:#fff;border:1.5px solid #e0e6ff;border-radius:14px;padding:16px;margin-bottom:14px';
-        let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px">'
-          + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
-          + '<span style="font-size:16px;color:#f5a623;font-weight:700;cursor:pointer" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\')">' + lesson.sound + '</span>'
-          + ' <button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\')">' + _soundBtnText + '</button>'
-          + '</div>'
-          + '<div style="font-size:12px;color:#888;margin-bottom:10px">💡 ' + lesson.tip + '</div>';
+  // 更多练习：折叠/展开 5 个低频入口（单词学习/短文阅读常驻）
+  function togglePhonicsMore() {
+    const box = document.getElementById('phonics-more-features');
+    const btn = document.getElementById('phonics-more-btn');
+    if (!box) return;
+    const show = box.style.display === 'none';
+    box.style.display = show ? 'block' : 'none';
+    if (btn) btn.textContent = show ? '⚙️ 收起更多练习 ⌃' : '⚙️ 更多练习 ⌄';
+  }
+
+  // 一课一主线：点击展开/收起某课（同时只亮一课）
+  function phonicsToggleLesson(id) {
+    phonicsOpenLesson = (phonicsOpenLesson === id) ? null : id;
+    if (phonicsCurrentGroup) renderPhonicsLessons(phonicsCurrentGroup);
+  }
+  // 例词分批：显示更多（每次 +3），重渲染当前组
+  function phonicsMoreWords(id) {
+    phonicsWordStep[id] = (phonicsWordStep[id] || 2) + 3;
+    if (phonicsCurrentGroup) renderPhonicsLessons(phonicsCurrentGroup);
+  }
+
+  // 渲染某分组的课时卡片（手风琴 + 例词分批 + 错词回流）
+  function renderPhonicsLessons(group) {
+    const groupId = group.id;
+    const list = document.getElementById('phonics-lesson-list');
+    if (!list) return;
+    list.innerHTML = '';
+    group.lessons.forEach((lesson, li) => {
+      const isOpen = (phonicsOpenLesson === lesson.id);
+      const step = phonicsWordStep[lesson.id] || 2;
+      // 音标课时播本地音素音频；组合音课时没有单一音素，按钮注明读的是代表词
+      const _sound = String(lesson.sound || '').trim();
+      const _soundIsIpa = _sound.charAt(0) === '/' && _sound.charAt(_sound.length - 1) === '/' && !/[\u4e00-\u9fa5]/.test(_sound);
+      const _soundBtnText = (_soundIsIpa && !PHONEME_NO_AUDIO[_sound]) ? ('🔊 读 ' + _sound) : '🔊 读代表词';
+      const card = document.createElement('div');
+      card.className = 'word-detail-card';
+      card.style = 'background:#fff;border:1.5px solid ' + (isOpen ? '#6c63ff' : '#e0e6ff') + ';border-radius:14px;padding:16px;margin-bottom:14px';
+      let html = '<div style="display:flex;align-items:center;flex-wrap:wrap;gap:10px">'
+        + '<button onclick="phonicsToggleLesson(\'' + esc(lesson.id) + '\')" style="flex:1;display:flex;align-items:center;gap:10px;background:none;border:none;text-align:left;cursor:pointer;padding:0;font-family:inherit">'
+        + '<span style="background:#eef2ff;color:#6c63ff;padding:2px 8px;border-radius:10px;font-size:12px">' + (li + 1) + '</span>'
+        + '<span style="font-size:22px;font-weight:800;color:#6c63ff">' + lesson.title + '</span>'
+        + '<span style="font-size:16px;color:#f5a623;font-weight:700">' + lesson.sound + '</span>'
+        + '<span style="margin-left:auto;font-size:13px;color:#999">' + (isOpen ? '▼ 收起' : '▶ 展开练习') + '</span>'
+        + '</button>'
+        + '<button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\')">' + _soundBtnText + '</button>'
+        + '</div>';
+      if (isOpen) {
+        html += '<div style="font-size:12px;color:#888;margin:10px 0">💡 ' + lesson.tip + '</div>';
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
           + '<span style="font-size:16px;font-weight:600;color:#333">' + lesson.sound_word + '</span>'
           + ' <button class="btn btn-sm" style="padding:4px 10px" onclick="speakWord(\'' + esc(lesson.sound_word) + '\')">🔊 读单词</button>'
@@ -11621,8 +11621,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         const _rec = raGetRecords('phonics_' + groupId);
         const _isWeak = w => { const r = _rec[w.w]; return !!(r && (r.s < 70 || (r.w && r.w.length))); };
         const _sortedWords = lesson.words.slice().sort((a, b) => Number(_isWeak(b)) - Number(_isWeak(a)));
+        const _shown = _sortedWords.slice(0, step);
         html += '<div style="display:flex;flex-wrap:wrap;gap:8px">';
-        _sortedWords.forEach(w => {
+        _shown.forEach(w => {
           const _weak = _isWeak(w);
           html += '<div style="flex:0 1 150px;max-width:200px;background:' + (_weak ? '#fff7e6' : '#f7f9ff') + ';border:1px solid ' + (_weak ? '#ffd591' : '#e6ecff') + ';border-radius:10px;padding:8px 10px">'
             + '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">'
@@ -11635,9 +11636,61 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             + '</div></div>';
         });
         html += '</div>';
-        card.innerHTML = html;
-        list.appendChild(card);
-      });
+        if (_sortedWords.length > step) {
+          html += '<button onclick="phonicsMoreWords(\'' + esc(lesson.id) + '\')" style="width:100%;margin-top:10px;padding:8px;font-size:12px;color:#6c63ff;background:#f6f8ff;border:1px dashed #c7c9f5;border-radius:8px;cursor:pointer">显示更多例词（' + _shown.length + '/' + _sortedWords.length + '）⌄</button>';
+        } else if (_sortedWords.length > 2) {
+          html += '<div style="margin-top:10px;font-size:12px;color:#bbb;text-align:center">已显示全部 ' + _sortedWords.length + ' 个例词</div>';
+        }
+      }
+      card.innerHTML = html;
+      list.appendChild(card);
+    });
+  }
+
+  async function openPhonicsGroup(groupId) {
+    try {
+      const data = await apiGET('/api/phonics/' + groupId);
+      const group = data.group;
+      if (!group) { toast('未找到该拼读分组'); return; }
+      phonicsCurrentGroup = group;
+      phonicsOpenLesson = null;   // 换组重置：全部收起
+      phonicsWordStep = {};       // 换组重置：例词回到默认 2 个
+      document.getElementById('phonics-group-list').style.display = 'none';
+      const area = document.getElementById('phonics-lesson-area');
+      area.style.display = 'block';
+      document.getElementById('phonics-lesson-title').textContent = group.title;
+      // 本组单词消消乐入口（有词才显示）
+      const pme = document.getElementById('phonics-match-entry');
+      if (pme) {
+        const words = phonicsGroupWords(group);
+        if (words.length >= 2) {
+          pme.style.display = 'block';
+          pme.innerHTML =
+          // 主行动常驻：单词学习 + 短文阅读（一次只亮一条主线）
+          '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="choice" style="padding:12px 3px;font-size:14px;font-weight:700;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#4f9fff,#6c63ff)" onclick="extFeatureGo(\'phonics\',\'choice\')">🎯 单词学习</button>' +
+            '<button class="btn btn-primary ext-feature-btn" data-extkey="reading" id="phonics-reading-btn" style="padding:12px 3px;font-size:14px;font-weight:700;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffd666,#ffa940);color:#7a5c00" onclick="extFeatureGo(\'phonics\',\'reading\')">📖 短文阅读</button>' +
+          '</div>' +
+          '<button id="phonics-more-btn" onclick="togglePhonicsMore()" style="width:100%;margin-top:8px;padding:8px;font-size:12px;color:#6c63ff;background:#f6f8ff;border:1px dashed #c7c9f5;border-radius:8px;cursor:pointer">⚙️ 更多练习 ⌄</button>' +
+          // 低频入口折叠：PK / 消消乐 / 同步挑战 / 随手拼 / 单词拼写
+          '<div id="phonics-more-features" style="display:none;margin-top:8px">' +
+            '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">' +
+              '<button class="btn btn-primary ext-feature-btn" data-extkey="pk" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#a55eea,#8854d0)" onclick="extFeatureGo(\'phonics\',\'pk\')">⚔️ 单词PK</button>' +
+              '<button class="btn btn-primary ext-feature-btn" data-extkey="match" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ff9f43,#ff6b9d)" onclick="extFeatureGo(\'phonics\',\'match\')">🎴 消消乐</button>' +
+              '<button class="btn btn-primary ext-feature-btn" data-extkey="challenge" style="padding:8px 2px;border:none;border-radius:10px;background:linear-gradient(100deg,#3b9dff 0%,#5b7fff 42%,#a55eea 58%,#8b46d4 100%);color:#fff;font-size:12px;font-weight:800;font-family:inherit;cursor:pointer;box-shadow:0 4px 12px rgba(120,90,220,.3)" onclick="extFeatureGo(\'phonics\',\'challenge\')"><span style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><span style="display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:#fff;color:#7a4bd0;font-size:11px;font-weight:900;font-style:italic">VS</span><span>同步挑战</span></span></button>' +
+              '<button class="btn btn-primary ext-feature-btn" data-extkey="doodle" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#ffb347,#ff8a3d)" onclick="extFeatureGo(\'phonics\',\'doodle\')">✍️ 随手拼</button>' +
+              '<button class="btn btn-primary ext-feature-btn" data-extkey="spell" style="padding:10px 3px;font-size:13px;border-radius:10px;line-height:1.2;background:linear-gradient(135deg,#26de81,#20bf6b)" onclick="extFeatureGo(\'phonics\',\'spell\')">🔤 单词拼写</button>' +
+            '</div>' +
+          '</div>';
+        } else {
+          pme.style.display = 'none';
+          pme.innerHTML = '';
+        }
+      }
+      Match.exit();   // 切换分组时收起上一局的消消乐面板
+      if (typeof Doodle !== 'undefined' && Doodle.scope) Doodle.exit();   // 顺手拼面板也一起收起
+      if (typeof Spell !== 'undefined' && Spell.scope) Spell.exit();      // 单词拼写面板也一起收起
+      renderPhonicsLessons(group);   // 手风琴 + 例词分批 + 错词回流
     } catch (e) {
       toast('加载失败，请稍后重试');
     }
