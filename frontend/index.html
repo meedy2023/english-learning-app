@@ -2235,7 +2235,8 @@ const API = ".";
     var bar = v ? v.querySelector('.tab-bar') : null;
     var activeBtn = bar ? bar.querySelector('.tab-btn.active') : null;
     var extActive = (typeof EXT_FEATURE !== 'undefined' && EXT_FEATURE.active);
-    if (GRADE_TAB.tab === tab && activeBtn && activeBtn.getAttribute('data-tab') === tab && !extActive) {
+    // 测验例外：重复点击「闯关测验」必须重开一局，不能沿用上次的题号/答题记录/结算页
+    if (tab !== 'quiz' && GRADE_TAB.tab === tab && activeBtn && activeBtn.getAttribute('data-tab') === tab && !extActive) {
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -2313,6 +2314,13 @@ const API = ".";
     if (name !== 'learn') {
       var _lbh = document.getElementById('learn-back-home');
       if (_lbh) _lbh.style.top = '84px';
+    }
+    // 离开单词测验页即清空本局状态；下次从测验 tab 进入会 startQuiz 重建一局
+    if (currentView === 'quiz' && name !== 'quiz') {
+      currentQuizIndex = 0;
+      quizOrder = [];
+      window.quizAnswerMap = {};
+      window._quizRetry = false;
     }
     currentView = name;
     // 离开 PK 页时清理对战计时器，避免后台继续跑
@@ -8436,6 +8444,16 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   // 退出就地模式：把 view 搬回原位、停功能、恢复列表与按钮态
   function extFeatureRestore() {
     if (!EXT_FEATURE.active) return;
+    // 离开就地测验即清空本局状态；下次进入从第一题重新开始，不延续上次结果
+    if (EXT_FEATURE.key === 'quiz') {
+      try {
+        ketQuizIndex = 0;
+        ketQuizQueue = [];
+        ketQuizAnswers = {};
+        ketQuizMode = '';
+        ketQuizSpeak = null;
+      } catch (e) {}
+    }
     var m = EXT_FEATURE.moved;
     // 分类短文：按钮自身即返回入口，退出时恢复文字并停朗读
     if (EXT_FEATURE.module === 'toefl' && EXT_FEATURE.key === 'reading') {
@@ -8478,10 +8496,11 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     // DOM/表单填写/游戏进度/滚动位置全部原地保留（原生 keep-alive 等效）。
     // 例外：短文阅读的再次点击是「收起」语义，保留原逻辑。
     if (EXT_FEATURE.active && EXT_FEATURE.module === module && EXT_FEATURE.key === key
-        && (EXT_FEATURE.shape || '') === _shape && key !== 'reading') {
+        && (EXT_FEATURE.shape || '') === _shape && key !== 'reading' && key !== 'quiz') {
       if (window.scrollTo) window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
+    // 单元/分类测验例外：重复点击测验入口走完整重进流程，startKetQuiz 会重建题库并清零答案
     // reading 再次点击仍执行收起
     if (EXT_FEATURE.active && EXT_FEATURE.module === module && EXT_FEATURE.key === key && key === 'reading') {
       extFeatureRestore();
