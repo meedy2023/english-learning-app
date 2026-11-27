@@ -17,6 +17,7 @@
     python pregenerate_audio.py --kind vocab-extra --all-rates   # 补充词汇短句(KET/小托福/拼读)：3 档全量
     python pregenerate_audio.py --kind ket-reading-full --all-rates  # KET短文整篇(human=1)：3 档全量
     python pregenerate_audio.py --kind phonics-reading --all-rates  # 自然拼读分类短文整段(human=1)：3 档全量
+    python pregenerate_audio.py --kind phonics-letter --all-rates   # 自然拼读字母/组合发音(字母名+例词,human=1)：3 档全量
     python pregenerate_audio.py --kind toefl-reading --all-rates   # 小托福分类短文整段(human=1)：3 档全量
     python pregenerate_audio.py --limit 20                       # 试生成前 20 条
     python pregenerate_audio.py --all-rates --workers 8          # 课文：3 档全量
@@ -346,6 +347,29 @@ def _add_jobs(jobs, seen, texts, rates, human=True, role=""):
             jobs.append((spoken, voice_id, rate, edge, human))
 
 
+def phonics_letter_text(lesson):
+    """把一课拼读转成人声可读的「字母名/组合名 + 例词」短语。
+    例：Aa/apple → 'A. Apple.'；bl/blue → 'B L. Blue.'；-ad/dad → 'A D. Dad.'
+    纯音素（/æ/）Edge TTS 读不出来，故用字母名 + 例词让孩子从例词里听到目标音。
+    前端 phonicsLetterText() 必须与本函数逐字一致，否则音频哈希对不上。
+    """
+    title = str(lesson.get("title") or "").strip()
+    word = str(lesson.get("sound_word") or "").strip()
+    word_cap = (word[:1].upper() + word[1:]) if word else ""
+    # 取第一个变体并去掉括号注释：'er / ir / ur'→'er'，'oo (短)'→'oo'
+    head = re.split(r"[/／]", title)[0].strip()
+    head = re.sub(r"[（(][^)）]*[)）]", "", head).strip()
+    if re.match(r"^[A-Z][a-z]$", title):        # Aa/Bb：单个字母，读一个字母名
+        spelled = title[0].upper()
+    elif re.search(r"\s", head):                # soft c / soft g：描述性标题当词组读
+        spelled = head.title()
+    else:                                       # bl→B L，-ad→A D，a_e→A E
+        spelled = " ".join(re.sub(r"[^A-Za-z]", "", head).upper())
+    if spelled and word_cap:
+        return spelled + ". " + word_cap + "."
+    return word_cap + "." if word_cap else ""
+
+
 KIND_LABELS = {
     "lesson": "课文逐句",
     "words": "单词发音",
@@ -356,6 +380,7 @@ KIND_LABELS = {
     "ket-reading-full": "KET短文整篇（human=1）",
     "phonics-reading": "自然拼读分类短文整段（human=1）",
     "phonics-sentence": "自然拼读分类短文单句（human=1）",
+    "phonics-letter": "自然拼读字母/组合发音（字母名+例词，human=1）",
     "toefl-reading": "小托福分类短文整段（human=1）",
 }
 # 各 kind 的默认数据源；--source 可显式覆盖（多源聚合 kind 忽略 --source）
@@ -369,6 +394,7 @@ DEFAULT_SOURCE_BY_KIND = {
     "ket-reading-full": ROOT / "docs" / "data" / "ket.json",
     "phonics-reading": ROOT / "docs" / "data" / "phonics.json",
     "phonics-sentence": ROOT / "docs" / "data" / "phonics.json",
+    "phonics-letter": ROOT / "docs" / "data" / "phonics.json",
     "toefl-reading": ROOT / "docs" / "data" / "toefl.json",
 }
 DATA_DIR = ROOT / "docs" / "data"
@@ -575,6 +601,17 @@ def collect_jobs(source, rates, limit, kind="lesson"):
                 texts.extend(split_sentences_like_frontend(story_en))
         # 前端重听时 voiceId=null、human=1，与整篇朗读音色/语速一致
         _add_jobs(jobs, seen, texts, rates, True, "")
+    elif kind == "phonics-letter":
+        # 自然拼读字母/组合发音：26 字母 + 短/长元音组合 + 辅音组合 + 元音字母组合。
+        # 纯音素 Edge 读不出（会读成字母名），故生成「字母名/组合名 + 例词」人声短语，
+        # 让孩子从例词里听到目标音。human=1、voiceId=null，与前端 preAudioUrl 对齐。
+        texts = []
+        for group in _load(source):
+            for lesson in (group.get("lessons") or []):
+                t = phonics_letter_text(lesson)
+                if t:
+                    texts.append(t)
+        _add_jobs(jobs, seen, texts, rates, True, "")
     elif kind == "toefl-reading":
         # 与前端 renderToeflCategoryReading() 对齐：优先用 toefl.json 各类别的
         # story.en（内置约100-150词记叙文，关键词自然融入情节、温暖细腻、完整叙事）。
@@ -626,6 +663,7 @@ def main():
                          "ket-reading-full=KET短文整篇(human=1) / "
                          "phonics-reading=自然拼读分类短文整段(human=1) / "
                          "phonics-sentence=自然拼读分类短文单句(human=1) / "
+                         "phonics-letter=自然拼读字母/组合发音字母名+例词(human=1) / "
                          "toefl-reading=小托福分类短文整段(human=1)")
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")

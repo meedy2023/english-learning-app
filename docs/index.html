@@ -11491,8 +11491,39 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     step();
   }
 
-  // 自然拼读发音：单音播录音、组合按顺序播、没有素材才读代表词
-  function speakPhonicsSound(ipa, word, audioKey) {
+  // 拼读音素「字母名 + 例词」真人朗读文本：与 pregenerate_audio.py 的 phonics_letter_text() 逐字一致。
+  // 纯音素 Edge 读不出来（会读成字母名），故用字母名+例词让孩子从例词里听到目标音。
+  function phonicsLetterText(title, word) {
+    title = String(title || '').trim();
+    word = String(word || '').trim();
+    const wordCap = word ? (word.charAt(0).toUpperCase() + word.slice(1)) : '';
+    // 取第一个变体并去掉括号注释：'er / ir / ur'→'er'，'oo (短)'→'oo'
+    let head = title.split(/[\/／]/)[0].trim();
+    head = head.replace(/[（(][^)）]*[)）]/g, '').trim();
+    let spelled;
+    if (/^[A-Z][a-z]$/.test(title)) spelled = title.charAt(0).toUpperCase();           // Aa/Bb：单个字母名
+    else if (/\s/.test(head)) spelled = head.replace(/\b\w/g, c => c.toUpperCase());  // soft c/g：词组
+    else spelled = head.replace(/[^A-Za-z]/g, '').toUpperCase().split('').join(' '); // bl→B L，-ad→A D
+    if (spelled && wordCap) return spelled + '. ' + wordCap + '.';
+    return wordCap ? wordCap + '.' : '';
+  }
+
+  // 自然拼读发音：优先真人「字母名+例词」音；缺音频再退回本地音素录音/分音合成
+  function speakPhonicsSound(ipa, word, audioKey, letterTitle) {
+    // 真人朗读（human=1，voiceId=null）：与 pregenerate_audio.py --kind phonics-letter 对齐
+    const humanText = phonicsLetterText(letterTitle || '', word);
+    if (humanText) {
+      const url = preAudioUrl(humanText, 'en-US', null, true);
+      if (url) {
+        const done = playPreAudio(url, function () {}, function () { playPhonicsFallback(ipa, word, audioKey); });
+        if (done) return;
+      }
+    }
+    playPhonicsFallback(ipa, word, audioKey);
+  }
+
+  // 回退：本地音素录音 + espeak 组合音 + 分音合成（真人音不可用时才走）
+  function playPhonicsFallback(ipa, word, audioKey) {
     let ph = (ipa || '').trim();
     const isIpa = ph.indexOf('/') === 0 && ph.lastIndexOf('/') === ph.length - 1 && !/[\u4e00-\u9fa5]/.test(ph);
     if (!isIpa) { speakWord(word || ''); return; }
@@ -11597,7 +11628,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       // 音标课时播本地音素音频；组合音课时没有单一音素，按钮注明读的是代表词
       const _sound = String(lesson.sound || '').trim();
       const _soundIsIpa = _sound.charAt(0) === '/' && _sound.charAt(_sound.length - 1) === '/' && !/[\u4e00-\u9fa5]/.test(_sound);
-      const _soundBtnText = (_soundIsIpa && !PHONEME_NO_AUDIO[_sound]) ? ('🔊 读 ' + _sound) : '🔊 读代表词';
+      const _soundBtnText = '🔊 读发音';
       const card = document.createElement('div');
       card.className = 'word-detail-card';
       card.style = 'background:#fff;border:1.5px solid ' + (isOpen ? '#6c63ff' : '#e0e6ff') + ';border-radius:14px;padding:16px;margin-bottom:14px';
@@ -11608,7 +11639,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '<span style="font-size:16px;color:#f5a623;font-weight:700">' + lesson.sound + '</span>'
         + '<span style="margin-left:auto;font-size:13px;color:#999">' + (isOpen ? '▼ 收起' : '▶ 展开练习') + '</span>'
         + '</button>'
-        + '<button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\')">' + _soundBtnText + '</button>'
+        + '<button class="btn btn-sm" style="padding:4px 12px" onclick="speakPhonicsSound(\'' + esc(lesson.sound) + '\', \'' + esc(lesson.sound_word || '') + '\', \'' + esc(lesson.audio || '') + '\', \'' + esc(lesson.title) + '\')">' + _soundBtnText + '</button>'
         + '</div>';
       if (isOpen) {
         html += '<div style="font-size:12px;color:#888;margin:10px 0">💡 ' + lesson.tip + '</div>';

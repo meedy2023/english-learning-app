@@ -28,3 +28,4 @@ node_modules/
 # Chrome CDP test profiles (transient)
 .cdp_score*/
 .chrome-tmp/
+.chrome-tmp-*/
