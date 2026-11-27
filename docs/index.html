@@ -574,12 +574,15 @@
   .lr-w.lr-word-done { color: #8c8c8c; }
   /* 整段短文朗读：当前词的焦点态（视觉焦点环 + DOM 焦点），与滚动跟随配套 */
   .lr-w.lr-word-focus, .lr-w.lr-single-focus { background:#ffd54f !important; color:#3d2600 !important; font-weight:700; box-shadow:0 0 0 3px rgba(255,167,38,.45),0 2px 10px rgba(255,145,0,.35) !important; outline:none; }
+  /* 短文整句朗读：当前句整句一起亮，不逐词推进——降低对精准时间戳的依赖 */
+  .lr-w.lr-sentence-reading { background:#ffe08a !important; color:#5c3b00 !important; font-weight:600; box-shadow:0 0 0 1px #ffc53d !important; }
+  .lr-w.lr-sentence-reading.lr-word-focus { background:#ffd54f !important; }
   /* 短文阅读（KET/小托福/拼读）：本章节/本类词汇高亮（朗读时让位于朗读高亮） */
-  .lr-w.lr-keyword:not(.lr-reading) { color:#c0392b; background:#fff1b8; font-weight:700; box-shadow:0 0 0 1px #ffd666; }
+  .lr-w.lr-keyword:not(.lr-reading):not(.lr-sentence-reading) { color:#c0392b; background:#fff1b8; font-weight:700; box-shadow:0 0 0 1px #ffd666; }
   /* 40天计划预读短文：整段布局不改动——抑制句级紫色卡片/淡出，仅保留词级跟随高亮；当天词汇高亮样式与原 <strong> 一致 */
   #toefl-plan-passage-en.lr-line.lr-current,
   #toefl-plan-passage-en.lr-line.lr-read { opacity:1 !important; background:transparent !important; border-left-width:0 !important; box-shadow:none !important; }
-  #toefl-plan-passage-en .lr-w.lr-keyword:not(.lr-reading) { color:#c0392b; background:#fff3cd; padding:0 2px; border-radius:3px; box-shadow:none; font-weight:700; }
+  #toefl-plan-passage-en .lr-w.lr-keyword:not(.lr-reading):not(.lr-sentence-reading) { color:#c0392b; background:#fff3cd; padding:0 2px; border-radius:3px; box-shadow:none; font-weight:700; }
   /* 朗读控制条（固定悬浮在底部导航上方，滚动时始终可操作） */
   .lr-dock {
     position: fixed;
@@ -3936,20 +3939,40 @@ const API = ".";
       items.forEach((item, i) => {
         const wordEls = Array.prototype.slice.call(item.querySelectorAll('.lr-w'));
         const useWordFocus = !!(ui && ui.wordFocus);
+        const useSentenceFocus = !!(ui && ui.sentenceFocus);
+        const useFocus = useWordFocus || useSentenceFocus;
         let acc = 0;
         const words = wordEls.map(el => {
-          if (useWordFocus) { try { el.setAttribute('tabindex', '-1'); } catch (e) {} }
+          if (useFocus) { try { el.setAttribute('tabindex', '-1'); } catch (e) {} }
           const len = (el.textContent || '').length + 1;
           const w = { el: el, start: acc, end: acc + len };
           acc += len;
           return w;
         });
+        // 整句朗读：按句末标点把词切成句子单元（拼读/小托福/40天为整段一行，KET 为每句一行）。
+        // 读到某句时整句一起亮，不再用字符进度逐词推进，避免长段落高亮落后于语音。
+        let sentences = [];
+        if (useSentenceFocus) {
+          let cur = null;
+          words.forEach(w => {
+            if (!cur) { cur = { words: [], start: w.start, end: w.end }; sentences.push(cur); }
+            cur.words.push(w);
+            cur.end = w.end;
+            const t = (w.el.textContent || '').replace(/[\u201d\u2019"'）]/g, '').trim();
+            if (/[.!?]$/.test(t)) cur = null;  // 句末：下一个词另起一句
+          });
+          // 无句末标点时整行作为一句，保证一定有可高亮单元
+          if (!sentences.length && words.length) {
+            sentences.push({ words: words.slice(), start: words[0].start, end: words[words.length - 1].end });
+          }
+        }
         const src = content && content[i];
         this.lines.push({
           item: item,
           text: (src && (src.text || src.en)) || '',
           role: (src && (src.role || src.speaker)) || '',
           words: words,
+          sentences: sentences,
           total: acc
         });
       });
@@ -4059,7 +4082,7 @@ const API = ".";
       this.ensureReadingSpace();
       // 整段短文启用词级焦点后，滚动完全由 followWord 按当前词接管，
       // 不再用句级 scrollIntoView 把长段落整段拉到中间（会覆盖词级跟随）
-      if (!(this.ui && this.ui.wordFocus)) this.scrollIntoView(line.item);
+      if (!(this.ui && (this.ui.wordFocus || this.ui.sentenceFocus))) this.scrollIntoView(line.item);
       this.startAt = Date.now();
       this._audioStartAt = null;
       // 系统语音没有 currentTime，按字符数与语速估算这一句的时长
@@ -4167,7 +4190,8 @@ const API = ".";
         p = Math.min(1, (Date.now() - this.startAt) / this.estMs);
       }
       p = Math.max(0, Math.min(1, p));
-      this.markWord(line, p);
+      if (this.ui && this.ui.sentenceFocus) this.markSentence(line, p);
+      else this.markWord(line, p);
       this.updateBar(p);
     },
     // 句首 */整句状态
@@ -4184,10 +4208,44 @@ const API = ".";
         const it = this.lines[i];
         if (!it.item) continue;
         it.item.classList.remove('lr-read', 'lr-current');
-        it.words.forEach(w => { if (w.el) w.el.classList.remove('lr-reading', 'lr-word-done'); });
+        it.words.forEach(w => { if (w.el) w.el.classList.remove('lr-reading', 'lr-word-done', 'lr-sentence-reading'); });
       }
       this.clearWordFocus();
+      this._sentIdx = -1;
+      this._sentLine = null;
       this.updateBar(0);
+    },
+    // 整句高亮：按进度定位当前句，整句一起亮；焦点与滚动锚定句首词。
+    // 只需在「句子切换」时重绘，句内不再随进度移动——大幅降低对精准时间戳的依赖。
+    markSentence(line, p) {
+      if (!line || !line.total) return;
+      const sents = line.sentences;
+      if (!sents || !sents.length) { this.markWord(line, p); return; }
+      const target = Math.floor(p * line.total);
+      let cur = sents.length - 1;
+      for (let i = 0; i < sents.length; i++) {
+        if (target >= sents[i].start && target < sents[i].end) { cur = i; break; }
+      }
+      if (this._sentLine === line && this._sentIdx === cur) return;  // 同一句不重复重绘/聚焦
+      this._sentLine = line;
+      this._sentIdx = cur;
+      const self = this;
+      sents.forEach(function (s, i) {
+        s.words.forEach(function (w) {
+          if (!w.el) return;
+          if (i === cur) {
+            w.el.classList.add('lr-sentence-reading');
+            w.el.classList.remove('lr-word-done');
+          } else if (i < cur) {
+            w.el.classList.add('lr-word-done');
+            w.el.classList.remove('lr-sentence-reading');
+          } else {
+            w.el.classList.remove('lr-sentence-reading', 'lr-word-done');
+          }
+        });
+      });
+      const first = sents[cur].words[0];
+      if (first && first.el) self.focusWord(first);
     },
     markWord(line, p) {
       if (!line || !line.total) return;
@@ -4213,10 +4271,10 @@ const API = ".";
       if (!line) return;
       line.words.forEach(w => {
         if (!w.el) return;
-        w.el.classList.remove('lr-reading');
+        w.el.classList.remove('lr-reading', 'lr-sentence-reading');
         if (done) w.el.classList.add('lr-word-done');
       });
-      if (done) this.clearWordFocus();
+      if (done) { this.clearWordFocus(); this._sentIdx = -1; this._sentLine = null; }
     },
     // ---- 朗读可视区保障：动态测量底部悬浮控制条 + 底部导航的实际遮挡高度 ----
     dockCoverHeight() {
@@ -11387,6 +11445,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       const rpBtn = document.getElementById('ket-replay-btn');
       if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
       LessonReader.bind(reading.sentences, {
+        sentenceFocus: true,
         scope: 'ket-reading-area',
         dock: 'ket-reader-dock',
         main: 'ket-full-speak-btn',
@@ -11534,7 +11593,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var raBtn = document.getElementById('toefl-ra-btn');
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
-      wordFocus: true,
+      sentenceFocus: true,
       scope: 'toefl-feature-stage',
       dock: 'toefl-reading-dock',
       main: 'toefl-reading-full-btn',
@@ -11644,7 +11703,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     var raBtn = document.getElementById('phonics-ra-btn');
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
-      wordFocus: true,
+      sentenceFocus: true,
       scope: 'phonics-feature-stage',
       dock: 'phonics-reading-dock',
       main: 'phonics-reading-full-btn',
@@ -12679,7 +12738,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         + '</div>';
         // 整段作为一行绑定 LessonReader：只取词级跟随高亮，不显示句级卡片/控制条
         LessonReader.bind([{ en: d.passage.en }], {
-          wordFocus: true,
+          sentenceFocus: true,
           scope: 'toefl-plan-passage',
           main: 'toefl-plan-full-speak-btn',
           label: '🔊 朗读全文'
