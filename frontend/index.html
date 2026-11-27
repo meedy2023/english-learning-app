@@ -603,7 +603,7 @@
   .lr-ctrl-btn { flex: 1; padding: 12px; font-size: 14px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; }
   .lr-ctrl-main { background: linear-gradient(135deg,#4f9fff,#6c63ff); color: #fff; }
   .lr-ctrl-sub { flex: 0 0 auto; padding: 12px 14px; background: #f5f7ff; border: 1px solid #e0e6ff; color: #6c63ff; }
-  #toefl-reading-repeat-sentence-btn { padding: 12px 9px; font-size: 12px; }
+  #ket-repeat-sentence-btn, #toefl-reading-repeat-sentence-btn, #phonics-reading-repeat-sentence-btn { padding: 12px 9px; font-size: 12px; }
   .lr-ctrl-btn:active { transform: scale(.97); }
   .lr-progress { margin-top: 8px; font-size: 12px; color: #888; text-align: center; }
   .lr-nav { display: flex; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #e2e8ff; }
@@ -11639,6 +11639,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           <div class="lr-dock" id="ket-reader-dock" style="display:none">
             <div class="lr-ctrl">
               <button class="lr-ctrl-btn lr-ctrl-main" id="ket-full-speak-btn" data-reading="0" type="button" aria-label="朗读全文">🔊 朗读全文</button>
+              <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-repeat-sentence-btn" style="display:none" type="button" aria-label="重听本句">↻ 重听本句</button>
               <button class="lr-ctrl-btn lr-ctrl-sub" id="ket-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>
             </div>
             <div class="lr-bar" id="ket-read-bar" style="display:none"><i></i></div>
@@ -11652,12 +11653,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
       const rpBtn = document.getElementById('ket-replay-btn');
       if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
+      const repSentBtn = document.getElementById('ket-repeat-sentence-btn');
+      if (repSentBtn) repSentBtn.onclick = function () { LessonReader.repeatCurrentSentence(); };
       LessonReader.bind(reading.sentences, {
         sentenceFocus: true,
         scope: 'ket-reading-area',
         dock: 'ket-reader-dock',
         main: 'ket-full-speak-btn',
         replay: 'ket-replay-btn',
+        repeatSentence: 'ket-repeat-sentence-btn',
         progress: 'ket-read-progress',
         bar: 'ket-read-bar',
         label: '🔊 朗读全文'
@@ -11902,6 +11906,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       + '<div class="lr-dock" id="phonics-reading-dock" style="display:none">'
         + '<div class="lr-ctrl">'
           + '<button class="lr-ctrl-btn lr-ctrl-main" id="phonics-reading-full-btn" data-reading="0" type="button" aria-label="朗读短文">🔊 朗读短文</button>'
+          + '<button class="lr-ctrl-btn lr-ctrl-sub" id="phonics-reading-repeat-sentence-btn" style="display:none" type="button" aria-label="重听本句">↻ 重听本句</button>'
           + '<button class="lr-ctrl-btn lr-ctrl-sub" id="phonics-reading-replay-btn" style="display:none" type="button" aria-label="重播">🔁 重播</button>'
         + '</div>'
         + '<div class="lr-bar" id="phonics-reading-bar" style="display:none"><i></i></div>'
@@ -11912,6 +11917,8 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (mainBtn) mainBtn.onclick = function () { LessonReader.toggle(); };
     var rpBtn = document.getElementById('phonics-reading-replay-btn');
     if (rpBtn) rpBtn.onclick = function () { LessonReader.replay(); };
+    var repSentBtn = document.getElementById('phonics-reading-repeat-sentence-btn');
+    if (repSentBtn) repSentBtn.onclick = function () { LessonReader.repeatCurrentSentence(); };
     var raBtn = document.getElementById('phonics-ra-btn');
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
@@ -11920,6 +11927,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
       dock: 'phonics-reading-dock',
       main: 'phonics-reading-full-btn',
       replay: 'phonics-reading-replay-btn',
+      repeatSentence: 'phonics-reading-repeat-sentence-btn',
       progress: 'phonics-reading-progress',
       bar: 'phonics-reading-bar',
       label: '🔊 朗读短文'
@@ -12849,6 +12857,10 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     try { LessonReader.toggle(); } catch (e) {}
   }
 
+  function toeflPlanRepeatSentence() {
+    try { LessonReader.repeatCurrentSentence(); } catch (e) {}
+  }
+
   function toeflPlanToggleZh() {
     var zh = document.getElementById('toefl-plan-passage-zh');
     var btn = document.getElementById('toefl-plan-zh-toggle');
@@ -12941,6 +12953,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
           + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">'
             + '<div style="display:flex;align-items:center;gap:6px;font-size:15px;font-weight:700;color:#b8860b">📖 预读短文 <span style="font-size:11px;font-weight:400;color:#c9a355">（加粗词为当天词汇，朗读时逐词高亮）</span></div>'
             + '<button id="toefl-plan-full-speak-btn" class="speak-btn" onclick="toeflPlanSpeakPassage()" style="padding:6px 14px;font-size:13px">🔊 朗读全文</button>'
+            + '<button id="toefl-plan-repeat-sentence-btn" class="speak-btn" onclick="toeflPlanRepeatSentence()" style="display:none;padding:6px 14px;font-size:13px;margin-left:6px">↻ 重听本句</button>'
           + '</div>'
           + '<div id="toefl-plan-passage-en" class="lr-line" style="font-size:15px;line-height:1.9;color:#3a2f1a">' + lrWordsHtml(d.passage.en, planStems) + '</div>'
           + '<button id="toefl-plan-zh-toggle" class="btn btn-secondary btn-sm" onclick="toeflPlanToggleZh()" style="margin-top:10px;font-size:12px">显示中文翻译 ▾</button>'
@@ -12948,11 +12961,12 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             + (d.passage.zh || '')
           + '</div>'
         + '</div>';
-        // 整段作为一行绑定 LessonReader：只取词级跟随高亮，不显示句级卡片/控制条
+        // 整段作为一行绑定 LessonReader：不显示悬浮控制条，仅在全文按钮旁显示「重听本句」
         LessonReader.bind([{ en: d.passage.en }], {
           sentenceFocus: true,
           scope: 'toefl-plan-passage',
           main: 'toefl-plan-full-speak-btn',
+          repeatSentence: 'toefl-plan-repeat-sentence-btn',
           label: '🔊 朗读全文'
         });
       } else {
