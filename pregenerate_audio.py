@@ -10,16 +10,16 @@
 
 用法：
     python pregenerate_audio.py --dry-run                        # 课文：只看将生成多少条
-    python pregenerate_audio.py --kind words --all-rates         # 单词发音：5 档全量
-    python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句：5 档全量
-    python pregenerate_audio.py --kind examples --all-rates      # 四模块词汇例句：5 档全量
-    python pregenerate_audio.py --kind plan-reading --all-rates  # 40天计划短文：5 档全量
-    python pregenerate_audio.py --kind vocab-extra --all-rates   # 补充词汇短句(KET/小托福/拼读)：5 档全量
-    python pregenerate_audio.py --kind ket-reading-full --all-rates  # KET短文整篇(human=1)：5 档全量
-    python pregenerate_audio.py --kind phonics-reading --all-rates  # 自然拼读分类短文整段(human=1)：5 档全量
-    python pregenerate_audio.py --kind toefl-reading --all-rates   # 小托福分类短文整段(human=1)：5 档全量
+    python pregenerate_audio.py --kind words --all-rates         # 单词发音：3 档全量
+    python pregenerate_audio.py --kind ket-reading --all-rates   # KET短文单句：3 档全量
+    python pregenerate_audio.py --kind examples --all-rates      # 四模块词汇例句：3 档全量
+    python pregenerate_audio.py --kind plan-reading --all-rates  # 40天计划短文：3 档全量
+    python pregenerate_audio.py --kind vocab-extra --all-rates   # 补充词汇短句(KET/小托福/拼读)：3 档全量
+    python pregenerate_audio.py --kind ket-reading-full --all-rates  # KET短文整篇(human=1)：3 档全量
+    python pregenerate_audio.py --kind phonics-reading --all-rates  # 自然拼读分类短文整段(human=1)：3 档全量
+    python pregenerate_audio.py --kind toefl-reading --all-rates   # 小托福分类短文整段(human=1)：3 档全量
     python pregenerate_audio.py --limit 20                       # 试生成前 20 条
-    python pregenerate_audio.py --all-rates --workers 8          # 课文：5 档全量
+    python pregenerate_audio.py --all-rates --workers 8          # 课文：3 档全量
 
 依赖：
     pip install --upgrade edge-tts
@@ -115,11 +115,9 @@ ROLE_IDS_BY_GENDER = {
 ALL_ROLE_IDS = [p["id"] for p in ROLE_VOICE_POOL if not p.get("fixedOnly")]
 
 RATE_TABLE = [
-    (0.5, 0.775),
     (0.8, 0.830),
     (1.0, 1.000),
     (1.2, 1.180),
-    (1.5, 1.390),
 ]
 ALL_RATES = [r for r, _ in RATE_TABLE]
 
@@ -181,7 +179,7 @@ def edge_voice_for(voice_id):
 
 
 def synth_rate(rate):
-    r = max(0.5, min(1.5, float(rate)))
+    r = max(ALL_RATES[0], min(ALL_RATES[-1], float(rate)))
     for (ua, sa), (ub, sb) in zip(RATE_TABLE, RATE_TABLE[1:]):
         if r <= ub:
             t = (r - ua) / (ub - ua)
@@ -588,7 +586,7 @@ def main():
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")
     ap.add_argument("--rate", type=float, action="append", help="生成语速档，可重复；默认 0.8")
-    ap.add_argument("--all-rates", action="store_true", help="生成全部 5 个语速档")
+    ap.add_argument("--all-rates", action="store_true", help="生成全部 3 个语速档")
     ap.add_argument("--limit", type=int, default=0, help="最多生成条数（0=全部）")
     ap.add_argument("--workers", type=int, default=6, help="并发数")
     ap.add_argument("--timeout", type=int, default=30, help="单次连接超时秒数")

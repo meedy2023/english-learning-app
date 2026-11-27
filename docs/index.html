@@ -4422,11 +4422,9 @@ const API = ".";
   let speechRate = parseFloat(localStorage.getItem('speech_rate') || '0.8');
   if (!(speechRate > 0.3 && speechRate <= 2)) speechRate = 0.8;
   const SPEECH_RATE_OPTIONS = [
-    { value: '0.5', label: '0.5倍 · 很慢' },
     { value: '0.8', label: '0.8倍 · 慢速推荐' },
     { value: '1', label: '1.0倍 · 正常' },
-    { value: '1.2', label: '1.2倍 · 稍快' },
-    { value: '1.5', label: '1.5倍 · 快' }
+    { value: '1.2', label: '1.2倍 · 稍快' }
   ];
   const SPEECH_RATE_VALUES = SPEECH_RATE_OPTIONS.map(function (o) { return parseFloat(o.value); });
   const SPEECH_RATE_DEFAULT = 0.8;
@@ -5514,8 +5512,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
   }
   function previewSpeechRate() {
     stopAllAudio();
-    // 用预生成真人音试听，与日常单词/课文的听感一致；预览句已按 5 个语速档位全部预生成，
-    // 不传 voiceId 才能命中 default 真人音（传 enVoice 会算成另一套哈希而 miss）。
+    // 试听句不在预生成语料里，走网络 TTS 合成（会沿用当前语速与音色设置）。
     TTS.speak('Hello! How are you today?', 'en-US');
   }
   initSpeechRateSelect();
