@@ -3924,6 +3924,8 @@ const API = ".";
     _repeatLeft: 0,
     _repeatHandler: null,
     _repeatTimer: null,
+    _repeatEndTimer: null,   // 到句尾的定时截停（timeupdate 间隔太粗会串到下一句）
+    _repeatWatchTimer: null, // 高频兜底检查 audio.currentTime
     paused: false,
     // 课文朗读默认分角色：女生女声、男生男声，无需开关
     ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
@@ -4353,6 +4355,8 @@ const API = ".";
     // ---- 单句重听：复用当前音频，在真实句边界间回退播放 ----
     cancelRepeat() {
       if (this._repeatTimer) { try { clearTimeout(this._repeatTimer); } catch (e) {} this._repeatTimer = null; }
+      if (this._repeatEndTimer) { try { clearTimeout(this._repeatEndTimer); } catch (e) {} this._repeatEndTimer = null; }
+      if (this._repeatWatchTimer) { try { clearInterval(this._repeatWatchTimer); } catch (e) {} this._repeatWatchTimer = null; }
       const a = this._sentAudio;
       const h = this._repeatHandler;
       if (a && h) { try { a.removeEventListener('timeupdate', h); } catch (e) {} }
@@ -4409,17 +4413,31 @@ const API = ".";
       const self = this;
       const run = function () {
         if (!self._repeating || self.token !== tk) return;
+        if (self._repeatEndTimer) { try { clearTimeout(self._repeatEndTimer); } catch (e) {} self._repeatEndTimer = null; }
+        if (self._repeatWatchTimer) { try { clearInterval(self._repeatWatchTimer); } catch (e) {} self._repeatWatchTimer = null; }
+        const rate = (self.handle && self.handle.kind === 'preaudio') ? 1 : audioPlaybackRate();
+        // timeupdate 通常 200~300ms 才触发一次，只靠它截停会越过句尾、把下一句前两个词也读出来。
+        // 这里提前 80ms 停止，并用定时器 + 高频检查双重兜底，听到的是完整本句而非下一句串词。
+        const stopAt = Math.max(range.start + 0.08, range.end - 0.08);
         try {
-          audio.playbackRate = (self.handle && self.handle.kind === 'preaudio') ? 1 : audioPlaybackRate();
+          audio.playbackRate = rate;
           audio.currentTime = range.start;
           const p = audio.play();
           if (p && p.catch) p.catch(function () {});
         } catch (e) { self.finishRepeat(); return; }
         self.updateUI();
-        const onTime = function () {
-          if (!self._repeating || self.token !== tk) return;
-          if (audio.currentTime + 0.04 < range.end) return;
-          try { audio.pause(); } catch (e) {}
+        let ended = false;
+        const onBoundary = function () {
+          if (ended || !self._repeating || self.token !== tk) return;
+          ended = true;
+          if (self._repeatEndTimer) { try { clearTimeout(self._repeatEndTimer); } catch (e) {} self._repeatEndTimer = null; }
+          if (self._repeatWatchTimer) { try { clearInterval(self._repeatWatchTimer); } catch (e) {} self._repeatWatchTimer = null; }
+          try {
+            if (!isFinite(audio.duration) || stopAt <= audio.duration) audio.currentTime = stopAt;
+            audio.pause();
+          } catch (e) {
+            try { audio.pause(); } catch (e2) {}
+          }
           try { audio.removeEventListener('timeupdate', onTime); } catch (e) {}
           if (self._repeatHandler === onTime) self._repeatHandler = null;
           self._repeatLeft--;
@@ -4427,8 +4445,19 @@ const API = ".";
           if (self._repeatLeft > 0) self._repeatTimer = setTimeout(run, 180);
           else self.finishRepeat();
         };
+        const onTime = function () {
+          if (ended || !self._repeating || self.token !== tk) return;
+          if (audio.currentTime + 0.02 < stopAt) return;
+          onBoundary();
+        };
         self._repeatHandler = onTime;
         try { audio.addEventListener('timeupdate', onTime); } catch (e) {}
+        const delayMs = Math.max(0, (stopAt - range.start) / Math.max(0.1, rate) * 1000);
+        self._repeatEndTimer = setTimeout(onBoundary, delayMs);
+        self._repeatWatchTimer = setInterval(function () {
+          if (ended || !self._repeating || self.token !== tk) return;
+          if (audio.currentTime + 0.02 >= stopAt) onBoundary();
+        }, 24);
       };
       run();
     },
