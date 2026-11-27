@@ -12250,11 +12250,15 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
             <div class="word-detail-card" style="margin-bottom:12px;padding:16px;background:#fffbf0;border-radius:12px;border:2px solid #ffe7ba">
               <div style="font-size:16px;font-weight:600;color:#d48806;margin-bottom:12px">📝 例句 (${grammar.例句.length}个)</div>
               ${grammar.例句.map((ex, idx) => `
-                <div style="padding:8px 0;border-bottom:1px dashed #ffe7ba;display:flex;align-items:center;gap:8px">
-                  <span style="background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px">${idx + 1}</span>
-                  <span style="font-size:15px;color:#333">${ex}</span>
-                  <button class="speak-btn" onclick="speakWord('${esc(ex)}')" style="padding:2px 8px;font-size:11px">🔊</button>
-                  <button class="ra-btn" onclick="raToggleKet(this, '${esc(ex)}')" style="margin-left:auto;padding:2px 8px;font-size:11px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:6px;cursor:pointer">🎤 跟读</button>
+                <div style="padding:10px 0;border-bottom:1px dashed #ffe7ba">
+                  <div style="display:flex;align-items:flex-start;gap:8px">
+                    <span style="flex-shrink:0;background:#ffe7ba;color:#d48806;padding:2px 8px;border-radius:10px;font-size:12px;margin-top:2px">${idx + 1}</span>
+                    <span style="flex:1;font-size:15px;color:#333;line-height:1.5">${ex}</span>
+                  </div>
+                  <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+                    <button class="speak-btn" onclick="speakWord('${esc(ex)}')" style="margin:0;padding:5px 12px;font-size:12px;border-radius:8px">🔊 朗读</button>
+                    <button class="ra-btn" onclick="raToggleKet(this, '${esc(ex)}')" style="margin:0;padding:5px 12px;font-size:12px;background:#fff0f5;color:#ff6b9d;border:1px solid #ff6b9d;border-radius:8px;cursor:pointer">🎤 跟读</button>
+                  </div>
                 </div>
               `).join('')}
             </div>
