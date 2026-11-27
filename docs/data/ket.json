@@ -4425,23 +4425,23 @@
  "句型": {
   "自我介绍": [
    {
-    "english": "Hello, my name is...",
-    "chinese": "你好，我叫……",
+    "english": "Hello, my name is Lily.",
+    "chinese": "你好，我叫莉莉。",
     "usage": "介绍自己的名字"
    },
    {
-    "english": "I'm ... years old.",
-    "chinese": "我……岁。",
+    "english": "I'm twelve years old.",
+    "chinese": "我十二岁。",
     "usage": "介绍年龄"
    },
    {
-    "english": "I'm from...",
-    "chinese": "我来自……",
+    "english": "I'm from China.",
+    "chinese": "我来自中国。",
     "usage": "介绍籍贯"
    },
    {
-    "english": "I live in...",
-    "chinese": "我住在……",
+    "english": "I live in Beijing.",
+    "chinese": "我住在北京。",
     "usage": "介绍居住地"
    },
    {
@@ -4465,38 +4465,38 @@
     "usage": "礼貌地开始自我介绍"
    },
    {
-    "english": "My name is ... and I'm ... years old.",
-    "chinese": "我叫……，今年……岁。",
+    "english": "My name is Lily and I'm twelve years old.",
+    "chinese": "我叫莉莉，今年十二岁。",
     "usage": "完整自我介绍"
    },
    {
-    "english": "I come from...",
-    "chinese": "我来自……",
+    "english": "I come from China.",
+    "chinese": "我来自中国。",
     "usage": "说明来自哪里"
    },
    {
-    "english": "I was born in...",
-    "chinese": "我出生在……",
+    "english": "I was born in Beijing.",
+    "chinese": "我出生在北京。",
     "usage": "说明出生地"
    },
    {
-    "english": "I study at...",
-    "chinese": "我在……学习。",
+    "english": "I study at Star Middle School.",
+    "chinese": "我在星辰中学学习。",
     "usage": "介绍学校"
    },
    {
-    "english": "I work as a...",
-    "chinese": "我的工作是……",
+    "english": "I work as a teacher.",
+    "chinese": "我的工作是老师。",
     "usage": "介绍职业"
    },
    {
-    "english": "I'm a student at...",
-    "chinese": "我是……的学生。",
+    "english": "I'm a student at Star Middle School.",
+    "chinese": "我是星辰中学的学生。",
     "usage": "介绍学生身份"
    },
    {
-    "english": "In my free time, I like to...",
-    "chinese": "空闲时间，我喜欢……",
+    "english": "In my free time, I like to read books.",
+    "chinese": "空闲时间，我喜欢读书。",
     "usage": "介绍爱好"
    }
   ],
@@ -4522,8 +4522,8 @@
     "usage": "询问电话"
    },
    {
-    "english": "What's your favourite...?",
-    "chinese": "你最喜欢的……是什么？",
+    "english": "What's your favourite colour?",
+    "chinese": "你最喜欢的颜色是什么？",
     "usage": "询问喜好"
    },
    {
@@ -4592,90 +4592,90 @@
     "usage": "询问价格"
    },
    {
-    "english": "Where is the...?",
-    "chinese": "……在哪里？",
+    "english": "Where is the library?",
+    "chinese": "图书馆在哪里？",
     "usage": "询问位置"
    },
    {
-    "english": "How do I get to...?",
-    "chinese": "我怎么去……？",
+    "english": "How do I get to the museum?",
+    "chinese": "我怎么去博物馆？",
     "usage": "询问路线"
    }
   ],
   "表达喜好": [
    {
-    "english": "I like...",
-    "chinese": "我喜欢……",
+    "english": "I like reading.",
+    "chinese": "我喜欢读书。",
     "usage": "表达喜欢"
    },
    {
-    "english": "I don't like...",
-    "chinese": "我不喜欢……",
+    "english": "I don't like rainy days.",
+    "chinese": "我不喜欢雨天。",
     "usage": "表达不喜欢"
    },
    {
-    "english": "My favourite... is...",
-    "chinese": "我最喜欢的……是……",
+    "english": "My favourite sport is football.",
+    "chinese": "我最喜欢的运动是足球。",
     "usage": "表达最爱"
    },
    {
-    "english": "I enjoy...",
-    "chinese": "我享受……",
+    "english": "I enjoy swimming.",
+    "chinese": "我喜欢游泳。",
     "usage": "表达享受"
    },
    {
-    "english": "I prefer...",
-    "chinese": "我更喜欢……",
+    "english": "I prefer tea to coffee.",
+    "chinese": "相比咖啡我更喜欢茶。",
     "usage": "表达偏好"
    },
    {
-    "english": "I love...",
-    "chinese": "我热爱……",
+    "english": "I love music.",
+    "chinese": "我热爱音乐。",
     "usage": "强烈喜欢"
    },
    {
-    "english": "I hate...",
-    "chinese": "我讨厌……",
+    "english": "I hate getting up early.",
+    "chinese": "我讨厌早起。",
     "usage": "强烈不喜欢"
    },
    {
-    "english": "I'm interested in...",
-    "chinese": "我对……感兴趣。",
+    "english": "I'm interested in science.",
+    "chinese": "我对科学感兴趣。",
     "usage": "表达兴趣"
    },
    {
-    "english": "I'm fond of...",
-    "chinese": "我喜欢……",
+    "english": "I'm fond of cats.",
+    "chinese": "我喜欢猫。",
     "usage": "表达喜爱"
    },
    {
-    "english": "I'm keen on...",
-    "chinese": "我热衷于……",
+    "english": "I'm keen on basketball.",
+    "chinese": "我热衷于篮球。",
     "usage": "表达热衷"
    },
    {
-    "english": "I'm crazy about...",
-    "chinese": "我对……很着迷。",
+    "english": "I'm crazy about pop music.",
+    "chinese": "我对流行音乐很着迷。",
     "usage": "表达痴迷"
    },
    {
-    "english": "I can't stand...",
-    "chinese": "我无法忍受……",
+    "english": "I can't stand the cold.",
+    "chinese": "我无法忍受寒冷。",
     "usage": "表达无法忍受"
    },
    {
-    "english": "I don't mind...",
-    "chinese": "我不介意……",
+    "english": "I don't mind waiting.",
+    "chinese": "我不介意等待。",
     "usage": "表达无所谓"
    },
    {
-    "english": "I would rather... than...",
-    "chinese": "我宁愿……也不愿……",
+    "english": "I would rather walk than take a bus.",
+    "chinese": "我宁愿走路也不愿坐公交。",
     "usage": "表达选择"
    },
    {
-    "english": "I like... better than...",
-    "chinese": "比起……我更喜欢……",
+    "english": "I like summer better than winter.",
+    "chinese": "比起冬天我更喜欢夏天。",
     "usage": "比较喜好"
    }
   ],
@@ -4808,18 +4808,18 @@
   ],
   "表达意见": [
    {
-    "english": "I think...",
-    "chinese": "我认为……",
+    "english": "I think this film is great.",
+    "chinese": "我认为这部电影很棒。",
     "usage": "表达观点"
    },
    {
-    "english": "I believe...",
-    "chinese": "我相信……",
+    "english": "I believe he is right.",
+    "chinese": "我相信他是对的。",
     "usage": "表达信念"
    },
    {
-    "english": "In my opinion...",
-    "chinese": "在我看来……",
+    "english": "In my opinion, this book is useful.",
+    "chinese": "在我看来，这本书很有用。",
     "usage": "表达看法"
    },
    {
@@ -4885,53 +4885,53 @@
   ],
   "请求与许可": [
    {
-    "english": "Can you...?",
-    "chinese": "你能……吗？",
+    "english": "Can you help me?",
+    "chinese": "你能帮我吗？",
     "usage": "请求帮助"
    },
    {
-    "english": "Could you...?",
-    "chinese": "你能……吗？（更礼貌）",
+    "english": "Could you open the window?",
+    "chinese": "你能打开窗吗？（更礼貌）",
     "usage": "礼貌请求"
    },
    {
-    "english": "Would you mind...?",
-    "chinese": "你介意……吗？",
+    "english": "Would you mind closing the door?",
+    "chinese": "你介意关上门吗？",
     "usage": "请求许可"
    },
    {
-    "english": "May I...?",
-    "chinese": "我可以……吗？",
+    "english": "May I come in?",
+    "chinese": "我可以进来吗？",
     "usage": "请求许可"
    },
    {
-    "english": "Can I...?",
-    "chinese": "我可以……吗？",
+    "english": "Can I use your pen?",
+    "chinese": "我可以用你的笔吗？",
     "usage": "请求许可"
    },
    {
-    "english": "Do you mind if I...?",
-    "chinese": "你介意我……吗？",
+    "english": "Do you mind if I sit here?",
+    "chinese": "你介意我坐这里吗？",
     "usage": "请求许可"
    },
    {
-    "english": "Is it OK if I...?",
-    "chinese": "我……可以吗？",
+    "english": "Is it OK if I open the window?",
+    "chinese": "我开窗可以吗？",
     "usage": "请求许可"
    },
    {
-    "english": "Would it be possible to...?",
-    "chinese": "……可能吗？",
+    "english": "Would it be possible to change the date?",
+    "chinese": "改个日期可能吗？",
     "usage": "礼貌请求"
    },
    {
-    "english": "I wonder if you could...",
-    "chinese": "不知你是否能……",
+    "english": "I wonder if you could help me.",
+    "chinese": "不知你是否能帮我。",
     "usage": "委婉请求"
    },
    {
-    "english": "Could you possibly...?",
-    "chinese": "你能否……？",
+    "english": "Could you possibly lend me your bike?",
+    "chinese": "你能否把自行车借我？",
     "usage": "礼貌请求"
    },
    {
@@ -4960,70 +4960,70 @@
     "usage": "拒绝请求"
    },
    {
-    "english": "I'm sorry, but...",
-    "chinese": "对不起，但是……",
+    "english": "I'm sorry, but I can't come.",
+    "chinese": "对不起，但我不能来。",
     "usage": "委婉拒绝"
    }
   ],
   "建议与邀请": [
    {
-    "english": "Why don't you...?",
-    "chinese": "你为什么不……呢？",
+    "english": "Why don't you join us?",
+    "chinese": "你为什么不加入我们呢？",
     "usage": "提建议"
    },
    {
-    "english": "How about...?",
-    "chinese": "……怎么样？",
+    "english": "How about going for a walk?",
+    "chinese": "去散步怎么样？",
     "usage": "提建议"
    },
    {
-    "english": "What about...?",
-    "chinese": "……怎么样？",
+    "english": "What about a cup of tea?",
+    "chinese": "来杯茶怎么样？",
     "usage": "提建议"
    },
    {
-    "english": "Let's...",
-    "chinese": "让我们……",
+    "english": "Let's go to the park.",
+    "chinese": "我们去公园吧。",
     "usage": "提议一起做"
    },
    {
-    "english": "Shall we...?",
-    "chinese": "我们……好吗？",
+    "english": "Shall we watch a film?",
+    "chinese": "我们看电影好吗？",
     "usage": "征求意见"
    },
    {
-    "english": "You should...",
-    "chinese": "你应该……",
+    "english": "You should see a doctor.",
+    "chinese": "你应该去看医生。",
     "usage": "给建议"
    },
    {
-    "english": "You'd better...",
-    "chinese": "你最好……",
+    "english": "You'd better hurry up.",
+    "chinese": "你最好快点。",
     "usage": "强烈建议"
    },
    {
-    "english": "If I were you, I'd...",
-    "chinese": "如果我是你，我会……",
+    "english": "If I were you, I'd take the train.",
+    "chinese": "如果我是你，我会坐火车。",
     "usage": "给建议"
    },
    {
-    "english": "Would you like to...?",
-    "chinese": "你想……吗？",
+    "english": "Would you like to go with us?",
+    "chinese": "你想和我们一起去吗？",
     "usage": "邀请"
    },
    {
-    "english": "Do you want to...?",
-    "chinese": "你想……吗？",
+    "english": "Do you want to play tennis?",
+    "chinese": "你想打网球吗？",
     "usage": "邀请"
    },
    {
-    "english": "Are you free...?",
-    "chinese": "你有空……吗？",
+    "english": "Are you free this weekend?",
+    "chinese": "你这周末有空吗？",
     "usage": "询问是否有空"
    },
    {
-    "english": "What are you doing...?",
-    "chinese": "你……在做什么？",
+    "english": "What are you doing this afternoon?",
+    "chinese": "你今天下午在做什么？",
     "usage": "询问计划"
    },
    {
@@ -5037,8 +5037,8 @@
     "usage": "接受邀请"
    },
    {
-    "english": "I'd like to, but...",
-    "chinese": "我很想去，但是……",
+    "english": "I'd like to, but I'm busy.",
+    "chinese": "我很想去，但我很忙。",
     "usage": "委婉拒绝"
    },
    {
@@ -5059,78 +5059,78 @@
   ],
   "描述事物": [
    {
-    "english": "It's...",
-    "chinese": "它是……",
+    "english": "It's a book.",
+    "chinese": "它是一本书。",
     "usage": "描述"
    },
    {
-    "english": "This is...",
-    "chinese": "这是……",
+    "english": "This is my friend.",
+    "chinese": "这是我的朋友。",
     "usage": "介绍"
    },
    {
-    "english": "That is...",
-    "chinese": "那是……",
+    "english": "That is a tree.",
+    "chinese": "那是一棵树。",
     "usage": "介绍远处"
    },
    {
-    "english": "These are...",
-    "chinese": "这些是……",
+    "english": "These are my books.",
+    "chinese": "这些是我的书。",
     "usage": "介绍复数"
    },
    {
-    "english": "Those are...",
-    "chinese": "那些是……",
+    "english": "Those are birds.",
+    "chinese": "那些是鸟。",
     "usage": "介绍远处复数"
    },
    {
-    "english": "There is...",
-    "chinese": "有……（单数）",
+    "english": "There is a cat on the chair.",
+    "chinese": "椅子上有一只猫。（单数）",
     "usage": "存在"
    },
    {
-    "english": "There are...",
-    "chinese": "有……（复数）",
+    "english": "There are many students in the classroom.",
+    "chinese": "教室里有很多学生。（复数）",
     "usage": "存在复数"
    },
    {
-    "english": "It looks like...",
-    "chinese": "它看起来像……",
+    "english": "It looks like a dog.",
+    "chinese": "它看起来像一只狗。",
     "usage": "描述外观"
    },
    {
-    "english": "It sounds like...",
-    "chinese": "听起来像……",
+    "english": "It sounds like music.",
+    "chinese": "听起来像音乐。",
     "usage": "描述声音"
    },
    {
-    "english": "It tastes like...",
-    "chinese": "尝起来像……",
+    "english": "It tastes like sugar.",
+    "chinese": "尝起来像糖。",
     "usage": "描述味道"
    },
    {
-    "english": "It smells like...",
-    "chinese": "闻起来像……",
+    "english": "It smells like flowers.",
+    "chinese": "闻起来像花。",
     "usage": "描述气味"
    },
    {
-    "english": "It feels like...",
-    "chinese": "感觉像……",
+    "english": "It feels like silk.",
+    "chinese": "感觉像丝绸。",
     "usage": "描述触感"
    },
    {
-    "english": "It's made of...",
-    "chinese": "它是由……制成的",
+    "english": "It's made of wood.",
+    "chinese": "它是由木头制成的。",
     "usage": "描述材料"
    },
    {
-    "english": "It's used for...",
-    "chinese": "它被用来……",
+    "english": "It's used for cutting paper.",
+    "chinese": "它被用来剪纸。",
     "usage": "描述用途"
    },
    {
-    "english": "It's about...",
-    "chinese": "它大约是……",
+    "english": "It's about animals.",
+    "chinese": "它是关于动物的。",
     "usage": "描述大小/数量"
    }
   ],
@@ -5141,58 +5141,58 @@
     "usage": "问时间"
    },
    {
-    "english": "It's ... o'clock.",
-    "chinese": "现在……点。",
+    "english": "It's seven o'clock.",
+    "chinese": "现在七点。",
     "usage": "回答时间"
    },
    {
-    "english": "It's half past...",
-    "chinese": "现在……点半。",
+    "english": "It's half past seven.",
+    "chinese": "现在七点半。",
     "usage": "半点"
    },
    {
-    "english": "It's quarter past...",
-    "chinese": "现在……点一刻。",
+    "english": "It's quarter past seven.",
+    "chinese": "现在七点一刻。",
     "usage": "一刻"
    },
    {
-    "english": "It's quarter to...",
-    "chinese": "现在差一刻……点。",
+    "english": "It's quarter to eight.",
+    "chinese": "现在差一刻八点。",
     "usage": "差一刻"
    },
    {
-    "english": "At what time...?",
-    "chinese": "几点……？",
+    "english": "At what time does the train leave?",
+    "chinese": "火车几点出发？",
     "usage": "问具体时间"
    },
    {
-    "english": "How long...?",
-    "chinese": "多久……？",
+    "english": "How long have you been here?",
+    "chinese": "你在这里多久了？",
     "usage": "问时长"
    },
    {
-    "english": "How often...?",
-    "chinese": "多久一次……？",
+    "english": "How often do you exercise?",
+    "chinese": "你多久锻炼一次？",
     "usage": "问频率"
    },
    {
-    "english": "How many times...?",
-    "chinese": "多少次……？",
+    "english": "How many times have you been there?",
+    "chinese": "你去过那里多少次？",
     "usage": "问次数"
    },
    {
-    "english": "Once a...",
-    "chinese": "每……一次",
+    "english": "Once a week.",
+    "chinese": "每周一次。",
     "usage": "频率"
    },
    {
-    "english": "Twice a...",
-    "chinese": "每……两次",
+    "english": "Twice a month.",
+    "chinese": "每月两次。",
     "usage": "频率"
    },
    {
-    "english": "Three times a...",
-    "chinese": "每……三次",
+    "english": "Three times a year.",
+    "chinese": "每年三次。",
     "usage": "频率"
    },
    {
@@ -5258,18 +5258,18 @@
     "usage": "随便看看"
    },
    {
-    "english": "I'd like to buy...",
-    "chinese": "我想买……",
+    "english": "I'd like to buy a T-shirt.",
+    "chinese": "我想买一件T恤。",
     "usage": "表达购买意向"
    },
    {
-    "english": "I'm looking for...",
-    "chinese": "我在找……",
+    "english": "I'm looking for a bookshop.",
+    "chinese": "我在找一家书店。",
     "usage": "寻找商品"
    },
    {
-    "english": "Do you have...?",
-    "chinese": "你们有……吗？",
+    "english": "Do you have any apples?",
+    "chinese": "你们有苹果吗？",
     "usage": "询问是否有"
    },
    {
@@ -5323,8 +5323,8 @@
     "usage": "决定购买"
    },
    {
-    "english": "I'd like to order...",
-    "chinese": "我想点……",
+    "english": "I'd like to order a sandwich.",
+    "chinese": "我想点一个三明治。",
     "usage": "点餐"
    },
    {
@@ -5338,8 +5338,8 @@
     "usage": "问辣度"
    },
    {
-    "english": "I'm allergic to...",
-    "chinese": "我对……过敏。",
+    "english": "I'm allergic to peanuts.",
+    "chinese": "我对花生过敏。",
     "usage": "说明过敏"
    },
    {
