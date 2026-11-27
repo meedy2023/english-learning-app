@@ -355,6 +355,7 @@ KIND_LABELS = {
     "vocab-extra": "补充词汇短句（KET/小托福/拼读，human=0）",
     "ket-reading-full": "KET短文整篇（human=1）",
     "phonics-reading": "自然拼读分类短文整段（human=1）",
+    "phonics-sentence": "自然拼读分类短文单句（human=1）",
     "toefl-reading": "小托福分类短文整段（human=1）",
 }
 # 各 kind 的默认数据源；--source 可显式覆盖（多源聚合 kind 忽略 --source）
@@ -367,6 +368,7 @@ DEFAULT_SOURCE_BY_KIND = {
     "vocab-extra": ROOT / "docs" / "data",       # 目录：ket/toefl/phonics 三份 + 固定预览文本
     "ket-reading-full": ROOT / "docs" / "data" / "ket.json",
     "phonics-reading": ROOT / "docs" / "data" / "phonics.json",
+    "phonics-sentence": ROOT / "docs" / "data" / "phonics.json",
     "toefl-reading": ROOT / "docs" / "data" / "toefl.json",
 }
 DATA_DIR = ROOT / "docs" / "data"
@@ -375,6 +377,37 @@ DATA_DIR = ROOT / "docs" / "data"
 def _load(path):
     with open(path, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+# 与前端 LessonReader.isSentenceEnd() 逐字对齐：Mr./Ms. 等缩写后接大写词或数字时不当句末。
+_SENTENCE_ABBREV = {"mr", "mrs", "ms", "dr", "prof", "st", "jr", "sr", "vs", "e.g", "i.e", "no", "nos"}
+
+
+def _is_sentence_end(token, next_token):
+    clean = re.sub(r'[\u201d\u2019"\'\uff09]', "", str(token or "")).strip()
+    if not re.search(r"[.!?]$", clean):
+        return False
+    word = re.sub(r"[.!?]+$", "", clean).lower()
+    if word in _SENTENCE_ABBREV:
+        nxt = str(next_token or "").strip()
+        if re.match(r"^[A-Z0-9]", nxt):
+            return False
+    return True
+
+
+def split_sentences_like_frontend(text):
+    """按前端 bind() 的切句口径拆词，保证句子音频 key 与当前高亮句一一对应。"""
+    toks = str(text or "").split()
+    out, cur = [], []
+    for i, tok in enumerate(toks):
+        cur.append(tok)
+        nxt = toks[i + 1] if i + 1 < len(toks) else ""
+        if _is_sentence_end(tok, nxt):
+            out.append(" ".join(cur))
+            cur = []
+    if cur:
+        out.append(" ".join(cur))
+    return out
 
 
 def collect_jobs(source, rates, limit, kind="lesson"):
@@ -532,6 +565,16 @@ def collect_jobs(source, rates, limit, kind="lesson"):
             texts.append(para)
         # 播放器 bind([{text:para}]) 无 role → voiceId=null，human=1
         _add_jobs(jobs, seen, texts, rates, True, "")
+    elif kind == "phonics-sentence":
+        # 自然拼读重听本句专用：与前端 markSentence 切出的句子一一对应。
+        # 长段音频按字符比例估算句边界，300词故事累计误差大，故直接补句子级真人音。
+        texts = []
+        for group in _load(source):
+            story_en = str((group.get("story") or {}).get("en") or "").strip()
+            if story_en:
+                texts.extend(split_sentences_like_frontend(story_en))
+        # 前端重听时 voiceId=null、human=1，与整篇朗读音色/语速一致
+        _add_jobs(jobs, seen, texts, rates, True, "")
     elif kind == "toefl-reading":
         # 与前端 renderToeflCategoryReading() 对齐：优先用 toefl.json 各类别的
         # story.en（内置约100-150词记叙文，关键词自然融入情节、温暖细腻、完整叙事）。
@@ -582,6 +625,7 @@ def main():
                          "vocab-extra=补充词汇短句(KET/小托福/拼读,human=0) / "
                          "ket-reading-full=KET短文整篇(human=1) / "
                          "phonics-reading=自然拼读分类短文整段(human=1) / "
+                         "phonics-sentence=自然拼读分类短文单句(human=1) / "
                          "toefl-reading=小托福分类短文整段(human=1)")
     ap.add_argument("--source", default=None, help="JSON 路径（默认按 --kind 自动选择）")
     ap.add_argument("--out-dir", default=str(DEFAULT_OUT), help="音频输出目录")

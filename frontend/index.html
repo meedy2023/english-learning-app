@@ -3924,6 +3924,7 @@ const API = ".";
     _repeatHandler: null,
     _repeatEndTimer: null,   // 到句尾的定时截停（timeupdate 间隔太粗会串到下一句）
     _repeatWatchTimer: null, // 高频兜底检查 audio.currentTime
+    _sentClip: null,         // 句子级真人音片段（自然拼读重听专用）
     paused: false,
     // 课文朗读默认分角色：女生女声、男生男声，无需开关
     ui: null,           // {main, replay, progress, bar, dock, label} —— 可绑定任意页面的悬浮控制条
@@ -4354,6 +4355,10 @@ const API = ".";
     cancelRepeat() {
       if (this._repeatEndTimer) { try { clearTimeout(this._repeatEndTimer); } catch (e) {} this._repeatEndTimer = null; }
       if (this._repeatWatchTimer) { try { clearInterval(this._repeatWatchTimer); } catch (e) {} this._repeatWatchTimer = null; }
+      if (this._sentClip) {
+        try { this._sentClip.onended = null; this._sentClip.onerror = null; this._sentClip.pause(); this._sentClip.src = ''; } catch (e) {}
+        this._sentClip = null;
+      }
       const a = this._sentAudio;
       const h = this._repeatHandler;
       if (a && h) { try { a.removeEventListener('timeupdate', h); } catch (e) {} }
@@ -4385,7 +4390,68 @@ const API = ".";
       end = Math.min(end, Math.max(start + 0.1, d - 0.06));
       return { start: start, end: end };
     },
-    repeatCurrentSentence() {
+    // 自然拼读专用：直接播放当前句的预生成真人音，避免长段音频按字符比例估算句边界造成
+    // 「重听本句」读多/读少词。不调用 playPreAudio()（它会 stopAllAudio 干掉主音频），
+    // 而是独立 Audio 片段；播完再恢复主音频到点击前的位置继续全文。
+    repeatByClip(text) {
+      if (!text || typeof Audio === 'undefined') return false;
+      const mainAudio = this.handle && this.handle.el;
+      if (!mainAudio || typeof mainAudio.play !== 'function') return false;
+      const url = preAudioUrl(expandAbbrev(text, 'en-US'), 'en-US', null, true);
+      if (!url) return false;
+      if (this._repeating) this.cancelRepeat();
+      const tk = this.token;
+      const resumeAt = mainAudio.currentTime;
+      this._repeatResumeAt = resumeAt;
+      this._repeating = true;
+      this.stopTick();
+      try { mainAudio.pause(); } catch (e) {}
+      const cached = cachedAudioUrl(url);
+      let fallbackTried = false;
+      const clip = new Audio();
+      const self = this;
+      const cleanup = () => {
+        try { clip.onended = null; clip.onerror = null; clip.pause(); clip.src = ''; } catch (e) {}
+        if (self._sentClip === clip) self._sentClip = null;
+      };
+      const done = (fallback) => {
+        if (tk !== self.token || !self._repeating) return;
+        cleanup();
+        if (fallback) {
+          // 句子文件缺失/播放失败：回退到长音频 seek 方案，保证按钮仍可用
+          self.cancelRepeat();
+          self.repeatCurrentSentence(true);
+          return;
+        }
+        self.finishRepeat();
+      };
+      clip.preload = 'auto';
+      clip.src = cached || url;
+      clip.playbackRate = 1;
+      this._sentClip = clip;
+      clip.onended = function () { done(false); };
+      const onErr = function () {
+        if (!fallbackTried && cached) {
+          fallbackTried = true;
+          try {
+            clip.src = url;
+            const p2 = clip.play();
+            if (p2 && p2.catch) p2.catch(function () { done(true); });
+            return;
+          } catch (e) { /* 继续回退 */ }
+        }
+        done(true);
+      };
+      clip.onerror = onErr;
+      try {
+        const p = clip.play();
+        if (p && p.catch) p.catch(onErr);
+      } catch (e) { done(true); return true; }
+      if (!cached) prefetchAudioBlob(url);
+      this.updateUI();
+      return true;
+    },
+    repeatCurrentSentence(skipClip) {
       if (this.state !== 'playing' && this.state !== 'paused') { toast('请先开始朗读短文'); return; }
       const line = this.lines[this.idx];
       if (!line || !line.sentences || !line.sentences.length) return;
@@ -4397,6 +4463,7 @@ const API = ".";
         TTS.speak(text, 'en-US');
         return;
       }
+      if (!skipClip && this.ui && this.ui.useSentenceAudio && this.repeatByClip(text)) return;
       if (this._repeating) this.cancelRepeat();
       const tk = this.token;
       const range = this.sentenceTimeRange(line, idx, audio);
@@ -11923,6 +11990,7 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
     if (raBtn) raBtn.onclick = function () { raToggleKet(this, para); };
     LessonReader.bind([{ text: para }], {
       sentenceFocus: true,
+      useSentenceAudio: true,   // 自然拼读长段按字符比例估句边界误差大，重听改用句子级预生成音频
       scope: 'phonics-feature-stage',
       dock: 'phonics-reading-dock',
       main: 'phonics-reading-full-btn',
