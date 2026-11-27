@@ -5158,7 +5158,12 @@ function playAudioBlobEx(blob, onEnd, onPlayBlocked) {
       const attr = btn.getAttribute('onclick') || '';
       const m = attr.match(/speakWord\(['"](.*?)['"]\)/);
       if (!m || !m[1]) continue;
-      const url = preAudioUrl(expandAbbrev(m[1], 'en-US'), 'en-US', null, false);
+      // onclick 里的文本经过 esc() 转义：撇号变成 \'。若直接拿 m[1] 算哈希，
+      // 含撇号的句子（I'm / Let's / don't 等）会预取到错误 URL（404），
+      // 点击时只能临时下载正确音频，弱网/CDN 抖动下就表现为「点播放没反应」。
+      // 先还原转义，确保预取 URL 与 speakWord 实际收到的原文一致。
+      const text = m[1].replace(/\\'/g, "'");
+      const url = preAudioUrl(expandAbbrev(text, 'en-US'), 'en-US', null, false);
       if (!url) continue;
       btn.setAttribute('data-spk-observed', '1');
       // 交给 IntersectionObserver：只有真正接近视口（200px）时才发起 fetch，
