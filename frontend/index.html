@@ -1885,6 +1885,7 @@ const API = ".";
       if (k.indexOf('points_') === 0 || k.indexOf('progress_') === 0 ||
           k.indexOf('review_') === 0 || k.indexOf('last_study_') === 0 ||
           k.indexOf('wordlearn_') === 0 || k.indexOf('pk_last_') === 0 ||
+          k.indexOf('rarecord_') === 0 ||
           k.indexOf('tts_engine') === 0 || k === 'en_voice' || k === 'zh_voice' ||
           k === 'speech_rate' || k === 'big_font') {
         keys.push(k);
@@ -3254,6 +3255,7 @@ const API = ".";
   let _raMatchInfo = null;        // { matched, total, wrong:[] } —— 用于结果页展示比对明细
   let _raRecognizedSource = '';   // 'asr' | 'browser' —— 识别文本来源
   let _raScoreWaitStart = 0;      // 等待听写结果的起始时间（防长时间卡住）
+  let _raCtx = null;              // 拼读跟读上下文 { scope, key }，仅带 data-scope/data-key 的按钮设置，用于分数落库
 
   // 写入识别文本：空结果不覆盖已有内容（讯飞失败时保留浏览器识别结果）
   function raSetRecognized(text) {
@@ -3563,6 +3565,10 @@ const API = ".";
     _raScoreWaitStart = 0;
     const score = raComputeScore();
     if (score === null) return;
+    // 评分落库：仅拼读跟读（_raCtx 有值）记录，供下一轮错词回流
+    if (_raCtx) {
+      raSaveRecord(_raCtx.scope, _raCtx.key, score, (_raMatchInfo && _raMatchInfo.wrong) || []);
+    }
     const isFallback = !!(_raScoreDetail && _raScoreDetail.fallback);
     let stars, msg, emoji;
     if (isFallback) {
@@ -5644,6 +5650,9 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
 
   // ========== KET 跟读（复用全局 _ra 状态机）==========
   function raToggleKet(btnEl, text) {
+    // 仅拼读按钮带 data-scope/data-key，用于评分落库；其余模块（KET/语法/小托福/短文）不带，不落库
+    _raCtx = (btnEl && btnEl.dataset && btnEl.dataset.scope && btnEl.dataset.key)
+      ? { scope: btnEl.dataset.scope, key: btnEl.dataset.key } : null;
     if (_raState === 'recording' && _ra && _ra.state === 'recording') { raStopRecordingKet(); return; }
     if (_raState === 'playing') { raReset(); return; }
     raStartRecordingKet(btnEl, text);
@@ -8536,6 +8545,31 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         if ((RANK[status] || 0) >= (RANK[bucket[id]] || 0)) bucket[id] = status;
       });
       localStorage.setItem(key, JSON.stringify(all));
+    } catch (e) {}
+  }
+
+  // 跟读评分记录（独立 key，不污染 wordlearn_ 掌握度统计）
+  // 结构：{ "phonics_<groupId>": { "<word>": { s:最近分数, w:未读对词[], t:时间戳, n:累计次数 } } }
+  function raGetRecords(scope) {
+    try {
+      const all = JSON.parse(localStorage.getItem('rarecord_' + USER_ID) || '{}');
+      return all[scope] || {};
+    } catch (e) { return {}; }
+  }
+  function raSaveRecord(scope, key, score, wrong) {
+    if (!scope || !key) return;
+    try {
+      const ck = 'rarecord_' + USER_ID;
+      const all = JSON.parse(localStorage.getItem(ck) || '{}');
+      const bucket = all[scope] || (all[scope] = {});
+      const prev = bucket[key] || {};
+      bucket[key] = {
+        s: Math.round(score),
+        w: (Array.isArray(wrong) ? wrong : []).slice(0, 4),
+        t: Date.now(),
+        n: (prev.n || 0) + 1
+      };
+      localStorage.setItem(ck, JSON.stringify(all));
     } catch (e) {}
   }
 
@@ -11581,18 +11615,23 @@ function esc(s) { return String(s).replace(/'/g, "\\'"); }
         html += '<div style="margin-bottom:10px;display:flex;align-items:center;flex-wrap:wrap;gap:6px"><span style="font-size:13px;color:#666">代表词：</span>'
           + '<span style="font-size:16px;font-weight:600;color:#333">' + lesson.sound_word + '</span>'
           + ' <button class="btn btn-sm" style="padding:4px 10px" onclick="speakWord(\'' + esc(lesson.sound_word) + '\')">🔊 读单词</button>'
-          + ' <button class="btn btn-sm ra-btn" style="padding:4px 10px" onclick="raToggleKet(this, \'' + esc(lesson.sound_word) + '\')">🎤 跟读</button>'
+          + ' <button class="btn btn-sm ra-btn" data-scope="phonics_' + groupId + '" data-key="' + esc(lesson.sound_word) + '" style="padding:4px 10px" onclick="raToggleKet(this, \'' + esc(lesson.sound_word) + '\')">🎤 跟读</button>'
           + '</div>';
+        // 错词回流：读跟读记录，分数 <70 或有未读对词的词置顶并加 🔁 角标
+        const _rec = raGetRecords('phonics_' + groupId);
+        const _isWeak = w => { const r = _rec[w.w]; return !!(r && (r.s < 70 || (r.w && r.w.length))); };
+        const _sortedWords = lesson.words.slice().sort((a, b) => Number(_isWeak(b)) - Number(_isWeak(a)));
         html += '<div style="display:flex;flex-wrap:wrap;gap:8px">';
-        lesson.words.forEach(w => {
-          html += '<div style="flex:0 1 150px;max-width:200px;background:#f7f9ff;border:1px solid #e6ecff;border-radius:10px;padding:8px 10px">'
+        _sortedWords.forEach(w => {
+          const _weak = _isWeak(w);
+          html += '<div style="flex:0 1 150px;max-width:200px;background:' + (_weak ? '#fff7e6' : '#f7f9ff') + ';border:1px solid ' + (_weak ? '#ffd591' : '#e6ecff') + ';border-radius:10px;padding:8px 10px">'
             + '<div style="display:flex;align-items:center;justify-content:space-between;gap:6px">'
-            + '<span style="font-size:15px;font-weight:600;color:#333">' + esc(w.w) + '</span>'
+            + '<span style="font-size:15px;font-weight:600;color:#333">' + (_weak ? '🔁 ' : '') + esc(w.w) + '</span>'
             + '<span style="font-size:11px;color:#999">' + esc(w.c) + '</span>'
             + '</div>'
             + '<div style="display:flex;gap:6px;margin-top:6px">'
             + '<button class="btn btn-sm" style="flex:1;padding:3px 6px;font-size:12px" onclick="speakWord(\'' + esc(w.w) + '\')">🔊</button>'
-            + '<button class="btn btn-sm ra-btn" style="flex:1;padding:3px 6px;font-size:12px" onclick="raToggleKet(this, \'' + esc(w.w) + '\')">🎤</button>'
+            + '<button class="btn btn-sm ra-btn" data-scope="phonics_' + groupId + '" data-key="' + esc(w.w) + '" style="flex:1;padding:3px 6px;font-size:12px" onclick="raToggleKet(this, \'' + esc(w.w) + '\')">🎤</button>'
             + '</div></div>';
         });
         html += '</div>';
