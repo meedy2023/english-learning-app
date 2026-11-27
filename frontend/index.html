@@ -3922,6 +3922,18 @@ const API = ".";
       const id = (this.ui && this.ui[key]) || defId;
       return id ? document.getElementById(id) : null;
     },
+    // 句末判定：Mr./Ms./Dr./St. 等缩写后接大写词（或编号）时不是句子结束，
+    // 避免把 "Mr. Lin."、"Ms. Wang" 多切成一句，导致进度总数虚高。
+    isSentenceEnd(t, next) {
+      const clean = String(t || '').replace(/[\u201d\u2019"'）]/g, '').trim();
+      if (!/[.!?]$/.test(clean)) return false;
+      const word = clean.replace(/[.!?]+$/, '').toLowerCase();
+      if (/^(mr|mrs|ms|dr|prof|st|jr|sr|vs|e\.g|i\.e|no|nos)$/.test(word)) {
+        const n = String(next || '').trim();
+        if (/^[A-Z]/.test(n) || /^\d/.test(n)) return false;
+      }
+      return true;
+    },
     // 采集页面上的句子与词节点
     // content: [{text|en}...]；ui: KET 等页面的控制条元素 id
     bind(content, ui) {
@@ -3956,12 +3968,13 @@ const API = ".";
         let sentences = [];
         if (useSentenceFocus) {
           let cur = null;
-          words.forEach(w => {
+          words.forEach((w, wi) => {
             if (!cur) { cur = { words: [], start: w.start, end: w.end }; sentences.push(cur); }
             cur.words.push(w);
             cur.end = w.end;
-            const t = (w.el.textContent || '').replace(/[\u201d\u2019"'）]/g, '').trim();
-            if (/[.!?]$/.test(t)) cur = null;  // 句末：下一个词另起一句
+            const t = (w.el.textContent || '');
+            const next = words[wi + 1] ? (words[wi + 1].el.textContent || '') : '';
+            if (this.isSentenceEnd(t, next)) cur = null;  // 句末：下一个词另起一句
           });
           // 无句末标点时整行作为一句，保证一定有可高亮单元
           if (!sentences.length && words.length) {
